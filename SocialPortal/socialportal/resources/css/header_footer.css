@@ -1,0 +1,96 @@
+@CHARSET "ISO-8859-1";
+
+/* css for the header part */
+#header {
+	position: relative;
+	color: #fff;
+	background: url( ../img/default_header.jpg);
+	-moz-border-radius-bottomleft: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	margin-bottom: 20px;
+	min-height: 50px;
+	/*height: 120px;*/
+/*	padding-top: 25px;*/
+}
+
+	#header h1#logo {
+		position: absolute;
+		bottom: 5px;
+		left: 20px;
+		width: 44%;
+	}
+		#header h1 a {
+			color: #fff;
+			font-size: 26px;
+			text-decoration: none;
+		}
+
+	#header #search-bar {
+		position: absolute;
+	/*	top: 25px; */
+		right: 280px;
+		width: 100%;
+		text-align: right;
+	}
+
+		#header h1 {
+			line-height: 230%;
+		}
+
+		#header #search-bar .padder {
+			padding: 10px 20px;
+		}
+
+		#header #search-bar input[type=text] {
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			border: 1px inset #888;
+			padding: 2px;
+			margin-right: 4px;
+		}
+
+		#header #search-bar input[type=submit] {
+			font-size: 11px;
+			padding: 1px 4px;
+			margin-left: 4px;
+		}
+
+	#header div#connection{
+		background-color: blue;
+		/*position: absolute;
+		right: 15px;
+		bottom: 0px;*/
+		float: right;
+		margin: 5px;
+		padding: 5px;
+	}
+		#header div#connection a{
+			font-size: 11px;
+			text-align: right;
+			display: inline-block;
+		}
+	
+	#header div#connection #login_error{
+		background-color: yellow;
+		color: red;
+		font-style: italic;
+	}
+	
+	#header div#connection #register_link{
+		padding-left: 20px;
+		font-size: 12px;
+	}
+
+#header .clear_both{
+	clear: both;
+}
+		
+/* css for the footer part */
+#footer {
+	text-align: center;
+	color: #BBB;
+	text-shadow: #FAFAFA 1px 1px 0;
+}

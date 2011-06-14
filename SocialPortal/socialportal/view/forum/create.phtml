@@ -1,0 +1,13 @@
+<?php
+$vars['helper']->insertMessage();
+?>
+<form method=POST action="<?php echo $vars['helper']->createHref('forum', 'create')?>" >
+    <input type="text" name="bidule"><br>
+    <p>
+    <label for="name">Forum Name: </label>
+              <input type="text" name="name"><br>
+    <label for="description">Forum Description: </label>
+              <input type="text" name="description"><br>
+    <input type="submit" value="Send"> <input type="reset">
+    </p>
+ </form>

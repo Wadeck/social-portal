@@ -1,0 +1,37 @@
+<?php 
+use core\form\Form;
+$vars['helper']->addCssFile('form.css');
+$username = __( 'Username :' );
+$password = __( 'Password :' );
+$email = __( 'Email :' );
+$rememberMe = __( 'Remember me' );
+$register = __( 'Register' );
+?>
+<?php $vars['helper']->insertMessage(); ?>
+<div id="connection">
+	<?php if(isset($vars['error'])):?>
+		<div id="login_error">
+			<p><?php echo $vars['error']; ?></p>
+		</div>
+	<?php endif; ?>
+
+	<form class="generic_form" action="<?php $vars['helper']->insertHref('connection', 'register'); ?>" method="POST">
+		<div class="block">
+			<label for="username"><?php echo $username?></label>
+			<input type="text" id="username" name="username" class="mandatory" value="">
+		</div>
+		<div class="block">
+			<label for="password"><?php echo $password?></label>
+			<input type="password" id="password" name="password" class="mandatory" value="">
+		</div>
+		<div class="block">
+			<label for="email"><?php echo $email; ?></label>
+			<input type="text" name="email" id="email" class="mandatory" value="">
+		</div>
+		<div class="semi_block_right">
+			<input type="submit" name="login" class="button" value="<?php echo $register; ?>">
+		</div>
+		<?php Form::insertReferrerField(); ?>
+		<input type="hidden" name="testcookie" value="1">
+	</form>
+</div>

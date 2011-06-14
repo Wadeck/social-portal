@@ -1,0 +1,27 @@
+<?php $vars['helper']->insertMessage(); ?>
+<h2>Test with message</h2>
+
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => true, 'goto' => 'testMessage'))?>">
+	no message redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => false, 'goto' => 'testMessage'))?>">
+	no message no redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => true, 'goto' => 'testMessage', 'message'=>'salut'))?>">
+	m='salut' redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => false, 'goto' => 'testMessage', 'message'=>'salut'))?>">
+	m='salut' no redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => true, 'goto' => 'testMessage', 'message'=>'salut2'))?>">
+	m='salut2' redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => false, 'goto' => 'testMessage', 'message'=>'salut2'))?>">
+	m='salut2' no redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => true, 'goto' => 'testMessage', 'message'=>'ran'+rand(0,1000)))?>">
+	m='ran' redirect</a><br/>
+<a href="<?php echo $vars['helper']->createHref('Bipper', 'testMessage',  array(), 
+	array('redirect' => false, 'goto' => 'testMessage', 'message'=>'ran'+rand(0,1000)))?>">
+	m='ran' no redirect</a><br/>
