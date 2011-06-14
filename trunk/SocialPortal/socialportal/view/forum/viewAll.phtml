@@ -1,0 +1,27 @@
+<?php
+//$vars['helper']->insertMessage();
+//$name = $vars['forum']->getName();
+//$descr = $vars['forum']->getDescription();
+//echo "name is [$name]";
+//echo "descr is [$descr]";
+
+
+$vars['helper']->insertMessage();
+if( isset( $vars['forums'] ) )
+	foreach( $vars['forums'] as $forum ) {
+		?><div>
+<p><?php
+		echo $forum->getName();
+		?><span><a
+	href=" <?php
+		$vars['helper']->insertHref( 'Forum', 'displayForm', array( $forum->getId() ) );
+		?>" title="edit">&nbsp;Edit</a></span></p>
+</div><?php
+	}
+else {
+	echo "<div>Currently no forum</div>";
+}
+?>
+<a href="<?php
+echo $vars['helper']->createHref( 'Forum', 'index' )?>">Go forum index</a>
+<br />

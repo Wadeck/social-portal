@@ -1,0 +1,8 @@
+<?php
+$vars['helper']->insertMessage();
+echo "<h3>Forum form</h3>";
+if($vars['form']){
+	$vars['form']->insert();
+}
+?>
+<a href="<?php echo $vars['helper']->createHref('Forum', 'viewAll')?>">View all</a><br/>

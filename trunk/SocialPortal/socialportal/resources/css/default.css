@@ -1,0 +1,33 @@
+@CHARSET "ISO-8859-1";
+
+.button {
+	background: url( ../img/white-grad.png ) top left repeat-x;
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #888;
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+a {
+	color: #1FB3DD;
+	text-decoration: none;
+}
+
+div.rounded-box {
+	margin: 10px 0 20px 0;
+	border: 1px solid #eee;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+div.rounded-box.padded {
+	padding: 8px;
+}

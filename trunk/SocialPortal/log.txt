@@ -1,0 +1,281 @@
+Tue, 14 Jun 11 12:36:07 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:36:07 +0000	Request path: Forum :: displayForm :: Array
+(
+    [0] => 8
+)
+
+Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+      'notice' => 'A problem occurred during the edition of forum called TestFo2',
+      'redirectFrom' => '/SocialPortal/Forum/edit/8',
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:07 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:36:07 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:36:07 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:36:07 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:36:34 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:36:34 +0000	Request path: home :: index :: 
+Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:34 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:36:34 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:36:34 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:36:41 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:36:41 +0000	Request path: Forum :: edit :: Array
+(
+    [0] => 8
+)
+
+Tue, 14 Jun 11 12:36:41 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:41 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:36:47 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:36:56 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:36:56 +0000	Request path: Forum :: edit :: Array
+(
+    [0] => 8
+)
+
+Tue, 14 Jun 11 12:36:56 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:36:56 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:37:05 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:37:05 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:37:05 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:37:05 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:37:05 +0000	Redirect to /SocialPortal/forum/viewAll from /SocialPortal/Forum/edit/8
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:37:05 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:37:05 +0000	Request path: forum :: viewAll :: 
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+      'notice' => 'All the modification for the forum called TestFo2 were a success',
+      'redirectFrom' => '/SocialPortal/Forum/edit/8',
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:37:05 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:37:05 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:37:05 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:37:05 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:37:09 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:37:09 +0000	Request path: Forum :: displayForm :: Array
+(
+    [0] => 8
+)
+
+Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:37:09 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:37:09 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:37:09 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:37:09 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:43:46 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:43:46 +0000	Request path: Forum :: edit :: Array
+(
+    [0] => 8
+)
+
+Tue, 14 Jun 11 12:43:46 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:43:46 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:43:49 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:43:49 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:43:49 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:43:49 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:43:49 +0000	Redirect to /SocialPortal/forum/viewAll from /SocialPortal/Forum/edit/8
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	end of session
+====================================
+
+Tue, 14 Jun 11 12:43:49 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Tue, 14 Jun 11 12:43:49 +0000	Request path: forum :: viewAll :: 
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	session=array (
+  '_symfony2' => 
+  array (
+    '_flash' => 
+    array (
+      'notice' => 'All the modification for the forum called TestFo2 were a success',
+      'redirectFrom' => '/SocialPortal/Forum/edit/8',
+    ),
+    '_locale' => 'en',
+  ),
+)
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  'bp-activity-oldestpage' => '1',
+)
+Tue, 14 Jun 11 12:43:49 +0000	Simple cookies: Array
+(
+    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [bp-activity-oldestpage] => 1
+)
+
+Tue, 14 Jun 11 12:43:49 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
+Tue, 14 Jun 11 12:43:49 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Tue, 14 Jun 11 12:43:49 +0000	Storing cookie bp-activity-oldestpage=>1
+Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	end of session
+====================================
+

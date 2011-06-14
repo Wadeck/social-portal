@@ -1,0 +1,13 @@
+<?php 
+$username = $vars['user']->getUsername();
+$logout = __( 'Log out' );
+?>
+<div id="connection">
+	<p><?php echo __( 'Welcome %username%' , array('%username%'=>$username)); ?></p>
+	<p><a title="<?php 
+		echo $logout;
+	?>" href="<?php 
+		$vars['helper']->insertHref('connection', 'logout'); 
+	?>"><?php echo $logout; ?></a></p>
+</div>
+

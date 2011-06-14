@@ -1,0 +1,16 @@
+
+
+# BEGIN SocialPortal
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /SocialPortal/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /SocialPortal/index.php [L]
+</IfModule>
+
+# END SocialPortal
+# could be removed if we use the index.php in each subdirectory strategy, 
+# could have an overhead but guaranty some architectural security
+RedirectMatch 301 ^/SocialPortal/(.*)/$ /SocialPortal/
