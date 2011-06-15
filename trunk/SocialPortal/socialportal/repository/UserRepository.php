@@ -2,6 +2,8 @@
 
 namespace socialportal\repository;
 
+use core\security\Crypto;
+
 use core\user\UserManager;
 
 use socialportal\model\User;
@@ -46,6 +48,7 @@ class UserRepository extends EntityRepository {
 		}
 		return $this->anonUser;
 	}
+	
 //	/**
 //	 * @return array of string representing the capabilities
 //	 */

@@ -98,6 +98,18 @@ class Response {
 		return $this->vars;
 	}
 	
+	/** Replace the current vars by the given ones, especially use to simulate a buffer in insertModule */
+	public function setVars(array $vars) {
+		$this->vars = $vars;
+	}
+	
+	/** Remove the vars and return them, especially use to simulate a buffer in insertModule */
+	public function removeAllVars() {
+		$result = $this->vars;
+		$this->vars = array();
+		return $result;
+	}
+	
 	/** @param string $body The real content of the page with html tags etc */
 	public function setBody($body) {
 		$this->body = $body;
@@ -234,11 +246,6 @@ class Response {
 			echo $this->favicon;
 			?>" type="image/x-icon" />
 		
-		
-		
-		
-		
-		
 		<?php endif;
 		?>
 	<!-- other meta -->
@@ -291,7 +298,7 @@ class Response {
 				foreach( $assoc as $key => $value ) {
 					$temp[] = "$key: \"$value\"";
 				}
-				$result .= implode(',', $temp);
+				$result .= implode( ',', $temp );
 				$result .= '};';
 			}
 			$result .= '/* ]]> */</script>';
@@ -299,18 +306,6 @@ class Response {
 		echo $result;
 	}
 	
-	//	var BP_DTheme = {
-	//	my_favs: "My Favorites",
-	//	accepted: "Accepted",
-	//	rejected: "Rejected",
-	//	show_all_comments: "Show all comments for this thread",
-	//	show_all: "Show all",
-	//	comments: "comments",
-	//	close: "Close",
-	//	mention_explain: "@ is a unique identifier for  that you can type into any message on this site.  will be sent a notification and a link to your message any time you use it."
-	//};
-	
-
 	/** @return true if the status code is in (201, 301, 302, 303, 307) */
 	public function isRedirect() {
 		return in_array( $this->statusCode, array( 201, 301, 302, 303, 307 ) );

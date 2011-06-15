@@ -122,7 +122,7 @@ class UserManager {
 		if( !$user ) {
 			return false;
 		}
-		if( Crypto::verifyDBPassword( $username, $password, $user->getPassword() ) ) {
+		if( Crypto::verifyDBPassword( $user->getRandomKey(), $password, $user->getPassword() ) ) {
 			$this->user = $user;
 			if( $rememberMe ) {
 				$this->populateCookie();
@@ -154,15 +154,8 @@ class UserManager {
 			return false;
 		}
 		
-		//TODO implement me
-		$user = new User();
-		$user->setUsername( $username );
-		$user->setPassword( Crypto::encodeDBPassword( $username, $password ) );
-		$user->setEmail( $email );
 		$status = $withActivation ? 0 : 1;
-		$user->setStatus( $status );
-		$user->setRandomKey( Crypto::createRandomKey() );
-		$user->setRegistered( new \DateTime( "now" ) );
+		$user = self::createUser( $username, $password, $email, UserRoles::$full_user_role, $status );
 		
 		return $this->userProvider->addNewUser( $user );
 	}
@@ -173,12 +166,35 @@ class UserManager {
 		$user->setUsername( 'Anonymous' );
 		$user->setStatus( 0 );
 		$user->setEmail( 'anon@void.com' );
+		$user->setRoles( UserRoles::$anonymous_role );
 		//32 chars
 		$user->setRandomKey( '12345678901234567890123456789012' );
 		// to generate this password, we use the url: tool/createDirectPassword/_randomKey_/_password_
 		// password = 'anon'
 		$user->setPassword( '7e3ea8c729242fac9036b888d952767deb7be460' );
 		
+		return $user;
+	}
+	
+	/**
+	 * Helper to create a user with the correct format for password / randomKey
+	 * @param string $username
+	 * @param string $password
+	 * @param string $email
+	 * @param string $activationKey
+	 * @return User that is not persisted at all for the moment
+	 */
+	public static function createUser($username, $password, $email, $role, $status = 0, $activationKey = '') {
+		$user = new User();
+		$user->setUsername( $username );
+		$randomKey = Crypto::createRandomKey();
+		$user->setPassword( Crypto::encodeDBPassword( $randomKey, $password ) );
+		$user->setRandomKey( $randomKey );
+		$user->setEmail( $email );
+		$user->setStatus( $status );
+		$user->setActivationKey( $activationKey );
+		$user->setRegistered( new \DateTime( "now" ) );
+		$user->setRoles( $role );
 		return $user;
 	}
 

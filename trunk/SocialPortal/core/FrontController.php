@@ -190,7 +190,7 @@ class FrontController {
 				// this could append typically in the $methodName() action
 				$this->generateException( $e->getCustomException() );
 			} else {
-				Logger::getInstance()->debug( "Unknown Exception thrown: " . var_export( $e ) );
+				Logger::getInstance()->debug( "Unknown Exception thrown: " . var_export( $e, true) );
 				Logger::getInstance()->debug( "Trace: " . $e->getTraceAsString() );
 				// like the name says, we don't expect to have another exception type
 				// so we wrap it into UnexpectedException to be able to go through generateException

@@ -31,3 +31,19 @@ div.rounded-box {
 div.rounded-box.padded {
 	padding: 8px;
 }
+
+body {
+	width: 90%;
+	min-width: 960px;
+	max-width: 1250px;
+	margin: 0 auto;
+	font-family: Arial, Tahoma, Verdana, sans-serif;
+}
+
+div#container{
+	line-height: 170%;	
+}
+
+h1,h2,h3,h4,h5,h6 {
+	margin: 5px 0 15px 0;
+}

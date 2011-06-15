@@ -15,8 +15,8 @@ class Crypto {
 	}
 	
 	/** Database usage @return bool true iff the pwd correspond to the pass in database */
-	public static function verifyDBPassword($login, $pwd, $from_base) {
-		$hashedPassword = self::hashPwd( $login, $pwd, 'db' );
+	public static function verifyDBPassword($key, $pwd, $from_base) {
+		$hashedPassword = self::hashPwd( $key, $pwd, 'db' );
 		if( $hashedPassword === $from_base ) {
 			return true;
 		} else {
