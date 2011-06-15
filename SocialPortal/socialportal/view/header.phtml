@@ -1,5 +1,13 @@
 <body>
 <div id="header">
+	<?php 
+	use core\user\UserRoles;
+	//TODO remove when the capabilities will be done
+	$roles = $vars['helper']->getCurrentUser()->getRoles();
+	if($roles & UserRoles::$admin_role == UserRoles::$admin_role){
+		$vars['helper']->insertModule('admin');
+	}
+	?>
 	<h1 id="logo"><a href="<?php $vars['helper']->insertHref('') ?>" title="Home"><?php echo __( 'Social Portal' ); ?></a></h1>
 		<?php
 			if($vars['helper']->getCurrentUser()->getId()){
@@ -9,3 +17,4 @@
 			}?>
 	<div class="clear_both"></div>
 </div>
+<div id="container">

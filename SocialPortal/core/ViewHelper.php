@@ -84,9 +84,9 @@ class ViewHelper {
 	
 	/** Could be used for login/pass/avatar template */
 	public function insertModule($module, $action = '', $parameters = array()) {
-		//TODO implement this, by using internal state machine in front controller to avoid redirection
-		// could perhaps works even with this simple call to doAction
+		$tempVars = $this->frontController->getResponse()->removeAllVars();
 		$this->frontController->doAction( $module, $action, $parameters );
+		$this->frontController->getResponse()->setVars($tempVars);
 	}
 	
 	public function setNonce($nonce) {
@@ -108,7 +108,7 @@ class ViewHelper {
 		if( $actionName && !empty( $parameters ) ) {
 			$result .= '/' . implode( '/', $parameters );
 		}
-		if( !$this->nonce ) {
+		if( $this->nonce ) {
 			$GETAttributes['_nonce'] = $this->nonce;
 		}
 		if( !empty( $GETAttributes ) ) {

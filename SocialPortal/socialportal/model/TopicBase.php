@@ -7,9 +7,9 @@ namespace socialportal\model;
  * @Table(
  *	name="topic__base", 
  *	indexes={
+ *		@Index(name="idx_26a222185bb66c05", columns={"poster_id"}),
  *		@Index(name="idx_26a2221829ccbad0", columns={"forum_id"}),
- *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"}),
- *		@Index(name="idx_26a222185bb66c05", columns={"poster_id"})
+ *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"})
  *	}
  * )
  * @Entity
@@ -99,6 +99,16 @@ class TopicBase{
      *
      * @ManyToOne(targetEntity="socialportal\model\User")
      * @JoinColumns({
+     *   @JoinColumn(name="lastposter_id", referencedColumnName="id")
+     * })
+     */
+    private $lastposter;
+
+    /**
+     * @var socialportal\model\User
+     *
+     * @ManyToOne(targetEntity="socialportal\model\User")
+     * @JoinColumns({
      *   @JoinColumn(name="poster_id", referencedColumnName="id")
      * })
      */
@@ -113,16 +123,6 @@ class TopicBase{
      * })
      */
     private $forum;
-
-    /**
-     * @var socialportal\model\User
-     *
-     * @ManyToOne(targetEntity="socialportal\model\User")
-     * @JoinColumns({
-     *   @JoinColumn(name="lastposter_id", referencedColumnName="id")
-     * })
-     */
-    private $lastposter;
 
     public function __construct(){
         $this->isOpen = '1';
@@ -192,6 +192,12 @@ class TopicBase{
     /** Get tagCount @return bigint $tagCount */
     public function getTagCount(){ return $this->tagCount; }
 
+    /** Set lastposter @param socialportal\model\User $lastposter */
+    public function setLastposter(\socialportal\model\User $lastposter){ $this->lastposter = $lastposter; }
+
+    /** Get lastposter @return socialportal\model\User $lastposter */
+    public function getLastposter(){ return $this->lastposter; }
+
     /** Set poster @param socialportal\model\User $poster */
     public function setPoster(\socialportal\model\User $poster){ $this->poster = $poster; }
 
@@ -203,10 +209,4 @@ class TopicBase{
 
     /** Get forum @return socialportal\model\Forum $forum */
     public function getForum(){ return $this->forum; }
-
-    /** Set lastposter @param socialportal\model\User $lastposter */
-    public function setLastposter(\socialportal\model\User $lastposter){ $this->lastposter = $lastposter; }
-
-    /** Get lastposter @return socialportal\model\User $lastposter */
-    public function getLastposter(){ return $this->lastposter; }
 }

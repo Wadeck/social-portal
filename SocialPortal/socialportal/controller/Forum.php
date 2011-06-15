@@ -118,47 +118,4 @@ class Forum extends AbstractController {
 	public function moveAction($parameters) {
 
 	}
-
-	//	//###############################################
-//	public function viewAction($parameters) {
-//		$this->frontController->doAction( 'forum', 'index', $parameters );
-//	}
-//	
-//	public function viewAllAction($parameters) {
-//		$forums = $this->em->getRepository( 'socialportal\model\Forum' )->findAll();
-//		
-//		$this->frontController->getResponse()->setTitle( 'View all' );
-//		$this->frontController->doDisplay( 'forum', 'viewAll', array( 'forums' => $forums ) );
-//	}
-//	
-//	public function displayCreateAction($parameters) {
-//		$this->frontController->doDisplay( 'forum', 'create' );
-//	}
-//	
-//	/**
-//	 * @Method(POST)
-//	 */
-//	public function createAction($parameters) {
-//		
-//		$name = $this->frontController->getRequest()->request->get( 'name', null );
-//		$description = $this->frontController->getRequest()->request->get( 'description', null );
-//		if( !($name && $description) ) {
-//			$this->frontController->addMessage( 'creation of forum failed!!!' );
-//			$this->frontController->doRedirect( 'forum', 'viewAll' );
-//		}
-//		
-//		$this->frontController->getResponse()->setTitle( 'Creation of forum' );
-//		$forum = new model\Forum();
-//		$forum->setName( $name );
-//		$forum->setDescription( $description );
-//		
-//		$this->em->persist( $forum );
-//		$this->em->flush();
-//		
-//		$this->frontController->addMessage( 'creation of forum completed' );
-//		$this->frontController->doRedirect( 'forum', 'viewAll' );
-//	
-//	}
-
-
 }

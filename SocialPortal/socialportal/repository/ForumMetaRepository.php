@@ -18,7 +18,7 @@ class ForumMetaRepository extends EntityRepository {
 	/** @return mixed|null if not found */
 	public function getMeta($forumId, $key, $default = null) {
 		$qb = $this->_em->createQueryBuilder();
-		$qb->select( 'fm' )->from( 'socialportal\model\ForumMeta', 'fm' )->where( 'fm.forum_id = :id' )->where( 'fm.meta_key = :key' )->setParameter( 'id', $forumId )->setParameter( 'key', $key )->setMaxResults( 1 );
+		$qb->select( 'fm' )->from( 'socialportal\model\ForumMeta', 'fm' )->where( 'fm.forumId = :id' )->andWhere( 'fm.metaKey = :key' )->setParameter( 'id', $forumId )->setParameter( 'key', $key )->setMaxResults( 1 );
 		$results = $qb->getQuery()->getResult();
 		if( $results ) {
 			$meta = $results[0];
@@ -34,7 +34,7 @@ class ForumMetaRepository extends EntityRepository {
 	 */
 	public function getAcceptableTopics($forumId) {
 		$value = $this->getMeta( $forumId, '_acceptTopics' );
-		if( !$value ) {
+		if( $value ) {
 			return unserialize( $value );
 		} else {
 			return array();
@@ -45,17 +45,19 @@ class ForumMetaRepository extends EntityRepository {
 	 * 
 	 * @param int $forumId
 	 * @param array $acceptTopicsId
+	 * @return true if the modification was a success
 	 */
 	public function setAcceptableTopics($forumId, array $acceptTopicsId = array()) {
 		$value = serialize( $acceptTopicsId );
-		$this->setMeta( $forumId, '_acceptTopics', $value );
+		return $this->setMeta( $forumId, '_acceptTopics', $value );
 	}
 	
 	/** @return true if the modification was a success */
 	public function setMeta($forumId, $key, $value) {
-		$meta = $this->findBy( array( 'forum_id' => $forumId, 'meta_key' => $key ) );
+		$meta = $this->findOneBy( array( 'forumId' => $forumId, 'metaKey' => $key ) );
 		if( !$meta ) {
 			$meta = new ForumMeta();
+			$meta->setForumId($forumId);
 			$meta->setMetaKey( $key );
 		}
 		$meta->setMetaValue( $value );

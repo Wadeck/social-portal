@@ -5,7 +5,10 @@ namespace socialportal\model;
  * User
  *
  * @Table(
- *	name="user"
+ *	name="user", 
+ *	uniqueConstraints={
+ *		@UniqueConstraint(name="username_unique", columns={"username"})
+ *	}
  * )
  * @Entity(repositoryClass="UserRepository")
  */
@@ -22,7 +25,7 @@ class User{
     /**
      * @var string $username
      *
-     * @Column(name="username", type="string", length=60, nullable=false)
+     * @Column(name="username", type="string", length=60, nullable=false, unique=true)
      */
     private $username;
 

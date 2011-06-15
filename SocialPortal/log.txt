@@ -1,281 +1,279 @@
-Tue, 14 Jun 11 12:36:07 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:36:07 +0000	Request path: Forum :: displayForm :: Array
-(
-    [0] => 8
-)
-
-Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 09:59:23 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 09:59:23 +0000	Request path: topic :: chooseType :: 
+Wed, 15 Jun 11 09:59:23 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 09:59:23 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
-      'notice' => 'A problem occurred during the edition of forum called TestFo2',
-      'redirectFrom' => '/SocialPortal/Forum/edit/8',
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 09:59:23 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 09:59:23 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:07 +0000	Simple cookies: Array
+Wed, 15 Jun 11 09:59:23 +0000	Simple cookies: Array
 (
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [_SESS] => e4vldhc60n9a3bnuamn0va4ut6
     [bp-activity-oldestpage] => 1
 )
 
-Tue, 14 Jun 11 12:36:07 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:36:07 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:36:07 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:36:07 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 09:59:23 +0000	Avoid storing session name in cookie _SESS=>e4vldhc60n9a3bnuamn0va4ut6
+Wed, 15 Jun 11 09:59:23 +0000	Storing cookie bp-activity-oldestpage=>1
+Wed, 15 Jun 11 09:59:23 +0000	[DEBUG]	end of session
 ====================================
 
-Tue, 14 Jun 11 12:36:34 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:36:34 +0000	Request path: home :: index :: 
-Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+Wed, 15 Jun 11 10:00:41 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 10:00:41 +0000	Request path: topic :: chooseType :: 
+Wed, 15 Jun 11 10:00:41 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 10:00:41 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
+Wed, 15 Jun 11 10:00:41 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 10:00:41 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:34 +0000	Simple cookies: Array
+Wed, 15 Jun 11 10:00:41 +0000	Simple cookies: Array
 (
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
+    [_SESS] => e4vldhc60n9a3bnuamn0va4ut6
     [bp-activity-oldestpage] => 1
 )
 
-Tue, 14 Jun 11 12:36:34 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:36:34 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:36:34 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 10:00:41 +0000	Avoid storing session name in cookie _SESS=>e4vldhc60n9a3bnuamn0va4ut6
+Wed, 15 Jun 11 10:00:41 +0000	Storing cookie bp-activity-oldestpage=>1
+Wed, 15 Jun 11 10:00:41 +0000	[DEBUG]	end of session
 ====================================
 
-Tue, 14 Jun 11 12:36:41 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:36:41 +0000	Request path: Forum :: edit :: Array
-(
-    [0] => 8
-)
-
-Tue, 14 Jun 11 12:36:41 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:00:56 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 10:00:56 +0000	Request path: topic :: chooseType :: 
+Wed, 15 Jun 11 10:00:56 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:41 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 10:00:56 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:36:47 +0000	[DEBUG]	end of session
-====================================
-
-Tue, 14 Jun 11 12:36:56 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:36:56 +0000	Request path: Forum :: edit :: Array
-(
-    [0] => 8
-)
-
-Tue, 14 Jun 11 12:36:56 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:00:56 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 10:00:56 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:36:56 +0000	[DEBUG]	session=array (
-  '_symfony2' => 
-  array (
-    '_flash' => 
-    array (
-    ),
-    '_locale' => 'en',
-  ),
-)
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
-  'bp-activity-oldestpage' => '1',
-)
-Tue, 14 Jun 11 12:37:05 +0000	Simple cookies: Array
+Wed, 15 Jun 11 10:00:56 +0000	Simple cookies: Array
 (
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [_SESS] => e4vldhc60n9a3bnuamn0va4ut6
     [bp-activity-oldestpage] => 1
 )
 
-Tue, 14 Jun 11 12:37:05 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:37:05 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:37:05 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:37:05 +0000	Redirect to /SocialPortal/forum/viewAll from /SocialPortal/Forum/edit/8
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 10:00:56 +0000	Avoid storing session name in cookie _SESS=>e4vldhc60n9a3bnuamn0va4ut6
+Wed, 15 Jun 11 10:00:56 +0000	Storing cookie bp-activity-oldestpage=>1
+Wed, 15 Jun 11 10:00:56 +0000	[DEBUG]	end of session
 ====================================
 
-Tue, 14 Jun 11 12:37:05 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:37:05 +0000	Request path: forum :: viewAll :: 
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:01:04 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 10:01:04 +0000	Request path: tool :: index :: 
+Wed, 15 Jun 11 10:01:04 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	session=array (
-  '_symfony2' => 
-  array (
-    '_flash' => 
-    array (
-      'notice' => 'All the modification for the forum called TestFo2 were a success',
-      'redirectFrom' => '/SocialPortal/Forum/edit/8',
-    ),
-    '_locale' => 'en',
-  ),
-)
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
-  'bp-activity-oldestpage' => '1',
-)
-Tue, 14 Jun 11 12:37:05 +0000	Simple cookies: Array
-(
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
-    [bp-activity-oldestpage] => 1
-)
-
-Tue, 14 Jun 11 12:37:05 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:37:05 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:37:05 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:37:05 +0000	[DEBUG]	end of session
-====================================
-
-Tue, 14 Jun 11 12:37:09 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:37:09 +0000	Request path: Forum :: displayForm :: Array
-(
-    [0] => 8
-)
-
-Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
-  'bp-activity-oldestpage' => '1',
-)
-Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 10:01:04 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:01:04 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 10:01:04 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:37:09 +0000	Simple cookies: Array
+Wed, 15 Jun 11 10:01:04 +0000	Simple cookies: Array
 (
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [_SESS] => e4vldhc60n9a3bnuamn0va4ut6
     [bp-activity-oldestpage] => 1
 )
 
-Tue, 14 Jun 11 12:37:09 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:37:09 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:37:09 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:37:09 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 10:01:04 +0000	Avoid storing session name in cookie _SESS=>e4vldhc60n9a3bnuamn0va4ut6
+Wed, 15 Jun 11 10:01:04 +0000	Storing cookie bp-activity-oldestpage=>1
+Wed, 15 Jun 11 10:01:04 +0000	[DEBUG]	end of session
 ====================================
 
-Tue, 14 Jun 11 12:43:46 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:43:46 +0000	Request path: Forum :: edit :: Array
-(
-    [0] => 8
-)
-
-Tue, 14 Jun 11 12:43:46 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:01:06 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 10:01:06 +0000	Request path: tool :: index :: 
+Wed, 15 Jun 11 10:01:06 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:43:46 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 10:01:06 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:01:06 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 10:01:06 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:43:49 +0000	Simple cookies: Array
+Wed, 15 Jun 11 10:01:06 +0000	Simple cookies: Array
 (
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
+    [_SESS] => e4vldhc60n9a3bnuamn0va4ut6
     [bp-activity-oldestpage] => 1
 )
 
-Tue, 14 Jun 11 12:43:49 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:43:49 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:43:49 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:43:49 +0000	Redirect to /SocialPortal/forum/viewAll from /SocialPortal/Forum/edit/8
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 10:01:06 +0000	Avoid storing session name in cookie _SESS=>e4vldhc60n9a3bnuamn0va4ut6
+Wed, 15 Jun 11 10:01:06 +0000	Storing cookie bp-activity-oldestpage=>1
+Wed, 15 Jun 11 10:01:06 +0000	[DEBUG]	end of session
 ====================================
 
-Tue, 14 Jun 11 12:43:49 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
-Tue, 14 Jun 11 12:43:49 +0000	Request path: forum :: viewAll :: 
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	cookies=array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+Wed, 15 Jun 11 10:01:25 +0000	start of session Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.91 Safari/534.30
+Wed, 15 Jun 11 10:01:25 +0000	Request path: Topic :: displayForm :: Array
+(
+    [0] => 2
+)
+
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	cookies=array (
+  '_SESS' => 'e4vldhc60n9a3bnuamn0va4ut6',
   'bp-activity-oldestpage' => '1',
 )
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	session=array (
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	session=array (
   '_symfony2' => 
   array (
     '_flash' => 
     array (
-      'notice' => 'All the modification for the forum called TestFo2 were a success',
-      'redirectFrom' => '/SocialPortal/Forum/edit/8',
     ),
     '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMSI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	Cookies received: array (
-  '_SESS' => 'kg1bve2nvr0ulbgp3cahq88rf1',
-  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
-  'bp-activity-oldestpage' => '1',
-)
-Tue, 14 Jun 11 12:43:49 +0000	Simple cookies: Array
-(
-    [_SESS] => kg1bve2nvr0ulbgp3cahq88rf1
-    [XDEBUG_SESSION] => ECLIPSE_DBGP
-    [bp-activity-oldestpage] => 1
-)
-
-Tue, 14 Jun 11 12:43:49 +0000	Avoid storing session name in cookie _SESS=>kg1bve2nvr0ulbgp3cahq88rf1
-Tue, 14 Jun 11 12:43:49 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
-Tue, 14 Jun 11 12:43:49 +0000	Storing cookie bp-activity-oldestpage=>1
-Tue, 14 Jun 11 12:43:49 +0000	[DEBUG]	end of session
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '1',
+   'username' => 'admin',
+   'randomKey' => '093bd17dc33fa43f8a357ef2da67ec25',
+   'password' => '0a4e4f98c4793000932441d5c8def3014d56fa7b',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-06-15 09:13:02',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+))
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	The nonce is not present
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	Exception thrown: core\http\exceptions\AccessDeniedException::__set_state(array(
+   'code' => 403,
+   'message' => 'The current user has not the right to access (socialportal\\controller\\Topic)#(displayFormAction)',
+))
+Wed, 15 Jun 11 10:01:25 +0000	[DEBUG]	end of session
 ====================================
 
