@@ -33,13 +33,13 @@ class NonceManager {
 		$i = $this->tick();
 		
 		// Nonce generated 0-12 hours ago
-		if( $this->computeNonce( ($i), $uid, $nonceAction ) === $nonce )
+		if( $this->computeNonce( ($i), $uid, $nonceAction ) === $nonce ){
 			return 1;
-		
+		}
 		// Nonce generated 12-24 hours ago
-		if( $this->computeNonce( ($i - 1), $uid, $nonceAction ) === $nonce )
+		if( $this->computeNonce( ($i - 1), $uid, $nonceAction ) === $nonce ){
 			return 2;
-		
+		}
 		// Invalid nonce
 		return false;
 	}

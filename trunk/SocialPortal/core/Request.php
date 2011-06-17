@@ -56,6 +56,10 @@ class Request {
 	
 	/** @var string */
 	private $requestedUrl;
+	
+	/** @var integer unix timestamp at the arrival of that request */
+	private $requestTime;
+	
 	/**
 	 * Constructor.
 	 *
@@ -92,6 +96,7 @@ class Request {
 		$this->files = new FileBag( $files );
 		$this->server = new ServerBag( $server );
 		$this->headers = new HeaderBag( $this->server->getHeaders() );
+		$this->requestTime = time();
 	
 		//		$this->session = new Session( new NativeSessionStorage( array( 'lifetime' => 3600 ) ) );
 	}
@@ -103,6 +108,11 @@ class Request {
 	 */
 	public static function createFromGlobals() {
 		return new static( $_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER );
+	}
+	
+	/** @return unix time at the arrival of the request */
+	public function getRequestTime(){
+		return $this->requestTime;
 	}
 	
 	/** @return the requested url */

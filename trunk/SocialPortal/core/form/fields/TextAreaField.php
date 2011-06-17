@@ -35,4 +35,21 @@ class TextAreaField extends Field {
 		?></textarea>
 <?php
 	}
+	
+	public function displayAll() {
+		switch ( $this->mode ) {
+			case 1 :
+				$this->insertLabel();
+				$this->insertField();
+				$this->insertErrorMessage();
+				break;
+			case 2 :
+				?><div class="label_error"><?php
+				$this->insertLabel();
+				$this->insertErrorMessage();
+				?></div><?php
+				$this->insertField();
+				break;
+		}
+	}
 }

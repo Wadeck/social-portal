@@ -13,8 +13,8 @@ class DoctrineLink {
 		$config = new Configuration();
 		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal\\model' );
 		$config->setMetadataDriverImpl( $driverImpl );
-		$config->setProxyDir( 'socialportal\\model' );
-		$config->setProxyNamespace( 'socialportal\\model' );
+		$config->setProxyDir( 'socialportal\\model\\proxies' );
+		$config->setProxyNamespace( 'socialportal\\model\\proxies' );
 		if( true === DEBUG ) {
 			$cache = new \Doctrine\Common\Cache\ArrayCache();
 			$config->setAutoGenerateProxyClasses( true );

@@ -22,6 +22,7 @@ class ForumForm extends Form {
 		$this->addInputField( new TextAreaField( 'forum_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_5', 'strlen_less-than_10' ) ) );
 		$this->addInputField( new TextField( 'forum_num_posts', __( 'The initial number of post' ), '', 'text', array( 'optional', 'value_less-than_4' ) ) );
 		$this->addInputField( new TextField( 'forum_num_topics', __( 'The initial number of topic' ), '5', 'text', array( 'optional', 'not-default' ) ) );
+		$this->setCss('forum-form rounded-box', 'forum_form.css');
 	}
 
 	public function setupWithForum(Forum $forum){
@@ -48,6 +49,6 @@ class ForumForm extends Form {
 	
 	public function getNumTopics() {
 		return $this->ready ? $this->data['forum_num_topics'] : null;
-	}
+	}	
 
 }
