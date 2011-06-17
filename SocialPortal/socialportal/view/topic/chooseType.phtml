@@ -1,16 +1,33 @@
-<?php $vars['helper']->insertMessage(); ?>
-<div class="padder">
-	<a class="button" href="<?php $vars['helper']->insertHref('Forum', 'viewAll'); ?>">Back to discussion place</a>
-</div>
+<?php
+$vars['helper']->insertMessage();
+?>
+<div class="padder"><a class="button" href="<?php
+$vars['helper']->insertHref( 'Forum', 'viewAll' );
+?>">Back to discussion place</a></div>
 <h3>Choose the type of topic</h3>
-<?php foreach($vars['forums'] as $forum): ?>
-	<div class="rounded-box padded">
-	<h4><?php echo $forum->getName(); ?></h4>
-	<?php foreach($vars['topicsFor'][$forum->getId()] as $topicType): ?>
-		<a href="<?php $vars['helper']->insertHref('Topic', 'displayForm', array($topicType->getId())); ?>" class="button" title="<?php
-		echo __('%topic_name% in %forum_name%', array('%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName())); ?>
-		"><?php 
-			echo __('%topic_name% in %forum_name%', array('%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName())); ?></a>
-	<?php endforeach; ?>
+<?php
+foreach( $vars['forums'] as $forum ) :
+	?>
+<div class="rounded-box padded">
+<h4><?php
+	echo $forum->getName();
+	?></h4>
+	<?php
+	foreach( $vars['topicsFor'][$forum->getId()] as $topicType ) :
+		?>
+		<a href="<?php
+		$vars['helper']->insertHref( 'Topic', 'displayForm', array( $topicType->getId(), $forum->getId() ) );
+		?>"
+	class="button"
+	title="<?php
+		echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
+		?>"><?php
+		echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
+		?></a>
+	<?php
+	endforeach
+	?>
 	</div>
-<?php endforeach; ?>
+<?php
+endforeach
+?>

@@ -1,0 +1,55 @@
+<?php
+use core\tools\Utils;
+$vars['helper']->insertMessage();
+$forum = $vars['forum'];
+$topics = $vars['topics'];
+$pagination = $vars['pagination'];
+$userHelper = $vars['userHelper'];
+$vars['helper']->addCssFile('forum_loop.css');
+
+?>
+<?php if($topics): ?>
+	<?php $pagination->insert(); ?>
+	<table class="forum-loop">
+		<thead>
+			<tr>
+				<th id="title"><?php echo __('Topic Title');?></th>
+				<th id="author"><?php echo __('Author');?></th>
+				<th id="latest-poster"><?php echo __('Latest Poster');?></th>
+				<th id="postcount"><?php echo __('Posts');?></th>
+				<th id="freshness"><?php echo __('Freshness');?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			//TODO reste a faire les permalinks vers les topics qui sont en dur pour le moment
+				$size = count($topics);
+				for($i = 0 ; $i < $size ; $i++):
+					$topic = $topics[$i];
+					$title = $topic->getTitle();
+			?>
+				<tr <?php if( $i % 2 == 1 ){ echo ' class="alt"' ; }?>>
+					<td class="title"><a class="topic-title" href="http://10.10.10.104/wordpress/topic/543/"
+						title="<?php echo $title; ?>"><?php echo $title; ?></a></td>
+					<td class="author">
+						<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
+							<?php echo $userHelper->insertAvatar(30); ?>
+							<div class="author-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
+						<?php endif ?>
+					</td>
+					<td class="latest-poster">
+						<?php if($userHelper->setCurrentUser($topic->getLastposter())):?>
+							<?php echo $userHelper->insertAvatar(30); ?>
+							<div class="lastposter-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
+						<?php endif ?>
+					</td>
+					<td class="postcount"><?php echo $topic->getNumPosts();?></td>
+					<td class="freshness"><?php echo Utils::getDataSince($topic->getTime());?></td>
+				</tr>
+			<?php endfor ?>
+		</tbody>
+	</table>
+	<?php $pagination->insert(); ?>
+<?php else: // no topics in this forum ?>
+<div class="message"><?php echo __('No topic in this forum');?></div>
+<?php endif; ?>

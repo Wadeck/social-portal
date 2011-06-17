@@ -1,6 +1,10 @@
 <?php
 
 namespace socialportal\controller;
+use core\user\UserHelper;
+
+use core\tools\Paginator;
+
 use core\debug\Logger;
 
 use socialportal\model\Forum as ForumEntity;
@@ -74,6 +78,7 @@ class Forum extends AbstractController {
 	/**
 	 * @Method(POST)
 	 * @Nonce(editForum)
+	 * @Parameters(1) 
 	 */
 	public function editAction($parameters) {
 		if( !isset( $parameters[0] ) ) {
@@ -102,9 +107,16 @@ class Forum extends AbstractController {
 	}
 	
 	/**
-	 * @Method(POST)
+	 * @Nonce(deleteForum)
 	 */
 	public function deleteAction($parameters) {}
+	
+	/**
+	 * @Nonce(moveForum)
+	 */
+	public function moveAction($parameters) {
+
+	}
 	
 	public function viewAllAction($parameters) {
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
@@ -113,9 +125,37 @@ class Forum extends AbstractController {
 	}
 	
 	/**
-	 * @Method(POST)
+	 * @Paramaters(1)
 	 */
-	public function moveAction($parameters) {
-
+	public function displaySingleAction($parameters) {
+		$forumId = $parameters[0];
+		$get = $this->frontController->getRequest()->query;
+		$page_num = $get->get( 'p', 1 );
+		$num_per_page = $get->get( 'n', 20 );
+		
+		$forum = $this->em->getRepository( 'Forum' )->find( $forumId );
+		$topics = $this->em->getRepository( 'TopicBase' )->findTopicsFromForum( $forumId, $page_num, $num_per_page );
+		
+		if( !$forum ) {
+			Logger::getInstance()->debug( "The forum with id [$forumId] is not valid" );
+			$this->frontController->addMessage( __( 'The given forum is not valid' ) );
+			$this->frontController->doRedirect( 'forum', 'viewAll' );
+		}
+		
+		$max_pages = $forum->getNumTopics();
+		if(!$max_pages){
+			$max_pages = 0;
+		}
+		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array( $forumId ), array( 'p' => "%#p%", 'n' => "%#n%" ) );
+		
+		$pagination = new Paginator();
+		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
+		$this->frontController->getResponse()->setVar( 'forum', $forum );
+		$this->frontController->getResponse()->setVar( 'topics', $topics );
+		$this->frontController->getResponse()->setVar( 'pagination', $pagination );
+		$userHelper = new UserHelper();
+		$this->frontController->getResponse()->setVar( 'userHelper', $userHelper );
+		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}
+
 }

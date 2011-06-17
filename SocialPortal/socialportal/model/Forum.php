@@ -10,7 +10,7 @@ namespace socialportal\model;
  *		@UniqueConstraint(name="name", columns={"name"})
  *	}
  * )
- * @Entity
+ * @Entity(repositoryClass="ForumRepository")
  */
 class Forum{
     /**

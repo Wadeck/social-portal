@@ -78,6 +78,13 @@ class User{
      */
     private $roles;
 
+    /**
+     * @var string $avatarKey
+     *
+     * @Column(name="avatar_key", type="string", length=255, nullable=true)
+     */
+    private $avatarKey;
+
 
     /** Get id @return bigint $id */
     public function getId(){ return $this->id; }
@@ -129,4 +136,10 @@ class User{
 
     /** Get roles @return integer $roles */
     public function getRoles(){ return $this->roles; }
+
+    /** Set avatarKey @param string $avatarKey */
+    public function setAvatarKey($avatarKey){ $this->avatarKey = $avatarKey; }
+
+    /** Get avatarKey @return string $avatarKey */
+    public function getAvatarKey(){ return $this->avatarKey; }
 }

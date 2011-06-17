@@ -16,6 +16,7 @@
 #header h1 {
 	margin: 0px;
 }
+
 #header h1#logo {
 	position: absolute;
 	bottom: 5px;
@@ -112,4 +113,8 @@
 	text-align: center;
 	color: #BBB;
 	text-shadow: #FAFAFA 1px 1px 0;
+}
+
+#footer p {
+	font-family: serif;
 }

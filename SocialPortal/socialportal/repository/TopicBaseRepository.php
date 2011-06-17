@@ -11,7 +11,7 @@ use socialportal\model\User;
 
 use Doctrine\ORM\EntityRepository;
 
-class TopicRepository extends EntityRepository {
+class TopicBaseRepository extends EntityRepository {
 	/** @return TopicBase|false if not found */
 	public function findBaseTopic($topicId) {
 		$qb = $this->_em->createQueryBuilder();
@@ -24,22 +24,32 @@ class TopicRepository extends EntityRepository {
 		}
 	}
 	
+	/** @return array of TopicBase */
+	public function findTopicsFromForum($forumId, $page_num, $num_per_page) {
+		$offset = ($page_num - 1) * $num_per_page;
+		$qb = $this->_em->createQueryBuilder();
+		$qb->select( 't' )->from( 'socialportal\model\TopicBase', 't' )->where( 't.forum = :id' )->setParameter( 'id', $forumId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
+		$topics = $qb->getQuery()->getResult();
+		return $topics;
+	}
+	
 	/** @return TopicFull|false if not found */
 	public function findFullTopic($topicId) {
-		$topicBase = $this->findBaseTopic($topicId);
-		if(!$topicBase){
+		$topicBase = $this->findBaseTopic( $topicId );
+		if( !$topicBase ) {
 			return false;
 		}
-		$customId = $topicBase->getCustomId(); 
-		$customType = $topicBase->getCustomType(); 
-		$customType = TopicType::translateTypeIdToName($customType);
-	
+		$customId = $topicBase->getCustomId();
+		$customType = $topicBase->getCustomType();
+		$customType = TopicType::translateTypeIdToName( $customType );
+		
 		$qb = $this->_em->createQueryBuilder();
+		//TODO should be a problem here !
 		$qb->select( 'ct' )->from( $customType, 'ct' )->where( 'ct.topicBase_id = :id' )->setParameter( 'id', $customId )->setMaxResults( 1 );
 		$results = $qb->getQuery()->getResult();
 		if( $results ) {
 			$fullTopic = $results[0];
-			$fullTopic->setTopicBase($topicBase);
+			$fullTopic->setTopicBase( $topicBase );
 			return $fullTopic;
 		} else {
 			return false;
