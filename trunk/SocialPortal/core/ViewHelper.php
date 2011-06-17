@@ -111,7 +111,7 @@ class ViewHelper {
 	 * @param array $parameters
 	 * @param array $GETAttributes
 	 */
-	public function createHref($controllerName, $actionName = '', $parameters = array(), $GETAttributes = array()) {
+	public function createHref($controllerName, $actionName = '', array $parameters = array(), array $GETAttributes = array()) {
 		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
 		if( $actionName ) {
 			$result .= '/' . $actionName;
@@ -138,5 +138,9 @@ class ViewHelper {
 	/** @return User */
 	public function getCurrentUser() {
 		return $this->frontController->getCurrentUser();
+	}
+	
+	public function setContainerClass($class){
+		$this->frontController->getResponse()->setContainerClass($class);
 	}
 }

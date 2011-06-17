@@ -1,6 +1,6 @@
 <?php
 
-namespace core\tools;
+namespace core\annotations;
 
 use core\debug\Logger;
 

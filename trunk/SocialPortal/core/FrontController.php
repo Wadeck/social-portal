@@ -189,7 +189,7 @@ class FrontController {
 				// this could append typically in the $methodName() action
 				$this->generateException( $e->getCustomException() );
 			} else {
-				Logger::getInstance()->debug( "Unknown Exception thrown: " . var_export( $e, true) );
+				Logger::getInstance()->debug( "Unknown Exception thrown: " . var_export( $e, true ) );
 				Logger::getInstance()->debug( "Trace: " . $e->getTraceAsString() );
 				// like the name says, we don't expect to have another exception type
 				// so we wrap it into UnexpectedException to be able to go through generateException
@@ -277,14 +277,17 @@ class FrontController {
 				$this->generateException( new PageNotFoundException( $footerFileName ) );
 			}
 		}
-		
+		// to authorize the view to modify some parameters of the header / footer (by viewHelper->setContainerClass by example)
+		$content = $this->renderFile( $file, $parameters );
 		$body = '';
 		if( !$fromAjax ) {
 			$body .= $this->renderFile( $headerFileName );
-			$body .= $this->renderFile( $file, $parameters );
+			$body .= '<div id="container" class="' . $this->getResponse()->getContainerClass() . '">';
+			$body .= $content;
+			$body .= '</div>';
 			$body .= $this->renderFile( $footerFileName );
 		} else {
-			$body = $this->renderFile( $file, $parameters );
+			$body = $content;
 		}
 		$this->response->setBody( $body );
 		$this->response->setCookies( $this->request->cookies->all() );
