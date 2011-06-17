@@ -1,5 +1,6 @@
 <?php
 $vars['helper']->insertMessage();
+$vars['helper']->setContainerClass('');
 ?>
 <div class="padder"><a class="button" href="<?php
 $vars['helper']->insertHref( 'Forum', 'viewAll' );
@@ -8,7 +9,7 @@ $vars['helper']->insertHref( 'Forum', 'viewAll' );
 <?php
 foreach( $vars['forums'] as $forum ) :
 	?>
-<div class="rounded-box padded">
+<div class="rounded-box padded margined">
 <h4><?php
 	echo $forum->getName();
 	?></h4>

@@ -15,18 +15,15 @@
 	cursor: pointer;
 }
 
-a {
-	color: #1FB3DD;
-	text-decoration: none;
-}
-
 .rounded-box {
-	margin: 10px 0 20px 0;
 	border: 1px solid #eee;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 	background-color: #fafafa;
+}
+.margined {
+	margin: 10px 0 20px 0;	
 }
 
 div.rounded-box.padded {
@@ -49,4 +46,25 @@ div#container{
 
 h1,h2,h3,h4,h5,h6 {
 	margin: 5px 0 15px 0;
+}
+
+a {
+	/* default color for each link */
+	color: #1FB3DD;
+	text-decoration: none;
+}
+.background_primary{
+	background: #ddd;
+}
+.background_secondary{
+	background: #ededed;
+}
+.base_color{
+	background: #bbb;
+}
+.color_primary{
+	background: #bbb;
+}
+.color_secondary{
+	background: #ddd;
 }

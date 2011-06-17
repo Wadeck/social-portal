@@ -55,4 +55,12 @@ class TopicBaseRepository extends EntityRepository {
 			return false;
 		}
 	}
+	
+	/** Warning, after this call the topic entity must be reloaded to have the correct value */
+	public function incrementPostCount($topicId, $num = 1) {
+		$qb = $this->_em->createQueryBuilder();
+		$qb->update( 'socialportal\model\TopicBase', 't' )->set( 't.numPosts', 't.numPosts+?1' )->where( 'f.id = ?2' )->setParameter( 1, $num )->setParameter( 2, $topicId );
+		$q = $qb->getQuery();
+		$p = $q->execute();
+	}
 }
