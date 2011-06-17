@@ -1,8 +1,13 @@
 <?php
 
+$realWD = getcwd();
+$currentWD = dirname(__FILE__);
+if($realWD !== $currentWD){
+	chdir($currentWD);
+}
+
 require_once 'base_script.php';
 
-use Symfony\Component\Console\Output\EclipseOutput;
 use Doctrine\ORM\EntityManager;
 
 ini_set( "display_errors", "On" );
