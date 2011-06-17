@@ -12,7 +12,7 @@ use core\http\exceptions;
 
 use Doctrine\Common\Annotations\Annotation;
 
-// Could be either @Nonce('nonce_action_name') or @Method(bidule_action)
+// Could be either @Nonce('nonce_action_name') or @Nonce(bidule_action)
 class Nonce extends Annotation implements ValidableInterface{
 	/** @var array of Capabilities (string) */
 	private $nonceAction;
@@ -29,9 +29,11 @@ class Nonce extends Annotation implements ValidableInterface{
 	}
 	
 	public function isValid(){
-		//TODO WIP
 		$front = FrontController::getInstance();
 		$nonce = $front->getRequest()->request->get('_nonce', null);
+		if(null === $nonce){
+			$nonce = $front->getRequest()->query->get('_nonce', null);
+		}
 		if(null === $nonce){
 			Logger::getInstance()->debug('The nonce is not present');
 			return false;

@@ -108,7 +108,6 @@ class FrontController {
 		$this->firstCallDisplay = true;
 	}
 	
-	/** @return core\FrontController */
 	public static function getInstance() {
 		if( !self::$instance ) {
 			self::$instance = new FrontController();

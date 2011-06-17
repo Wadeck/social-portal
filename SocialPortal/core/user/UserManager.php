@@ -15,6 +15,12 @@ use core\security\Crypto;
 use core\Request;
 
 class UserManager {
+	public static $nullUserId = 1;
+	public static $anonUserId = 2;
+	/** @var User cached anonymous */
+	private static $anonUser = null;
+	/** @var User cached nullUser */
+	private static $nullUser = null;
 	private static $COOKIE_NAME = 'rememberMeC';
 	private static $SESSION_NAME = 'rememberMeS';
 	
@@ -35,7 +41,7 @@ class UserManager {
 	public function retrieveInformationAboutConnectedUser() {
 		if( !$this->retrieveFromSession() ) {
 			if( !$this->retrieveFromCookie() ) {
-				$this->user = self::createAnonymousUser();
+				$this->user = self::getAnonymousUser();
 			} else {
 				// we loaded the info from the cookie, so we need to populate the session
 				$this->populateSession();
@@ -122,6 +128,10 @@ class UserManager {
 		if( !$user ) {
 			return false;
 		}
+		if( $user->getId() <= 1 ) {
+			// nullUser not allowed to be connected
+			return false;
+		}
 		if( Crypto::verifyDBPassword( $user->getRandomKey(), $password, $user->getPassword() ) ) {
 			$this->user = $user;
 			if( $rememberMe ) {
@@ -160,8 +170,14 @@ class UserManager {
 		return $this->userProvider->addNewUser( $user );
 	}
 	
-	/** Give very limited capabilities */
-	public static function createAnonymousUser() {
+	/** 
+	 * Give very limited capabilities 
+	 * @return User anonymousUser that is used when the user is not registered
+	 */
+	public static function getAnonymousUser() {
+		if( self::$anonUser ) {
+			return self::$anonUser;
+		}
 		$user = new User();
 		$user->setUsername( 'Anonymous' );
 		$user->setStatus( 0 );
@@ -169,10 +185,40 @@ class UserManager {
 		$user->setRoles( UserRoles::$anonymous_role );
 		//32 chars
 		$user->setRandomKey( '12345678901234567890123456789012' );
-		// to generate this password, we use the url: tool/createDirectPassword/_randomKey_/_password_
+		// to generate this password, we use the url: tool/directCreatePassword/_randomKey_/_password_
 		// password = 'anon'
 		$user->setPassword( '7e3ea8c729242fac9036b888d952767deb7be460' );
+		// @ to enable unix timestamp
+		$date = new \DateTime( "@0" );
+		$user->setRegistered( $date );
+		$user->setAvatarKey( 'anon' );
 		
+		self::$anonUser = $user;
+		return $user;
+	}
+	/**
+	 * @return User nullUser that is used for the null reference like lastPoster of a topic that is just created
+	 */
+	public static function getNullUser() {
+		if( self::$nullUser ) {
+			return self::$nullUser;
+		}
+		$user = new User();
+		$user->setUsername( 'NullUser' );
+		$user->setStatus( 0 );
+		$user->setEmail( 'null@void.com' );
+		$user->setRoles( UserRoles::$anonymous_role );
+		//32 chars
+		$user->setRandomKey( '01234567890123456789012345678901' );
+		// to generate this password, we use the url: tool/directCreatePassword/_randomKey_/_password_
+		// password = 'null'
+		$user->setPassword( '835ef91ee76b62b87266693dbfa0e49cfdeb4e00' );
+		// @ to enable unix timestamp
+		$date = new \DateTime( "@0" );
+		$user->setRegistered( $date );
+		$user->setAvatarKey( 'null' );
+		
+		self::$nullUser = $user;
 		return $user;
 	}
 	
@@ -193,8 +239,13 @@ class UserManager {
 		$user->setEmail( $email );
 		$user->setStatus( $status );
 		$user->setActivationKey( $activationKey );
-		$user->setRegistered( new \DateTime( "now" ) );
+		
+		// @ to enable the unix timestamp
+		$date = new \DateTime( '@'.$this->request->getRequestTime() );		
+		
+		$user->setRegistered( $date );
 		$user->setRoles( $role );
+		$user->setAvatarKey( $email );
 		return $user;
 	}
 

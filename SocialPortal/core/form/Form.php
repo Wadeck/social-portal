@@ -110,7 +110,8 @@ class Form {
 		echo $name;
 		?>" class="button" value="<?php
 		echo $description;
-		?>" onClick="return validForm(this);">
+		?>"
+	onClick="return validForm(this);">
 <?php
 	}
 	
@@ -120,29 +121,13 @@ class Form {
 	
 	public function insertFields() {
 		foreach( $this->fields as $key => $field ) {
-			echo "<div>";
+			echo '<div class="field_container">';
 			$field->displayAll();
-			echo "</div>";
+			echo '</div>';
 		}
 	}
 	
 	//#################### creation part #####################
-	
-
-	//	/**
-	//	 * After this call, we must use #display (to ask for the content)
-	//	 * @param FrontController $frontController
-	//	 * @param array $post Comes from the $_POST, to fill the values of the field
-	//	 * @param array $errors Comes from the $_SESSION['errors_form'], is null the case we want to validate and retrieve the content,
-	//	 * because it's in this case that we check the validity and create the errors !
-	//	 */
-	//	public static function buildFromArrayForDisplay(FrontController $frontController, array $post = array(), array $errors = array()) {
-	//		$form = new static( $frontController );
-	//		$post = $this->frontController->getRequest()->request->all();
-	//		$errors = $this->frontController->getRequest()->getSession()->get( 'errors_form', array() );
-	//		$form->setupWithArray( $post, $errors );
-	//	}
-	
 
 	/**
 	 * Display the form in the view part without having to pass parameters
@@ -160,7 +145,7 @@ class Form {
 		}
 		$this->frontController->getViewHelper()->addJavascriptFile( 'jquery.js' );
 		$this->frontController->getViewHelper()->addJavascriptFile( 'form_validator.js' );
-		$this->frontController->getViewHelper()->addJavascriptVar('_error_messages', Field::getErrorMessages());
+		$this->frontController->getViewHelper()->addJavascriptVar( '_error_messages', Field::getErrorMessages() );
 		
 		$this->insertFormBody( $this->targetUrl, $cssClass );
 		$this->insertFields();
@@ -190,19 +175,6 @@ class Form {
 	//###################### validation part #####################
 	
 
-	//
-	//	/**
-	//	 * After this call, we muse use #checkAndGetContent (to receive the content)
-	//	 * @param FrontController $frontController
-	//	 * @param array $post Comes from the $_POST, to fill the values of the field
-	//	 */
-	//	public static function buildFromArrayForRetrieval(FrontController $frontController) {
-	//		$form = new static( $frontController );
-	//		$post = $this->frontController->getRequest()->request->all();
-	//		$form->setupWithArray( $post, array() );
-	//	}
-	
-
 	/**
 	 * If the form is invalid, it redirects automatically (except if we passe as parameter false
 	 * Enable the use of the children method like ForumForm#getForumName()
@@ -211,16 +183,14 @@ class Form {
 	public function checkAndPrepareContent() {
 		$errors = $this->validate();
 		if( !empty( $errors ) ) {
-
+			
 			// in this case there are some errors, so we display the referrerUrl instead of normal action,
 			// but this will be done in the controller, we just return false
 			$this->frontController->getRequest()->request->set( $this->formName . '_errors_form', $errors );
 			$url = $this->frontController->getRequest()->getReferrer();
-		// will exit
+			// will exit
 			$this->frontController->dispatch( $url );
-		
 		}
-		
 		$result = array();
 		foreach( $this->fields as $field ) {
 			$result[$field->getName()] = $field->getValue();
@@ -264,44 +234,6 @@ class Form {
 		$this->fillWithArray( $args, $errors );
 	}
 	
-	//	public function setupWithArray($withErrors, $forceEmptyForm = false) {
-	//		if( $forceEmptyForm ) {
-	//			$args = array();
-	//		} else {
-	//			$request = $this->frontController->getRequest();
-	//			
-	//			//TODO optimize after debug
-	//			// in this case we come from $_POST == the user send a form
-	//			$from_session = $request->getSession()->get( $this->formName.'_fields_form', array() );
-	//			$from_post = $request->request->all();
-	//			if( $from_session ) {
-	//				// in this case we come with information from $_SESSION, because we do a redirect === the user sent a form that is not valid
-	//				Logger::getInstance()->debug( 'The two a2rays in setupWithArray: from post=' . var_export( $from_post, true ) . ' and from session= ' . var_export( $from_session, true ) );
-	//				$args = $from_session;
-	//				
-	//				// only in this case we care about the errors
-	//				$errors = $request->getSession()->get(  $this->formName.'_errors_form', array() );
-	//				
-	//				// but we need to clear the session
-	////				$request->getSession()->remove( 'fields_form' );
-	////				$request->getSession()->remove( 'errors_form' );
-	//			} else {
-	//				$from_session = $this->frontController->getRequest()->getSession()->get(  $this->formName.'_fields_form', array() );
-	//				Logger::getInstance()->debug( 'The two a1rays in setupWithArray: from post=' . var_export( $from_post, true ) . ' and from session= ' . var_export( $from_session, true ) );
-	//				$args = $from_post;
-	//				
-	//				$errors = array();
-	//			}
-	//		}
-	//		//		if( $withErrors ) {
-	//		//			$errors = $this->frontController->getRequest()->getSession()->get( 'errors_form', array() );
-	//		//		} else {
-	//		//			$errors = null;
-	//		//		}
-	//		$this->fillWithArray( $args, $errors );
-	//	}
-	
-
 	protected function fillWithArray(array $args = array(), array $errors = array()) {
 		if( empty( $args ) && empty( $errors ) ) {
 			return;
@@ -318,7 +250,7 @@ class Form {
 	}
 	
 	//#############################
-	//TODO remove those methods
+	//TODO remove those methods after having changed the login form
 	
 
 	public static function insertReferrerField() {

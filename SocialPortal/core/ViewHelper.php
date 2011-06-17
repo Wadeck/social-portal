@@ -12,6 +12,8 @@ use core\security\Firewall;
 class ViewHelper {
 	/** @var string representing the hash of action / user / time to avoid malicious users to hijack session easily */
 	private $nonce;
+	/** @var array of nonce that are stored for the routines */
+	private $nonceStack = array();
 	/** @var core\FrontController*/
 	private $frontController;
 	/** @var core\Request */
@@ -85,10 +87,19 @@ class ViewHelper {
 	/** Could be used for login/pass/avatar template */
 	public function insertModule($module, $action = '', $parameters = array()) {
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
+		$tempNonce = $this->nonce;
+		$this->nonce = null;
+		
 		$this->frontController->doAction( $module, $action, $parameters );
+		
+		$this->nonce = $tempNonce;
 		$this->frontController->getResponse()->setVars($tempVars);
 	}
 	
+	/** 
+	 * Would be reset after a doDisplay
+	 * Acts as a stack that is push and pop for each subroutine
+	 */
 	public function setNonce($nonce) {
 		$this->nonce = $nonce;
 	}
