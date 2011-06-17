@@ -1,0 +1,113 @@
+/*
+ * paginate - WordPress Pagination Function
+ * Revision: $Id: paginate.css 286636 2010-09-08 00:11:23Z emartin24 $
+ * Copyright (c) 2010 Eric Martin http://www.ericmmartin.com/projects/paginate/
+ */
+.paginate {
+	padding: 0;
+	margin: 0;
+	font-style: normal;
+	font-family: Lucida Grande, Arial, Sans-serif;
+	text-align: center;
+}
+
+.paginate li {
+	display: inline;
+	list-style: none;
+}
+
+.paginate a {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #ddd;
+	color: #1FB3DD;
+	/*color:#666;*/
+	margin-right: 2px;
+	margin-left: 2px;
+	padding: 2px 3px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.paginate a:hover,.paginate a:active {
+	background: #EAEAEA;
+	color: #111;
+	border: 1px solid #aaa;
+}
+
+.paginate span {
+	text-decoration: none;
+	font-weight: bold;
+	padding: 2px 3px;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+.paginate .title {
+	color: #555;
+	margin-right: 4px;
+}
+
+.paginate .gap {
+	color: #999;
+	margin-right: 4px;
+}
+
+/*.paginate .current {
+	color:#fff; background:#5f87ae; border:1px solid #89adcf; margin-right:4px; padding:3px 6px;
+}
+*/
+.paginate .page {
+	
+}
+
+.paginate .prev {
+	margin-right: 10px;
+}
+
+.paginate .next {
+	margin-left: 10px;
+}
+
+.paginate .last,.paginate .first {
+	
+}
+
+/* style overrides for comments pagination */
+.paginate-comments {
+	
+}
+
+.paginate-comments li {
+	
+}
+
+.paginate-comments a {
+	
+}
+
+.paginate-comments a:hover,.paginate-comments a:active {
+	
+}
+
+.paginate-comments .title {
+	
+}
+
+.paginate-comments .gap {
+	
+}
+
+.paginate-comments .current {
+	
+}
+
+.paginate-comments .page {
+	
+}
+
+.paginate-comments .prev,.paginate-comments .next {
+	
+}

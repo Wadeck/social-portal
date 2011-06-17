@@ -14,7 +14,7 @@ class UserRepository extends EntityRepository {
 	/** @return User|false if not found */
 	public function findByUsername($username) {
 		if( $username === 'Anonymous' ) {
-			return $this->getAnonymousUser();
+			return UserManager::getAnonymousUser();
 		}
 		$qb = $this->_em->createQueryBuilder();
 		$qb->select( 'u' )->from( 'socialportal\model\User', 'u' )->where( 'u.username = :username' )->setParameter( 'username', $username )->setMaxResults( 1 );
@@ -36,26 +36,8 @@ class UserRepository extends EntityRepository {
 	
 	public function getUserPassword($username) {
 		if( $username === 'Anonymous' ) {
-			return $this->getAnonymousUser()->getPassword();
+			return UserManager::getAnonymousUser()->getPassword();
 		}
 		$this->findByUsername( $username )->getPassword();
 	}
-	
-	/** @return User */
-	public function getAnonymousUser() {
-		if( !$this->anonUser ) {
-			$this->anonUser = UserManager::createAnonymousUser();
-		}
-		return $this->anonUser;
-	}
-	
-//	/**
-//	 * @return array of string representing the capabilities
-//	 */
-//	public function getUserCapability(User $user){
-//		$roles = $user->getRoles();
-//		foreach($roles){
-//			
-//		}
-//	}
 }

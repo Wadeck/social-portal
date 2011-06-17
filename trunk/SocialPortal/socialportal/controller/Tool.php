@@ -41,7 +41,7 @@ class Tool extends AbstractController {
 			$url = $this->frontController->getViewHelper()->createHref( $currentClass, $name );
 			$links[$name] = $url;
 		}
-		
+		$links['Back to home'] = $this->frontController->getViewHelper()->createHref( 'home' );
 		$this->frontController->getResponse()->setVar( 'links', $links );
 		$this->frontController->doDisplay( 'tool', 'displayAllTools' );
 	}
@@ -66,40 +66,40 @@ class Tool extends AbstractController {
 		$forumDiscussion->setName( 'Discussion' );
 		$forumDiscussion->setDescription( 'Place where people can speak with others freely' );
 		$forumDiscussion->setPosition( 1 );
-		$forumDiscussion->setNumPosts(0);
-		$forumDiscussion->setNumTopics(0);
+		$forumDiscussion->setNumPosts( 0 );
+		$forumDiscussion->setNumTopics( 0 );
 		$this->em->persist( $forumDiscussion );
 		
 		$forumStories = new Forum();
 		$forumStories->setName( 'Stories' );
 		$forumStories->setDescription( 'Place where people narrate stories and explain their thoughts' );
 		$forumStories->setPosition( 2 );
-		$forumStories->setNumPosts(0);
-		$forumStories->setNumTopics(0);
+		$forumStories->setNumPosts( 0 );
+		$forumStories->setNumTopics( 0 );
 		$this->em->persist( $forumStories );
 		
 		$forumStrategies = new Forum();
 		$forumStrategies->setName( 'Strategies' );
 		$forumStrategies->setDescription( 'Place where people exchange strategies under list format' );
 		$forumStrategies->setPosition( 3 );
-		$forumStrategies->setNumPosts(0);
-		$forumStrategies->setNumTopics(0);
+		$forumStrategies->setNumPosts( 0 );
+		$forumStrategies->setNumTopics( 0 );
 		$this->em->persist( $forumStrategies );
 		
 		$forumActivities = new Forum();
 		$forumActivities->setName( 'Activities' );
 		$forumActivities->setDescription( 'Place where people exchange activities and can gather some ideas' );
 		$forumActivities->setPosition( 4 );
-		$forumActivities->setNumPosts(0);
-		$forumActivities->setNumTopics(0);
+		$forumActivities->setNumPosts( 0 );
+		$forumActivities->setNumTopics( 0 );
 		$this->em->persist( $forumActivities );
 		
 		$forumSupport = new Forum();
 		$forumSupport->setName( 'Support' );
 		$forumSupport->setDescription( 'Place where people can ask for help from others' );
 		$forumSupport->setPosition( 10 );
-		$forumSupport->setNumPosts(0);
-		$forumSupport->setNumTopics(0);
+		$forumSupport->setNumPosts( 0 );
+		$forumSupport->setNumTopics( 0 );
 		$this->em->persist( $forumSupport );
 		
 		if( $this->em->flushSafe() ) {
@@ -118,17 +118,21 @@ class Tool extends AbstractController {
 		} else {
 			$this->frontController->addMessage( __( 'Creation of the base forum failed !' ) );
 		}
-		$this->frontController->doRedirect( 'home', 'index' );
+		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
-	public function createAdminAction($parameters) {
-		$user = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, 0 );
-		$this->em->persist( $user );
+	public function createBaseUserAction($parameters) {
+		$anonUser = UserManager::getAnonymousUser();
+		$nullUser = UserManager::getNullUser();
+		$admin = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, 0 );
+		$this->em->persist( $nullUser );
+		$this->em->persist( $anonUser );
+		$this->em->persist( $admin );
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Creation of the admin user complete' ) );
+			$this->frontController->addMessage( __( 'Creation of the default users complete' ) );
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the admin user failed !' ) );
+			$this->frontController->addMessage( __( 'Creation of the default users failed !' ) );
 		}
-		$this->frontController->doRedirect( 'home', 'index' );
+		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 }

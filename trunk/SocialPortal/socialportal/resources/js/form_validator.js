@@ -61,10 +61,16 @@ function validForm(obj) {
 			var constraints = jq(this).attr('class').split(' ');
 			var error = containsError(value, constraints);
 			if (error) {
-			var errorLabel = jq(this).siblings('.error_message');
-			errorLabel.html(error);
-			errorLabel.addClass('active');
-			numberOfError++;
+				var parent = jq(this).parentsUntil('.field_container');
+				if(!parent.length){
+					parent = jq(this);
+				}
+				parent = parent.parent();
+				parent = parent[parent.length-1];
+				var errorLabel = jq('.error_message', parent);
+				errorLabel.html(error);
+				errorLabel.addClass('active');
+				numberOfError++;
 			}
 		});
 	}catch(e){

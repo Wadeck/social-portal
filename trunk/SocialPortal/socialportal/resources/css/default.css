@@ -20,12 +20,13 @@ a {
 	text-decoration: none;
 }
 
-div.rounded-box {
+.rounded-box {
 	margin: 10px 0 20px 0;
 	border: 1px solid #eee;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+	background-color: #fafafa;
 }
 
 div.rounded-box.padded {
@@ -42,6 +43,8 @@ body {
 
 div#container{
 	line-height: 170%;	
+	margin: 0 auto;	
+	width: 80%;
 }
 
 h1,h2,h3,h4,h5,h6 {

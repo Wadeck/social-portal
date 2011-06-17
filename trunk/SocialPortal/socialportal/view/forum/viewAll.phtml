@@ -7,18 +7,22 @@
 
 
 $vars['helper']->insertMessage();
-if( isset( $vars['forums'] ) )
-	foreach( $vars['forums'] as $forum ) {
+$forums = $vars['forums'];
+if( $forums )
+	foreach( $forums as $forum ) {
 		?><div>
 <p><?php
 		echo $forum->getName();
-		?><span><a
-	href=" <?php
+		?><span><a href=" <?php
 		$vars['helper']->insertHref( 'Forum', 'displayForm', array( $forum->getId() ) );
-		?>" title="edit">&nbsp;Edit</a></span></p>
+		?>"
+	title="edit">&nbsp;Edit</a><a
+	href=" <?php
+		$vars['helper']->insertHref( 'Forum', 'displaySingle', array( $forum->getId() ) );
+		?>" title="edit">&nbsp;View</a></span></p>
 </div><?php
 	}
 else {
-	echo "<div>Currently no forum</div>";
+	echo '<div class="message">Currently no forum</div>';
 }
 ?>

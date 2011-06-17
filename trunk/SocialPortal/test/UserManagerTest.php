@@ -121,5 +121,13 @@ class UserProviderMock implements UserProviderInterface {
 	public function getUserByUsername($username) {
 		return $this->user;
 	}
+/* (non-PHPdoc)
+	 * @see core\user.UserProviderInterface::addNewUser()
+	 */
+	public function addNewUser(User $user) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
