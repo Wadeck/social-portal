@@ -135,4 +135,42 @@ class Tool extends AbstractController {
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
+	
+	public function recountAllTopicsAction($parameters) {
+		$forumRep = $this->em->getRepository( 'Forum' );
+		$forums = $forumRep->findAll();
+		$total = 0;
+		foreach( $forums as $f ) {
+			$count = $forumRep->recountAllTopics( $f->getId() );
+			$total += $count;
+			$f->setNumTopics( $count );
+			$this->em->persist( $f );
+		}
+		
+		if( $this->em->flushSafe() ) {
+			$this->frontController->addMessage( __( 'Recount topics complete total=%total%', array( '%total%' => $total ) ) );
+		} else {
+			$this->frontController->addMessage( __( 'Recount failed !' ) );
+		}
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
+	public function recountAllPostsAction($parameters) {
+		$forumRep = $this->em->getRepository( 'Forum' );
+		$forums = $forumRep->findAll();
+		$total = 0;
+		foreach( $forums as $f ) {
+			$count = $forumRep->recountAllPosts( $f->getId() );
+			$total += $count;
+			$f->setNumPosts( $count );
+			$this->em->persist( $f );
+		}
+		
+		if( $this->em->flushSafe() ) {
+			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ) );
+		} else {
+			$this->frontController->addMessage( __( 'Recount failed !' ) );
+		}
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
 }

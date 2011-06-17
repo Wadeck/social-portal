@@ -140,6 +140,8 @@ class Topic extends AbstractController {
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
+		// increment the number of topic in the forum parent
+		$this->em->getRepository('Forum')->incrementTopicCount($forumId);
 		
 		$this->frontController->addMessage( __( 'The creation of the topic was a success' ) );
 		$this->frontController->doRedirect( 'Forum', 'viewAll' );

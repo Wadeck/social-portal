@@ -1,6 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-div.flash_message{
+div.flash_message {
 	display: block;
 	font-size: 15px;
 	font-weight: normal;
@@ -15,4 +15,26 @@ div.flash_message{
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	max-width: 250px;
+}
+
+div.message {
+	display: block;
+	font-size: 15px;
+	font-weight: normal;
+	background: #FFF9DB;
+	border-bottom: 1px solid #FFE8C4;
+	border-right: 1px solid #FFE8C4;
+	color: #ffa200;
+	padding: 5px 8px;
+	margin: 8px;
+	text-decoration: none;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	max-width: 250px;
+}
+div.message.centered{
+	margin-left: auto;
+	margin-right: auto;
+	width: 33%;
 }

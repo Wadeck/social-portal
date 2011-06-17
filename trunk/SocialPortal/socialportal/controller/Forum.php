@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\topics\ForumHeader;
+
 use core\user\UserHelper;
 
 use core\tools\Paginator;
@@ -143,18 +145,37 @@ class Forum extends AbstractController {
 		}
 		
 		$max_pages = $forum->getNumTopics();
-		if(!$max_pages){
+		$max_pages = ceil($max_pages / $num_per_page);
+		if( !$max_pages ) {
 			$max_pages = 0;
 		}
 		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array( $forumId ), array( 'p' => "%#p%", 'n' => "%#n%" ) );
 		
+		$response = $this->frontController->getResponse();
+		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
-		$this->frontController->getResponse()->setVar( 'forum', $forum );
-		$this->frontController->getResponse()->setVar( 'topics', $topics );
-		$this->frontController->getResponse()->setVar( 'pagination', $pagination );
+		$response->setVar( 'pagination', $pagination );
+		
+		$response->setVar( 'forum', $forum );
+		$response->setVar( 'topics', $topics );
+		
 		$userHelper = new UserHelper();
-		$this->frontController->getResponse()->setVar( 'userHelper', $userHelper );
+		$response->setVar( 'userHelper', $userHelper );
+		
+		$forumHeader = new ForumHeader();
+		$forums = $this->em->getRepository( 'Forum' )->findAll();
+		usort( $forums, function (ForumEntity $a, ForumEntity $b) {
+			if( $a == $b ) {
+				return 0;
+			}
+			return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
+		} );
+		$indexSelected = array_search( $forum, $forums );
+		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );
+		
+		$response->setVar( 'forumHeader', $forumHeader );
+		
 		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}
 

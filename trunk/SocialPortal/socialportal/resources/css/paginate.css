@@ -3,9 +3,14 @@
  * Revision: $Id: paginate.css 286636 2010-09-08 00:11:23Z emartin24 $
  * Copyright (c) 2010 Eric Martin http://www.ericmmartin.com/projects/paginate/
  */
+
+.navigation{
+	min-height: 15px;
+}
+
 .paginate {
 	padding: 0;
-	margin: 0;
+	margin: 6px 0 6px 0;
 	font-style: normal;
 	font-family: Lucida Grande, Arial, Sans-serif;
 	text-align: center;
