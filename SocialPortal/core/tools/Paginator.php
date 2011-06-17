@@ -54,6 +54,7 @@ class Paginator {
 			return $this->cache;
 		}
 		if( !$pages ) {
+			// should normally never occur
 			$this->cache = '';
 			return $this->cache;
 		}
@@ -79,7 +80,7 @@ class Paginator {
 		
 		$output = stripslashes( $before );
 		if( $pages > 1 ) {
-			$output .= sprintf( '<ol class="wp-paginate%s">', ($this->type === 'posts') ? '' : ' wp-paginate-comments' );
+			$output .= '<ol class="paginate paginate-comments">' ;
 			if( $title ) {
 				$output .= sprintf( '<li><span class="title">%s</span></li>', $title );
 			}

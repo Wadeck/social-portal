@@ -14,6 +14,7 @@ class DoctrineLink {
 		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal\\model' );
 		$config->setMetadataDriverImpl( $driverImpl );
 		$config->setProxyDir( 'socialportal\\model\\proxies' );
+		$config->setDefaultEntityNamespace( 'socialportal\\model' );
 		$config->setProxyNamespace( 'socialportal\\model\\proxies' );
 		if( true === DEBUG ) {
 			$cache = new \Doctrine\Common\Cache\ArrayCache();

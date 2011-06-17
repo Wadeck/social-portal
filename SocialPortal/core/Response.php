@@ -29,6 +29,9 @@ class Response {
 	private $desiredCss = array();
 	/** @var array */
 	private $desiredJs = array();
+	
+	private $containerClass = 'rounded-box padded';
+	
 	/** 
 	 * Typically translation arrays
 	 * @var array Variables that will be passed to javascript
@@ -239,20 +242,12 @@ class Response {
 <title><?php
 		echo $this->title;
 		?></title>
-	<?php
-		if( $this->favicon ) :
-			?>
-	<link rel="shortcut icon" href="<?php
-			echo $this->favicon;
-			?>" type="image/x-icon" />
-		
-		<?php endif;
-		?>
-	<!-- other meta -->
-	<?php
-		$this->insertCSS();
-		$this->insertJavascript();
-		?>
+	<?php if( $this->favicon ) : ?>
+		<link rel="shortcut icon" href="<?php echo $this->favicon; ?>" type="image/x-icon" />		
+	<?php endif ;
+	$this->insertCSS();
+	$this->insertJavascript();
+	?>
 </head>
 <body><?php
 		echo $this->body;
@@ -309,5 +304,21 @@ class Response {
 	/** @return true if the status code is in (201, 301, 302, 303, 307) */
 	public function isRedirect() {
 		return in_array( $this->statusCode, array( 201, 301, 302, 303, 307 ) );
+	}
+	
+	/** 
+	 * Internal use only, to display the css class of the container 
+	 * @return string
+	 */
+	public function getContainerClass() {
+		return $this->containerClass;
+	}
+	
+	/**
+	 * The container class is the css class we'll add to the container, the div that contains all the things that are not in header neither in footer
+	 * @param string $class css class, default is 'rounded-box padded'
+	 */
+	public function setContainerClass($class = 'rounded-box padded') {
+		$this->containerClass = $class;
 	}
 }

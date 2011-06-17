@@ -230,7 +230,7 @@ class UserManager {
 	 * @param string $activationKey
 	 * @return User that is not persisted at all for the moment
 	 */
-	public static function createUser($username, $password, $email, $role, $status = 0, $activationKey = '') {
+	public static function createUser($username, $password, $email, $role, $time, $status = 0, $activationKey = '') {
 		$user = new User();
 		$user->setUsername( $username );
 		$randomKey = Crypto::createRandomKey();
@@ -241,7 +241,7 @@ class UserManager {
 		$user->setActivationKey( $activationKey );
 		
 		// @ to enable the unix timestamp
-		$date = new \DateTime( '@'.$this->request->getRequestTime() );		
+		$date = new \DateTime( '@'.$time );		
 		
 		$user->setRegistered( $date );
 		$user->setRoles( $role );
