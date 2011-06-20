@@ -51,9 +51,23 @@ class ViewHelper {
 	}
 	
 	public function insertMessage() {
-		$message = $this->frontController->getRequest()->getSession()->getFlash( 'notice' );
+		$session = $this->frontController->getRequest()->getSession();
+		
+		// error prevails information
+		$message = $session->getFlash( 'notice_error' );
+		$class = 'flash_message error';
+		if( !$message ) {
+			$message = $session->getFlash( 'notice_correct' );
+			$class = 'flash_message correct';
+			
+			if( !$message ) {
+				$message = $session->getFlash( 'notice_info' );
+				$class = 'flash_message info';
+			}
+		}
+		
 		//TODO remove after debug
-		$redirect = $this->frontController->getRequest()->getSession()->getFlash( 'redirectFrom' );
+		$redirect = $session->getFlash( 'redirectFrom' );
 		//		if( $redirect ) {
 		//			echo "<p>Redirect from: $redirect</p>";
 		//		} else {
@@ -63,8 +77,12 @@ class ViewHelper {
 			//			echo '<p>No Message pending</p>';
 			return;
 		}
-		$this->addCssFile( 'messages' );
-		?><div class="flash_message"><?php
+		$this->addJavascriptFile( 'jquery.js' );
+		$this->addJavascriptFile( 'message_click.js' );
+		$this->addCssFile( 'messages.css' );
+		?><div class="<?php
+		echo $class;
+		?>"><?php
 		echo $message;
 		?></div><?php
 	}
@@ -93,7 +111,7 @@ class ViewHelper {
 		$this->frontController->doAction( $module, $action, $parameters );
 		
 		$this->nonce = $tempNonce;
-		$this->frontController->getResponse()->setVars($tempVars);
+		$this->frontController->getResponse()->setVars( $tempVars );
 	}
 	
 	/** 
@@ -130,9 +148,22 @@ class ViewHelper {
 		return $result;
 	}
 	
+	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $parameters = array(), array $GETAttributes = array()) {
+		$prev = $this->nonce;
+		$this->nonce = $nonce;
+		$href = $this->createHref( $controllerName, $actionName, $parameters, $GETAttributes );
+		$this->nonce = $prev;
+		return $href;
+	}
+	
 	/** @see ViewHelper#createHref */
 	public function insertHref($controllerName, $actionName = '', $parameters = array(), $GETAttributes = array()) {
 		echo $this->createHref( $controllerName, $actionName, $parameters, $GETAttributes );
+	}
+	
+	/** @see ViewHelper#createHrefWithNonce */
+	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', $parameters = array(), $GETAttributes = array()) {
+		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $parameters, $GETAttributes );
 	}
 	
 	/** @return User */
@@ -140,7 +171,15 @@ class ViewHelper {
 		return $this->frontController->getCurrentUser();
 	}
 	
-	public function setContainerClass($class){
-		$this->frontController->getResponse()->setContainerClass($class);
+	public function setContainerClass($class) {
+		$this->frontController->getResponse()->setContainerClass( $class );
+	}
+	
+	private $cacheRoles;
+	public function currentUserIs($role){
+		if(!$this->cacheRoles){
+			$this->cacheRoles = $this->frontController->getCurrentUser()->getRoles();
+		}
+		return ($this->cacheRoles & $role) == $role;
 	}
 }

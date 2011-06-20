@@ -2,6 +2,26 @@
 
 namespace core\topics;
 
+use core\topics\templates\StrategyPostTemplate;
+
+use core\topics\templates\StoryPostTemplate;
+
+use core\topics\templates\FreetextPostTemplate;
+
+use core\topics\templates\ActivityPostTemplate;
+
+use core\FrontController;
+
+use Doctrine\ORM\EntityManager;
+
+use core\topics\templates\StrategyTopicTemplate;
+
+use core\topics\templates\StoryTopicTemplate;
+
+use core\topics\templates\FreetextTopicTemplate;
+
+use core\topics\templates\ActivityTopicTemplate;
+
 class TopicType {
 	public static $typeActivity = 1;
 	public static $typeFreeText = 2;
@@ -93,6 +113,7 @@ class TopicType {
 				return 4;
 		}
 	}
+	
 	/**
 	 * Translate a topic type name into topic type id
 	 * @param string $typeName
@@ -108,5 +129,63 @@ class TopicType {
 			case 'Strategy' :
 				return 4;
 		}
+	}
+	
+	/**
+	 * Translate a topic type name into topic type id
+	 * @param string $typeName
+	 * @return iTopicTemplate
+	 */
+	public static function getTopicTemplate($typeId, FrontController $front, EntityManager $em) {
+		$typeId = intval( $typeId );
+		$result = null;
+		switch ( $typeId ) {
+			case 1 :
+				$result = new ActivityTopicTemplate();
+				break;
+			case 2 :
+				$result = new FreetextTopicTemplate();
+				break;
+			case 3 :
+				$result = new StoryTopicTemplate();
+				break;
+			case 4 :
+				$result = new StrategyTopicTemplate();
+				break;
+		}
+		if( $result ) {
+			$result->setFrontController( $front );
+			$result->setEntityManager( $em );
+		}
+		return $result;
+	}
+	
+	/**
+	 * Translate a topic type name into topic type id
+	 * @param string $typeName
+	 * @return iTopicTemplate
+	 */
+	public static function getPostTemplate($typeId, FrontController $front, EntityManager $em) {
+		$typeId = intval( $typeId );
+		$result = null;
+		switch ( $typeId ) {
+			case 1 :
+				$result = new ActivityPostTemplate();
+				break;
+			case 2 :
+				$result = new FreetextPostTemplate();
+				break;
+			case 3 :
+				$result = new StoryPostTemplate();
+				break;
+			case 4 :
+				$result = new StrategyPostTemplate();
+				break;
+		}
+		if( $result ) {
+			$result->setFrontController( $front );
+			$result->setEntityManager( $em );
+		}
+		return $result;
 	}
 }

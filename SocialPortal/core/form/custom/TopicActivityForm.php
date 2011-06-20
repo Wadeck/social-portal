@@ -2,6 +2,8 @@
 
 namespace core\form\custom;
 
+use socialportal\model\TopicBase;
+
 use socialportal\model\TopicActivity;
 
 use socialportal\model\Forum;
@@ -20,14 +22,14 @@ class TopicActivityForm extends AbstractTopicForm {
 	
 	public function __construct(FrontController $frontController) {
 		parent::__construct( 'Activity', $frontController, 'formActivitySubmit', __( 'Submit' ) );
-		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_less-equal_100' ) ) );
+		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
 	}
 	
 	public function setupWithTopic($topic) {
 		$args = array();
-		$args['topic_title'] = $topic->getName();
-		$args['topic_description'] = $topic->getDescription();
+		$args['topic_title'] = $topic->getTopicbase()->getTitle();
+		$args['topic_description'] = $topic->getContent();
 		
 		$this->fillWithArray( $args );
 	}
@@ -39,8 +41,13 @@ class TopicActivityForm extends AbstractTopicForm {
 	public function getTopicDescription() {
 		return $this->ready ? $this->data['topic_description'] : null;
 	}
-	public function createSpecificTopic(TopicBase $base) {
-		$topic = new TopicActivity();
+	
+	public function createSpecificTopic(TopicBase $base, $existing = null) {
+		if( $existing ) {
+			$topic = $existing;
+		} else {
+			$topic = new TopicActivity();
+		}
 		$topic->setContent( $this->getTopicDescription() );
 		$topic->setTopicbase( $base );
 		return $topic;
