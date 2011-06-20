@@ -34,7 +34,7 @@ class TopicBase{
     /**
      * @var string $title
      *
-     * @Column(name="title", type="string", length=100, nullable=false)
+     * @Column(name="title", type="string", length=50, nullable=false)
      */
     private $title;
 

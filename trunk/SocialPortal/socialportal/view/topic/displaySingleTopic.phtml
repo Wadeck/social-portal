@@ -1,0 +1,32 @@
+<?php
+use core\tools\Utils;
+$vars['helper']->insertMessage();
+
+$vars['helper']->addCssFile('posts_loop.css');
+// to remove the container css class
+$vars['helper']->setContainerClass('');
+
+$pagination = $vars['pagination'];
+$topicTemplate = $vars['topicTemplate'];
+$topic = $vars['topic'];
+$postsTemplate = $vars['postsTemplate'];
+$posts = $vars['posts'];
+?>
+
+<?php if($topic): // forum loop ?>
+	<div class="rounded-box">
+		<!-- title / content -->
+		<?php $topicTemplate->insertTopic($topic); ?>
+		<!-- 1st pagination -->
+		<?php $pagination->insert(); ?>
+		<!-- posts -->
+		<?php $postsTemplate->insertPosts($posts); ?>
+		<!-- 2nd pagination -->
+		<?php $pagination->insert(); ?>
+	</div>
+<?php else: // no topics in this forum ?>
+	<?php $vars['helper']->addCssFile('messages.css'); ?>
+	<div class="rounded-box pagged">
+	<div class="message centered"><?php echo __('No topic in this forum');?></div>
+	</div>
+<?php endif; ?>

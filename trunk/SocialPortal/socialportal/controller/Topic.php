@@ -1,6 +1,10 @@
 <?php
 
 namespace socialportal\controller;
+use core\tools\Paginator;
+
+use socialportal\repository\ForumMetaRepository;
+
 use core\user\UserManager;
 
 use core\form\custom\TopicFormFactory;
@@ -52,42 +56,56 @@ class Topic extends AbstractController {
 	}
 	
 	/**
-	 * Paramaters = [topic_type_id, forum_id]
+	 * Paramaters = [topic_type_id, forum_id, topic_id(opt, only for edit)]
 	 * @Nonce(displayTopicForm)
+	 * @Parameters(2)
 	 */
 	public function displayFormAction($parameters) {
 		// displayForm/idType/(opt)idTopic(to edit)
-		// retrieve information and then pass to the form
-		// if existing information, we put as action "edit" instead of create
-		$actionUrl = null;
-		if( count( $parameters ) < 2 ) {
-			$this->frontController->addMessage( __( 'You should add a topic type id and a forum id to your request' ) );
-			$this->frontController->doRedirect( 'topic', 'displayForm' );
+		$topicType = $parameters[0];
+		$forumId = $parameters[1];
+		
+		// check if the forum accept the custom type proposed 
+		$forumMeta = $this->em->getRepository( 'ForumMeta' );
+		if( !$forumMeta->isAcceptedBy( $forumId, $topicType ) ) {
+			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
+			$this->frontController->doRedirect( 'home' );
 		}
 		
-		$topicType = $parameters[0];
+		// retrieve information and then pass to the form
+		// if existing information, we put as action "edit" instead of create
 		$form = TopicFormFactory::createForm( $topicType, $this->frontController );
 		if( !$form ) {
-			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ) );
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
 			$this->frontController->doRedirect( 'topic', 'chooseType' );
 		}
 		$module = '';
-		$forumId = $parameters[1];
 		
+		$paramArgs = array( $topicType );
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( count( $parameters ) >= 3 ) {
 			$topic_id = $parameters[2];
+			
 			$topicRepo = $this->em->getRepository( 'TopicBase' );
 			$currentTopic = $topicRepo->findFullTopic( $topic_id );
+			
+			// check if the class correspond to what is attempted !
+			$customClass = TopicType::translateTypeIdToName( $topicType );
+			if( !$currentTopic instanceof $customClass ) {
+				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
+				$this->frontController->doRedirect( 'forum', 'viewAll' );
+			}
+			
 			$form->setupWithTopic( $currentTopic );
 			$form->setNonceAction( 'editTopic' );
 			$module = 'edit';
+			$paramArgs[] = $topic_id;
 		} else {
 			$form->setNonceAction( 'createTopic' );
 			$module = 'create';
+			$paramArgs[] = $forumId;
 		}
-		
-		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, array( $topicType, $forumId ) );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, $paramArgs );
 		
 		// fill the form with the posted field and errors
 		$form->setupWithArray( true );
@@ -98,16 +116,53 @@ class Topic extends AbstractController {
 	}
 	
 	/**
+	 * @Parameters(1)
+	 */
+	public function displaySingleTopicAction($parameters){
+		$topicId = $parameters[0];
+		$get = $this->frontController->getRequest()->query;
+		$page_num = $get->get( 'p', 1 );
+		$num_per_page = $get->get( 'n', 20 );
+		
+		$topic = $this->em->getRepository('TopicBase')->findFullTopic($topicId);
+		$base = $topic->getTopicbase();
+		$typeId = $base->getCustomType();
+		$posts = $this->em->getRepository('PostBase')->findPostsFromTopic($topic->getId(), $page_num, $num_per_page);
+
+		$max_pages = $base->getNumPosts();
+		$max_pages = ceil($max_pages / $num_per_page);
+		if( !$max_pages ) {
+			$max_pages = 0;
+		}
+		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( $topicId ), array( 'p' => "%#p%", 'n' => "%#n%" ) );
+		
+		$pagination = new Paginator();
+		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
+
+		$this->frontController->getResponse()->setVar('pagination', $pagination);
+		$this->frontController->getResponse()->setVar('posts', $posts);
+		$this->frontController->getResponse()->setVar('topic', $topic);
+		$this->frontController->getResponse()->setVar('topicTemplate', TopicType::getTopicTemplate($typeId, $this->frontController, $this->em));
+		$this->frontController->getResponse()->setVar('postsTemplate', TopicType::getPostTemplate($typeId, $this->frontController, $this->em));
+		
+		$this->frontController->doDisplay('topic', 'displaySingleTopic');
+	}
+	
+	/**
 	 * @Method(POST)
 	 * @Nonce(createTopic)
+	 * @Parameters(2)
 	 */
 	public function createAction($parameters) {
-		if( count( $parameters ) < 2 ) {
-			$this->frontController->addMessage( __( 'You should add a topic type id to your request' ) );
-			$this->frontController->doRedirect( 'topic', 'displayForm' );
-		}
 		$typeId = $parameters[0];
 		$forumId = $parameters[1];
+		
+		// check if the forum accept the custom type proposed 
+		$forumMeta = $this->em->getRepository( 'ForumMeta' );
+		if( !$forumMeta->isAcceptedBy( $forumId, $typeId ) ) {
+			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
+			$this->frontController->doRedirectUrl( 'home' );
+		}
 		
 		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
@@ -115,14 +170,14 @@ class Topic extends AbstractController {
 		
 		$base = new TopicEntity();
 		$base->setCustomType( $typeId );
-		$base->setForum( $this->em->getPartialReference( 'Forum', $forumId ) );
+		$base->setForum( $this->em->getReference( 'Forum', $forumId ) );
 		$base->setIsDeleted( 0 );
 		$base->setIsOpen( 1 );
 		$base->setIsSticky( 0 );
-		$base->setLastposter( $this->em->getPartialReference( 'User', UserManager::$nullUserId ) );
+		$base->setLastposter( $this->em->getReference( 'User', UserManager::$nullUserId ) );
 		$base->setNumPosts( 0 );
 		if( !$this->frontController->getCurrentUser()->getId() ) {
-			$base->setPoster( $this->em->getPartialReference( 'User', UserManager::$anonUserId ) );
+			$base->setPoster( $this->em->getReference( 'User', UserManager::$anonUserId ) );
 		} else {
 			$base->setPoster( $this->frontController->getCurrentUser() );
 		}
@@ -135,84 +190,109 @@ class Topic extends AbstractController {
 		$this->em->persist( $base );
 		$this->em->persist( $topic );
 		if( !$this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ) );
+			$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ), 'error' );
 			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		// increment the number of topic in the forum parent
-		$this->em->getRepository('Forum')->incrementTopicCount($forumId);
+		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId );
 		
-		$this->frontController->addMessage( __( 'The creation of the topic was a success' ) );
+		$this->frontController->addMessage( __( 'The creation of the topic was a success' ), 'correct' );
 		$this->frontController->doRedirect( 'Forum', 'viewAll' );
 	}
 	
 	/**
 	 * @Method(POST)
 	 * @Nonce(editTopic)
+	 * @Paramaters(2)
 	 */
 	public function editAction($parameters) {
-		if( !isset( $parameters[0] ) ) {
-			$this->frontController->addMessage( __( 'No identifier for that forum, edit canceled.' ) );
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl( $referrer );
-		}
-		$param_id = $parameters[0];
+		$typeId = $parameters[0];
+		$topicId = $parameters[1];
 		
-		$form = new ForumForm( $this->frontController );
+		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
-		$forum = $this->em->find( 'Forum', $param_id );
-		$forum->setName( $form->getForumName() );
-		$forum->setDescription( $form->getForumDescription() );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$existing = $topicRepo->findFullTopic( $topicId );
+		if( !$existing ) {
+			$this->frontController->addMessage( __( 'The given id for the edition was invalid' ), 'error' );
+			$this->frontController->doRedirect( 'topic', 'displayForm' );
+		}
 		
-		$this->em->persist( $forum );
-		try {
-			$this->em->flush( $forum );
-		} catch (\Exception $e ) {
-			Logger::getInstance()->debug_var( 'Exception from Forum#edit', $e );
-			// not ok
-			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ) );
+		// check if the forum accept the custom type proposed 
+		$customClass = TopicType::translateTypeIdToName( $typeId );
+		if( !$existing instanceof $customClass ) {
+			$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
+			$this->frontController->doRedirect( 'topic', 'displayForm' );
+		}
+		
+		$base = $existing->getTopicbase();
+		$base->setTitle( $form->getTopicTitle() );
+		
+		$existing = $form->createSpecificTopic( $base, $existing );
+		$this->em->merge( $base );
+		$this->em->merge( $existing );
+		if( !$this->em->flushSafe() ) {
+			$this->frontController->addMessage( __( 'There was a problem during the edition of the topic' ), 'error' );
+			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
-		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ) );
-		$this->frontController->doRedirect( 'forum', 'viewAll' );
+		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'viewAll' );
+	
 	}
 	
 	/**
+	 * Wargning, do no forget to decrease the num topics of the forum
 	 * @Nonce(deleteTopic)
+	 * @Parameters(1)
 	 */
 	public function deleteAction($parameters) {}
 	
 	/**
-	 * @Nonce(moveTopic)
+	 * Warning, do not forget to increase the num topics of the forum
+	 * @Nonce(undeleteTopic)
+	 * @Parameters(1)
 	 */
-	public function moveAction($parameters) {
-
-	}
+	public function undeleteAction($parameters) {}
+	
+//	/**
+//	 * @Nonce(moveTopic)
+//	 * @Parameters(1)
+//	 */
+//	public function moveAction($parameters) {
+//
+//	}
+	
 	/**
 	 * @Nonce(stickTopic)
+	 * @Parameters(1)
 	 */
 	public function stickAction($parameters) {
 
 	}
 	/**
 	 * @Nonce(unstickTopic)
+	 * @Parameters(1)
 	 */
 	public function unstickAction($parameters) {
 
 	}
 	/**
 	 * @Nonce(closeTopic)
+	 * @Parameters(1)
 	 */
 	public function closeAction($parameters) {
 
 	}
 	/**
 	 * @Nonce(openTopic)
+	 * @Parameters(1)
 	 */
 	public function openAction($parameters) {
 

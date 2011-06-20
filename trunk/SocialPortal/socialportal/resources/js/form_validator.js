@@ -1,6 +1,4 @@
-/**
- * TODO WIP
- */
+
 var jq = jQuery;
 jq(document).ready(function() {
 // jq(':submit').click(function() {

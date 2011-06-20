@@ -7,7 +7,7 @@ namespace socialportal\model;
  * @Table(
  *	name="term_relation"
  * )
- * @Entity
+ * @Entity(repositoryClass="TermRelationRepository")
  */
 class TermRelation{
     /**

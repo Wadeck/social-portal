@@ -11,7 +11,7 @@ namespace socialportal\model;
  *		@Index(name="idx_a8a02955bb66c05", columns={"poster_id"})
  *	}
  * )
- * @Entity
+ * @Entity(repositoryClass="PostBaseRepository")
  */
 class PostBase{
     /**

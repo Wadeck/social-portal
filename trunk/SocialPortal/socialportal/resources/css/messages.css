@@ -15,8 +15,28 @@ div.flash_message {
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	max-width: 250px;
+	cursor: pointer;
 }
 
+div.flash_message.info { /** basic */
+	
+}
+
+div.flash_message.error {
+	background: #FFE0DB;
+	border-bottom: 1px solid #D00;
+	border-right: 1px solid #D00;
+	color: #D00;
+}
+
+div.flash_message.correct {
+	background: #BFB;
+	border-bottom: 1px solid #171;
+	border-right: 1px solid #171;
+	color: #171;
+}
+
+}
 div.message {
 	display: block;
 	font-size: 15px;
@@ -33,7 +53,8 @@ div.message {
 	border-radius: 3px;
 	max-width: 250px;
 }
-div.message.centered{
+
+div.message.centered {
 	margin-left: auto;
 	margin-right: auto;
 	width: 33%;
