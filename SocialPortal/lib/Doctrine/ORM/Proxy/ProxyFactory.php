@@ -148,7 +148,9 @@ class ProxyFactory {
 		
 		$file = str_replace( $placeholders, $replacements, $file );
 		
-		if( !file_exists( $fileName ) ) {
+		// test if the directory exists, if not we create it, if it exists,
+		// we don't have to create the file, it is automatically done by file_put_contents
+		if( !file_exists( $dirName ) ) {
 			Logger::getInstance()->debug( 'Creation of the proxy path: ' . $fileName );
 			mkdir( $dirName, '0777', true );
 		}

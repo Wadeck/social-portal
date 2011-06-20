@@ -46,6 +46,19 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayAllTools' );
 	}
 	
+	public function generateErrorMessageAction($parameters) {
+		$this->frontController->addMessage( 'Test error', 'error' );
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	public function generateCorrectMessageAction($parameters) {
+		$this->frontController->addMessage( 'Test correct', 'correct' );
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	public function generateInfoMessageAction($parameters) {
+		$this->frontController->addMessage( 'Test info' );
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
 	public function directCreatePasswordAction($parameters) {
 		if( count( $parameters ) >= 2 ) {
 			$randomkey = $parameters[0];
@@ -111,12 +124,12 @@ class Tool extends AbstractController {
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TopicType::$typeActivity ) );
 			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TopicType::$typeFreeText ) );
 			if( $result ) {
-				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ) );
+				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ) , 'correct');
 			} else {
-				$this->frontController->addMessage( __( 'The metadata were not added/modified' ) );
+				$this->frontController->addMessage( __( 'The metadata were not added/modified' ), 'info' );
 			}
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the base forum failed !' ) );
+			$this->frontController->addMessage( __( 'Creation of the base forum failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
@@ -129,9 +142,9 @@ class Tool extends AbstractController {
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Creation of the default users complete' ) );
+			$this->frontController->addMessage( __( 'Creation of the default users complete' ),'correct' );
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the default users failed !' ) );
+			$this->frontController->addMessage( __( 'Creation of the default users failed !' ),'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
@@ -148,9 +161,9 @@ class Tool extends AbstractController {
 		}
 		
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Recount topics complete total=%total%', array( '%total%' => $total ) ) );
+			$this->frontController->addMessage( __( 'Recount topics complete total=%total%', array( '%total%' => $total ) ), 'info' );
 		} else {
-			$this->frontController->addMessage( __( 'Recount failed !' ) );
+			$this->frontController->addMessage( __( 'Recount failed !' ),'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
@@ -167,9 +180,9 @@ class Tool extends AbstractController {
 		}
 		
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ) );
+			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ) , 'info');
 		} else {
-			$this->frontController->addMessage( __( 'Recount failed !' ) );
+			$this->frontController->addMessage( __( 'Recount failed !' ),'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}

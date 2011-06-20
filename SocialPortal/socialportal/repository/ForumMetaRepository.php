@@ -42,6 +42,17 @@ class ForumMetaRepository extends EntityRepository {
 	}
 	
 	/**
+	 * Determine if the given forum accepts the given topic type id
+	 * @param int $forumId
+	 * @param int $topicTypeId
+	 * @return true only if the id is in the array of accepted topic types
+	 */
+	public function isAcceptedBy($forumId, $topicTypeId){
+		$acceptArray = $this->getAcceptableTopics($forumId);
+		return in_array($topicTypeId, $acceptArray);
+	}
+	
+	/**
 	 * 
 	 * @param int $forumId
 	 * @param array $acceptTopicsId

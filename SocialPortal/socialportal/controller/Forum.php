@@ -68,12 +68,12 @@ class Forum extends AbstractController {
 		$forum->setName( $form->getForumName() );
 		$forum->setDescription( $form->getForumDescription() );
 		if( !$this->em->persistAndFlush( $forum ) ) {
-			$this->frontController->addMessage( __( 'There is already a forum called %name%', array( '%name%' => $form->getForumName() ) ) );
+			$this->frontController->addMessage( __( 'There is already a forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
-		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array( '%name%' => $form->getForumName() ) ) );
+		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
@@ -84,7 +84,7 @@ class Forum extends AbstractController {
 	 */
 	public function editAction($parameters) {
 		if( !isset( $parameters[0] ) ) {
-			$this->frontController->addMessage( __( 'No identifier for that forum, edit canceled.' ) );
+			$this->frontController->addMessage( __( 'No identifier for that forum, edit canceled.' ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
@@ -99,12 +99,12 @@ class Forum extends AbstractController {
 		$forum->setDescription( $form->getForumDescription() );
 		
 		if( !$this->em->persistAndFlush( $forum ) ) {
-			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ) );
+			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
-		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ) );
+		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ),'correct' );
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
@@ -140,7 +140,7 @@ class Forum extends AbstractController {
 		
 		if( !$forum ) {
 			Logger::getInstance()->debug( "The forum with id [$forumId] is not valid" );
-			$this->frontController->addMessage( __( 'The given forum is not valid' ) );
+			$this->frontController->addMessage( __( 'The given forum is not valid' ), 'error' );
 			$this->frontController->doRedirect( 'forum', 'viewAll' );
 		}
 		
@@ -175,6 +175,10 @@ class Forum extends AbstractController {
 		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );
 		
 		$response->setVar( 'forumHeader', $forumHeader );
+		
+		//TODO remove, for debug only
+		$nonce = $this->frontController->getNonceManager()->createNonce( 'displayTopicForm' );
+		$this->frontController->getResponse()->setVar('debug_nonce', $nonce);
 		
 		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}

@@ -3,8 +3,7 @@
 	<?php 
 	use core\user\UserRoles;
 	//TODO remove when the capabilities will be done
-	$roles = $vars['helper']->getCurrentUser()->getRoles();
-	if($roles & UserRoles::$admin_role == UserRoles::$admin_role){
+	if($vars['helper']->currentUserIs(UserRoles::$admin_role)){
 		$vars['helper']->insertModule('admin');
 	}
 	?>
