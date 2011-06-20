@@ -1,0 +1,3 @@
+- faire attention lorsqu'on retrieve un user de bien checker que son id n'est ni anonId ni nullId dans ce cas il faut faire des traitements speciaux
+- pour la creation de query avec doctrine, lorsqu'il s'agit d'une association, topic.forum = :id on passe directement un id et pas un objet
+- faire attention avec les id des class doctrine, elles sont en string ! moyen de les mettre en int mais alors limité en taille
