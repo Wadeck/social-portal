@@ -24,7 +24,7 @@ class Parameters extends Annotation implements ValidableInterface {
 			$resquest = FrontController::getInstance()->getRequest();
 			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'Parameters', $resquest->module, $resquest->action ) );
 		}
-		$this->$paramLength = $value;
+		$this->paramLength = $value;
 	}
 	
 	public function isValid() {

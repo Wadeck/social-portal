@@ -2,6 +2,8 @@
 
 namespace core\form\custom;
 
+use core\form\fields\CheckBoxField;
+
 use core\form\Field;
 
 use core\FrontController;

@@ -183,7 +183,7 @@ class FrontController {
 			$controller->actionBefore( $action, $parameters );
 			$controller->$methodName( $parameters );
 			$controller->actionAfter( $action, $parameters );
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
 				// this could append typically in the $methodName() action
@@ -356,9 +356,10 @@ class FrontController {
 	/**
 	 * Add a message to the cookies to be used in the next page (useful with redirect)
 	 * @param string $message The message to display, just a string without format
+	 * @param string $type 'info'|'error'|'correct'
 	 */
-	public function addMessage($message) {
-		$this->request->getSession()->setFlash( 'notice', $message );
+	public function addMessage($message, $type = 'info') {
+		$this->request->getSession()->setFlash( "notice_$type", $message );
 	}
 	
 	/** @return Response */
