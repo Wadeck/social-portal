@@ -2,6 +2,8 @@
 
 namespace core\annotations;
 
+use core\debug\Logger;
+
 use core\http\exceptions\InvalidValueForAnnotationException;
 
 use core\FrontController;
@@ -40,6 +42,7 @@ class Method extends Annotation implements ValidableInterface {
 		if( in_array( $method, $this->methods ) ) {
 			return true;
 		} else {
+			Logger::getInstance()->debug( 'The method is not accepted' );
 			return false;
 		}
 	}

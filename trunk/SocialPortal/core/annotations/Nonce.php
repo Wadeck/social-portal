@@ -29,10 +29,8 @@ class Nonce extends Annotation implements ValidableInterface {
 	
 	public function isValid() {
 		$front = FrontController::getInstance();
-		$nonce = $front->getRequest()->request->get( '_nonce', null );
-		if( null === $nonce ) {
-			$nonce = $front->getRequest()->query->get( '_nonce', null );
-		}
+		$nonce = $front->getCurrentNonce();
+		
 		if( null === $nonce ) {
 			Logger::getInstance()->debug( 'The nonce is not present' );
 			return false;

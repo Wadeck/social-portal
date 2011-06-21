@@ -10,8 +10,6 @@ use core\security\Firewall;
 
 /** Class that will be passed to the views to have a certain set of possible action */
 class ViewHelper {
-	/** @var string representing the hash of action / user / time to avoid malicious users to hijack session easily */
-	private $nonce;
 	/** @var array of nonce that are stored for the routines */
 	private $nonceStack = array();
 	/** @var core\FrontController*/
@@ -103,23 +101,22 @@ class ViewHelper {
 	}
 	
 	/** Could be used for login/pass/avatar template */
-	public function insertModule($module, $action = '', $parameters = array()) {
+	public function insertModule($module, $action = '', $parameters = array(), $nonceAction = false) {
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
-		$tempNonce = $this->nonce;
-		$this->nonce = null;
-		
-		$this->frontController->doAction( $module, $action, $parameters );
-		
-		$this->nonce = $tempNonce;
+		// store the nonce to avoid giving bad nonce to the createHref method
+		if( $nonceAction ) {
+			$tempNonce = $this->frontController->getCurrentNonce();
+			$nonce = $this->frontController->getNonceManager()->createNonce($nonceAction);
+			$this->frontController->setNonce( $nonce );
+			// call the module with the temporary nonce
+			$this->frontController->doAction( $module, $action, $parameters );
+			// come back to the previous value of nonce
+			$this->frontController->setNonce( $tempNonce );
+		} else {
+			// call the module without care of the nonce
+			$this->frontController->doAction( $module, $action, $parameters );
+		}
 		$this->frontController->getResponse()->setVars( $tempVars );
-	}
-	
-	/** 
-	 * Would be reset after a doDisplay
-	 * Acts as a stack that is push and pop for each subroutine
-	 */
-	public function setNonce($nonce) {
-		$this->nonce = $nonce;
 	}
 	
 	/**
@@ -137,9 +134,6 @@ class ViewHelper {
 		if( $actionName && !empty( $parameters ) ) {
 			$result .= '/' . implode( '/', $parameters );
 		}
-		if( $this->nonce ) {
-			$GETAttributes['_nonce'] = $this->nonce;
-		}
 		if( !empty( $GETAttributes ) ) {
 			$result .= '?' . implode( '&', array_map( function ($key, $value) {
 				return "$key=$value";
@@ -149,10 +143,11 @@ class ViewHelper {
 	}
 	
 	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $parameters = array(), array $GETAttributes = array()) {
-		$prev = $this->nonce;
-		$this->nonce = $nonce;
+		if( $nonce ) {
+			$nonceHash = $this->frontController->getNonceManager()->createNonce( $nonce );
+			$GETAttributes['_nonce'] = $nonceHash;
+		}
 		$href = $this->createHref( $controllerName, $actionName, $parameters, $GETAttributes );
-		$this->nonce = $prev;
 		return $href;
 	}
 	
@@ -175,11 +170,25 @@ class ViewHelper {
 		$this->frontController->getResponse()->setContainerClass( $class );
 	}
 	
+	/** @var array of roles, cache version */
 	private $cacheRoles;
-	public function currentUserIs($role){
-		if(!$this->cacheRoles){
+	public function currentUserIs($role) {
+		if( !$this->cacheRoles ) {
 			$this->cacheRoles = $this->frontController->getCurrentUser()->getRoles();
 		}
 		return ($this->cacheRoles & $role) == $role;
+	}
+	
+	/** @var array of capabilities, cache version */
+	private $cacheCapabilities;
+	public function currentUserCan($capability) {
+		//		if(!$this->cacheCapabilities){
+		//			$this->cacheCapabilities = $this->frontController->getCurrentUser()->getRoles();
+		//		}
+		//		return ($this->cacheRoles & $role) == $role;
+		if( $capability === false ) {
+			return false;
+		}
+		return true;
 	}
 }

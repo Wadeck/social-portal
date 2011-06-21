@@ -31,7 +31,7 @@ class Parameters extends Annotation implements ValidableInterface {
 		$front = FrontController::getInstance();
 		$parameters = $front->getRequest()->parameters;
 		if( ($this->paramLength && !$parameters) || (count( $parameters ) < $this->paramLength) ) {
-			Logger::getInstance()->debug( 'The number of paramaters is insufficiant' );
+			Logger::getInstance()->debug( 'The number of parameters is insufficiant' );
 			return false;
 		}
 		return true;

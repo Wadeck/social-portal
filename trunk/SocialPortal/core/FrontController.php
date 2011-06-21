@@ -174,6 +174,9 @@ class FrontController {
 				$this->generateException( new NoSuchActionException( $className, $methodName ) );
 			}
 			
+			$tempParams = $this->request->parameters;
+			$this->request->parameters = $parameters;
+			
 			// [Authorization] check if the user has the right to access this action
 			// could lead to exit
 			$this->firewall->checkAuthorization( $controller, $methodName );
@@ -183,13 +186,15 @@ class FrontController {
 			$controller->actionBefore( $action, $parameters );
 			$controller->$methodName( $parameters );
 			$controller->actionAfter( $action, $parameters );
-		} catch (\Exception $e ) {
+			
+			$this->request->parameters = $tempParams;
+		} catch ( \Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
 				// this could append typically in the $methodName() action
 				$this->generateException( $e->getCustomException() );
 			} else {
-				Logger::getInstance()->debug( "Unknown Exception thrown: " . var_export( $e, true ) );
+				Logger::getInstance()->debug_var( "Unknown Exception thrown: ", $e );
 				Logger::getInstance()->debug( "Trace: " . $e->getTraceAsString() );
 				// like the name says, we don't expect to have another exception type
 				// so we wrap it into UnexpectedException to be able to go through generateException
@@ -239,6 +244,7 @@ class FrontController {
 	 */
 	//TODO reflechir encore si on garde le tableau de parametre ou si on passe plutot par la response vars
 	public function doDisplay($module, $action = null, array $parameters = array()) {
+		$module = strtolower( $module );
 		$fileName = self::$VIEW_DIR . $module;
 		if( $action ) {
 			$fileName .= DIRECTORY_SEPARATOR . $action;
@@ -250,6 +256,7 @@ class FrontController {
 		}
 		
 		if( !$this->firstCallDisplay ) {
+			// we are in the buffer
 			echo $this->renderFile( $file, $parameters );
 			return;
 		} else {
@@ -322,6 +329,8 @@ class FrontController {
 	public function generateException(CustomException $customException) {
 		Logger::getInstance()->debug( 'Exception thrown: ' . var_export( $customException, true ) );
 		$message = $customException->getUserMessage();
+		ob_get_clean();
+		ob_start();
 		$code = $customException->getCode();
 		switch ( $code ) {
 			case 404 :
@@ -347,10 +356,14 @@ class FrontController {
 				echo "<p>$message</p>";
 				break;
 		}
+		$body = ob_get_clean();
+		$this->response = new Response();
+		$this->response->setBody( $body );
+		$this->response->setCookies( $this->request->cookies->all() );
+		$this->response->printOut();
 		exit();
 	}
 	
-	//TODO dunno if we put it into viewHelper or not,
 	// normally the view should not have to add message,
 	// it's only the controllers that do actions
 	/**
@@ -402,6 +415,30 @@ class FrontController {
 			$this->nonceManager = new NonceManager( $this );
 		}
 		return $this->nonceManager;
+	}
+	
+	/**
+	 * @var string specific nonce used only to buffer a nonce when we want to add a particular module inside another
+	 * in other case the normal nonce is used
+	 */
+	private $nonce;
+	/**
+	 * This nonce can be modified by using setNonce
+	 * @return string the current nonce
+	 */
+	public function getCurrentNonce() {
+		if( $this->nonce ) {
+			return $this->nonce;
+		}
+		$nonce = $this->getRequest()->request->get( '_nonce', null );
+		if( null === $nonce ) {
+			$nonce = $this->getRequest()->query->get( '_nonce', null );
+		}
+		return $nonce;
+	}
+	
+	public function setNonce($nonce) {
+		$this->nonce = $nonce;
 	}
 
 }

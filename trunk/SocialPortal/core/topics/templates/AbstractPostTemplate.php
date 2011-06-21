@@ -12,13 +12,13 @@ use core\user\UserRoles;
 
 use core\user\UserHelper;
 
-use core\topics\templates\iPostsTemplate;
-
-abstract class AbstractPostTemplate implements iPostsTemplate{
+abstract class AbstractPostTemplate implements iInsertable{
 	/** @var EntityManager */
 	protected $em;
 	/** @var FrontController */
 	protected $front;
+	/** @var array of posts */
+	protected $posts;
 	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
@@ -28,12 +28,16 @@ abstract class AbstractPostTemplate implements iPostsTemplate{
 		$this->em = $em;
 	}
 	
-	public function insertPosts(array $posts){
-		if(!$posts){
+	public function setPosts(array $posts){
+		$this->posts = $posts;
+	}
+	
+	public function insert(){
+		if(!$this->posts){
 			$this->front->getViewHelper()->addCssFile('messages.css');
 			?>
-				<div id="message" class="info">
-					<p><?php __( 'There are no posts for this topic.' ) ?></p>
+				<div class="message info centered">
+					<p><?php echo __( 'There are no posts for this topic.' ) ?></p>
 				</div>
 			<?php
 			return;
@@ -42,9 +46,10 @@ abstract class AbstractPostTemplate implements iPostsTemplate{
 		?>
 		<ol id="topic-post-list" class="commentlist">
 		<?php
-		foreach($posts as $post):
-			$postAuthor = $post->getPoster();
-			$postId = $post->getId();
+		foreach($this->posts as $post):
+			$base = $post->getPostbase();
+			$postAuthor = $base->getPoster();
+			$postId = $base->getId();
 			$userHelper->setCurrentUser($postAuthor);
 			
 		?>
@@ -77,7 +82,7 @@ abstract class AbstractPostTemplate implements iPostsTemplate{
 							<!-- publication date -->
 							<span id="topic-date">
 								<!-- publication date -->
-								<?php Utils::getDataSince($post->getTime()); ?>
+								<?php Utils::getDataSince($base->getTime()); ?>
 							</span>
 						</td>
 					</tr>
@@ -97,20 +102,20 @@ abstract class AbstractPostTemplate implements iPostsTemplate{
 	 * edit / stick / close / delete
 	 */
 	protected function insertAdminTools($post){
-		$base = $post->getTopicbase();
+		$base = $post->getPostbase();
 		$customTypeId = $base->getCustomType();
-		$topicId = $base->getId();
-		$forumId = $base->getForum()->getId();
+		$postId = $base->getId();
+//		$forumId = $base->getForum()->getId();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('editTopic', 'Post', 'edit', array($customTypeId, $forumId, $topicId)); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('editPost', 'Post', 'edit', array($customTypeId, $postId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		
-		<?php if($base->isDeleted()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array($topicId)); ?>"
+		<?php if($base->getIsDeleted()): ?>
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array($postId)); ?>"
 				title="<?php echo __( 'Restore the post from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array($topicId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array($postId)); ?>"
 				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;

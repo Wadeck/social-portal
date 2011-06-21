@@ -7,19 +7,19 @@ class StoryTopicTemplate extends AbstractTopicTemplate {
 		?>
 		<p><?php echo $topic->getStoryContent(); ?></p>
 		<?php if($topic->getAutomaticThoughts()):?>
-			<h3><?php echo __('Automatic thoughts'); ?></h3>
+			<h5><?php echo __('Automatic thoughts'); ?></h5>
 			<p><?php echo $topic->getAutomaticThoughts(); ?></p>
 		<?php endif;?>
 		<?php if($topic->getAlternativeThoughts()):?>
-			<h3><?php echo __('Alternative thoughts'); ?></h3>
+			<h5><?php echo __('Alternative thoughts'); ?></h5>
 			<p><?php echo $topic->getAlternativeThoughts(); ?></p>
 		<?php endif;?>
 		<?php if($topic->getRealisticThoughts()):?>
-			<h3><?php echo __('Realistic thoughts'); ?></h3>
+			<h5><?php echo __('Realistic thoughts'); ?></h5>
 			<p><?php echo $topic->getRealisticThoughts(); ?></p>
 		<?php endif;?>
 		<?php if($topic->getPs()):?>
-			<h4><?php echo __('Ps'); ?></h4>
+			<h5><em><?php echo __('Ps'); ?></em></h5>
 			<p><?php echo $topic->getPs(); ?></p>
 		<?php endif;?>
 	<?php 

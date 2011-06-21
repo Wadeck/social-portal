@@ -84,6 +84,24 @@ class TopicType {
 	 * Translate a topic type id into a topic type name
 	 * @param string $typeId
 	 */
+	public static function translateTypeIdToPostName($typeId) {
+		$typeId = intval( $typeId );
+		switch ( $typeId ) {
+			case 1 :
+				return 'socialportal\model\PostActivity';
+			case 2 :
+				return 'socialportal\model\PostFreeText';
+			case 3 :
+				return 'socialportal\model\PostStory';
+			case 4 :
+				return 'socialportal\model\PostStrategy';
+		}
+	}
+	
+	/**
+	 * Translate a topic type id into a topic type name
+	 * @param string $typeId
+	 */
 	public static function translateTypeIdToSimpleName($typeId) {
 		$typeId = intval( $typeId );
 		switch ( $typeId ) {
@@ -136,7 +154,7 @@ class TopicType {
 	 * @param string $typeName
 	 * @return iTopicTemplate
 	 */
-	public static function getTopicTemplate($typeId, FrontController $front, EntityManager $em) {
+	public static function getTopicTemplate($typeId, FrontController $front, EntityManager $em, $topic) {
 		$typeId = intval( $typeId );
 		$result = null;
 		switch ( $typeId ) {
@@ -156,6 +174,7 @@ class TopicType {
 		if( $result ) {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
+			$result->setTopic($topic);
 		}
 		return $result;
 	}
@@ -165,7 +184,7 @@ class TopicType {
 	 * @param string $typeName
 	 * @return iTopicTemplate
 	 */
-	public static function getPostTemplate($typeId, FrontController $front, EntityManager $em) {
+	public static function getPostTemplate($typeId, FrontController $front, EntityManager $em, array $posts) {
 		$typeId = intval( $typeId );
 		$result = null;
 		switch ( $typeId ) {
@@ -185,7 +204,12 @@ class TopicType {
 		if( $result ) {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
+			$result->setPosts($posts);
 		}
 		return $result;
+	}
+	
+	public static function getCommentForm(){
+		
 	}
 }
