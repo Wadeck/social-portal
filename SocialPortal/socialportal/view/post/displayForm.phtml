@@ -1,0 +1,25 @@
+<?php
+use core\user\UserHelper;
+$vars['helper']->setContainerClass('');
+$form = $vars['form'];
+$user = $vars['user'];
+$userHelper = new UserHelper();
+$userHelper->setCurrentUser($user);
+?>
+
+<div id="topic-respond" class="rounded-box">
+	<table>
+    	<tbody><tr>
+	    	<!-- Avatar box -->
+    		<td class="avatar-box">
+    			<?php $userHelper->insertLinkToProfile(); ?>
+    			<?php $userHelper->insertAvatar(75); ?>
+    		</td>
+    		<!-- Content of the comment -->
+    		<td class="comment-right-part">
+				<h3><?php echo __( 'Leave a feedback' ); ?></h3>
+    			<?php $form->insert(); ?>
+    		</td>
+		</tr>
+	</tbody></table>
+</div>

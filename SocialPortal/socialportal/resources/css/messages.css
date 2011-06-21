@@ -1,6 +1,6 @@
 @CHARSET "ISO-8859-1";
 
-div.flash_message {
+div.flash_message,div.message {
 	display: block;
 	font-size: 15px;
 	font-weight: normal;
@@ -15,43 +15,28 @@ div.flash_message {
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 	max-width: 250px;
+}
+
+div.flash_message {
 	cursor: pointer;
 }
 
-div.flash_message.info { /** basic */
+div.flash_message.info,div.message.info { /** basic */
 	
 }
 
-div.flash_message.error {
+div.flash_message.error,div.message.error {
 	background: #FFE0DB;
 	border-bottom: 1px solid #D00;
 	border-right: 1px solid #D00;
 	color: #D00;
 }
 
-div.flash_message.correct {
+div.flash_message.correct,div.message.correct {
 	background: #BFB;
 	border-bottom: 1px solid #171;
 	border-right: 1px solid #171;
 	color: #171;
-}
-
-}
-div.message {
-	display: block;
-	font-size: 15px;
-	font-weight: normal;
-	background: #FFF9DB;
-	border-bottom: 1px solid #FFE8C4;
-	border-right: 1px solid #FFE8C4;
-	color: #ffa200;
-	padding: 5px 8px;
-	margin: 8px;
-	text-decoration: none;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	max-width: 250px;
 }
 
 div.message.centered {

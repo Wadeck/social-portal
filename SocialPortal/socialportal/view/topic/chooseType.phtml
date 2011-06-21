@@ -17,7 +17,7 @@ foreach( $vars['forums'] as $forum ) :
 	foreach( $vars['topicsFor'][$forum->getId()] as $topicType ) :
 		?>
 		<a href="<?php
-		$vars['helper']->insertHref( 'Topic', 'displayForm', array( $topicType->getId(), $forum->getId() ) );
+		$vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array( $topicType->getId(), $forum->getId() ) );
 		?>"
 	class="button"
 	title="<?php

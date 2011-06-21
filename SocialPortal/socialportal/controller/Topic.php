@@ -1,6 +1,14 @@
 <?php
 
 namespace socialportal\controller;
+use core\topics\templates\ModuleInsertTemplate;
+
+use core\form\custom\PostFormFactory;
+
+use core\topics\templates\MessageInsertTemplate;
+
+use core\user\UserRoles;
+
 use core\tools\Paginator;
 
 use socialportal\repository\ForumMetaRepository;
@@ -34,9 +42,6 @@ class Topic extends AbstractController {
 	 */
 	public function chooseTypeAction() {
 		// set the nonce to each link that will be created, in an invisible manner for the view
-		$nonce = $this->frontController->getNonceManager()->createNonce( 'displayTopicForm' );
-		$this->frontController->getViewHelper()->setNonce( $nonce );
-		
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
 		$topicsFor = array();
 		if( $forums ) {
@@ -56,12 +61,11 @@ class Topic extends AbstractController {
 	}
 	
 	/**
-	 * Paramaters = [topic_type_id, forum_id, topic_id(opt, only for edit)]
 	 * @Nonce(displayTopicForm)
 	 * @Parameters(2)
+	 * Paramaters[topic_type_id, forum_id, topic_id(opt, only for edit)]
 	 */
 	public function displayFormAction($parameters) {
-		// displayForm/idType/(opt)idTopic(to edit)
 		$topicType = $parameters[0];
 		$forumId = $parameters[1];
 		
@@ -116,10 +120,12 @@ class Topic extends AbstractController {
 	}
 	
 	/**
-	 * @Parameters(1)
+	 * @Parameters(2)
+	 * Parameters[topicId, forumId]
 	 */
 	public function displaySingleTopicAction($parameters){
 		$topicId = $parameters[0];
+		$forumId = $parameters[1];
 		$get = $this->frontController->getRequest()->query;
 		$page_num = $get->get( 'p', 1 );
 		$num_per_page = $get->get( 'n', 20 );
@@ -127,7 +133,7 @@ class Topic extends AbstractController {
 		$topic = $this->em->getRepository('TopicBase')->findFullTopic($topicId);
 		$base = $topic->getTopicbase();
 		$typeId = $base->getCustomType();
-		$posts = $this->em->getRepository('PostBase')->findPostsFromTopic($topic->getId(), $page_num, $num_per_page);
+		$posts = $this->em->getRepository('PostBase')->findAllFullPosts($topic->getId(), $typeId, $page_num, $num_per_page);
 
 		$max_pages = $base->getNumPosts();
 		$max_pages = ceil($max_pages / $num_per_page);
@@ -139,11 +145,19 @@ class Topic extends AbstractController {
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
 
+		// condition to satisfy to be able to write a comment
+		if(!$this->frontController->getViewHelper()->currentUserIs(UserRoles::$anonymous_role)){
+			$commentForm = new ModuleInsertTemplate($this->frontController, 'Post', 'displayForm', array($typeId, $topicId, $forumId), 'displayPostForm');
+		}else{
+			$commentForm = new MessageInsertTemplate($this->frontController, __('You do not have the right to add comment'));
+		}
+		
+		$this->frontController->getResponse()->setVar('commentForm', $commentForm);
 		$this->frontController->getResponse()->setVar('pagination', $pagination);
 		$this->frontController->getResponse()->setVar('posts', $posts);
 		$this->frontController->getResponse()->setVar('topic', $topic);
-		$this->frontController->getResponse()->setVar('topicTemplate', TopicType::getTopicTemplate($typeId, $this->frontController, $this->em));
-		$this->frontController->getResponse()->setVar('postsTemplate', TopicType::getPostTemplate($typeId, $this->frontController, $this->em));
+		$this->frontController->getResponse()->setVar('topicTemplate', TopicType::getTopicTemplate($typeId, $this->frontController, $this->em, $topic));
+		$this->frontController->getResponse()->setVar('postsTemplate', TopicType::getPostTemplate($typeId, $this->frontController, $this->em, $posts));
 		
 		$this->frontController->doDisplay('topic', 'displaySingleTopic');
 	}
@@ -152,6 +166,7 @@ class Topic extends AbstractController {
 	 * @Method(POST)
 	 * @Nonce(createTopic)
 	 * @Parameters(2)
+	 * Parameters[typeId, forumId]
 	 */
 	public function createAction($parameters) {
 		$typeId = $parameters[0];
@@ -206,6 +221,7 @@ class Topic extends AbstractController {
 	 * @Method(POST)
 	 * @Nonce(editTopic)
 	 * @Paramaters(2)
+	 * Parameters[typeId, topicId]
 	 */
 	public function editAction($parameters) {
 		$typeId = $parameters[0];
@@ -251,6 +267,7 @@ class Topic extends AbstractController {
 	 * Wargning, do no forget to decrease the num topics of the forum
 	 * @Nonce(deleteTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function deleteAction($parameters) {}
 	
@@ -258,12 +275,14 @@ class Topic extends AbstractController {
 	 * Warning, do not forget to increase the num topics of the forum
 	 * @Nonce(undeleteTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function undeleteAction($parameters) {}
 	
 //	/**
 //	 * @Nonce(moveTopic)
 //	 * @Parameters(1)
+//	 * Parameters[topicId]
 //	 */
 //	public function moveAction($parameters) {
 //
@@ -272,6 +291,7 @@ class Topic extends AbstractController {
 	/**
 	 * @Nonce(stickTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function stickAction($parameters) {
 
@@ -279,6 +299,7 @@ class Topic extends AbstractController {
 	/**
 	 * @Nonce(unstickTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function unstickAction($parameters) {
 
@@ -286,6 +307,7 @@ class Topic extends AbstractController {
 	/**
 	 * @Nonce(closeTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function closeAction($parameters) {
 
@@ -293,6 +315,7 @@ class Topic extends AbstractController {
 	/**
 	 * @Nonce(openTopic)
 	 * @Parameters(1)
+	 * Parameters[topicId]
 	 */
 	public function openAction($parameters) {
 
