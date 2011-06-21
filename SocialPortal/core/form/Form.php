@@ -2,11 +2,13 @@
 
 namespace core\form;
 
+use core\topics\templates\iInsertable;
+
 use core\debug\Logger;
 
 use core\FrontController;
 
-class Form {
+class Form implements iInsertable {
 	private static $REFERRER_FIELD_NAME = '_http_referrer';
 	
 	/** @var FrontController */
@@ -128,6 +130,7 @@ class Form {
 	}
 	
 	//#################### creation part #####################
+	
 
 	/**
 	 * Display the form in the view part without having to pass parameters

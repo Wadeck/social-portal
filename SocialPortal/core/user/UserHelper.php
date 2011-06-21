@@ -56,7 +56,7 @@ class UserHelper {
 		} else {
 			$imgLink = $this->getGravatar( $key, $size, 'identicon' );
 		}
-		?><a class="avatar" href="<?php
+		?><a rel="nofollow" class="avatar" href="<?php
 		echo $this->getLinkToProfile();
 		?>"><img src="<?php
 		echo $imgLink;
@@ -80,7 +80,7 @@ class UserHelper {
 	
 	/** @display a link to the user profile */
 	public function insertLinkToProfile() {
-		?><a href="<?php
+		?><a rel="nofollow" href="<?php
 		echo $this->getLinkToProfile();
 		?>" title="<?php
 		echo $this->getUsername();

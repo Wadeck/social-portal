@@ -14,16 +14,16 @@ use Doctrine\ORM\EntityManager;
 
 use core\user\UserHelper;
 
-use core\topics\templates\iTopicTemplate;
-
 /**
  * Display only the topic part, i.e. the upper part of the topic view
  */
-abstract class AbstractTopicTemplate implements iTopicTemplate {
+abstract class AbstractTopicTemplate implements iInsertable {
 	/** @var EntityManager */
 	protected $em;
 	/** @var FrontController */
 	protected $front;
+	/** @var Topic */
+	protected $topic;
 	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
@@ -33,11 +33,15 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 		$this->em = $em;
 	}
 	
-	public function insertTopic($topic){
-		if(!$topic){
+	public function setTopic($topic){
+		$this->topic = $topic;
+	}
+	
+	public function insert(){
+		if(!$this->topic){
 			return;
 		}
-		$base = $topic->getTopicbase();
+		$base = $this->topic->getTopicbase();
 		$topicId = $base->getId();
 		$numPosts = $base->getNumPosts();
 		$title = $base->getTitle();
@@ -48,13 +52,13 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 		$tags = $tagRepo->getAllTags($topicId);
 		?>
 		<!-- Topic initial post -->
-			<div class="rounded-box-topic" id="topic">
+			<div class="rounded-box" id="topic">
 				<table id="topic-<?php echo $topicId; ?>">
 					<tr>
 						<!-- row of avatar box -->	
 						<td class="avatar-box"><!-- cell of avatar box -->
 							<?php $userHelper->insertLinkToProfile(); ?>
-							<?php $userHelper->insertAvatar(60); ?>
+							<?php $userHelper->insertAvatar(75); ?>
 						</td>
 						
 						<!-- cell of title / date / tags -->
@@ -63,7 +67,7 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 								<h3><?php echo "$title ($numPosts)"; ?></h3>
 							</div>
 
-							<?php if( !$tags ): ?>
+							<?php if( $tags ): ?>
 								<div id="topic-tags">
 									<?php echo __( 'Tags: '); ?>
 									<?php foreach($tags as $tag):
@@ -84,23 +88,23 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 					<tr><!-- row of content -->
 						<td colspan="2" id="topic-content">
 							<!-- insert content here -->
-							<?php $this->insertTopicBody($topic); ?>
+							<?php $this->insertTopicBody($this->topic); ?>
 						</td>
 					</tr>
 					<tr><!-- row of admin tool -->
 						<td colspan="2" id="topic-bottom">
 							<span id="topic-tools">
 							<?php if($author->getId() === $this->front->getCurrentUser()->getId() || $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
-								$this->insertAdminTools($topic);//TODO change this when capabilities will be implemented
+								$this->insertAdminTools($this->topic);//TODO change this when capabilities will be implemented
 							}
-							$this->insertUserTools($topic);
+							$this->insertUserTools($this->topic);
 							?>
 							</span>
 
 							<!-- publication date -->
 							<span id="topic-date">
 								<!-- publication date -->
-								<?php Utils::getDataSince($base->getStartTime()); ?>
+								<?php echo Utils::getDataSince($base->getStartTime()); ?>
 							</span>
 						</td>
 					</tr>
@@ -123,11 +127,11 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 		$topicId = $base->getId();
 		$forumId = $base->getForum()->getId();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('editTopic', 'Topic', 'edit', array($customTypeId, $forumId, $topicId)); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array($customTypeId, $forumId, $topicId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		
-		<?php if($base->isSticky()): ?>
+		<?php if($base->getIsSticky()): ?>
 			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array($topicId)); ?>"
 				title="<?php echo __( 'Unstick the topic, it will be shown like other topics by order of last modification' ); ?>"><?php echo __('Unstick'); ?></a>
 		<?php else: ?>
@@ -136,7 +140,7 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
-		<?php if($base->isOpen()): ?>
+		<?php if($base->getIsOpen()): ?>
 			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array($topicId)); ?>"
 				title="<?php echo __( 'Close the topic, so that no other comments could be left, and so the topic falls in the forget' ); ?>"><?php echo __('Close'); ?></a>
 		<?php else: ?>
@@ -145,7 +149,7 @@ abstract class AbstractTopicTemplate implements iTopicTemplate {
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
-		<?php if($base->isDeleted()): ?>
+		<?php if($base->getIsDeleted()): ?>
 			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Topic', 'undelete', array($topicId)); ?>"
 				title="<?php echo __( 'Restore the topic from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
