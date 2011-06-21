@@ -1,0 +1,34 @@
+@CHARSET "ISO-8859-1";
+
+form.post-form {
+	padding: 8px;
+}
+
+form.post-form .label_error {
+	display: block;
+}
+
+form.post-form .field_container {
+	
+}
+
+form.post-form label {
+	font-weight: bold;
+	margin: 15px 0 5px 0;
+	text-align: left;
+	width: 100%;
+	display: inline;
+}
+
+form.post-form input[type="text"] {
+	width: 75%;
+}
+
+form.post-form textarea {
+	width: 75%;
+	height: 120px;
+}
+
+form.post-form input[type=submit]{
+	margin-top: 5px;
+}

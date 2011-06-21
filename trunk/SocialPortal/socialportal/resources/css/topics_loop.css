@@ -1,10 +1,5 @@
 @CHARSET "ISO-8859-1";
 
-/** message that are displayed when there is no topic for a given forum */
-.message{
-	
-}
-
 ul#forums-header {
 	padding: 10px;
 	/*margin: 0 auto;*/
@@ -195,3 +190,136 @@ table.forum-loop td.author .author-name, table.forum-loop td.latest-poster .last
 	vertical-align: middle;
 }
 
+/* > WordPress Blog Comment Styles
+-------------------------------------------------------------- */
+
+#trackbacks {
+	margin-top: 30px;
+}
+
+#comments h3, #trackbacks h3, #respond h3, #topic h3 {
+	font-size: 20px;
+	margin: 5px 0 25px 0;
+	font-weight: normal;
+	color: #555;
+}
+
+#comments span.title, #trackbacks span.title {
+	color: #aaa;
+}
+
+/*ol.commentlist li, div#topic, div#edit-topic, div#edit-post, div#topic-respond {*/
+ol.commentlist li, div.rounded-box #topic {
+	margin: 10px 0 20px 0;
+	border: 1px solid #eee;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+	div.rounded-box-topic.padded{
+		padding: 8px;	
+	}
+	
+	ol.commentlist td {
+		vertical-align: text-top;
+	}
+	ol.commentlist li.even {
+		background-color: #fdfdfd;
+	}
+	ol.commentlist li.odd {
+		background-color: #f9f9f9;
+	}
+	.comment-right-part {
+		/*margin-left: 110px;*/
+		padding: 7px;
+	}
+	
+	/* the cell containing the avatar */
+	td.avatar-box{
+	/*	background: #f0f0f0; */
+		padding: 6px 6px 9px 6px;
+	/*	float: left; */ 
+	/*	font-family: georgia, times, serif; */
+		font-size: 12px;
+		font-weight: bold;
+		border-right: 1px solid #eee;
+	/*	text-align: center; */
+		width: 80px;
+		
+		vertical-align: text-top;
+		/* TODO to remove 
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		border-radius: inherit;
+		*/
+	}
+		td.avatar-box img{
+			float: none;
+		}
+		td.avatar-box a{
+			text-decoration: none;
+		}
+		td.avatar-box a.avatar{
+			display: block;
+			text-align: center;
+		}
+
+	a.comment-author-name, a.topic-author-name{
+		display: block;
+ 		text-align: left;
+  	}
+	
+	.comment-avatar, .topic-avatar {
+		display: block;
+   		text-align: center;
+	}
+
+	.comment-meta, #topic-bottom{
+		border-top: 1px solid #eee;
+		border-bottom: none;
+		margin: 0px;
+		padding: 0 5px;
+		/*padding-top: 2px;*/
+		/*clear: both;*/
+	}
+		.comment-meta .comment-date, #topic-bottom #topic-date{
+			/*float: right; */
+			padding-left: 5px;
+		}
+		.comment-meta .comment-tools, #topic-bottom #topic-tools {
+			float: right; 
+			padding-right: 5px;
+		}
+		.comment-meta a, #topic-bottom a {
+			text-decoration: none;
+		}
+		
+		.comment-meta, #topic-bottom{
+			font-size: 80%;			
+		}
+	
+		div.comment-options {
+			border-bottom: none;
+		}
+
+	span.comment-upper-part {
+		
+	}
+	
+	#topic-content{
+		border-top: 1px solid #eee;
+	}
+	/*
+#edit-topic, #edit-post{
+	padding: 8px;	
+}*/
+.with_space_before{
+	margin-top: 10px;	
+	margin-bottom: 0px;	
+}
+
+.nsp_disable_li{
+	color: #ccc;
+	text-decoration: line-through;	
+}
+	

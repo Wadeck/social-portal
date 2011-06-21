@@ -2,6 +2,7 @@
 use core\tools\Utils;
 $vars['helper']->insertMessage();
 $forum = $vars['forum'];
+$forumId = $forum->getId();
 $topics = $vars['topics'];
 $pagination = $vars['pagination'];
 $forumHeader = $vars['forumHeader'];
@@ -35,7 +36,7 @@ $vars['helper']->setContainerClass('');
 					<tr <?php if( $i % 2 == 1 ){ echo ' class="alt background_secondary"' ; }?>>
 						<!-- <td class="title"><a class="topic-title" href="http://10.10.10.104/wordpress/topic/543/"
 							title="<?php echo $title; ?>"><?php echo $title; ?></a></td>-->
-						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array($topic->getId())); ?>"
+						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array($topic->getId(), $forumId)); ?>"
 							title="<?php echo $title; ?>"><?php echo $title; ?></a></td>
 						<td class="author">
 							<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
@@ -58,8 +59,8 @@ $vars['helper']->setContainerClass('');
 		<?php $pagination->insert(); ?>
 	</div>
 <?php else: // no topics in this forum ?>
-<?php $vars['helper']->addCssFile('messages.css'); ?>
-<div class="rounded-box pagged">
-<div class="message centered"><?php echo __('No topic in this forum');?></div>
-</div>
+	<?php $vars['helper']->addCssFile('messages.css'); ?>
+	<div class="rounded-box pagged">
+		<div class="message info centered"><?php echo __('No topic in this forum');?></div>
+	</div>
 <?php endif; ?>

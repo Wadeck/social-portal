@@ -2,7 +2,7 @@
 use core\tools\Utils;
 $vars['helper']->insertMessage();
 
-$vars['helper']->addCssFile('posts_loop.css');
+$vars['helper']->addCssFile('topics_loop.css');
 // to remove the container css class
 $vars['helper']->setContainerClass('');
 
@@ -11,22 +11,25 @@ $topicTemplate = $vars['topicTemplate'];
 $topic = $vars['topic'];
 $postsTemplate = $vars['postsTemplate'];
 $posts = $vars['posts'];
+$commentForm = $vars['commentForm'];
 ?>
 
 <?php if($topic): // forum loop ?>
-	<div class="rounded-box">
+<!--	<div class="rounded-box">-->
 		<!-- title / content -->
-		<?php $topicTemplate->insertTopic($topic); ?>
+		<?php $topicTemplate->insert(); ?>
 		<!-- 1st pagination -->
 		<?php $pagination->insert(); ?>
 		<!-- posts -->
-		<?php $postsTemplate->insertPosts($posts); ?>
+		<?php $postsTemplate->insert(); ?>
 		<!-- 2nd pagination -->
 		<?php $pagination->insert(); ?>
-	</div>
+		<!-- form to comment -->
+		<?php $commentForm->insert(); ?>
+<!--	</div>-->
 <?php else: // no topics in this forum ?>
 	<?php $vars['helper']->addCssFile('messages.css'); ?>
 	<div class="rounded-box pagged">
-	<div class="message centered"><?php echo __('No topic in this forum');?></div>
+	<div class="message info centered"><?php echo __('No topic in this forum');?></div>
 	</div>
 <?php endif; ?>
