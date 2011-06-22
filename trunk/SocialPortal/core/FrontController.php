@@ -106,6 +106,7 @@ class FrontController {
 		$this->userManager = new UserManager( $this->request, new UserEntityProvider( $this->em ) );
 		$this->firewall = new Firewall( $this, $this->userManager );
 		$this->firstCallDisplay = true;
+	
 	}
 	
 	public static function getInstance() {
@@ -125,8 +126,10 @@ class FrontController {
 		list( $module, $action, $param ) = $this->request->parseUrl( $url );
 		
 		if( !$url ) {
-			Logger::getInstance()->debug( 'cookies=' . var_export( $_COOKIE, true ) );
-			Logger::getInstance()->debug( 'session=' . var_export( $_SESSION, true ) );
+			Logger::getInstance()->log_var( 'GET', $_GET );
+			Logger::getInstance()->log_var( 'POST', $_POST );
+			Logger::getInstance()->log_var( 'COOKIE', $_COOKIE );
+			Logger::getInstance()->log_var( 'SESSION', $_SESSION );
 			
 			// [Authentification] check who is the current user
 			// could lead to exit ? / redirect ? Not for the moment
@@ -188,7 +191,7 @@ class FrontController {
 			$controller->actionAfter( $action, $parameters );
 			
 			$this->request->parameters = $tempParams;
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
 				// this could append typically in the $methodName() action

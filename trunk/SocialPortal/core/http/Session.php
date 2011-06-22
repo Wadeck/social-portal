@@ -21,6 +21,7 @@ use core\http\storage\SessionStorageInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Session implements \Serializable {
+	protected static $sessName = '_socialportal';
 	protected $storage;
 	protected $attributes;
 	protected $newFlashes;
@@ -55,7 +56,7 @@ class Session implements \Serializable {
 		
 		$this->storage->start();
 		
-		$this->attributes = $this->storage->read( '_symfony2' );
+		$this->attributes = $this->storage->read( self::$sessName );
 		
 		if( !isset( $this->attributes['_flash'] ) ) {
 			$this->attributes['_flash'] = array();
@@ -82,7 +83,7 @@ class Session implements \Serializable {
 		
 		// second keys erase the first ones
 		$this->attributes['_flash'] = array_merge( $this->attributes['_flash'], $this->newFlashes );
-		$this->storage->write( '_symfony2', $this->attributes );
+		$this->storage->write( self::$sessName, $this->attributes );
 	}
 	
 	/**

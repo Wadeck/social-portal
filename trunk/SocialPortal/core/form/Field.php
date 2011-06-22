@@ -24,7 +24,7 @@ class Field {
 	protected $mode = 1;
 	
 	private static function initMessages() {
-		self::$errorMessages = array( 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ) );
+		self::$errorMessages = array( 'form_already_sent'=> __js('This form was already sent to the server, please refresh the page'), 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ) );
 	}
 	
 	public static function getErrorMessages() {

@@ -34,11 +34,12 @@ jq(document).ready(function() {
 //
 // return true;
 // });
+	
 });
 
 function validForm(obj) {
 	if(obj.isAlreadySent){
-		alert('already sent');
+		alert(_error_messages['form_already_sent']);
 		return false;
 	}
 	obj.disabled = true;

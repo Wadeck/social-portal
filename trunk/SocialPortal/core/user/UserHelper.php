@@ -80,7 +80,7 @@ class UserHelper {
 	
 	/** @display a link to the user profile */
 	public function insertLinkToProfile() {
-		?><a rel="nofollow" href="<?php
+		?><a class="profile" rel="nofollow" href="<?php
 		echo $this->getLinkToProfile();
 		?>" title="<?php
 		echo $this->getUsername();

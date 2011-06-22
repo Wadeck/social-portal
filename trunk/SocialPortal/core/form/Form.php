@@ -100,6 +100,9 @@ class Form implements iInsertable {
 		$nonce = $this->frontController->getNonceManager()->createNonce( $this->nonceAction );
 		// add this variable into an hidden field
 		echo '<input type="hidden" name="_nonce" value="' . $nonce . '">';
+		if(defined('DEBUG') && DEBUG){
+			echo '<input type="hidden" name="_nonce_clear" value="' . $this->nonceAction . '">';
+		}
 	}
 	
 	/**
