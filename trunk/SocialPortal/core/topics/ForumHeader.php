@@ -2,9 +2,11 @@
 
 namespace core\topics;
 
+use core\topics\templates\iInsertable;
+
 use core\FrontController;
 
-class ForumHeader {
+class ForumHeader implements iInsertable{
 	/** @var string */
 	private $cache;
 	/** @var FrontController */
@@ -36,7 +38,7 @@ class ForumHeader {
 			if( $i === $indexSelected ) {
 				$classes .= ' selected';
 			}
-			$output .= '<li class="' . $classes . '"><a href="' . $link . '" title="' . $descr . '">' . $name . ' (' . $numTopics . ')</a></li>';
+			$output .= '<li class="' . $classes . '"><a href="' . $link . '" title="' . $descr . '">' . $name . '&nbsp;(' . $numTopics . ')</a></li>';
 		}
 		$output .= '</ul>';
 		$this->cache = $output;

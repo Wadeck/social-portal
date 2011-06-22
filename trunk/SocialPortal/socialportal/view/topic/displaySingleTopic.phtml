@@ -16,6 +16,10 @@ $commentForm = $vars['commentForm'];
 
 <?php if($topic): // forum loop ?>
 <!--	<div class="rounded-box">-->
+		<!-- Link to the parent forum -->
+		<div id="link-back">
+			<a class="button" href="<?php $vars['helper']->insertHref('Forum', 'viewAll') ?>"><?php echo __('Back to discussion place'); ?></a>
+		</div>
 		<!-- title / content -->
 		<?php $topicTemplate->insert(); ?>
 		<!-- 1st pagination -->

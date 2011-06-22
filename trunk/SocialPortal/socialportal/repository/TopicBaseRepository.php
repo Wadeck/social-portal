@@ -27,15 +27,20 @@ class TopicBaseRepository extends EntityRepository {
 		}
 	}
 	
-	/** @return array of TopicBase */
-	public function findTopicsFromForum($forumId, $page_num, $num_per_page) {
-		$offset = ($page_num - 1) * $num_per_page;
+	/**
+	 * @param int $forumId
+	 * @param int $page_num Must be >= 1
+	 * @param int $num_per_page
+	 * @return array of TopicBase
+	 */
+	public function findTopicsFromForum($forumId, $page_num=1, $num_per_page=false) {
 		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id' );
-		$dql->setParameter( 'id', $forumId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
+		$dql->setParameter( 'id', $forumId );
+		if(false !== $num_per_page){
+			$offset = ($page_num - 1) * $num_per_page;
+			$dql->setFirstResult( $offset )->setMaxResults( $num_per_page );
+		}
 		$topics = $dql->getResult();
-		//		$qb = $this->_em->createQueryBuilder();
-		//		$qb->select( 't' )->from( 'socialportal\model\TopicBase', 't' )->where( 't.forum = :id' )->setParameter( 'id', $forumId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
-		//		$topics = $qb->getQuery()->getResult();
 		return $topics;
 	}
 	
