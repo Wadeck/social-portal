@@ -101,8 +101,12 @@ class ViewHelper {
 	}
 	
 	/** Could be used for login/pass/avatar template */
-	public function insertModule($module, $action = '', $parameters = array(), $nonceAction = false) {
+	public function insertModule($module, $action = '', array $parameters = array(), array $getAttributes = array(), $nonceAction = false) {
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
+		// like a stack
+		$tempGet = $this->frontController->getRequest()->query->all();
+		$this->frontController->getRequest()->query->replace($getAttributes);
+		
 		// store the nonce to avoid giving bad nonce to the createHref method
 		if( $nonceAction ) {
 			$tempNonce = $this->frontController->getCurrentNonce();
@@ -116,6 +120,8 @@ class ViewHelper {
 			// call the module without care of the nonce
 			$this->frontController->doAction( $module, $action, $parameters );
 		}
+		// reset the previously set GET values
+		$this->frontController->getRequest()->query->replace($tempGet);
 		$this->frontController->getResponse()->setVars( $tempVars );
 	}
 	

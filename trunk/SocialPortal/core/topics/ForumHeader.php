@@ -29,7 +29,7 @@ class ForumHeader implements iInsertable{
 			$descr = $f->getDescription();
 			$numTopics = $f->getNumTopics();
 			$classes = 'forums-tab';
-			$link = $front->getViewHelper()->createHref( 'Forum', 'displaySingle', array($id) );
+			$link = $front->getViewHelper()->createHref( 'Forum', 'displaySingle', array(), array('forumId'=>$id) );
 //			if( $i === $indexSelected ) {
 //				$classes .= ' selected background_primary';
 //			}else{

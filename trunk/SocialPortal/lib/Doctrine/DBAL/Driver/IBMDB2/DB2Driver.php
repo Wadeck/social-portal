@@ -105,4 +105,12 @@ class DB2Driver implements Driver
         $params = $conn->getParams();
         return $params['dbname'];
     }
+/* (non-PHPdoc)
+	 * @see Driver::_constructDsn()
+	 */
+	function _constructDsn(array $params) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

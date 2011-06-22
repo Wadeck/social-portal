@@ -23,6 +23,8 @@ namespace Doctrine\DBAL\Driver;
 
 use \PDO;
 
+use Doctrine\DBAL\Driver\Connection;
+
 /**
  * PDO implementation of the Connection interface.
  * Used by all PDO-based drivers.

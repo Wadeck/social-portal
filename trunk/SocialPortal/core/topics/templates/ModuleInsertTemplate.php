@@ -14,8 +14,10 @@ class ModuleInsertTemplate implements iInsertable {
 	protected $module;
 	/** @var string */
 	protected $action;
-	/** @var string */
+	/** @var array */
 	protected $parameters;
+	/** @var array */
+	protected $getAttributes;
 	/** @var string */
 	protected $nonce;
 	
@@ -23,16 +25,17 @@ class ModuleInsertTemplate implements iInsertable {
 	 * @param FrontController $frontController
 	 * @param string $message Message to display in the div, already translated
 	 */
-	public function __construct(FrontController $frontController, $module, $action, $parameters, $nonce=false) {
+	public function __construct(FrontController $frontController, $module, $action, $parameters, $getAttributes, $nonce=false) {
 		$this->frontController = $frontController;
 		$this->module = $module;
 		$this->action = $action;
 		$this->parameters = $parameters;
+		$this->getAttributes = $getAttributes;
 		$this->nonce = $nonce;
 	}
 	
 	public function insert() {
-		$this->frontController->getViewHelper()->insertModule($this->module, $this->action, $this->parameters, $this->nonce);
+		$this->frontController->getViewHelper()->insertModule($this->module, $this->action, $this->parameters, $this->getAttributes, $this->nonce);
 	}
 
 }

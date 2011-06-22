@@ -710,4 +710,68 @@ LEFT JOIN all_cons_columns r_cols
     {
         return '';
     }
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getBooleanTypeDeclarationSQL()
+	 */
+	public function getBooleanTypeDeclarationSQL(array $columnDef) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getIntegerTypeDeclarationSQL()
+	 */
+	public function getIntegerTypeDeclarationSQL(array $columnDef) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getBigIntTypeDeclarationSQL()
+	 */
+	public function getBigIntTypeDeclarationSQL(array $columnDef) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getSmallIntTypeDeclarationSQL()
+	 */
+	public function getSmallIntTypeDeclarationSQL(array $columnDef) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::_getCommonIntegerTypeDeclarationSQL()
+	 */
+	protected function _getCommonIntegerTypeDeclarationSQL(array $columnDef) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::initializeDoctrineTypeMappings()
+	 */
+	protected function initializeDoctrineTypeMappings() {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getClobTypeDeclarationSQL()
+	 */
+	public function getClobTypeDeclarationSQL(array $field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+/* (non-PHPdoc)
+	 * @see AbstractPlatform::getName()
+	 */
+	public function getName() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
