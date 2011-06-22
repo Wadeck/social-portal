@@ -172,14 +172,19 @@ class Tool extends AbstractController {
 		$forumRep = $this->em->getRepository( 'Forum' );
 		$forums = $forumRep->findAll();
 		$total = 0;
+		$error = false;
 		foreach( $forums as $f ) {
 			$count = $forumRep->recountAllPosts( $f->getId() );
+			if(false === $count){
+				$error = true;
+				break;
+			}
 			$total += $count;
 			$f->setNumPosts( $count );
 			$this->em->persist( $f );
 		}
 		
-		if( $this->em->flushSafe() ) {
+		if( !$error && $this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ) , 'info');
 		} else {
 			$this->frontController->addMessage( __( 'Recount failed !' ),'error' );

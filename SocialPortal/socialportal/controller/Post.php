@@ -126,7 +126,7 @@ class Post extends AbstractController {
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		// increment the number of topic in the forum parent
-		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId );
+		$this->em->getRepository( 'Forum' )->incrementPostCount( $forumId );
 		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId );
 		
 		$this->frontController->addMessage( __( 'The creation of the post was a success' ), 'correct' );
@@ -166,8 +166,8 @@ class Post extends AbstractController {
 		$base = $existing->getPostbase();
 		$existing = $form->createSpecificPost( $base, $existing );
 		
-//		$this->em->merge( $base );
-		$this->em->merge( $existing );
+//		$this->em->persist( $base );
+		$this->em->persist( $existing );
 		if( !$this->em->flushSafe() ) {
 			//TODO redirection
 			$this->frontController->addMessage( __( 'There was a problem during the edition of the post' ), 'error' );

@@ -216,6 +216,13 @@ ol.commentlist li, div.rounded-box #topic {
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
+	ol.commentlist li:first-child {
+		margin: 0 0 20px 0;
+	}
+	ol.commentlist li:last-child {
+		margin: 10px 0 0 0;
+	}
+
 	div.rounded-box-topic.padded{
 		padding: 8px;	
 	}

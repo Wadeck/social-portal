@@ -128,7 +128,7 @@ class Topic extends AbstractController {
 		$forumId = $parameters[1];
 		$get = $this->frontController->getRequest()->query;
 		$page_num = $get->get( 'p', 1 );
-		$num_per_page = $get->get( 'n', 20 );
+		$num_per_page = $get->get( 'n', 10 );
 		
 		$topic = $this->em->getRepository('TopicBase')->findFullTopic($topicId);
 		$base = $topic->getTopicbase();
@@ -248,8 +248,8 @@ class Topic extends AbstractController {
 		$base->setTitle( $form->getTopicTitle() );
 		
 		$existing = $form->createSpecificTopic( $base, $existing );
-		$this->em->merge( $base );
-		$this->em->merge( $existing );
+		$this->em->persist( $base );
+		$this->em->persist( $existing );
 		if( !$this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'There was a problem during the edition of the topic' ), 'error' );
 			//TODO problem here the referrer needs authentification that we don't have

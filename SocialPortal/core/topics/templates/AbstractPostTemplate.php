@@ -82,7 +82,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 							<!-- publication date -->
 							<span id="topic-date">
 								<!-- publication date -->
-								<?php Utils::getDataSince($base->getTime()); ?>
+								<?php echo Utils::getDataSince($base->getTime()); ?>
 							</span>
 						</td>
 					</tr>
@@ -114,10 +114,10 @@ abstract class AbstractPostTemplate implements iInsertable{
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsDeleted()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array($postId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array($postId)); ?>"
 				title="<?php echo __( 'Restore the post from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array($postId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array($postId)); ?>"
 				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
@@ -132,13 +132,13 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 */
 	protected function insertUserTools($post){
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array($post->getId())); ?>"
+		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array($post->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
-		<a href="#comment" onClick="onQuoteClick(); return true"
+		<a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"
 			title="<?php echo __( 'Quote this post in your answer' ); ?>"><?php echo __('Quote'); ?></a>
 		&nbsp;|&nbsp;
-		<a href="#topic-<?php echo $post->getId(); ?>"
+		<a href="#post-<?php echo $post->getId(); ?>"
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
 								
 	<?php

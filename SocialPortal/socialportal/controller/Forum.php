@@ -67,7 +67,11 @@ class Forum extends AbstractController {
 		$forum = new ForumEntity();
 		$forum->setName( $form->getForumName() );
 		$forum->setDescription( $form->getForumDescription() );
-		if( !$this->em->persistAndFlush( $forum ) ) {
+		$forum->setNumPosts(0);
+		$forum->setNumTopics(0);
+		
+		$this->em->persist($forum);
+		if( !$this->em->flushSafe( $forum ) ) {
 			$this->frontController->addMessage( __( 'There is already a forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
@@ -98,7 +102,8 @@ class Forum extends AbstractController {
 		$forum->setName( $form->getForumName() );
 		$forum->setDescription( $form->getForumDescription() );
 		
-		if( !$this->em->persistAndFlush( $forum ) ) {
+		$this->em->persist($forum);
+		if( !$this->em->flushSafe( $forum ) ) {
 			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );

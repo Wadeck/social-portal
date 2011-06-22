@@ -23,6 +23,6 @@ if( $forums )
 </div><?php
 	}
 else {
-	echo '<div class="message">Currently no forum</div>';
-}
-?>
+	echo '<div class="message info">Currently no forum</div>';
+}?>
+<a href="<?php echo $vars['helper']->createHref('Forum', 'displayForm')?>">Create new forum</a><br/>

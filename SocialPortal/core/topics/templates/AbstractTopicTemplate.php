@@ -132,28 +132,28 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsSticky()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array($topicId)); ?>"
 				title="<?php echo __( 'Unstick the topic, it will be shown like other topics by order of last modification' ); ?>"><?php echo __('Unstick'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array($topicId)); ?>"
 				title="<?php echo __( 'Stick the topic at the top of the forum' ); ?>"><?php echo __('Stick'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsOpen()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array($topicId)); ?>"
 				title="<?php echo __( 'Close the topic, so that no other comments could be left, and so the topic falls in the forget' ); ?>"><?php echo __('Close'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('openTopic', 'Topic', 'open', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('openTopic', 'Topic', 'open', array($topicId)); ?>"
 				title="<?php echo __( 'Open the topic, it will re accept comments' ); ?>"><?php echo __('Open'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsDeleted()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Topic', 'undelete', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Topic', 'undelete', array($topicId)); ?>"
 				title="<?php echo __( 'Restore the topic from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Topic', 'delete', array($topicId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Topic', 'delete', array($topicId)); ?>"
 				title="<?php echo __( 'Delete the topic, stay in database but it is no more displayed' ); ?>"><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
@@ -168,7 +168,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	 */
 	protected function insertUserTools($topic){
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array($topic->getId())); ?>"
+		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array($topic->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
 		<!--<a href="#comment" onClick="onQuoteClick(); return true"
