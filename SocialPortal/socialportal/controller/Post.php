@@ -34,13 +34,15 @@ use core\AbstractController;
 class Post extends AbstractController {
 	/**
 	 * @Nonce(displayPostForm)
-	 * @Parameters(3)
-	 * Paramaters = [topic_type_id, topic_id, forumId, post_id(opt, only for edit)]
+	 * @GetAttributes({typeId, forumId, topicId})
+	 * [postId(opt for edit)]
 	 */
 	public function displayFormAction($parameters) {
-		$topicType = $parameters[0];
-		$topicId = $parameters[1];
-		$forumId = $parameters[2];
+		$get = $this->frontController->getRequest()->query;
+		$topicType = $get->get('typeId');
+		$topicId = $get->get('topicId');
+		$forumId = $get->get('forumId');
+		$postId = $get->get('postId', false);
 		
 		$user = $this->frontController->getCurrentUser();
 		
@@ -49,15 +51,13 @@ class Post extends AbstractController {
 		$form = PostFormFactory::createForm( $topicType, $this->frontController );
 		if( !$form ) {
 			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
-			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic',array(), array('topicId'=>$topicId, 'forumId'=>$forumId) );
 		}
 		$module = '';
 		
-		$paramArgs = array( $topicType );
+		$getArgs = array( 'typeId' => $topicType );
 		// now the form is valid we check if we can already fill it with previous value (from db)
-		if( count( $parameters ) >= 4 ) {
-			$postId = $parameters[3];
-			
+		if( false !== $postId ) {
 			$postRepo = $this->em->getRepository( 'PostBase' );
 			$currentPost = $postRepo->findFullPost( $postId );
 			
@@ -65,20 +65,20 @@ class Post extends AbstractController {
 			$customClass = TopicType::translateTypeIdToPostName( $topicType );
 			if( !$currentPost instanceof $customClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
-				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
+				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array('topicId'=>$topicId, 'forumId'=>$forumId) );
 			}
 			
 			$form->setupWithPost( $currentPost );
 			$form->setNonceAction( 'editPost' );
 			$module = 'edit';
-			$paramArgs[] = $postId;
+			$getArgs['postId'] = $postId;
 		} else {
 			$form->setNonceAction( 'createPost' );
 			$module = 'create';
-			$paramArgs[] = $forumId;
-			$paramArgs[] = $topicId;
+			$getArgs['forumId'] = $forumId;
+			$getArgs['topicId'] = $topicId;
 		}
-		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, $paramArgs );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, array(), $getArgs );
 		
 		// fill the form with the posted field and errors
 		$form->setupWithArray( true );
@@ -93,13 +93,13 @@ class Post extends AbstractController {
 	/**
 	 * @Method(POST)
 	 * @Nonce(createPost)
-	 * @Parameters(3)
-	 * Parameters[typeId, forumId, topicId]
+	 * @GetAttributes({typeId, forumId, topicId})
 	 */
 	public function createAction($parameters) {
-		$typeId = $parameters[0];
-		$forumId = $parameters[1];
-		$topicId = $parameters[2];
+		$get = $this->frontController->getRequest()->query;
+		$typeId = $get->get('typeId');
+		$topicId = $get->get('topicId');
+		$forumId = $get->get('forumId');
 		
 		$form = PostFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
@@ -130,18 +130,18 @@ class Post extends AbstractController {
 		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId );
 		
 		$this->frontController->addMessage( __( 'The creation of the post was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array('topicId'=>$topicId, 'forumId'=>$forumId) );
 	}
 	
 	/**
 	 * @Method(POST)
 	 * @Nonce(editPost)
-	 * @Paramaters(3)
-	 * Parameters[typeId, postId]
+	 * @GetAttributes({typeId, postId})
 	 */
 	public function editAction($parameters) {
-		$typeId = $parameters[0];
-		$postId = $parameters[1];
+		$get = $this->frontController->getRequest()->query;
+		$typeId = $get->get('typeId');
+		$postId = $get->get('postId');
 		
 		$form = PostFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );

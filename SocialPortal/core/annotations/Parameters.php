@@ -14,7 +14,7 @@ use Doctrine\Common\Annotations\Annotation;
 
 // @Parameters(3)
 class Parameters extends Annotation implements ValidableInterface {
-	/** @var array of Capabilities (string) */
+	/** @var length of parameters */
 	private $paramLength;
 	
 	public function __construct($data) {
