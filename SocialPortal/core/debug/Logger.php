@@ -51,14 +51,14 @@ class Logger {
 	
 	public function log_var($message, $var) {
 		ob_start();
-		var_dump( $var );
+		var_export( $var );
 		$message .= ' = ' . ob_get_clean();
 		@fputs( $this->file, date( DATE_RFC822 ) . "\t" . $message . "\n" );
 	}
 	
 	public function debug_var($message, $var) {
 		ob_start();
-		var_dump( $var );
+		var_export( $var );
 		$message .= ' = ' . ob_get_clean();
 		@fputs( $this->file, date( DATE_RFC822 ) . "\t[DEBUG]\t" . $message . "\n" );
 	}

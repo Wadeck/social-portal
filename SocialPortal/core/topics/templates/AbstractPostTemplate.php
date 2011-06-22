@@ -105,9 +105,11 @@ abstract class AbstractPostTemplate implements iInsertable{
 		$base = $post->getPostbase();
 		$customTypeId = $base->getCustomType();
 		$postId = $base->getId();
-//		$forumId = $base->getForum()->getId();
+		$topic = $base->getTopic();
+		$topicId = $topic->getId();
+		$forumId = $topic->getForum()->getId();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('editPost', 'Post', 'edit', array($customTypeId, $postId)); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array($customTypeId, $topicId, $forumId, $postId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		

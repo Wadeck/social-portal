@@ -234,13 +234,23 @@ ol.commentlist li, div.rounded-box #topic {
 		padding: 7px;
 	}
 	
+	ol.commentlist td.avatar-box{
+		vertical-align: text-top;		
+	}
+	ol.commentlist td.comment-right-part{
+		vertical-align: text-top;		
+	}
+	ol.commentlist td {
+		font-size: 12px;
+		line-height: 20px;
+	}
 	/* the cell containing the avatar */
 	td.avatar-box{
 	/*	background: #f0f0f0; */
 		padding: 6px 6px 9px 6px;
 	/*	float: left; */ 
 	/*	font-family: georgia, times, serif; */
-		font-size: 12px;
+		/*font-size: 12px;*/
 		font-weight: bold;
 		border-right: 1px solid #eee;
 	/*	text-align: center; */
@@ -257,13 +267,23 @@ ol.commentlist li, div.rounded-box #topic {
 			float: none;
 		}
 		td.avatar-box a{
+			font-family: georgia, times, serif;
 			text-decoration: none;
+		}
+		td.avatar-box a.profile{
+			line-height: 170%;
+			font-size: 12px;			
+			/*vertical-align: text-top;*/
 		}
 		td.avatar-box a.avatar{
 			display: block;
 			text-align: center;
 		}
 
+	/*	comment-right-part p{
+			font-size:12px;
+}*/
+		
 	a.comment-author-name, a.topic-author-name{
 		display: block;
  		text-align: left;

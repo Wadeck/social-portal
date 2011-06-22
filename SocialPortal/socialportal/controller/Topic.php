@@ -133,14 +133,13 @@ class Topic extends AbstractController {
 		$topic = $this->em->getRepository('TopicBase')->findFullTopic($topicId);
 		$base = $topic->getTopicbase();
 		$typeId = $base->getCustomType();
-		$posts = $this->em->getRepository('PostBase')->findAllFullPosts($topic->getId(), $typeId, $page_num, $num_per_page);
-
+		$posts = $this->em->getRepository('PostBase')->findAllFullPosts($topicId, $typeId, $page_num, $num_per_page);
 		$max_pages = $base->getNumPosts();
 		$max_pages = ceil($max_pages / $num_per_page);
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( $topicId ), array( 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( $topicId, $forumId ), array( 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );

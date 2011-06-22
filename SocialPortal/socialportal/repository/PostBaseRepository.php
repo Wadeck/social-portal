@@ -24,7 +24,7 @@ class PostBaseRepository extends EntityRepository {
 			return false;
 		}
 	}
-//
+
 //	/** @return array of PostBase */
 //	public function findPostsFromTopic($topicId, $page_num, $num_per_page) {
 //		$offset = ($page_num - 1) * $num_per_page;
@@ -38,7 +38,7 @@ class PostBaseRepository extends EntityRepository {
 		$offset = ($page_num - 1) * $num_per_page;
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
 		// special join to fetch the customtype and the postbase information
-		$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.id = :id" );
+		$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0" );
 		$dql->setParameter( 'id', $topicId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
 		$fullPosts = $dql->getResult();
 		return $fullPosts;

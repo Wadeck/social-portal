@@ -13,8 +13,6 @@ use socialportal\repository\ForumMetaRepository;
 
 use core\user\UserManager;
 
-use core\form\custom\TopicFormFactory;
-
 use core\topics\TopicType;
 
 use core\debug\Logger;
@@ -51,7 +49,7 @@ class Post extends AbstractController {
 		$form = PostFormFactory::createForm( $topicType, $this->frontController );
 		if( !$form ) {
 			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
-			$this->frontController->doRedirect( 'Topic', 'displaySingle', array($topicId) );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
 		}
 		$module = '';
 		
@@ -67,10 +65,10 @@ class Post extends AbstractController {
 			$customClass = TopicType::translateTypeIdToPostName( $topicType );
 			if( !$currentPost instanceof $customClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
-				$this->frontController->doRedirect( 'Topic', 'displaySingle', array($topicId) );
+				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
 			}
 			
-			$form->setupWithTopic( $currentPost );
+			$form->setupWithPost( $currentPost );
 			$form->setNonceAction( 'editPost' );
 			$module = 'edit';
 			$paramArgs[] = $postId;
@@ -132,7 +130,7 @@ class Post extends AbstractController {
 		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId );
 		
 		$this->frontController->addMessage( __( 'The creation of the post was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array($topicId, $forumId) );
 	}
 	
 	/**
@@ -145,35 +143,39 @@ class Post extends AbstractController {
 		$typeId = $parameters[0];
 		$postId = $parameters[1];
 		
-		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
+		$form = PostFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
-		$topicRepo = $this->em->getRepository( 'TopicBase' );
-		$existing = $topicRepo->findFullTopic( $postId );
+		$postRepo = $this->em->getRepository( 'PostBase' );
+		$existing = $postRepo->findFullPost( $postId );
 		if( !$existing ) {
+			// TODO redirection
 			$this->frontController->addMessage( __( 'The given id for the edition was invalid' ), 'error' );
-			$this->frontController->doRedirect( 'topic', 'displayForm' );
+			$this->frontController->doRedirect( 'home' );
 		}
 		
 		// check if the forum accept the custom type proposed 
-		$customClass = TopicType::translateTypeIdToName( $typeId );
+		$customClass = TopicType::translateTypeIdToPostName( $typeId );
 		if( !$existing instanceof $customClass ) {
+			// TODO redirection
 			$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
-			$this->frontController->doRedirect( 'topic', 'displayForm' );
+			$this->frontController->doRedirect( 'home' );
 		}
 		
-		$base = $existing->getTopicbase();
-		$base->setTitle( $form->getTopicTitle() );
+		$base = $existing->getPostbase();
+		$existing = $form->createSpecificPost( $base, $existing );
 		
-		$existing = $form->createSpecificTopic( $base, $existing );
-		$this->em->merge( $base );
+//		$this->em->merge( $base );
 		$this->em->merge( $existing );
 		if( !$this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'There was a problem during the edition of the topic' ), 'error' );
-			//TODO problem here the referrer needs authentification that we don't have
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl( $referrer );
+			//TODO redirection
+			$this->frontController->addMessage( __( 'There was a problem during the edition of the post' ), 'error' );
+			//TODO problem here the referrer needs authorization that we don't have
+//			$referrer = $this->frontController->getRequest()->getReferrer();
+//			$this->frontController->doRedirectUrl( $referrer );
+// that needs authorization
+			$this->frontController->doRedirect('home');
 		}
 		
 		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );
