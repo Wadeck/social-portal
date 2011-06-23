@@ -16,6 +16,4 @@ namespace Symfony\Component\Yaml;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParserException extends Exception
-{
-}
+class ParserException extends Exception {}

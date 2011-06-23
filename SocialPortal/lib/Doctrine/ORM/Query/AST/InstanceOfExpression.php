@@ -30,20 +30,17 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class InstanceOfExpression extends Node
-{
-    public $not;
-    public $identificationVariable;
-    public $value;
-    
-    public function __construct($identVariable)
-    {
-        $this->identificationVariable = $identVariable;
-    }
-
-    public function dispatch($sqlWalker)
-    {
-        return $sqlWalker->walkInstanceOfExpression($this);
-    }
+class InstanceOfExpression extends Node {
+	public $not;
+	public $identificationVariable;
+	public $value;
+	
+	public function __construct($identVariable) {
+		$this->identificationVariable = $identVariable;
+	}
+	
+	public function dispatch($sqlWalker) {
+		return $sqlWalker->walkInstanceOfExpression( $this );
+	}
 }
 

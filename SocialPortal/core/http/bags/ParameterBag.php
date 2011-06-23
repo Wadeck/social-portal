@@ -114,8 +114,7 @@ class ParameterBag {
 				$currentKey = null;
 			} else {
 				if( null === $currentKey ) {
-					throw new \InvalidArgumentException( 
-							sprintf( 'Malformed path. Unexpected "%s" at position %d.', $char, $i ) );
+					throw new \InvalidArgumentException( sprintf( 'Malformed path. Unexpected "%s" at position %d.', $char, $i ) );
 				}
 				
 				$currentKey .= $char;

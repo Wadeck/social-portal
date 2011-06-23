@@ -16,6 +16,4 @@ namespace Symfony\Component\Yaml;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Exception extends \Exception
-{
-}
+class Exception extends \Exception {}

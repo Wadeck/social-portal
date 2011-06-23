@@ -27,12 +27,12 @@ abstract class AbstractPostForm extends Form implements iPostForm {
 	
 	/** Children use only, to build the different forms */
 	protected function addInputField(Field $field) {
-//		$this->fields[] = $field;
-//		$field->setMode( $this->globalMode );
-//		if( $field->isFileAccepter() ) {
-//			$this->mustAcceptFile = true;
-//		}
-		parent::addInputField($field);
+		//		$this->fields[] = $field;
+		//		$field->setMode( $this->globalMode );
+		//		if( $field->isFileAccepter() ) {
+		//			$this->mustAcceptFile = true;
+		//		}
+		parent::addInputField( $field );
 		$field->setMode( $this->globalMode );
 	}
 }

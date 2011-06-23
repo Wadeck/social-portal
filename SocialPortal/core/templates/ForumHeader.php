@@ -1,12 +1,12 @@
 <?php
 
-namespace core\topics;
+namespace core\templates;
 
-use core\topics\templates\iInsertable;
+use core\templates\iInsertable;
 
 use core\FrontController;
 
-class ForumHeader implements iInsertable{
+class ForumHeader implements iInsertable {
 	/** @var string */
 	private $cache;
 	/** @var FrontController */
@@ -29,12 +29,12 @@ class ForumHeader implements iInsertable{
 			$descr = $f->getDescription();
 			$numTopics = $f->getNumTopics();
 			$classes = 'forums-tab';
-			$link = $front->getViewHelper()->createHref( 'Forum', 'displaySingle', array(), array('forumId'=>$id) );
-//			if( $i === $indexSelected ) {
-//				$classes .= ' selected background_primary';
-//			}else{
-//				$classes .= ' background_secondary';
-//			}
+			$link = $front->getViewHelper()->createHref( 'Forum', 'displaySingle', array( 'forumId' => $id ) );
+			//			if( $i === $indexSelected ) {
+			//				$classes .= ' selected background_primary';
+			//			}else{
+			//				$classes .= ' background_secondary';
+			//			}
 			if( $i === $indexSelected ) {
 				$classes .= ' selected';
 			}

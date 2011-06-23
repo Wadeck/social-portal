@@ -14,11 +14,11 @@ if( $forums )
 <p><?php
 		echo $forum->getName();
 		?><span><a href=" <?php
-		$vars['helper']->insertHref( 'Forum', 'displayForm', array(), array( 'forumId' => $forum->getId() ) );
+		$vars['helper']->insertHref( 'Forum', 'displayForm', array( 'forumId' => $forum->getId() ) );
 		?>"
 	title="edit">&nbsp;Edit</a><a
 	href=" <?php
-		$vars['helper']->insertHref( 'Forum', 'displaySingle', array(), array( 'forumId' => $forum->getId() ) );
+		$vars['helper']->insertHref( 'Forum', 'displaySingle', array( 'forumId' => $forum->getId() ) );
 		?>" title="edit">&nbsp;View</a></span></p>
 </div><?php
 	}

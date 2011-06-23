@@ -8,13 +8,13 @@ use core\form\Field;
 
 class StrategyListField extends Field {
 	private $cleanText;
-	public function __construct($identifier, $description, $value, array $constraints = array(), $cleanText=true) {
+	public function __construct($identifier, $description, $value, array $constraints = array(), $cleanText = true) {
 		parent::__construct( $identifier, $description, $value, 'text', $constraints );
 		$this->cleanText = $cleanText;
 	}
 	
-	public function getValue(){
-		return Utils::getCleanText($this->value);
+	public function getValue() {
+		return Utils::getCleanText( $this->value );
 	}
 	
 	protected function isAcceptType($type) {

@@ -42,7 +42,7 @@ class TopicFreetextForm extends AbstractTopicForm {
 		return $this->ready ? $this->data['topic_description'] : null;
 	}
 	
-	public function createSpecificTopic(TopicBase $base, $existing=null) {
+	public function createSpecificTopic(TopicBase $base, $existing = null) {
 		if( $existing ) {
 			$topic = $existing;
 		} else {

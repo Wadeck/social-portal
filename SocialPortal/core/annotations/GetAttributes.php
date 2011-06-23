@@ -17,25 +17,25 @@ class GetAttributes extends Annotation implements ValidableInterface {
 	/** list of key that need to be passed as get attributes, not counting _nonce */
 	private $attributes;
 	
-	public function __construct($data){
-		if (isset( $data ['value'] )) {
-			$value = $data ['value'];
+	public function __construct($data) {
+		if( isset( $data['value'] ) ) {
+			$value = $data['value'];
 		} else {
-			$resquest = FrontController::getInstance()->getRequest();
-			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'GetAttributes', $resquest->module, $resquest->action ) );
+			$request = FrontController::getInstance()->getRequest();
+			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'GetAttributes', $request->module, $request->action ) );
 		}
-		if (! is_array( $value )) {
-			$value = array ($value );
+		if( !is_array( $value ) ) {
+			$value = array( $value );
 		}
 		$this->attributes = $value;
 	}
 	
-	public function isValid(){
+	public function isValid() {
 		$front = FrontController::getInstance();
 		$query = $front->getRequest()->query->all();
-		$query = array_keys($query);
+		$query = array_keys( $query );
 		$emptyArray = array_diff( $this->attributes, $query );
-		if ($this->attributes && count( $emptyArray ) > 0) {
+		if( $this->attributes && count( $emptyArray ) > 0 ) {
 			Logger::getInstance()->debug_var( 'Some get attributes are missing', $emptyArray );
 			return false;
 		}

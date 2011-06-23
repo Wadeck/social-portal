@@ -38,7 +38,7 @@ class PostStoryForm extends AbstractPostForm {
 	public function getPostContent() {
 		return $this->ready ? $this->data['post_content'] : null;
 	}
-
+	
 	public function getAutomaticThoughts() {
 		return $this->ready ? $this->data['post_automatic_thoughts'] : null;
 	}

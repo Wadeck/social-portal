@@ -16,7 +16,7 @@
  * and is licensed under the LGPL. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 namespace Doctrine\ORM\Query\AST;
 
 /**
@@ -33,26 +33,23 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class PathExpression extends Node
-{
-    const TYPE_COLLECTION_VALUED_ASSOCIATION = 2;
-    const TYPE_SINGLE_VALUED_ASSOCIATION = 4;
-    const TYPE_STATE_FIELD = 8;
-    
-    public $type;
-    public $expectedType;
-    public $identificationVariable;
-    public $field;
-    
-    public function __construct($expectedType, $identificationVariable, $field = null)
-    {
-        $this->expectedType = $expectedType;
-        $this->identificationVariable = $identificationVariable;
-        $this->field = $field;
-    }
-    
-    public function dispatch($walker)
-    {
-        return $walker->walkPathExpression($this);
-    }
+class PathExpression extends Node {
+	const TYPE_COLLECTION_VALUED_ASSOCIATION = 2;
+	const TYPE_SINGLE_VALUED_ASSOCIATION = 4;
+	const TYPE_STATE_FIELD = 8;
+	
+	public $type;
+	public $expectedType;
+	public $identificationVariable;
+	public $field;
+	
+	public function __construct($expectedType, $identificationVariable, $field = null) {
+		$this->expectedType = $expectedType;
+		$this->identificationVariable = $identificationVariable;
+		$this->field = $field;
+	}
+	
+	public function dispatch($walker) {
+		return $walker->walkPathExpression( $this );
+	}
 }

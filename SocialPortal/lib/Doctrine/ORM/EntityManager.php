@@ -323,7 +323,7 @@ class EntityManager {
 		try {
 			$this->errorIfClosed();
 			$this->unitOfWork->commit();
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e ) {
 			Logger::getInstance()->debug_var( 'Exception thrown in persistAndFlush', $e );
 			return false;
 		}
@@ -338,7 +338,7 @@ class EntityManager {
 			$this->persist( $entity );
 			$this->flush();
 			return true;
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e ) {
 			Logger::getInstance()->debug_var( 'Exception thrown in persistAndFlush', $e );
 			return false;
 		}

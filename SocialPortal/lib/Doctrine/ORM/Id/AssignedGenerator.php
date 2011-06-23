@@ -31,39 +31,37 @@ use Doctrine\ORM\ORMException;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class AssignedGenerator extends AbstractIdGenerator
-{
-    /**
-     * Returns the identifier assigned to the given entity.
-     *
-     * @param object $entity
-     * @return mixed
-     * @override
-     */
-    public function generate(EntityManager $em, $entity)
-    {
-        $class = $em->getClassMetadata(get_class($entity));
-        $identifier = array();
-        if ($class->isIdentifierComposite) {
-            $idFields = $class->getIdentifierFieldNames();
-            foreach ($idFields as $idField) {
-                $value = $class->getReflectionProperty($idField)->getValue($entity);
-                if (isset($value)) {
-                    $identifier[$idField] = $value;
-                } else {
-                    throw ORMException::entityMissingAssignedId($entity);
-                }
-            }
-        } else {
-            $idField = $class->identifier[0];
-            $value = $class->reflFields[$idField]->getValue($entity);
-            if (isset($value)) {
-                $identifier[$idField] = $value;
-            } else {
-                throw ORMException::entityMissingAssignedId($entity);
-            }
-        }
-        
-        return $identifier;
-    }
+class AssignedGenerator extends AbstractIdGenerator {
+	/**
+	 * Returns the identifier assigned to the given entity.
+	 *
+	 * @param object $entity
+	 * @return mixed
+	 * @override
+	 */
+	public function generate(EntityManager $em, $entity) {
+		$class = $em->getClassMetadata( get_class( $entity ) );
+		$identifier = array();
+		if( $class->isIdentifierComposite ) {
+			$idFields = $class->getIdentifierFieldNames();
+			foreach( $idFields as $idField ) {
+				$value = $class->getReflectionProperty( $idField )->getValue( $entity );
+				if( isset( $value ) ) {
+					$identifier[$idField] = $value;
+				} else {
+					throw ORMException::entityMissingAssignedId( $entity );
+				}
+			}
+		} else {
+			$idField = $class->identifier[0];
+			$value = $class->reflFields[$idField]->getValue( $entity );
+			if( isset( $value ) ) {
+				$identifier[$idField] = $value;
+			} else {
+				throw ORMException::entityMissingAssignedId( $entity );
+			}
+		}
+		
+		return $identifier;
+	}
 }

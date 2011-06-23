@@ -1,9 +1,9 @@
 <?php
 
 $realWD = getcwd();
-$currentWD = dirname(__FILE__);
-if($realWD !== $currentWD){
-	chdir($currentWD);
+$currentWD = dirname( __FILE__ );
+if( $realWD !== $currentWD ) {
+	chdir( $currentWD );
 }
 
 require_once 'base_script.php';
@@ -43,9 +43,9 @@ foreach( $classes as $class ) {
 
 $generator = new EntityGenerator();
 $generator->setUpdateEntityIfExists( true ); // only update if class already exists
-$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
+$generator->setRegenerateEntityIfExists( true ); // this will overwrite the existing classes
 $generator->setGenerateStubMethods( true );
 $generator->setGenerateAnnotations( true );
 $generator->setRepositoryFolder( 'repository' );
 $generator->generate( $metadata, TARGET );
-$output->writeln('Generation of entities done');
+$output->writeln( 'Generation of entities done' );

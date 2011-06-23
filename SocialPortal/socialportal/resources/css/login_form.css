@@ -46,7 +46,8 @@ form.login-form label { /*font-weight: bold;*/
 	display: inline;
 }
 
-form.login-form textarea,form.login-form input[type=text],form .login-form select,form.login-form input[type=password] {
+form.login-form textarea,form.login-form input[type=text],form .login-form select,form.login-form input[type=password]
+	{
 	border: 1px solid #ccc;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;

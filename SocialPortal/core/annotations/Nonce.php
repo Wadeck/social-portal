@@ -21,8 +21,8 @@ class Nonce extends Annotation implements ValidableInterface {
 		if( isset( $data['value'] ) ) {
 			$value = $data['value'];
 		} else {
-			$resquest = FrontController::getInstance()->getRequest();
-			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'Nonce', $resquest->module, $resquest->action ) );
+			$request = FrontController::getInstance()->getRequest();
+			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'Nonce', $request->module, $request->action ) );
 		}
 		$this->nonceAction = $value;
 	}

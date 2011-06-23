@@ -21,8 +21,8 @@ class Method extends Annotation implements ValidableInterface {
 		if( isset( $data['value'] ) ) {
 			$value = $data['value'];
 		} else {
-			$resquest = FrontController::getInstance()->getRequest();
-			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'Method', $resquest->module, $resquest->action ) );
+			$request = FrontController::getInstance()->getRequest();
+			FrontController::getInstance()->generateException( new InvalidValueForAnnotationException( 'Method', $request->module, $request->action ) );
 		}
 		if( !is_array( $value ) ) {
 			$value = array( $value );

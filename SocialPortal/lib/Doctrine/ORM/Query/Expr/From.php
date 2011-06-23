@@ -32,29 +32,24 @@ namespace Doctrine\ORM\Query\Expr;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class From
-{
-    private $_from;
-    private $_alias;
-
-    public function __construct($from, $alias)
-    {
-        $this->_from  = $from;
-        $this->_alias  = $alias;
-    }
-
-    public function getFrom()
-    {
-        return $this->_from;
-    }
-
-    public function getAlias()
-    {
-        return $this->_alias;
-    }
-
-    public function __toString()
-    {
-        return $this->_from . ' ' . $this->_alias;
-    }
+class From {
+	private $_from;
+	private $_alias;
+	
+	public function __construct($from, $alias) {
+		$this->_from = $from;
+		$this->_alias = $alias;
+	}
+	
+	public function getFrom() {
+		return $this->_from;
+	}
+	
+	public function getAlias() {
+		return $this->_alias;
+	}
+	
+	public function __toString() {
+		return $this->_from . ' ' . $this->_alias;
+	}
 }

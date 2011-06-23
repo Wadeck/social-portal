@@ -1,11 +1,11 @@
 <?php
 
-namespace core\topics\templates;
+namespace core\templates;
 
 use core\FrontController;
 
 /**
- *	Simple object implementing iInsertable
+ * Simple object implementing iInsertable
  */
 class ModuleInsertTemplate implements iInsertable {
 	/** @var FrontController */
@@ -25,7 +25,7 @@ class ModuleInsertTemplate implements iInsertable {
 	 * @param FrontController $frontController
 	 * @param string $message Message to display in the div, already translated
 	 */
-	public function __construct(FrontController $frontController, $module, $action, $parameters, $getAttributes, $nonce=false) {
+	public function __construct(FrontController $frontController, $module, $action, $parameters, $getAttributes, $nonce = false) {
 		$this->frontController = $frontController;
 		$this->module = $module;
 		$this->action = $action;
@@ -35,7 +35,7 @@ class ModuleInsertTemplate implements iInsertable {
 	}
 	
 	public function insert() {
-		$this->frontController->getViewHelper()->insertModule($this->module, $this->action, $this->parameters, $this->getAttributes, $this->nonce);
+		$this->frontController->getViewHelper()->insertModule( $this->module, $this->action, $this->parameters, $this->getAttributes, $this->nonce );
 	}
 
 }

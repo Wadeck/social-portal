@@ -21,8 +21,7 @@
 
 namespace Doctrine\ORM\Query\Exec;
 
-use Doctrine\DBAL\Connection,
-    Doctrine\ORM\Query\AST;
+use Doctrine\DBAL\Connection, Doctrine\ORM\Query\AST;
 
 /**
  * Executor that executes the SQL statements for DQL DELETE/UPDATE statements on classes
@@ -35,19 +34,16 @@ use Doctrine\DBAL\Connection,
  * @since       2.0
  * @todo This is exactly the same as SingleSelectExecutor. Unify in SingleStatementExecutor. 
  */
-class SingleTableDeleteUpdateExecutor extends AbstractSqlExecutor
-{
-    public function __construct(AST\Node $AST, $sqlWalker)
-    {
-        if ($AST instanceof AST\UpdateStatement) {
-            $this->_sqlStatements = $sqlWalker->walkUpdateStatement($AST);
-        } else if ($AST instanceof AST\DeleteStatement) {
-            $this->_sqlStatements = $sqlWalker->walkDeleteStatement($AST);
-        }
-    }
-    
-    public function execute(Connection $conn, array $params, array $types)
-    {
-        return $conn->executeUpdate($this->_sqlStatements, $params, $types);
-    }
+class SingleTableDeleteUpdateExecutor extends AbstractSqlExecutor {
+	public function __construct(AST\Node $AST, $sqlWalker) {
+		if( $AST instanceof AST\UpdateStatement ) {
+			$this->_sqlStatements = $sqlWalker->walkUpdateStatement( $AST );
+		} else if( $AST instanceof AST\DeleteStatement ) {
+			$this->_sqlStatements = $sqlWalker->walkDeleteStatement( $AST );
+		}
+	}
+	
+	public function execute(Connection $conn, array $params, array $types) {
+		return $conn->executeUpdate( $this->_sqlStatements, $params, $types );
+	}
 }

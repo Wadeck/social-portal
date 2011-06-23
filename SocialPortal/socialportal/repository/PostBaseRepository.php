@@ -2,7 +2,7 @@
 
 namespace socialportal\repository;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use core\security\Crypto;
 
@@ -24,17 +24,18 @@ class PostBaseRepository extends EntityRepository {
 			return false;
 		}
 	}
-
-//	/** @return array of PostBase */
-//	public function findPostsFromTopic($topicId, $page_num, $num_per_page) {
-//		$offset = ($page_num - 1) * $num_per_page;
-//		$dql = $this->_em->createQuery( 'SELECT p FROM PostBase p WHERE p.topic = :id' );
-//		$dql->setParameter( 'id', $topicId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
-//		$posts = $dql->getResult();
-//		return $posts;
-//	}
 	
-	public function findAllFullPosts($topicId, $topicTypeId, $page_num, $num_per_page){
+	//	/** @return array of PostBase */
+	//	public function findPostsFromTopic($topicId, $page_num, $num_per_page) {
+	//		$offset = ($page_num - 1) * $num_per_page;
+	//		$dql = $this->_em->createQuery( 'SELECT p FROM PostBase p WHERE p.topic = :id' );
+	//		$dql->setParameter( 'id', $topicId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
+	//		$posts = $dql->getResult();
+	//		return $posts;
+	//	}
+	
+
+	public function findAllFullPosts($topicId, $topicTypeId, $page_num, $num_per_page) {
 		$offset = ($page_num - 1) * $num_per_page;
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
 		// special join to fetch the customtype and the postbase information
@@ -69,15 +70,15 @@ class PostBaseRepository extends EntityRepository {
 	}
 	
 	/** @return int */
-	public function getLastPosition($topicId){
+	public function getLastPosition($topicId) {
 		$dql = $this->_em->createQuery( 'SELECT PARTIAL p.{id,position} FROM PostBase p WHERE p.topic = :id ORDER BY p.position DESC' );
 		$dql->setParameter( 'id', $topicId )->setMaxResults( 1 );
 		$posts = $dql->getResult();
-		if(!$posts){
+		if( !$posts ) {
 			return 1;
 		}
 		$post = $posts[0];
-		$position = $post->getPosition()+1;
+		$position = $post->getPosition() + 1;
 		return $position;
 	}
 }

@@ -15,16 +15,16 @@ use core\AbstractController;
 use core\user\UserRoles;
 
 class Connection extends AbstractController {
-	public function displayUserPanelAction($parameters) {
+	public function displayUserPanelAction() {
 		$user = $this->frontController->getCurrentUser();
 		if( !$user->getId() ) {
-			$this->displayLoginFormAction($parameters);
+			$this->displayLoginFormAction( );
 		} else {
-			$this->displayUserAction($parameters);
+			$this->displayUserAction( );
 		}
 	}
 	
-	public function displayUserAction($parameters) {
+	public function displayUserAction() {
 		// show the connected user
 		$user = $this->frontController->getCurrentUser();
 		$this->frontController->getResponse()->setVar( 'user', $user );
@@ -41,7 +41,7 @@ class Connection extends AbstractController {
 		$this->frontController->doDisplay( 'connection', 'displayUser' );
 	}
 	
-	public function displayLoginFormAction($parameters) {
+	public function displayLoginFormAction() {
 		$form = new LoginForm( $this->frontController );
 		$form->setNonceAction( 'login' );
 		$form->setupWithArray( true );
@@ -56,7 +56,7 @@ class Connection extends AbstractController {
 	 * @Nonce(login)
 	 * @Method(POST)
 	 */
-	public function loginAction($parameters) {
+	public function loginAction() {
 		$form = new LoginForm( $this->frontController );
 		$form->setupWithArray();
 		$form->checkAndPrepareContent();
@@ -83,13 +83,13 @@ class Connection extends AbstractController {
 		$this->frontController->doRedirectUrl( $referrer );
 	}
 	
-	public function logoutAction($parameters) {
+	public function logoutAction() {
 		// logout => remove session / cookie
 		$this->frontController->getUserManager()->disconnect();
 		$this->frontController->doRedirect( 'home', 'index' );
 	}
 	
-	public function displayRegisterFormAction($parameters) {
+	public function displayRegisterFormAction() {
 		$form = new RegisterForm( $this->frontController );
 		$form->setNonceAction( 'register' );
 		$form->setupWithArray( true );
@@ -105,7 +105,7 @@ class Connection extends AbstractController {
 	 * @Method(POST)
 	 * @Nonce(register)
 	 */
-	public function registerAction($parameters) {
+	public function registerAction() {
 		$form = new RegisterForm( $this->frontController );
 		$form->setupWithArray();
 		$form->checkAndPrepareContent();
@@ -114,15 +114,16 @@ class Connection extends AbstractController {
 		$password = $form->getPassword();
 		$email = $form->getEmail();
 		
-//		$username = $this->frontController->getRequest()->getPOSTAttribute( 'username', null );
-//		$password = $this->frontController->getRequest()->getPOSTAttribute( 'password', null );
+		//		$username = $this->frontController->getRequest()->getPOSTAttribute( 'username', null );
+		//		$password = $this->frontController->getRequest()->getPOSTAttribute( 'password', null );
 		
+
 		// redirect to referer or something like that, the page that was ask previously
 		$referrer = $this->frontController->getRequest()->getReferrer();
 		if( !$referrer ) {
 			$referrer = '';
 		}
-
+		
 		// TODO email-activation:: here the point to modify
 		$withActivation = false;
 		$user = $this->frontController->getUserManager()->registerNewUser( $username, $password, $email, $withActivation );
@@ -140,7 +141,7 @@ class Connection extends AbstractController {
 	/**
 	 * When the registration is success, it explains to the user the fact that he will receive an email with validation link
 	 */
-	public function registerCompleteAction($parameters) {
+	public function registerCompleteAction() {
 		$activation = $this->frontController->getRequest()->getSession()->getFlash( 'withActivation', false );
 		if( $activation ) {
 			$this->frontController->doDisplay( 'connection', 'registerCompleteActivation' );
@@ -152,7 +153,7 @@ class Connection extends AbstractController {
 	/**
 	 * @Method(GET)
 	 */
-	public function activationAction($parameters) {
+	public function activationAction() {
 		//TODO email activation, check with database key etc
 	}
 }

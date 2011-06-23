@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,36 +29,32 @@ use Doctrine\DBAL\Logging\SQLLogger;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  * @internal When adding a new configuration option just write a getter/setter
- *           pair and add the option to the _attributes array with a proper default value.
+ * pair and add the option to the _attributes array with a proper default value.
  */
-class Configuration
-{
-    /**
-     * The attributes that are contained in the configuration.
-     * Values are default values.
-     *
-     * @var array
-     */
-    protected $_attributes = array();
-
-    /**
-     * Sets the SQL logger to use. Defaults to NULL which means SQL logging is disabled.
-     *
-     * @param SQLLogger $logger
-     */
-    public function setSQLLogger(SQLLogger $logger)
-    {
-        $this->_attributes['sqlLogger'] = $logger;
-    }
-
-    /**
-     * Gets the SQL logger that is used.
-     * 
-     * @return SQLLogger
-     */
-    public function getSQLLogger()
-    {
-        return isset($this->_attributes['sqlLogger']) ?
-                $this->_attributes['sqlLogger'] : null;
-    }
+class Configuration {
+	/**
+	 * The attributes that are contained in the configuration.
+	 * Values are default values.
+	 *
+	 * @var array
+	 */
+	protected $_attributes = array();
+	
+	/**
+	 * Sets the SQL logger to use. Defaults to NULL which means SQL logging is disabled.
+	 *
+	 * @param SQLLogger $logger
+	 */
+	public function setSQLLogger(SQLLogger $logger) {
+		$this->_attributes['sqlLogger'] = $logger;
+	}
+	
+	/**
+	 * Gets the SQL logger that is used.
+	 * 
+	 * @return SQLLogger
+	 */
+	public function getSQLLogger() {
+		return isset( $this->_attributes['sqlLogger'] ) ? $this->_attributes['sqlLogger'] : null;
+	}
 }

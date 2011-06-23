@@ -2,21 +2,23 @@
 
 namespace core;
 
+use core\http\Response;
+
+use core\http\Request;
+
 use core\http\exceptions\PageNotFoundException;
 use core\FrontController;
-use core\Request;
-use core\Response;
 use core\security\Firewall;
 
 /** Class that will be passed to the views to have a certain set of possible action */
 class ViewHelper {
 	/** @var array of nonce that are stored for the routines */
 	private $nonceStack = array();
-	/** @var core\FrontController*/
+	/** @var FrontController*/
 	private $frontController;
-	/** @var core\Request */
+	/** @var Request */
 	public $request;
-	/** @var core\Response */
+	/** @var Response */
 	public $response;
 	
 	public function __construct(FrontController $controller, Request $request, Response $response) {
@@ -48,6 +50,9 @@ class ViewHelper {
 		$this->response->addJsVar( $name, $assoc );
 	}
 	
+	/**
+	 * Display the message that are stored in flash session
+	 */
 	public function insertMessage() {
 		$session = $this->frontController->getRequest()->getSession();
 		
@@ -64,15 +69,9 @@ class ViewHelper {
 			}
 		}
 		
-		//TODO remove after debug
 		$redirect = $session->getFlash( 'redirectFrom' );
-		//		if( $redirect ) {
-		//			echo "<p>Redirect from: $redirect</p>";
-		//		} else {
-		//			echo "<p>No redirect</p>";
-		//		}
 		if( !$message ) {
-			//			echo '<p>No Message pending</p>';
+			// no Message pending
 			return;
 		}
 		$this->addJavascriptFile( 'jquery.js' );
@@ -86,7 +85,7 @@ class ViewHelper {
 	}
 	
 	/** Could be used for static view insertion */
-	public function insertView($module, $action = '', $parameters = array()) {
+	public function insertView($module, $action = '', $addVars = array()) {
 		$fileName = FrontController::$VIEW_DIR . $module;
 		if( $action ) {
 			$fileName .= DIRECTORY_SEPARATOR . $action;
@@ -97,31 +96,31 @@ class ViewHelper {
 			$this->generateException( new PageNotFoundException( $module, $action ) );
 		}
 		
-		echo $this->frontController->renderFile( $file, $parameters );
+		echo $this->frontController->renderFile( $file, $addVars );
 	}
 	
 	/** Could be used for login/pass/avatar template */
-	public function insertModule($module, $action = '', array $parameters = array(), array $getAttributes = array(), $nonceAction = false) {
+	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
 		// like a stack
 		$tempGet = $this->frontController->getRequest()->query->all();
-		$this->frontController->getRequest()->query->replace($getAttributes);
+		$this->frontController->getRequest()->query->replace( $gets );
 		
 		// store the nonce to avoid giving bad nonce to the createHref method
 		if( $nonceAction ) {
 			$tempNonce = $this->frontController->getCurrentNonce();
-			$nonce = $this->frontController->getNonceManager()->createNonce($nonceAction);
+			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
 			$this->frontController->setNonce( $nonce );
 			// call the module with the temporary nonce
-			$this->frontController->doAction( $module, $action, $parameters );
+			$this->frontController->doAction( $module, $action );
 			// come back to the previous value of nonce
 			$this->frontController->setNonce( $tempNonce );
 		} else {
 			// call the module without care of the nonce
-			$this->frontController->doAction( $module, $action, $parameters );
+			$this->frontController->doAction( $module, $action );
 		}
 		// reset the previously set GET values
-		$this->frontController->getRequest()->query->replace($tempGet);
+		$this->frontController->getRequest()->query->replace( $tempGet );
 		$this->frontController->getResponse()->setVars( $tempVars );
 	}
 	
@@ -132,39 +131,36 @@ class ViewHelper {
 	 * @param array $parameters
 	 * @param array $GETAttributes
 	 */
-	public function createHref($controllerName, $actionName = '', array $parameters = array(), array $GETAttributes = array()) {
+	public function createHref($controllerName, $actionName = '', array $gets = array()) {
 		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
 		if( $actionName ) {
 			$result .= '/' . $actionName;
 		}
-		if( $actionName && !empty( $parameters ) ) {
-			$result .= '/' . implode( '/', $parameters );
-		}
-		if( !empty( $GETAttributes ) ) {
+		if( !empty( $gets ) ) {
 			$result .= '?' . implode( '&', array_map( function ($key, $value) {
 				return "$key=$value";
-			}, array_keys( $GETAttributes ), array_values( $GETAttributes ) ) );
+			}, array_keys( $gets ), array_values( $gets ) ) );
 		}
 		return $result;
 	}
 	
-	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $parameters = array(), array $GETAttributes = array()) {
+	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array()) {
 		if( $nonce ) {
 			$nonceHash = $this->frontController->getNonceManager()->createNonce( $nonce );
-			$GETAttributes['_nonce'] = $nonceHash;
+			$gets['_nonce'] = $nonceHash;
 		}
-		$href = $this->createHref( $controllerName, $actionName, $parameters, $GETAttributes );
+		$href = $this->createHref( $controllerName, $actionName, $gets );
 		return $href;
 	}
 	
 	/** @see ViewHelper#createHref */
-	public function insertHref($controllerName, $actionName = '', $parameters = array(), $GETAttributes = array()) {
-		echo $this->createHref( $controllerName, $actionName, $parameters, $GETAttributes );
+	public function insertHref($controllerName, $actionName = '', $gets = array()) {
+		echo $this->createHref( $controllerName, $actionName, $gets );
 	}
 	
 	/** @see ViewHelper#createHrefWithNonce */
-	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', $parameters = array(), $GETAttributes = array()) {
-		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $parameters, $GETAttributes );
+	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', $gets = array()) {
+		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $gets );
 	}
 	
 	/** @return User */

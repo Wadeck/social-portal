@@ -26,7 +26,7 @@ class UserEntityProvider implements UserProviderInterface {
 			$this->em->persist( $user );
 			$this->em->flush();
 			return $user;
-		} catch ( \Exception $e ) {
+		} catch (\Exception $e ) {
 			return false;
 		}
 	}

@@ -5,7 +5,7 @@ use core\user\UserHelper;
 
 use core\form\custom\PostFormFactory;
 
-use core\topics\templates\MessageInsertTemplate;
+use core\templates\MessageInsertTemplate;
 
 use core\user\UserRoles;
 
@@ -15,7 +15,7 @@ use socialportal\repository\ForumMetaRepository;
 
 use core\user\UserManager;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use core\debug\Logger;
 
@@ -39,7 +39,7 @@ class Post extends AbstractController {
 	 * @GetAttributes({typeId, forumId, topicId})
 	 * [postId(opt for edit)]
 	 */
-	public function displayFormAction($parameters) {
+	public function displayFormAction() {
 		$get = $this->frontController->getRequest()->query;
 		$topicType = $get->get( 'typeId' );
 		$topicId = $get->get( 'topicId' );
@@ -100,7 +100,7 @@ class Post extends AbstractController {
 	 * @Nonce(createPost)
 	 * @GetAttributes({typeId, forumId, topicId})
 	 */
-	public function createAction($parameters) {
+	public function createAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$topicId = $get->get( 'topicId' );
@@ -148,7 +148,7 @@ class Post extends AbstractController {
 	 * @Nonce(editPost)
 	 * @GetAttributes({typeId, postId})
 	 */
-	public function editAction($parameters) {
+	public function editAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$postId = $get->get( 'postId' );
@@ -196,15 +196,13 @@ class Post extends AbstractController {
 	/**
 	 * Wargning, do no forget to decrease the num topics of the forum
 	 * @Nonce(deleteTopic)
-	 * @Parameters(1)
 	 * Parameters[postId]
 	 */
-	public function deleteAction($parameters) {}
+	public function deleteAction() {}
 	
 	/**
 	 * Warning, do not forget to increase the num topics of the forum
 	 * @Nonce(undeleteTopic)
-	 * @Parameters(1)
 	 * Parameters[postId]
 	 */
 	public function undeleteAction($parameters) {}

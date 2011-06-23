@@ -9,7 +9,7 @@ class Home extends AbstractController {
 	// @Secured({"full","limited"})
 	/**
 	 */
-	public function indexAction($parameters) {
+	public function indexAction() {
 		$this->frontController->doDisplay( 'home' );
 	}
 }

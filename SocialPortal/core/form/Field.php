@@ -192,7 +192,8 @@ class Field {
 	}
 	
 	public function insertErrorMessage() {
-		?><span class="error_message<?php
+		?><span
+	class="error_message<?php
 		if( $this->error )
 			echo ' active'?>"><?php
 		echo $this->error;
@@ -203,17 +204,20 @@ class Field {
 		?>
 <input type="<?php
 		echo $this->type;
-		?>" id="<?php
+		?>"
+	id="<?php
 		echo $this->identifier;
 		?>"
 	name="<?php
 		echo $this->identifier;
-		?>" class="<?php
+		?>"
+	class="<?php
 		echo $this->getConstraintsAsString();
 		?>"
 	title="<?php
 		echo $this->description;
-		?>" value="<?php
+		?>"
+	value="<?php
 		echo $this->getValue();
 		?>" />
 <?php

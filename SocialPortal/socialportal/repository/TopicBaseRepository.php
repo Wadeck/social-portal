@@ -1,7 +1,7 @@
 <?php
 namespace socialportal\repository;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use socialportal\model\TopicBase;
 
@@ -33,10 +33,10 @@ class TopicBaseRepository extends EntityRepository {
 	 * @param int $num_per_page
 	 * @return array of TopicBase
 	 */
-	public function findTopicsFromForum($forumId, $page_num=1, $num_per_page=false) {
+	public function findTopicsFromForum($forumId, $page_num = 1, $num_per_page = false) {
 		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id' );
 		$dql->setParameter( 'id', $forumId );
-		if(false !== $num_per_page){
+		if( false !== $num_per_page ) {
 			$offset = ($page_num - 1) * $num_per_page;
 			$dql->setFirstResult( $offset )->setMaxResults( $num_per_page );
 		}
@@ -57,9 +57,9 @@ class TopicBaseRepository extends EntityRepository {
 		$dql->setParameter( 'id', $topicId )->setMaxResults( 1 );
 		$result = $dql->getSingleResult();
 		
-//		$qb = $this->_em->createQueryBuilder();
-//		$qb->select( 'ct' )->from( $customType, 'ct' )->where( 'ct.topicbase = :id' )->setParameter( 'id', $topicId )->setMaxResults( 1 );
-//		$results = $qb->getQuery()->getResult();
+		//		$qb = $this->_em->createQueryBuilder();
+		//		$qb->select( 'ct' )->from( $customType, 'ct' )->where( 'ct.topicbase = :id' )->setParameter( 'id', $topicId )->setMaxResults( 1 );
+		//		$results = $qb->getQuery()->getResult();
 		if( $result ) {
 			$fullTopic = $result;
 			$fullTopic->setTopicbase( $topicBase );

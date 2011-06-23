@@ -11,7 +11,7 @@
 
 namespace core\http;
 
-use core\Response;
+use core\http\Response;
 
 /**
  * RedirectResponse represents an HTTP response doing a redirect.
@@ -20,7 +20,7 @@ use core\Response;
  */
 use core;
 
-class RedirectResponse extends Response{
+class RedirectResponse extends Response {
 	/**
 	 * Creates a redirect response so that it conforms to the rules defined for a redirect status code.
 	 *
@@ -29,19 +29,15 @@ class RedirectResponse extends Response{
 	 *
 	 * @see http://tools.ietf.org/html/rfc2616#section-10.3.5
 	 */
-	public function __construct($url, $status = 302)	{
-		if (empty($url)) {
-			throw new \InvalidArgumentException('Cannot redirect to an empty URL.');
+	public function __construct($url, $status = 302) {
+		if( empty( $url ) ) {
+			throw new \InvalidArgumentException( 'Cannot redirect to an empty URL.' );
 		}
-
-		parent::__construct(
-			sprintf('<html><head><meta http-equiv="refresh" content="1;url=%s"/></head></html>', htmlspecialchars($url, ENT_QUOTES)),
-			$status,
-			array('Location' => $url)
-		);
-
-		if (!$this->isRedirect()) {
-			throw new \InvalidArgumentException(sprintf('The HTTP status code is not a redirect ("%s" given).', $status));
+		
+		parent::__construct( sprintf( '<html><head><meta http-equiv="refresh" content="1;url=%s"/></head></html>', htmlspecialchars( $url, ENT_QUOTES ) ), $status, array( 'Location' => $url ) );
+		
+		if( !$this->isRedirect() ) {
+			throw new \InvalidArgumentException( sprintf( 'The HTTP status code is not a redirect ("%s" given).', $status ) );
 		}
 	}
 }

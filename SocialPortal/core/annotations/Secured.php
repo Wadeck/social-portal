@@ -21,8 +21,8 @@ class Secured extends Annotation implements ValidableInterface {
 		} else if( isset( $data['value'] ) ) {
 			$value = $data['value'];
 		} else {
-			$resquest = FrontController::getInstance()->getRequest();
-			throw new exceptions\InvalidValueForAnnotationException( 'Secured', $resquest->module, $resquest->action );
+			$request = FrontController::getInstance()->getRequest();
+			throw new exceptions\InvalidValueForAnnotationException( 'Secured', $request->module, $request->action );
 		}
 		if( !is_array( $value ) ) {
 			$value = array( $value );

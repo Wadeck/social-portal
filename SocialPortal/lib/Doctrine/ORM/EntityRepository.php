@@ -34,197 +34,180 @@ use Doctrine\DBAL\LockMode;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class EntityRepository
-{
-    /**
-     * @var string
-     */
-    protected $_entityName;
-
-    /**
-     * @var EntityManager
-     */
-    protected $_em;
-
-    /**
-     * @var Doctrine\ORM\Mapping\ClassMetadata
-     */
-    protected $_class;
-
-    /**
-     * Initializes a new <tt>EntityRepository</tt>.
-     *
-     * @param EntityManager $em The EntityManager to use.
-     * @param ClassMetadata $classMetadata The class descriptor.
-     */
-    public function __construct($em, Mapping\ClassMetadata $class)
-    {
-        $this->_entityName = $class->name;
-        $this->_em = $em;
-        $this->_class = $class;
-    }
-
-    /**
-     * Create a new QueryBuilder instance that is prepopulated for this entity name
-     *
-     * @param string $alias
-     * @return QueryBuilder $qb
-     */
-    public function createQueryBuilder($alias)
-    {
-        return $this->_em->createQueryBuilder()
-            ->select($alias)
-            ->from($this->_entityName, $alias);
-    }
-
-    /**
-     * Clears the repository, causing all managed entities to become detached.
-     */
-    public function clear()
-    {
-        $this->_em->clear($this->_class->rootEntityName);
-    }
-
-    /**
-     * Finds an entity by its primary key / identifier.
-     *
-     * @param int $id The identifier.
-     * @param int $lockMode 
-     * @param int $lockVersion
-     * @return object The entity.
-     */
-    public function find($id, $lockMode = LockMode::NONE, $lockVersion = null)
-    {
-        // Check identity map first
-        $entity = $this->_em->getUnitOfWork()->tryGetById($id, $this->_class->rootEntityName);
-        if ($entity) {
-            if (!($entity instanceof $this->_class->name)) {
-                return null;
-            }
-            
-            if ($lockMode != LockMode::NONE) {
-                $this->_em->lock($entity, $lockMode, $lockVersion);
-            }
-
-            return $entity; // Hit!
-        }
-
-        if ( ! is_array($id) || count($id) <= 1) {
-            // @todo FIXME: Not correct. Relies on specific order.
-            $value = is_array($id) ? array_values($id) : array($id);
-            $id = array_combine($this->_class->identifier, $value);
-        }
-
-        if ($lockMode == LockMode::NONE) {
-            return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id);
-        } else if ($lockMode == LockMode::OPTIMISTIC) {
-            if (!$this->_class->isVersioned) {
-                throw OptimisticLockException::notVersioned($this->_entityName);
-            }
-            $entity = $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id);
-
-            $this->_em->getUnitOfWork()->lock($entity, $lockMode, $lockVersion);
-
-            return $entity;
-        } else {
-            if (!$this->_em->getConnection()->isTransactionActive()) {
-                throw TransactionRequiredException::transactionRequired();
-            }
-            
-            return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($id, null, null, array(), $lockMode);
-        }
-    }
-
-    /**
-     * Finds all entities in the repository.
-     *
-     * @return array The entities.
-     */
-    public function findAll()
-    {
-        return $this->findBy(array());
-    }
-
-    /**
-     * Finds entities by a set of criteria.
-     *
-     * @param array $criteria
-     * @return array
-     */
-    public function findBy(array $criteria)
-    {
-        return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->loadAll($criteria);
-    }
-
-    /**
-     * Finds a single entity by a set of criteria.
-     *
-     * @param array $criteria
-     * @return object
-     */
-    public function findOneBy(array $criteria)
-    {
-        return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->load($criteria);
-    }
-
-    /**
-     * Adds support for magic finders.
-     *
-     * @return array|object The found entity/entities.
-     * @throws BadMethodCallException  If the method called is an invalid find* method
-     *                                 or no find* method at all and therefore an invalid
-     *                                 method call.
-     */
-    public function __call($method, $arguments)
-    {
-        if (substr($method, 0, 6) == 'findBy') {
-            $by = substr($method, 6, strlen($method));
-            $method = 'findBy';
-        } else if (substr($method, 0, 9) == 'findOneBy') {
-            $by = substr($method, 9, strlen($method));
-            $method = 'findOneBy';
-        } else {
-            throw new \BadMethodCallException(
-                "Undefined method '$method'. The method name must start with ".
-                "either findBy or findOneBy!"
-            );
-        }
-
-        if ( !isset($arguments[0])) {
-            // we dont even want to allow null at this point, because we cannot (yet) transform it into IS NULL.
-            throw ORMException::findByRequiresParameter($method.$by);
-        }
-
-        $fieldName = lcfirst(\Doctrine\Common\Util\Inflector::classify($by));
-
-        if ($this->_class->hasField($fieldName) || $this->_class->hasAssociation($fieldName)) {
-            return $this->$method(array($fieldName => $arguments[0]));
-        } else {
-            throw ORMException::invalidFindByCall($this->_entityName, $fieldName, $method.$by);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityName()
-    {
-        return $this->_entityName;
-    }
-
-    /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return $this->_em;
-    }
-
-    /**
-     * @return Mapping\ClassMetadata
-     */
-    protected function getClassMetadata()
-    {
-        return $this->_class;
-    }
+class EntityRepository {
+	/**
+	 * @var string
+	 */
+	protected $_entityName;
+	
+	/**
+	 * @var EntityManager
+	 */
+	protected $_em;
+	
+	/**
+	 * @var Doctrine\ORM\Mapping\ClassMetadata
+	 */
+	protected $_class;
+	
+	/**
+	 * Initializes a new <tt>EntityRepository</tt>.
+	 *
+	 * @param EntityManager $em The EntityManager to use.
+	 * @param ClassMetadata $classMetadata The class descriptor.
+	 */
+	public function __construct($em, Mapping\ClassMetadata $class) {
+		$this->_entityName = $class->name;
+		$this->_em = $em;
+		$this->_class = $class;
+	}
+	
+	/**
+	 * Create a new QueryBuilder instance that is prepopulated for this entity name
+	 *
+	 * @param string $alias
+	 * @return QueryBuilder $qb
+	 */
+	public function createQueryBuilder($alias) {
+		return $this->_em->createQueryBuilder()->select( $alias )->from( $this->_entityName, $alias );
+	}
+	
+	/**
+	 * Clears the repository, causing all managed entities to become detached.
+	 */
+	public function clear() {
+		$this->_em->clear( $this->_class->rootEntityName );
+	}
+	
+	/**
+	 * Finds an entity by its primary key / identifier.
+	 *
+	 * @param int $id The identifier.
+	 * @param int $lockMode 
+	 * @param int $lockVersion
+	 * @return object The entity.
+	 */
+	public function find($id, $lockMode = LockMode::NONE, $lockVersion = null) {
+		// Check identity map first
+		$entity = $this->_em->getUnitOfWork()->tryGetById( $id, $this->_class->rootEntityName );
+		if( $entity ) {
+			if( !($entity instanceof $this->_class->name) ) {
+				return null;
+			}
+			
+			if( $lockMode != LockMode::NONE ) {
+				$this->_em->lock( $entity, $lockMode, $lockVersion );
+			}
+			
+			return $entity; // Hit!
+		}
+		
+		if( !is_array( $id ) || count( $id ) <= 1 ) {
+			// @todo FIXME: Not correct. Relies on specific order.
+			$value = is_array( $id ) ? array_values( $id ) : array( $id );
+			$id = array_combine( $this->_class->identifier, $value );
+		}
+		
+		if( $lockMode == LockMode::NONE ) {
+			return $this->_em->getUnitOfWork()->getEntityPersister( $this->_entityName )->load( $id );
+		} else if( $lockMode == LockMode::OPTIMISTIC ) {
+			if( !$this->_class->isVersioned ) {
+				throw OptimisticLockException::notVersioned( $this->_entityName );
+			}
+			$entity = $this->_em->getUnitOfWork()->getEntityPersister( $this->_entityName )->load( $id );
+			
+			$this->_em->getUnitOfWork()->lock( $entity, $lockMode, $lockVersion );
+			
+			return $entity;
+		} else {
+			if( !$this->_em->getConnection()->isTransactionActive() ) {
+				throw TransactionRequiredException::transactionRequired();
+			}
+			
+			return $this->_em->getUnitOfWork()->getEntityPersister( $this->_entityName )->load( $id, null, null, array(), $lockMode );
+		}
+	}
+	
+	/**
+	 * Finds all entities in the repository.
+	 *
+	 * @return array The entities.
+	 */
+	public function findAll() {
+		return $this->findBy( array() );
+	}
+	
+	/**
+	 * Finds entities by a set of criteria.
+	 *
+	 * @param array $criteria
+	 * @return array
+	 */
+	public function findBy(array $criteria) {
+		return $this->_em->getUnitOfWork()->getEntityPersister( $this->_entityName )->loadAll( $criteria );
+	}
+	
+	/**
+	 * Finds a single entity by a set of criteria.
+	 *
+	 * @param array $criteria
+	 * @return object
+	 */
+	public function findOneBy(array $criteria) {
+		return $this->_em->getUnitOfWork()->getEntityPersister( $this->_entityName )->load( $criteria );
+	}
+	
+	/**
+	 * Adds support for magic finders.
+	 *
+	 * @return array|object The found entity/entities.
+	 * @throws BadMethodCallException  If the method called is an invalid find* method
+	 * or no find* method at all and therefore an invalid
+	 * method call.
+	 */
+	public function __call($method, $arguments) {
+		if( substr( $method, 0, 6 ) == 'findBy' ) {
+			$by = substr( $method, 6, strlen( $method ) );
+			$method = 'findBy';
+		} else if( substr( $method, 0, 9 ) == 'findOneBy' ) {
+			$by = substr( $method, 9, strlen( $method ) );
+			$method = 'findOneBy';
+		} else {
+			throw new \BadMethodCallException( "Undefined method '$method'. The method name must start with " . "either findBy or findOneBy!" );
+		}
+		
+		if( !isset( $arguments[0] ) ) {
+			// we dont even want to allow null at this point, because we cannot (yet) transform it into IS NULL.
+			throw ORMException::findByRequiresParameter( $method . $by );
+		}
+		
+		$fieldName = lcfirst( \Doctrine\Common\Util\Inflector::classify( $by ) );
+		
+		if( $this->_class->hasField( $fieldName ) || $this->_class->hasAssociation( $fieldName ) ) {
+			return $this->$method( array( $fieldName => $arguments[0] ) );
+		} else {
+			throw ORMException::invalidFindByCall( $this->_entityName, $fieldName, $method . $by );
+		}
+	}
+	
+	/**
+	 * @return string
+	 */
+	protected function getEntityName() {
+		return $this->_entityName;
+	}
+	
+	/**
+	 * @return EntityManager
+	 */
+	protected function getEntityManager() {
+		return $this->_em;
+	}
+	
+	/**
+	 * @return Mapping\ClassMetadata
+	 */
+	protected function getClassMetadata() {
+		return $this->_class;
+	}
 }

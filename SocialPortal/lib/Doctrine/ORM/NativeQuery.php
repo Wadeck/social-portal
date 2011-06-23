@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,49 +25,45 @@ namespace Doctrine\ORM;
  * @author Roman Borschel <roman@code-factory.org>
  * @since 2.0
  */
-final class NativeQuery extends AbstractQuery
-{
-    private $_sql;
-
-    /**
-     * Sets the SQL of the query.
-     *
-     * @param string $sql
-     * @return NativeQuery This query instance.
-     */
-    public function setSQL($sql)
-    {
-        $this->_sql = $sql;
-        return $this;
-    }
-
-    /**
-     * Gets the SQL query.
-     *
-     * @return mixed The built SQL query or an array of all SQL queries.
-     * @override
-     */
-    public function getSQL()
-    {
-        return $this->_sql;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _doExecute()
-    {
-        $stmt = $this->_em->getConnection()->prepare($this->_sql);
-        $params = $this->_params;
-        foreach ($params as $key => $value) {
-            if (isset($this->_paramTypes[$key])) {
-                $stmt->bindValue($key, $value, $this->_paramTypes[$key]);
-            } else {
-                $stmt->bindValue($key, $value);
-            }
-        }
-        $stmt->execute();
-
-        return $stmt;
-    }
+final class NativeQuery extends AbstractQuery {
+	private $_sql;
+	
+	/**
+	 * Sets the SQL of the query.
+	 *
+	 * @param string $sql
+	 * @return NativeQuery This query instance.
+	 */
+	public function setSQL($sql) {
+		$this->_sql = $sql;
+		return $this;
+	}
+	
+	/**
+	 * Gets the SQL query.
+	 *
+	 * @return mixed The built SQL query or an array of all SQL queries.
+	 * @override
+	 */
+	public function getSQL() {
+		return $this->_sql;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _doExecute() {
+		$stmt = $this->_em->getConnection()->prepare( $this->_sql );
+		$params = $this->_params;
+		foreach( $params as $key => $value ) {
+			if( isset( $this->_paramTypes[$key] ) ) {
+				$stmt->bindValue( $key, $value, $this->_paramTypes[$key] );
+			} else {
+				$stmt->bindValue( $key, $value );
+			}
+		}
+		$stmt->execute();
+		
+		return $stmt;
+	}
 }

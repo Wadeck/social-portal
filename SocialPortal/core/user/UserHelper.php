@@ -15,7 +15,7 @@ class UserHelper {
 	/** @var FrontController */
 	private $frontController;
 	
-	public function __construct(FrontController $frontController){
+	public function __construct(FrontController $frontController) {
 		$this->frontController = $frontController;
 	}
 	
@@ -25,7 +25,7 @@ class UserHelper {
 	 * @return true if the current user is not null
 	 */
 	public function setCurrentUser(User $user) {
-		$id = intval($user->getId());
+		$id = intval( $user->getId() );
 		if( !$id ) {
 			throw new \InvalidArgumentException( 'The user passed as argument is not persistant' );
 		}
@@ -62,11 +62,18 @@ class UserHelper {
 		} else {
 			$imgLink = $this->getGravatar( $key, $size, 'identicon' );
 		}
-		?><a rel="nofollow" class="avatar" href="<?php
+		?><a rel="nofollow" class="avatar"
+	href="<?php
 		echo $this->getUrlToProfile();
 		?>"><img src="<?php
 		echo $imgLink;
-		?>" alt="Avatar Image" class="avatar user-11-avatar" width="<?php echo $size; ?>" height="<?php echo $size; ?>"></a>
+		?>" alt="Avatar Image"
+	class="avatar user-11-avatar" width="<?php
+		echo $size;
+		?>"
+	height="<?php
+		echo $size;
+		?>"></a>
 <?php
 	}
 	
@@ -91,14 +98,12 @@ class UserHelper {
 	
 	/** @return a link to the user profile */
 	public function getLinkToProfile() {
-		$link = '<a class="profile" rel="nofollow" href="'.
-		$this->getUrlToProfile() .'" title="'.
-		$this->getUsername().'">'. $this->getUsername() .'</a>';
+		$link = '<a class="profile" rel="nofollow" href="' . $this->getUrlToProfile() . '" title="' . $this->getUsername() . '">' . $this->getUsername() . '</a>';
 		return $link;
 	}
 	
 	/** @return the url to the profile of the current user, only the url */
-	public function getUrlToProfile(){
+	public function getUrlToProfile() {
 		// doing stuff with frontController
 		return '#';	
 	}

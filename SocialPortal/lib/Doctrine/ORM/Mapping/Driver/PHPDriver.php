@@ -19,13 +19,7 @@
 
 namespace Doctrine\ORM\Mapping\Driver;
 
-use Doctrine\Common\Cache\ArrayCache,
-    Doctrine\Common\Annotations\AnnotationReader,
-    Doctrine\DBAL\Schema\AbstractSchemaManager,
-    Doctrine\ORM\Mapping\ClassMetadataInfo,
-    Doctrine\ORM\Mapping\MappingException,
-    Doctrine\Common\Util\Inflector,
-    Doctrine\ORM\Mapping\Driver\AbstractFileDriver;
+use Doctrine\Common\Cache\ArrayCache, Doctrine\Common\Annotations\AnnotationReader, Doctrine\DBAL\Schema\AbstractSchemaManager, Doctrine\ORM\Mapping\ClassMetadataInfo, Doctrine\ORM\Mapping\MappingException, Doctrine\Common\Util\Inflector, Doctrine\ORM\Mapping\Driver\AbstractFileDriver;
 
 /**
  * The PHPDriver includes php files which just populate ClassMetadataInfo
@@ -41,29 +35,26 @@ use Doctrine\Common\Cache\ArrayCache,
  * @author      Roman Borschel <roman@code-factory.org>
  * @todo Rename: PHPDriver
  */
-class PHPDriver extends AbstractFileDriver
-{
-    /**
-     * {@inheritdoc}
-     */
-    protected $_fileExtension = '.php';
-    protected $_metadata;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadMetadataForClass($className, ClassMetadataInfo $metadata)
-    {
-        $this->_metadata = $metadata;
-        $this->_loadMappingFile($this->_findMappingFile($className));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _loadMappingFile($file)
-    {
-        $metadata = $this->_metadata;
-        include $file;
-    }
+class PHPDriver extends AbstractFileDriver {
+	/**
+	 * {@inheritdoc}
+	 */
+	protected $_fileExtension = '.php';
+	protected $_metadata;
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function loadMetadataForClass($className, ClassMetadataInfo $metadata) {
+		$this->_metadata = $metadata;
+		$this->_loadMappingFile( $this->_findMappingFile( $className ) );
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _loadMappingFile($file) {
+		$metadata = $this->_metadata;
+		include $file;
+	}
 }

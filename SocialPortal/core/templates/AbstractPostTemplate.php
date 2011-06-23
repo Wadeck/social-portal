@@ -1,6 +1,6 @@
 <?php
 
-namespace core\topics\templates;
+namespace core\templates;
 
 use Doctrine\ORM\EntityManager;
 
@@ -109,15 +109,15 @@ abstract class AbstractPostTemplate implements iInsertable{
 		$topicId = $topic->getId();
 		$forumId = $topic->getForum()->getId();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array(), array('typeId'=>$customTypeId, 'topicId'=>$topicId, 'forumId'=>$forumId, 'postId'=>$postId)); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array('typeId'=>$customTypeId, 'topicId'=>$topicId, 'forumId'=>$forumId, 'postId'=>$postId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsDeleted()): ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete',array(), array('postId'=>$postId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array('postId'=>$postId)); ?>"
 				title="<?php echo __( 'Restore the post from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete',array(), array('postId'=>$postId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array('postId'=>$postId)); ?>"
 				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
@@ -132,7 +132,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 */
 	protected function insertUserTools($post){
 		?>
-		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array(), array('postId'=>$post->getId())); ?>"
+		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array('postId'=>$post->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
 		<a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"

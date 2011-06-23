@@ -34,58 +34,52 @@ namespace Doctrine\Common\Cache;
  * @author  Roman Borschel <roman@code-factory.org>
  * @author  David Abdemoulaie <dave@hobodave.com>
  */
-class ArrayCache extends AbstractCache
-{
-    /**
-     * @var array $data
-     */
-    private $data = array();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIds()
-    {
-        return array_keys($this->data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _doFetch($id)
-    {
-        if (isset($this->data[$id])) {
-            return $this->data[$id];
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _doContains($id)
-    {
-        return isset($this->data[$id]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _doSave($id, $data, $lifeTime = 0)
-    {
-        $this->data[$id] = $data;
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _doDelete($id)
-    {
-        unset($this->data[$id]);
-        
-        return true;
-    }
+class ArrayCache extends AbstractCache {
+	/**
+	 * @var array $data
+	 */
+	private $data = array();
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getIds() {
+		return array_keys( $this->data );
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _doFetch($id) {
+		if( isset( $this->data[$id] ) ) {
+			return $this->data[$id];
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _doContains($id) {
+		return isset( $this->data[$id] );
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _doSave($id, $data, $lifeTime = 0) {
+		$this->data[$id] = $data;
+		
+		return true;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function _doDelete($id) {
+		unset( $this->data[$id] );
+		
+		return true;
+	}
 }

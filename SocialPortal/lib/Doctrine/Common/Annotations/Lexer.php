@@ -33,125 +33,116 @@ namespace Doctrine\Common\Annotations;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class Lexer extends \Doctrine\Common\Lexer
-{
-    const T_NONE                = 1;
-    const T_IDENTIFIER          = 2;
-    const T_INTEGER             = 3;
-    const T_STRING              = 4;
-    const T_FLOAT               = 5;
-    
-    const T_AT                  = 101;
-    const T_CLOSE_CURLY_BRACES  = 102;
-    const T_CLOSE_PARENTHESIS   = 103;
-    const T_COMMA               = 104;
-    const T_EQUALS              = 105;
-    const T_FALSE               = 106;
-    const T_NAMESPACE_SEPARATOR = 107;
-    const T_OPEN_CURLY_BRACES   = 108;
-    const T_OPEN_PARENTHESIS    = 109;
-    const T_TRUE                = 110;
-    
-    /**
-     * @inheritdoc
-     */
-    protected function getCatchablePatterns()
-    {
-        return array(
-            '[a-z_][a-z0-9_:]*',
-            '(?:[0-9]+(?:[\.][0-9]+)*)(?:e[+-]?[0-9]+)?',
-            '"(?:[^"]|"")*"'
-        );
-    }
-    
-    /**
-     * @inheritdoc
-     */
-    protected function getNonCatchablePatterns()
-    {
-        return array('\s+', '\*+', '(.)');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getType(&$value)
-    {
-        $type = self::T_NONE;
-        $newVal = $this->getNumeric($value);
-        
-        // Checking numeric value
-        if ($newVal !== false) {
-            $value = $newVal;
-            
-            return (strpos($value, '.') !== false || stripos($value, 'e') !== false)
-                ? self::T_FLOAT : self::T_INTEGER;
-        }
-        
-        if ($value[0] === '"') {
-            $value = str_replace('""', '"', substr($value, 1, strlen($value) - 2));
-            
-            return self::T_STRING;
-        } else {
-            switch (strtolower($value)) {
-                case '@': 
-                    return self::T_AT;
-
-                case ',': 
-                    return self::T_COMMA;
-
-                case '(': 
-                    return self::T_OPEN_PARENTHESIS;
-
-                case ')': 
-                    return self::T_CLOSE_PARENTHESIS;
-
-                case '{': 
-                    return self::T_OPEN_CURLY_BRACES;
-
-                case '}': return self::T_CLOSE_CURLY_BRACES;
-                case '=': 
-                    return self::T_EQUALS;
-
-                case '\\': 
-                    return self::T_NAMESPACE_SEPARATOR;
-
-                case 'true': 
-                    return self::T_TRUE;
-
-                case 'false': 
-                    return self::T_FALSE;
-
-                default:
-                    if (ctype_alpha($value[0]) || $value[0] === '_') {
-                        return self::T_IDENTIFIER;
-                    }
-                    
-                    break;
-            }
-        }
-
-        return $type;
-    }
-
-    /**
-     * Checks if a value is numeric or not
-     *
-     * @param mixed $value Value to be inspected
-     * @return boolean|integer|float Processed value
-     * @todo Inline
-     */
-    private function getNumeric($value)
-    {
-        if ( ! is_scalar($value)) {
-            return false;
-        }
-
-        // Checking for valid numeric numbers: 1.234, -1.234e-2
-        if (is_numeric($value)) {
-            return $value;
-        }
-
-        return false;
-    }
+class Lexer extends \Doctrine\Common\Lexer {
+	const T_NONE = 1;
+	const T_IDENTIFIER = 2;
+	const T_INTEGER = 3;
+	const T_STRING = 4;
+	const T_FLOAT = 5;
+	
+	const T_AT = 101;
+	const T_CLOSE_CURLY_BRACES = 102;
+	const T_CLOSE_PARENTHESIS = 103;
+	const T_COMMA = 104;
+	const T_EQUALS = 105;
+	const T_FALSE = 106;
+	const T_NAMESPACE_SEPARATOR = 107;
+	const T_OPEN_CURLY_BRACES = 108;
+	const T_OPEN_PARENTHESIS = 109;
+	const T_TRUE = 110;
+	
+	/**
+	 * @inheritdoc
+	 */
+	protected function getCatchablePatterns() {
+		return array( '[a-z_][a-z0-9_:]*', '(?:[0-9]+(?:[\.][0-9]+)*)(?:e[+-]?[0-9]+)?', '"(?:[^"]|"")*"' );
+	}
+	
+	/**
+	 * @inheritdoc
+	 */
+	protected function getNonCatchablePatterns() {
+		return array( '\s+', '\*+', '(.)' );
+	}
+	
+	/**
+	 * @inheritdoc
+	 */
+	protected function getType(&$value) {
+		$type = self::T_NONE;
+		$newVal = $this->getNumeric( $value );
+		
+		// Checking numeric value
+		if( $newVal !== false ) {
+			$value = $newVal;
+			
+			return (strpos( $value, '.' ) !== false || stripos( $value, 'e' ) !== false) ? self::T_FLOAT : self::T_INTEGER;
+		}
+		
+		if( $value[0] === '"' ) {
+			$value = str_replace( '""', '"', substr( $value, 1, strlen( $value ) - 2 ) );
+			
+			return self::T_STRING;
+		} else {
+			switch ( strtolower( $value ) ) {
+				case '@' :
+					return self::T_AT;
+				
+				case ',' :
+					return self::T_COMMA;
+				
+				case '(' :
+					return self::T_OPEN_PARENTHESIS;
+				
+				case ')' :
+					return self::T_CLOSE_PARENTHESIS;
+				
+				case '{' :
+					return self::T_OPEN_CURLY_BRACES;
+				
+				case '}' :
+					return self::T_CLOSE_CURLY_BRACES;
+				case '=' :
+					return self::T_EQUALS;
+				
+				case '\\' :
+					return self::T_NAMESPACE_SEPARATOR;
+				
+				case 'true' :
+					return self::T_TRUE;
+				
+				case 'false' :
+					return self::T_FALSE;
+				
+				default :
+					if( ctype_alpha( $value[0] ) || $value[0] === '_' ) {
+						return self::T_IDENTIFIER;
+					}
+					
+					break;
+			}
+		}
+		
+		return $type;
+	}
+	
+	/**
+	 * Checks if a value is numeric or not
+	 *
+	 * @param mixed $value Value to be inspected
+	 * @return boolean|integer|float Processed value
+	 * @todo Inline
+	 */
+	private function getNumeric($value) {
+		if( !is_scalar( $value ) ) {
+			return false;
+		}
+		
+		// Checking for valid numeric numbers: 1.234, -1.234e-2
+		if( is_numeric( $value ) ) {
+			return $value;
+		}
+		
+		return false;
+	}
 }

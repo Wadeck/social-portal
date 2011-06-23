@@ -80,7 +80,7 @@ class Paginator {
 		
 		$output = stripslashes( $before );
 		if( $pages > 1 ) {
-			$output .= '<ol class="paginate paginate-comments">' ;
+			$output .= '<ol class="paginate paginate-comments">';
 			if( $title ) {
 				$output .= sprintf( '<li><span class="title">%s</span></li>', $title );
 			}

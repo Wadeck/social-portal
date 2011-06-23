@@ -25,7 +25,8 @@ class TextAreaField extends Field {
 		?>
 <textarea id="<?php
 		echo $this->identifier;
-		?>" name="<?php
+		?>"
+	name="<?php
 		echo $this->identifier;
 		?>"
 	class="<?php

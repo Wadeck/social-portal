@@ -65,14 +65,13 @@ class CryptoTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testGenerateRandomKey() {
 		$keys = array();
-		for($i = 0 ; $i < 10 ; $i++){
+		for( $i = 0; $i < 10; $i++ ) {
 			$keys[$i] = Crypto::createRandomKey();
-			for($j = 0 ; $j < $i ; $j++){
-				$this->assertFalse($keys[$j] === $keys[$i], 'The random generator has low collision');
+			for( $j = 0; $j < $i; $j++ ) {
+				$this->assertFalse( $keys[$j] === $keys[$i], 'The random generator has low collision' );
 			}
 		}
 	}
-	
 
 }
 
