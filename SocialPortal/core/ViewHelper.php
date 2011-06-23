@@ -176,6 +176,7 @@ class ViewHelper {
 		$this->frontController->getResponse()->setContainerClass( $class );
 	}
 	
+	// TODO refactor to put in security 
 	/** @var array of roles, cache version */
 	private $cacheRoles;
 	public function currentUserIs($role) {

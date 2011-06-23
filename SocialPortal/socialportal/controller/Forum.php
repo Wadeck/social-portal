@@ -167,7 +167,7 @@ class Forum extends AbstractController {
 		$response->setVar( 'forum', $forum );
 		$response->setVar( 'topics', $topics );
 		
-		$userHelper = new UserHelper();
+		$userHelper = new UserHelper($this->frontController);
 		$response->setVar( 'userHelper', $userHelper );
 		
 		$forumHeader = new ForumHeader();

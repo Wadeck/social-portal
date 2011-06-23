@@ -43,7 +43,7 @@ $vars['helper']->setContainerClass('');
 							<?php endif ?>
 						</td>
 						<td class="latest-poster">
-							<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
+							<?php if($userHelper->setCurrentUser($topic->getLastPoster())):?>
 								<?php echo $userHelper->insertAvatar(30); ?>
 								<div class="lastposter-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
 							<?php endif ?>

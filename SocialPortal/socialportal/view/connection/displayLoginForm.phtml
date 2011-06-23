@@ -1,38 +1,8 @@
-<?php 
-use core\form\Form;
-$vars['helper']->addCssFile('form.css');
-$vars['helper']->addCssFile('login_form.css');
-$username = __( 'Username :' );
-$password = __( 'Password :' );
-$rememberMe = __( 'Remember me' );
-$login = __( 'Log in' );
-$register = __( 'Register' );
+<?php
+$form = $vars['form'];
 ?>
 <div id="connection">
-	<?php if(isset($vars['error'])):?>
-		<div id="login_error">
-			<p><?php echo $vars['error']; ?></p>
-		</div>
-	<?php endif; ?>
-	<form class="login-form" action="<?php $vars['helper']->insertHref('connection', 'login'); ?>" method="POST">
-		<div class="block">
-			<label for="username"><?php echo $username?></label>
-			<input type="text" id="username" name="username" class="mandatory" value="">
-		</div>
-		<div class="block">
-			<label for="password"><?php echo $password?></label>
-			<input type="password" id="password" name="password" class="mandatory" value="">
-		</div>
-		<div class="semi_block_right">
-			<input name="rememberMe" id="rememberMe" type="checkbox" value="true">
-			<label for="rememberMe"><?php echo $rememberMe; ?></label>
-		</div>
-		<div class="semi_block_right">
-			<input type="submit" name="login" class="button" value="<?php echo $login; ?>">
-			<a id="register_link" href="<?php $vars['helper']->insertHref('connection', 'displayRegisterForm' ); ?>"><?php echo $register; ?></a>
-		</div>
-		<?php Form::insertReferrerField(); ?>
-		<input type="hidden" name="testcookie" value="1">
-	</form>
+<?php
+	$form->insert();
+?>
 </div>
-

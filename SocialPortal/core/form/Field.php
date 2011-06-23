@@ -23,8 +23,11 @@ class Field {
 	/** @var different mode of display */
 	protected $mode = 1;
 	
+	/** @var Form that is responsible to that field */
+	protected $form;
+	
 	private static function initMessages() {
-		self::$errorMessages = array( 'form_already_sent'=> __js('This form was already sent to the server, please refresh the page'), 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ) );
+		self::$errorMessages = array( 'form_already_sent' => __js( 'This form was already sent to the server, please refresh the page' ), 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ) );
 	}
 	
 	public static function getErrorMessages() {
@@ -36,6 +39,10 @@ class Field {
 	
 	public function setMode($mode = 1) {
 		$this->mode = $mode;
+	}
+	
+	public function setForm(Form $form) {
+		$this->form = $form;
 	}
 	
 	/**
@@ -148,7 +155,7 @@ class Field {
 					}
 					break;
 			
-		// default other word that are not constraints like "raw" to avoid clean text
+		// default other word that are not constraints like "raw" to avoid clean text, or labelInInput by example
 			}
 		}
 		return false;
@@ -162,6 +169,10 @@ class Field {
 		return false;
 	}
 	
+	/**
+	 * This is also use to inform the class attribute of the field
+	 * @return array of string representing the constraints
+	 */
 	public function getConstraintsAsString() {
 		return implode( $this->constraints, " " );
 	}
@@ -200,7 +211,9 @@ class Field {
 		?>" class="<?php
 		echo $this->getConstraintsAsString();
 		?>"
-	value="<?php
+	title="<?php
+		echo $this->description;
+		?>" value="<?php
 		echo $this->getValue();
 		?>" />
 <?php

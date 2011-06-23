@@ -32,7 +32,7 @@ form div.block {
 
 form div.semi_block_right {
 	clear: both;
-	margin-left: 100px;
+	margin-left: 104px;
 	margin-bottom: 3px;
 }
 
@@ -54,5 +54,4 @@ form span.error_message {
 
 form span.error_message.active {
 	display: inline;
-}
 }

@@ -1,0 +1,47 @@
+@CHARSET "ISO-8859-1";
+
+form.register-form {
+	padding: 8px;
+}
+
+form.register-form .label_error {
+	display: block;
+}
+
+form.register-form .field_container {
+	
+}
+
+form.register-form input[type=submit]{
+	margin-left: 105px;
+}
+
+form.register-form label {
+	/*font-weight: none;
+	margin: 15px 0 5px 0;
+	text-align: left;
+	width: 100px;
+	display: inline;*/
+}
+
+
+form.register-form input[type="text"], form.register-form input[type="password"] {
+	/*width: 75%;*/
+	margin-left: 5px;
+	vertical-align: middle;
+}
+/*
+form.register-form textarea {
+	width: 75%;
+	height: 120px;
+}
+*/
+form.register-form .field_container {
+    margin-bottom: 6px;
+}
+form.register-form span.error_message.active {
+    /*display: inline-block;*/
+    margin: 0;
+	margin-left: 105px;
+    padding: 4px;
+}

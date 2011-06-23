@@ -8,14 +8,52 @@ use core\debug\Logger;
 
 use core\FrontController;
 
+/**
+ * Two main utilisation of this class can be used
+ * 
+ * 1) Creation of the form, using optionnally a basic object
+
+	============ in controller ============
+	$form = TopicFormFactory::createForm( $topicType, $this->frontController );
+	// case of edition
+	$form->setupWithTopic( $currentTopic );
+	$form->setNonceAction( 'editTopic' );
+	// case of creation
+	$form->setNonceAction( 'createTopic' );
+	
+	$targetUrl = $this->frontController->getViewHelper()->createHref( ... );
+	
+	// fill the form with the posted field and errors
+	$form->setupWithArray( );
+	$form->setTargetUrl( $targetUrl );
+	
+	$this->frontController->getResponse()->setVar( 'form', $form );
+	============ in view ============
+	$vars['form']->insert();
+	 
+ * 2) Validation and retrieval of information
+
+	$form = TopicFormFactory::createForm( $typeId, $this->frontController );
+	// or $form = new LoginForm($this->frontController);
+	// to use information from POST
+	$form->setupWithArray( true );
+	// validation of the information given, could lead to a redirection
+	// if javascript validation doesn't work
+	// the php validation will do the job and re-ask the user
+	$form->checkAndPrepareContent();
+	// finally retrieve information from the form, some form have ability to create object directly
+	$xxx = $form->getXXX();
+	$yyy = $form->getYYY();
+
+ */
 class Form implements iInsertable {
 	private static $REFERRER_FIELD_NAME = '_http_referrer';
 	
 	/** @var FrontController */
 	protected $frontController;
 	protected $fields;
-	private $mustAcceptFile;
-	private $nonceAction;
+	protected $mustAcceptFile;
+	protected $nonceAction;
 	
 	protected $submitButtonDescription;
 	protected $submitButtonName;
@@ -29,6 +67,8 @@ class Form implements iInsertable {
 	protected $cssClass;
 	/** @var string The css file that will be included additionnally to form.css */
 	protected $cssFile;
+	/** @var array of string containing the names of the javascript file we want to add at the insert time */
+	protected $jsFiles;
 	
 	/** @var array containing $fieldName => $fieldValue used in the children to exhibit attributes */
 	protected $data;
@@ -50,6 +90,7 @@ class Form implements iInsertable {
 		$this->fields = array();
 		$this->submitButtonName = $submitName ? $submitName : 'submit';
 		$this->submitButtonDescription = $submitDescription ? $submitDescription : __( 'Submit' );
+		$this->jsFiles = array( 'jquery.js', 'form_validator.js' );
 	}
 	
 	//#################### dependant of the context ############################
@@ -82,6 +123,7 @@ class Form implements iInsertable {
 
 	/** Children use only, to build the different forms */
 	protected function addInputField(Field $field) {
+		$field->setForm( $this );
 		$this->fields[] = $field;
 		if( $field->isFileAccepter() ) {
 			$this->mustAcceptFile = true;
@@ -100,7 +142,7 @@ class Form implements iInsertable {
 		$nonce = $this->frontController->getNonceManager()->createNonce( $this->nonceAction );
 		// add this variable into an hidden field
 		echo '<input type="hidden" name="_nonce" value="' . $nonce . '">';
-		if(defined('DEBUG') && DEBUG){
+		if( defined( 'DEBUG' ) && DEBUG ) {
 			echo '<input type="hidden" name="_nonce_clear" value="' . $this->nonceAction . '">';
 		}
 	}
@@ -149,9 +191,6 @@ class Form implements iInsertable {
 		if( $this->cssFile ) {
 			$this->frontController->getViewHelper()->addCssFile( $this->cssFile );
 		}
-		$this->frontController->getViewHelper()->addJavascriptFile( 'jquery.js' );
-		$this->frontController->getViewHelper()->addJavascriptFile( 'form_validator.js' );
-		$this->frontController->getViewHelper()->addJavascriptVar( '_error_messages', Field::getErrorMessages() );
 		
 		$this->insertFormBody( $this->targetUrl, $cssClass );
 		$this->insertFields();
@@ -159,6 +198,14 @@ class Form implements iInsertable {
 		$this->insertNonceField();
 		$this->_insertReferrerField();
 		$this->insertSubmitButton( $this->submitButtonName, $this->submitButtonDescription );
+		
+		// doing this stuff after the insertion, allow the fields to register javascript within insert function
+		// not really good in term of conception but work for the moment
+		$jss = array_unique( $this->jsFiles );
+		foreach( $jss as $js ) {
+			$this->frontController->getViewHelper()->addJavascriptFile( $js );
+		}
+		$this->frontController->getViewHelper()->addJavascriptVar( '_error_messages', Field::getErrorMessages() );
 		
 		echo '</form>';
 	}
@@ -177,6 +224,10 @@ class Form implements iInsertable {
 	public function setCss($cssClass, $cssFile = '') {
 		$this->cssClass = $cssClass;
 		$this->cssFile = $cssFile;
+	}
+	
+	public function addJavascriptFile($jsFile) {
+		$this->jsFiles[] = $jsFile;
 	}
 	//###################### validation part #####################
 	
@@ -221,12 +272,12 @@ class Form implements iInsertable {
 	/**
 	 * After this call, we can use either validate / display
 	 */
-	public function setupWithArray($withErrors, $forceEmptyForm = false) {
+	public function setupWithArray($withErrors=true, $forceEmptyForm = false) {
 		if( $forceEmptyForm ) {
 			$args = array();
 		} else {
 			$request = $this->frontController->getRequest();
-			
+			// from $_POST
 			$args = $request->request->all();
 			if( isset( $args[$this->formName . '_errors_form'] ) ) {
 				// means we are in the case the form was already created (and then deleted) but found a validation error, and so add it to the $_POST
@@ -257,6 +308,7 @@ class Form implements iInsertable {
 	
 	//#############################
 	//TODO remove those methods after having changed the login form
+	// still used by the register form (non-form)
 	
 
 	public static function insertReferrerField() {

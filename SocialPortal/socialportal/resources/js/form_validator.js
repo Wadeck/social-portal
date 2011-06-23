@@ -1,41 +1,5 @@
 
 var jq = jQuery;
-jq(document).ready(function() {
-// jq(':submit').click(function() {
-// this.disabled = true;
-//
-// // we go through all the current form and remove active to the
-// // errormessages
-// var form = this.form;
-//
-// var error_messages = jq('.error_message', form);
-// error_messages.each(function() {
-// jq(this).removeClass('active');
-// });
-//
-// var numberOfError = 0;
-// var fields = jq(':input', form).not(':input[type=hidden]').not(':submit');
-// fields.each(function() {
-// var value = getValue(jq(this).val(), 0);
-// var constraints = jq(this).attr('class').split(' ');
-// var error = containsError(value, constraints);
-// if (error) {
-// var errorLabel = jq(this).siblings('.error_message');
-// errorLabel.html(error);
-// errorLabel.addClass('active');
-// numberOfError++;
-// }
-// });
-//
-// if (numberOfError > 0) {
-// this.disabled = false;
-// return false;
-// }
-//
-// return true;
-// });
-	
-});
 
 function validForm(obj) {
 	if(obj.isAlreadySent){
@@ -57,6 +21,10 @@ function validForm(obj) {
 		var fields = jq(':input', form).not(':input[type=hidden]').not(':submit');
 		fields.each(function() {
 			var value = getValue(jq(this).val(), 0);
+			if(value == jq(this).attr('title')){
+				value = '';
+			}
+			
 			var constraints = jq(this).attr('class').split(' ');
 			var error = containsError(value, constraints);
 			if (error) {

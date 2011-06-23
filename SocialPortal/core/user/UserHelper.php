@@ -12,6 +12,12 @@ use socialportal\model\User;
 class UserHelper {
 	/** @var User */
 	private $currentUser;
+	/** @var FrontController */
+	private $frontController;
+	
+	public function __construct(FrontController $frontController){
+		$this->frontController = $frontController;
+	}
 	
 	/**
 	 * Accepts only user that are already persisted !
@@ -57,7 +63,7 @@ class UserHelper {
 			$imgLink = $this->getGravatar( $key, $size, 'identicon' );
 		}
 		?><a rel="nofollow" class="avatar" href="<?php
-		echo $this->getLinkToProfile();
+		echo $this->getUrlToProfile();
 		?>"><img src="<?php
 		echo $imgLink;
 		?>" alt="Avatar Image" class="avatar user-11-avatar" width="<?php echo $size; ?>" height="<?php echo $size; ?>"></a>
@@ -80,17 +86,20 @@ class UserHelper {
 	
 	/** @display a link to the user profile */
 	public function insertLinkToProfile() {
-		?><a class="profile" rel="nofollow" href="<?php
 		echo $this->getLinkToProfile();
-		?>" title="<?php
-		echo $this->getUsername();
-		?>"><?php
-		echo $this->getUsername();
-		?></a>
-<?php
 	}
 	
+	/** @return a link to the user profile */
 	public function getLinkToProfile() {
-		return '#';
+		$link = '<a class="profile" rel="nofollow" href="'.
+		$this->getUrlToProfile() .'" title="'.
+		$this->getUsername().'">'. $this->getUsername() .'</a>';
+		return $link;
+	}
+	
+	/** @return the url to the profile of the current user, only the url */
+	public function getUrlToProfile(){
+		// doing stuff with frontController
+		return '#';	
 	}
 }

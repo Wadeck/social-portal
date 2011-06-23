@@ -46,7 +46,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$numPosts = $base->getNumPosts();
 		$title = $base->getTitle();
 		$author = $base->getPoster();
-		$userHelper = new UserHelper();
+		$userHelper = new UserHelper($this->front);
 		$userHelper->setCurrentUser($author);
 		$tagRepo = $this->em->getRepository('TermRelation');
 		$tags = $tagRepo->getAllTags($topicId);

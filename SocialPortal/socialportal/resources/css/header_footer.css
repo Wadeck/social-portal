@@ -10,7 +10,9 @@
 	-moz-border-radius-bottomright: 6px;
 	-webkit-border-bottom-right-radius: 6px;
 	margin-bottom: 20px;
-	min-height: 70px;
+/*	min-height: 70px;*/
+	/* to work on firefox 4 */
+	min-height: 10px;
 }
 
 #header h1 {
@@ -61,33 +63,6 @@
 	margin-left: 4px;
 }
 
-#header div#connection {
-	background-color: blue;
-	/*position: absolute;
-		right: 15px;
-		bottom: 0px;*/
-	float: right;
-	margin: 5px;
-	padding: 5px;
-}
-
-#header div#connection a {
-	font-size: 11px;
-	text-align: right;
-	display: inline-block;
-}
-
-#header div#connection #login_error {
-	background-color: yellow;
-	color: red;
-	font-style: italic;
-}
-
-#header div#connection #register_link {
-	padding-left: 20px;
-	font-size: 12px;
-}
-
 #header div#admin_panel {
 	padding: 5px 3px 5px 3px;
 	display: inline-block;
@@ -104,6 +79,19 @@
 	display: inline-block;
 }
 
+#header div#connected-panel{
+	float: right;
+	margin: 5px;
+	padding: 5px;	
+}
+#header div#connected-panel .user-info{
+	float: left;	
+}
+#header div#connected-panel .avatar-box{
+	float: right;
+	margin-left: 5px;
+}
+
 #header .clear_both {
 	clear: both;
 }
@@ -113,7 +101,7 @@
 	text-align: center;
 	color: #BBB;
 	text-shadow: #FAFAFA 1px 1px 0;
-	margin: 10px 10px 0px 10px;
+	margin: 30px 10px 0;
 }
 
 #footer p {

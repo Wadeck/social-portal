@@ -1,7 +1,33 @@
 @CHARSET "ISO-8859-1";
 
+form.login-form { /*background-color: blue;*/
+	/*position: absolute;
+		right: 15px;
+		bottom: 0px;*/
+	float: right;
+	margin: 5px;
+	padding: 5px;
+}
+
+form.login-form a {
+	font-size: 11px;
+	text-align: right;
+	display: inline-block;
+}
+
+form.login-form a.sign-in {
+	vertical-align: text-top;
+}
+
+form.login-form #login_error {
+	background-color: yellow;
+	color: red;
+	font-style: italic;
+}
+
 form.login-form {
 	padding: 8px;
+	color: black;
 }
 
 form.login-form .label_error {
@@ -9,26 +35,18 @@ form.login-form .label_error {
 }
 
 form.login-form .field_container {
-	
+	margin-bottom: 4px;
 }
 
-form.login-form label {
-	font-weight: bold;
+form.login-form label { /*font-weight: bold;*/
+	font-size: 12px;
 	margin: 15px 0 5px 0;
 	text-align: left;
 	width: 100%;
 	display: inline;
 }
 
-form.login-form input[type="text"] {
-	width: 75%;
-}
-
-form.login-form textarea {
-	width: 75%;
-	height: 120px;
-}
-form.login-form textarea,form.login-form input[type=text],form .login-formselect,form.login-form input[type=password] {	
+form.login-form textarea,form.login-form input[type=text],form .login-form select,form.login-form input[type=password] {
 	border: 1px solid #ccc;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
@@ -38,4 +56,15 @@ form.login-form textarea,form.login-form input[type=text],form .login-formselect
 	font-size: 14px;
 	color: #777;
 	margin: 2px 0px;
+}
+
+/** to be visible even with small lines */
+form.login-form span.error_message.active {
+	margin: 0;
+	padding: 4px;
+	display: inline-block;
+}
+
+form.login-form label {
+	vertical-align: text-top;
 }
