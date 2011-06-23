@@ -815,6 +815,8 @@ abstract class AbstractPlatform
             $columnData['default'] = $column->getDefault();
             $columnData['columnDefinition'] = $column->getColumnDefinition();
             $columnData['autoincrement'] = $column->getAutoincrement();
+            //XXX comment support
+            $columnData['comment'] = $column->getComment();
 
             if(in_array($column->getName(), $options['primary'])) {
                 $columnData['primary'] = true;
@@ -858,7 +860,6 @@ abstract class AbstractPlatform
                 $columnListSql .= ', ' . $this->getIndexDeclarationSQL($index, $definition);
             }
         }
-
         $query = 'CREATE TABLE ' . $tableName . ' (' . $columnListSql;
 
         $check = $this->getCheckDeclarationSQL($columns);
@@ -1152,12 +1153,15 @@ abstract class AbstractPlatform
 
             $unique = (isset($field['unique']) && $field['unique']) ?
                     ' ' . $this->getUniqueFieldDeclarationSQL() : '';
+			//XXX comment support
+            $comment = (isset($field['comment']) && $field['comment']) ?
+                    ' ' .  $this->getCommentValueDeclarationSQL($field['comment']) : '';
 
             $check = (isset($field['check']) && $field['check']) ?
                     ' ' . $field['check'] : '';
 
             $typeDecl = $field['type']->getSqlDeclaration($field, $this);
-            $columnDef = $typeDecl . $charset . $default . $notnull . $unique . $check . $collation;
+            $columnDef = $typeDecl . $charset . $default . $notnull . $unique . $comment . $check . $collation;
         }
 
         return $name . ' ' . $columnDef;
@@ -1201,6 +1205,18 @@ abstract class AbstractPlatform
             }
         }
         return $default;
+    }
+    
+    /**
+     * XXX comment support, perhaps only supported by mysql
+     */
+    public function getCommentValueDeclarationSQL($field){
+    	if(isset($field)){
+	    	$comment = "COMMENT '$field'";
+    	}else{
+    		$comment ='';
+    	}
+    	return $comment;
     }
 
     /**

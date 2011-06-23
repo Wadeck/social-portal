@@ -21,7 +21,7 @@ class Activity{
 
     /**
      * @var bigint $userId
-     *
+     * @Comment("Determine the size of the user JUST A TEST FOR ANNOTATION COMMENT")
      * @Column(name="user_id", type="bigint", nullable=false)
      */
     private $userId;

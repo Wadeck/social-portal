@@ -87,6 +87,8 @@ class Column extends AbstractAsset
      * @var string
      */
     protected $_columnDefinition = null;
+    
+    protected $_comment = null;
 
     /**
      * Create a new Column
@@ -218,6 +220,17 @@ class Column extends AbstractAsset
         $this->_default = $default;
         return $this;
     }
+    
+    /**
+     *
+     * @param  mixed $default
+     * @return Column
+     */
+    public function setComment($comment)
+    {
+        $this->_comment = $comment;
+        return $this;
+    }
 
     /**
      *
@@ -271,6 +284,11 @@ class Column extends AbstractAsset
     public function getScale()
     {
         return $this->_scale;
+    }
+
+    public function getComment()
+    {
+        return $this->_comment;
     }
 
     public function getUnsigned()
@@ -341,6 +359,7 @@ class Column extends AbstractAsset
             'name'          => $this->_name,
             'type'          => $this->_type,
             'default'       => $this->_default,
+            'comment'       => $this->_comment,
             'notnull'       => $this->_notnull,
             'length'        => $this->_length,
             'precision'     => $this->_precision,
