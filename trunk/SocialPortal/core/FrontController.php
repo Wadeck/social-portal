@@ -1,6 +1,10 @@
 <?php
 namespace core;
 
+use core\http\Request;
+
+use core\http\Response;
+
 use core\security\NonceManager;
 
 use core\debug\Logger;
@@ -45,6 +49,8 @@ use core\security;
 use core\http;
 
 use Doctrine\Common;
+
+use Exception;
 
 require_once 'i18n/language.php';
 
@@ -144,9 +150,9 @@ class FrontController {
 	 * Could be call from a controller that see the previous action is not in his domain
 	 * @param string $module The controller name
 	 * @param string $action The action name (corresponding to the function name .'Action'
-	 * @param array $parameters Array of parameter in associative manner passed to the action
+	 * @param array $getAttributes Array of parameter in associative manner passed to the action by get method
 	 */
-	public function doAction($module, $action = '', array $parameters = array()) {
+	public function doAction($module, $action = '', array $getAttributes = array()) {
 		$action = $action ? $action : 'index';
 		$name = ucfirst( $module );
 		$className = self::$CONTROLLER_DIR . $name;
@@ -177,21 +183,25 @@ class FrontController {
 				$this->generateException( new NoSuchActionException( $className, $methodName ) );
 			}
 			
-			$tempParams = $this->request->parameters;
-			$this->request->parameters = $parameters;
+			//			$tempParams = $this->request->parameters;
+			//			$this->request->parameters = $parameters;
 			
+
 			// [Authorization] check if the user has the right to access this action
 			// could lead to exit
 			$this->firewall->checkAuthorization( $controller, $methodName );
 			
 			$this->alreadyIncludedController[$name] = true;
 			
-			$controller->actionBefore( $action, $parameters );
-			$controller->$methodName( $parameters );
-			$controller->actionAfter( $action, $parameters );
-			
-			$this->request->parameters = $tempParams;
-		} catch (\Exception $e ) {
+			$controller->actionBefore( $action );
+			//			$controller->$methodName( $parameters );
+			$controller->$methodName();
+			$controller->actionAfter( $action );
+		
+		//			$this->request->parameters = $tempParams;
+		
+
+		} catch ( Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
 				// this could append typically in the $methodName() action
@@ -214,8 +224,8 @@ class FrontController {
 	 * @param string $gets
 	 * @exit
 	 */
-	public function doRedirect($module, $action = '', array $params = array(), array $gets = array(), $noLoopControl = false) {
-		$url = $this->getViewHelper()->createHref( $module, $action, $params, $gets );
+	public function doRedirect($module, $action = '', array $gets = array(), $noLoopControl = false) {
+		$url = $this->getViewHelper()->createHref( $module, $action, $gets );
 		$this->doRedirectUrl( $url, $noLoopControl );
 	}
 	
@@ -246,7 +256,7 @@ class FrontController {
 	 * @param string $parameters Associative array passed to the view
 	 */
 	//TODO reflechir encore si on garde le tableau de parametre ou si on passe plutot par la response vars
-	public function doDisplay($module, $action = null, array $parameters = array()) {
+	public function doDisplay($module, $action = null, array $addVars = array()) {
 		$module = strtolower( $module );
 		$fileName = self::$VIEW_DIR . $module;
 		if( $action ) {
@@ -260,7 +270,7 @@ class FrontController {
 		
 		if( !$this->firstCallDisplay ) {
 			// we are in the buffer
-			echo $this->renderFile( $file, $parameters );
+			echo $this->renderFile( $file, $addVars );
 			return;
 		} else {
 			$this->firstCallDisplay = false;
@@ -288,7 +298,7 @@ class FrontController {
 			}
 		}
 		// to authorize the view to modify some parameters of the header / footer (by viewHelper->setContainerClass by example)
-		$content = $this->renderFile( $file, $parameters );
+		$content = $this->renderFile( $file, $addVars );
 		$body = '';
 		if( !$fromAjax ) {
 			$body .= $this->renderFile( $headerFileName );
@@ -308,17 +318,23 @@ class FrontController {
 	 * Include the specific file
 	 * Must ensure that the file exist !
 	 * @param string $file
+	 * @param $addVars array assoc key=>value we want to pass to the view, like response->setVar()
 	 */
-	public function renderFile($file, array $parameters = array()) {
+	public function renderFile($file, array $addVars = array()) {
 		// the variable that will be passed to the file
 		$vars = $this->response->getVars();
-		$vars['helper'] = $this->getViewHelper();
-		if( !empty( $parameters ) ) {
-			$vars = array_merge( $vars, $parameters );
+		if( $addVars ) {
+			$vars = array_merge( $vars, $addVars );
 		}
+		$vars['helper'] = $this->getViewHelper();
+		
+		// start a buffer
 		ob_start();
+		// render the view inside the buffer
 		require ($file);
+		// and retrieve the buffer content
 		$str = ob_get_clean();
+		
 		unset( $vars );
 		return $str;
 	}

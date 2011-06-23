@@ -34,42 +34,38 @@ use Doctrine\Common\EventSubscriber;
  * @version     $Revision$
  * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class MysqlSessionInit implements EventSubscriber
-{
-    /**
-     * @var string
-     */
-    private $_charset;
-
-    /**
-     * @var string
-     */
-    private $_collation;
-
-    /**
-     * Configure Charset and Collation options of MySQL Client for each Connection
-     *
-     * @param string $charset
-     * @param string $collation
-     */
-    public function __construct($charset = 'utf8', $collation = false)
-    {
-        $this->_charset = $charset;
-        $this->_collation = $collation;
-    }
-
-    /**
-     * @param ConnectionEventArgs $args
-     * @return void
-     */
-    public function postConnect(ConnectionEventArgs $args)
-    {
-        $collation = ($this->_collation) ? " COLLATE ".$this->_collation : "";
-        $args->getConnection()->executeUpdate("SET NAMES ".$this->_charset . $collation);
-    }
-
-    public function getSubscribedEvents()
-    {
-        return array(Events::postConnect);
-    }
+class MysqlSessionInit implements EventSubscriber {
+	/**
+	 * @var string
+	 */
+	private $_charset;
+	
+	/**
+	 * @var string
+	 */
+	private $_collation;
+	
+	/**
+	 * Configure Charset and Collation options of MySQL Client for each Connection
+	 *
+	 * @param string $charset
+	 * @param string $collation
+	 */
+	public function __construct($charset = 'utf8', $collation = false) {
+		$this->_charset = $charset;
+		$this->_collation = $collation;
+	}
+	
+	/**
+	 * @param ConnectionEventArgs $args
+	 * @return void
+	 */
+	public function postConnect(ConnectionEventArgs $args) {
+		$collation = ($this->_collation) ? " COLLATE " . $this->_collation : "";
+		$args->getConnection()->executeUpdate( "SET NAMES " . $this->_charset . $collation );
+	}
+	
+	public function getSubscribedEvents() {
+		return array( Events::postConnect );
+	}
 }

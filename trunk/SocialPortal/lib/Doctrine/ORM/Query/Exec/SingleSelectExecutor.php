@@ -21,9 +21,7 @@
 
 namespace Doctrine\ORM\Query\Exec;
 
-use Doctrine\DBAL\Connection,
-    Doctrine\ORM\Query\AST\SelectStatement,
-    Doctrine\ORM\Query\SqlWalker;
+use Doctrine\DBAL\Connection, Doctrine\ORM\Query\AST\SelectStatement, Doctrine\ORM\Query\SqlWalker;
 
 /**
  * Executor that executes the SQL statement for simple DQL SELECT statements.
@@ -34,15 +32,12 @@ use Doctrine\DBAL\Connection,
  * @link        www.doctrine-project.org
  * @since       2.0
  */
-class SingleSelectExecutor extends AbstractSqlExecutor
-{
-    public function __construct(SelectStatement $AST, SqlWalker $sqlWalker)
-    {
-        $this->_sqlStatements = $sqlWalker->walkSelectStatement($AST);
-    }
-
-    public function execute(Connection $conn, array $params, array $types)
-    {
-        return $conn->executeQuery($this->_sqlStatements, $params, $types);
-    }
+class SingleSelectExecutor extends AbstractSqlExecutor {
+	public function __construct(SelectStatement $AST, SqlWalker $sqlWalker) {
+		$this->_sqlStatements = $sqlWalker->walkSelectStatement( $AST );
+	}
+	
+	public function execute(Connection $conn, array $params, array $types) {
+		return $conn->executeQuery( $this->_sqlStatements, $params, $types );
+	}
 }

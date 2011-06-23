@@ -18,60 +18,59 @@ namespace Symfony\Component\Console\Formatter;
  *
  * @api
  */
-interface OutputFormatterStyleInterface
-{
-    /**
-     * Sets style foreground color.
-     *
-     * @param   string  $color  color name
-     *
-     * @api
-     */
-    function setForeground($color = null);
-
-    /**
-     * Sets style background color.
-     *
-     * @param   string  $color  color name
-     *
-     * @api
-     */
-    function setBackground($color = null);
-
-    /**
-     * Sets some specific style option.
-     *
-     * @param   string  $option     option name
-     *
-     * @api
-     */
-    function setOption($option);
-
-    /**
-     * Unsets some specific style option.
-     *
-     * @param   string  $option     option name
-     */
-    function unsetOption($option);
-
-    /**
-     * Set multiple style options at once.
-     *
-     * @param   array   $options
-     */
-    function setOptions(array $options);
-
-    /**
-     * Returns begin style code.
-     *
-     * @return  string
-     */
-    function getBeginStyle();
-
-    /**
-     * Returns end style code.
-     *
-     * @return  string
-     */
-    function getEndStyle();
+interface OutputFormatterStyleInterface {
+	/**
+	 * Sets style foreground color.
+	 *
+	 * @param   string  $color  color name
+	 *
+	 * @api
+	 */
+	function setForeground($color = null);
+	
+	/**
+	 * Sets style background color.
+	 *
+	 * @param   string  $color  color name
+	 *
+	 * @api
+	 */
+	function setBackground($color = null);
+	
+	/**
+	 * Sets some specific style option.
+	 *
+	 * @param   string  $option     option name
+	 *
+	 * @api
+	 */
+	function setOption($option);
+	
+	/**
+	 * Unsets some specific style option.
+	 *
+	 * @param   string  $option     option name
+	 */
+	function unsetOption($option);
+	
+	/**
+	 * Set multiple style options at once.
+	 *
+	 * @param   array   $options
+	 */
+	function setOptions(array $options);
+	
+	/**
+	 * Returns begin style code.
+	 *
+	 * @return  string
+	 */
+	function getBeginStyle();
+	
+	/**
+	 * Returns end style code.
+	 *
+	 * @return  string
+	 */
+	function getEndStyle();
 }

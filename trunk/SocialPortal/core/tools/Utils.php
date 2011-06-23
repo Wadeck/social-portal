@@ -82,7 +82,7 @@ class Utils {
 	 * @return str The time since.
 	 */
 	public static function getDataSince($older_date, $newer_date = null) {
-		if($older_date instanceof \DateTime){
+		if( $older_date instanceof \DateTime ) {
 			$older_date = $older_date->getTimestamp();
 		}
 		// array of time period chunks

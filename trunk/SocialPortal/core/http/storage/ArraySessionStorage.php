@@ -18,38 +18,29 @@ namespace core\http\storage;
  * @author Bulat Shakirzyanov <mallluhuct@gmail.com>
  */
 
-class ArraySessionStorage implements SessionStorageInterface
-{
+class ArraySessionStorage implements SessionStorageInterface {
 	private $data = array();
-
-	public function read($key, $default = null)
-	{
-		return array_key_exists($key, $this->data) ? $this->data[$key] : $default;
+	
+	public function read($key, $default = null) {
+		return array_key_exists( $key, $this->data ) ? $this->data[$key] : $default;
 	}
-
-	public function regenerate($destroy = false)
-	{
-		if ($destroy) {
+	
+	public function regenerate($destroy = false) {
+		if( $destroy ) {
 			$this->data = array();
 		}
 		return true;
 	}
-
-	public function remove($key)
-	{
-		unset($this->data[$key]);
+	
+	public function remove($key) {
+		unset( $this->data[$key] );
 	}
-
-	public function start()
-	{
-	}
-
-	public function getId()
-	{
-	}
-
-	public function write($key, $data)
-	{
+	
+	public function start() {}
+	
+	public function getId() {}
+	
+	public function write($key, $data) {
 		$this->data[$key] = $data;
 	}
 }

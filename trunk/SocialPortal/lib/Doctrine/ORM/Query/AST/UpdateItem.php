@@ -24,7 +24,7 @@ namespace Doctrine\ORM\Query\AST;
 /**
  * UpdateItem ::= [IdentificationVariable "."] {StateField | SingleValuedAssociationField} "=" NewValue
  * NewValue ::= SimpleArithmeticExpression | StringPrimary | DatetimePrimary | BooleanPrimary |
- *              EnumPrimary | SimpleEntityExpression | "NULL"
+ * EnumPrimary | SimpleEntityExpression | "NULL"
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -34,20 +34,17 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class UpdateItem extends Node
-{
-    public $pathExpression;
-    public $newValue;
-
-    public function __construct($pathExpression, $newValue)
-    {
-        $this->pathExpression = $pathExpression;
-        $this->newValue = $newValue;
-    }
-
-    public function dispatch($sqlWalker)
-    {
-        return $sqlWalker->walkUpdateItem($this);
-    }
+class UpdateItem extends Node {
+	public $pathExpression;
+	public $newValue;
+	
+	public function __construct($pathExpression, $newValue) {
+		$this->pathExpression = $pathExpression;
+		$this->newValue = $newValue;
+	}
+	
+	public function dispatch($sqlWalker) {
+		return $sqlWalker->walkUpdateItem( $this );
+	}
 }
 

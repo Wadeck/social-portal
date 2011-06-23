@@ -4,9 +4,7 @@ namespace core\security;
 
 class Crypto {
 	/**  @var array different salts used to hash password in db or cookie */
-	private static $SALTS = array( 'cookie' => array( '62b1d5u|e3_04', '^t:,46ru7ç+', 'c245ho4{s€' ), 
-			'db' => array( 'le$gA5_ds*', 'm0-!%4Dr€', '#@^2s_5gA~' ), 
-			'nonce' => array( '5ks*à-+', 'gZs-/9D', '6èvF9d/' ) );
+	private static $SALTS = array( 'cookie' => array( '62b1d5u|e3_04', '^t:,46ru7ç+', 'c245ho4{s€' ), 'db' => array( 'le$gA5_ds*', 'm0-!%4Dr€', '#@^2s_5gA~' ), 'nonce' => array( '5ks*à-+', 'gZs-/9D', '6èvF9d/' ) );
 	
 	/** Database usage @return string the encrypted pwd */
 	public static function encodeDBPassword($login, $pwd) {
@@ -52,7 +50,7 @@ class Crypto {
 	
 	/** Cookie usage @return bool true iff the cookie value is the one that was set before by encodeCookie */
 	public static function verifyCookieHash($hashPwd, $key_from_db, $pwd_from_db) {
-		$hash_from_db = self::hashPwd($key_from_db, $pwd_from_db, 'cookie');
+		$hash_from_db = self::hashPwd( $key_from_db, $pwd_from_db, 'cookie' );
 		if( $hashPwd === $hash_from_db ) {
 			return true;
 		} else {
@@ -70,21 +68,21 @@ class Crypto {
 			throw new \InvalidArgumentException( 'Incorrect salt key in hashPwd', 2 );
 		}
 		$salts = self::$SALTS[$saltKey];
-		return sha1( $salts[0] . $login . $salts[1] . sha1($pwd) . $salts[2] );
+		return sha1( $salts[0] . $login . $salts[1] . sha1( $pwd ) . $salts[2] );
 	}
-
+	
 	/** @return random 32chars string */
-	public static function createRandomKey(){
-		list($usec, $sec) = explode(" ", microtime());
+	public static function createRandomKey() {
+		list( $usec, $sec ) = explode( " ", microtime() );
 		$first = mt_rand();
-		$second = $usec*$sec;
-		$result = md5($first.$second);
+		$second = $usec * $sec;
+		$result = md5( $first . $second );
 		return $result;
 	}
 	
-	public static function hashForNonce($nonce){
+	public static function hashForNonce($nonce) {
 		$salts = self::$SALTS['nonce'];
 		$hash = sha1( $salts[0] . $salts[1] . $nonce . $salts[2] );
-		return substr($hash, -25, 12);
+		return substr( $hash, -25, 12 );
 	}
 }

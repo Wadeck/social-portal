@@ -34,7 +34,7 @@ $vars['helper']->setContainerClass('');
 						$title = $topic->getTitle();
 				?>
 					<tr <?php if( $i % 2 == 1 ){ echo ' class="alt background_secondary"' ; }?>>
-						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array(), array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
+						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
 							title="<?php echo $title; ?>"><?php echo $title; ?></a></td>
 						<td class="author">
 							<?php if($userHelper->setCurrentUser($topic->getPoster())):?>

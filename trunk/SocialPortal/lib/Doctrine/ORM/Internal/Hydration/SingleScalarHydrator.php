@@ -27,23 +27,21 @@ use Doctrine\DBAL\Connection;
  * @author Roman Borschel <roman@code-factory.org>
  * @since 2.0
  */
-class SingleScalarHydrator extends AbstractHydrator
-{
-    /** @override */
-    protected function _hydrateAll()
-    {
-        $cache = array();
-        $result = $this->_stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $num = count($result);
-
-        if ($num == 0) {
-            throw new \Doctrine\ORM\NoResultException;
-        } else if ($num > 1 || count($result[key($result)]) > 1) {
-            throw new \Doctrine\ORM\NonUniqueResultException;
-        }
-        
-        $result = $this->_gatherScalarRowData($result[key($result)], $cache);
-        
-        return array_shift($result);
-    }
+class SingleScalarHydrator extends AbstractHydrator {
+	/** @override */
+	protected function _hydrateAll() {
+		$cache = array();
+		$result = $this->_stmt->fetchAll( \PDO::FETCH_ASSOC );
+		$num = count( $result );
+		
+		if( $num == 0 ) {
+			throw new \Doctrine\ORM\NoResultException();
+		} else if( $num > 1 || count( $result[key( $result )] ) > 1 ) {
+			throw new \Doctrine\ORM\NonUniqueResultException();
+		}
+		
+		$result = $this->_gatherScalarRowData( $result[key( $result )], $cache );
+		
+		return array_shift( $result );
+	}
 }

@@ -10,7 +10,7 @@ interface iPostForm {
 	/**
 	 * Given a specific post, we need to create the form
 	 * @param specific post the additionnal information for that $base
-	 *	it contains the post base !
+	 * it contains the post base !
 	 */
 	function setupWithPost($specific);
 	

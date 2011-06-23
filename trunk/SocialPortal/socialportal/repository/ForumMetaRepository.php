@@ -3,7 +3,7 @@ namespace socialportal\repository;
 
 use socialportal\model\ForumMeta;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use socialportal\model\TopicBase;
 
@@ -47,9 +47,9 @@ class ForumMetaRepository extends EntityRepository {
 	 * @param int $topicTypeId
 	 * @return true only if the id is in the array of accepted topic types
 	 */
-	public function isAcceptedBy($forumId, $topicTypeId){
-		$acceptArray = $this->getAcceptableTopics($forumId);
-		return in_array($topicTypeId, $acceptArray);
+	public function isAcceptedBy($forumId, $topicTypeId) {
+		$acceptArray = $this->getAcceptableTopics( $forumId );
+		return in_array( $topicTypeId, $acceptArray );
 	}
 	
 	/**
@@ -68,7 +68,7 @@ class ForumMetaRepository extends EntityRepository {
 		$meta = $this->findOneBy( array( 'forumId' => $forumId, 'metaKey' => $key ) );
 		if( !$meta ) {
 			$meta = new ForumMeta();
-			$meta->setForumId($forumId);
+			$meta->setForumId( $forumId );
 			$meta->setMetaKey( $key );
 		}
 		$meta->setMetaValue( $value );

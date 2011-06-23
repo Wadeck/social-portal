@@ -28,21 +28,24 @@ class SingleCheckBoxField extends Field {
 		}
 	}
 	
-	public function insertField() {?>
+	public function insertField() {
+		?>
 <input type="checkbox" id="<?php
 		echo $this->identifier;
-		?>" name="<?php
+		?>"
+	name="<?php
 		echo $this->identifier;
 		?>"
 	class="<?php
 		echo $this->getConstraintsAsString();
-		?>" value="<?php
+		?>"
+	value="<?php
 		echo $this->value;
-		?>"/>
+		?>" />
 <?php
 	}
 	
-	public function insertLabel()  {
+	public function insertLabel() {
 		?><label for="<?php
 		echo $this->identifier;
 		?>"><?php

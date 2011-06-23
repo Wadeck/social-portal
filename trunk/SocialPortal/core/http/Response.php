@@ -1,6 +1,8 @@
 <?php
 
-namespace core;
+namespace core\http;
+
+use core\FrontController;
 
 use core\debug\Logger;
 
@@ -242,12 +244,18 @@ class Response {
 <title><?php
 		echo $this->title;
 		?></title>
-	<?php if( $this->favicon ) : ?>
-		<link rel="shortcut icon" href="<?php echo $this->favicon; ?>" type="image/x-icon" />		
-	<?php endif ;
-	$this->insertCSS();
-	$this->insertJavascript();
-	?>
+	<?php
+		if( $this->favicon ) :
+			?>
+		<link rel="shortcut icon" href="<?php
+			echo $this->favicon;
+			?>"
+	type="image/x-icon" />		
+	
+		<?php endif ;
+		$this->insertCSS();
+		$this->insertJavascript();
+		?>
 </head>
 <body><?php
 		echo $this->body;

@@ -49,15 +49,15 @@ class LoginForm extends Form {
 <?php
 	}
 	
-	public function getUsername(){
+	public function getUsername() {
 		return $this->ready ? $this->data['login_username'] : null;
 	}
 	
-	public function getPassword(){
+	public function getPassword() {
 		return $this->ready ? $this->data['login_password'] : null;
 	}
 	
-	public function getIsRememberMe(){
+	public function getIsRememberMe() {
 		return $this->ready ? $this->data['login_rememberMe'] : null;
 	}
 }

@@ -5,13 +5,7 @@ use Doctrine\ORM\Configuration;
 define( 'TARGET', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'socialportal' . DIRECTORY_SEPARATOR . 'model' );
 
 require '../core/ClassLoader.php';
-core\ClassLoader::getInstance()
-	->addMatch( 'socialportal' )
-	->addMatch( 'Doctrine', 'lib' )
-	->addMatch( 'Symfony', 'lib' . DIRECTORY_SEPARATOR . 'Doctrine' )
-	->addMatch( 'Proxy', DIRECTORY_SEPARATOR . 'socialportal' . DIRECTORY_SEPARATOR . 'proxy' )
-	->addMatch( 'core' )
-	->setRootDirectory( implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )->register();
+core\ClassLoader::getInstance()->addMatch( 'socialportal' )->addMatch( 'Doctrine', 'lib' )->addMatch( 'Symfony', 'lib' . DIRECTORY_SEPARATOR . 'Doctrine' )->addMatch( 'Proxy', DIRECTORY_SEPARATOR . 'socialportal' . DIRECTORY_SEPARATOR . 'proxy' )->addMatch( 'core' )->setRootDirectory( implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )->register();
 
 $cache = new \Doctrine\Common\Cache\ArrayCache();
 

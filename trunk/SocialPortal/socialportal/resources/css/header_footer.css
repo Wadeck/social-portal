@@ -10,7 +10,7 @@
 	-moz-border-radius-bottomright: 6px;
 	-webkit-border-bottom-right-radius: 6px;
 	margin-bottom: 20px;
-/*	min-height: 70px;*/
+	/*	min-height: 70px;*/
 	/* to work on firefox 4 */
 	min-height: 10px;
 }
@@ -40,8 +40,8 @@
 	text-align: right;
 }
 
-#header h1 {
-	/*line-height: 230%;*/
+#header h1 { /*line-height: 230%;*/
+	
 }
 
 #header #search-bar .padder {
@@ -79,15 +79,17 @@
 	display: inline-block;
 }
 
-#header div#connected-panel{
+#header div#connected-panel {
 	float: right;
 	margin: 5px;
-	padding: 5px;	
+	padding: 5px;
 }
-#header div#connected-panel .user-info{
-	float: left;	
+
+#header div#connected-panel .user-info {
+	float: left;
 }
-#header div#connected-panel .avatar-box{
+
+#header div#connected-panel .avatar-box {
 	float: right;
 	margin-left: 5px;
 }

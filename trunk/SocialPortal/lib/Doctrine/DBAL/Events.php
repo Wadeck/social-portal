@@ -29,10 +29,9 @@ namespace Doctrine\DBAL;
  * @author Roman Borschel <roman@code-factory.org>
  * @since 2.0
  */
-final class Events
-{
-    private function __construct() {}
-
-    const postConnect = 'postConnect';
+final class Events {
+	private function __construct() {}
+	
+	const postConnect = 'postConnect';
 }
 

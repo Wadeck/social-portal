@@ -23,7 +23,7 @@ namespace Doctrine\ORM\Query\AST;
 
 /**
  * SimpleSelectExpression ::= StateFieldPathExpression | IdentificationVariable
- *                          | (AggregateExpression [["AS"] FieldAliasIdentificationVariable])
+ * | (AggregateExpression [["AS"] FieldAliasIdentificationVariable])
  *
  * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
@@ -33,18 +33,15 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class SimpleSelectExpression extends Node
-{
-    public $expression;
-    public $fieldIdentificationVariable;
-
-    public function __construct($expression)
-    {
-        $this->expression = $expression;
-    }    
-    
-    public function dispatch($sqlWalker)
-    {
-        return $sqlWalker->walkSimpleSelectExpression($this);
-    }
+class SimpleSelectExpression extends Node {
+	public $expression;
+	public $fieldIdentificationVariable;
+	
+	public function __construct($expression) {
+		$this->expression = $expression;
+	}
+	
+	public function dispatch($sqlWalker) {
+		return $sqlWalker->walkSimpleSelectExpression( $this );
+	}
 }

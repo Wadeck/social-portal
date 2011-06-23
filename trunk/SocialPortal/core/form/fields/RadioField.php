@@ -30,12 +30,14 @@ class RadioField extends Field {
 		?>
 <input type="radio" id="<?php
 		echo $this->identifier . $i;
-		?>" name="<?php
+		?>"
+	name="<?php
 		echo $this->identifier;
 		?>"
 	class="<?php
 		echo $this->getConstraintsAsString();
-		?>" value="<?php
+		?>"
+	value="<?php
 		echo $this->values[$i];
 		?>"
 	<?php // to determine the initial value

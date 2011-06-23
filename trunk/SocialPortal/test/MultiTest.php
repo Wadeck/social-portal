@@ -3,12 +3,10 @@
 require_once 'PHPUnit\Framework\TestSuite.php';
 
 require_once 'core\ClassLoader.php';
-core\ClassLoader::getInstance()->addMatch( 'socialportal' )->addMatch( 'Doctrine', 'lib' )->addMatch( 'core' )->addDefaultMatch( 
-		'test' )->setRootDirectory( 
-		implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )->register();
+core\ClassLoader::getInstance()->addMatch( 'socialportal' )->addMatch( 'Doctrine', 'lib' )->addMatch( 'core' )->addDefaultMatch( 'test' )->setRootDirectory( implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )->register();
 
-define('DEBUG', true);
-		
+define( 'DEBUG', true );
+
 /**
  * Static test suite.
  */
@@ -35,11 +33,11 @@ class MultiTest extends PHPUnit_Framework_TestSuite {
 		foreach( $files as $file ) {
 			$this->manageFile( $file, $dirname );
 		}
-
-		krsort($this->tempArray, SORT_NUMERIC );
 		
-		foreach ($this->tempArray as $key=>$value){
-			$this->addTestSuite($value);
+		krsort( $this->tempArray, SORT_NUMERIC );
+		
+		foreach( $this->tempArray as $key => $value ) {
+			$this->addTestSuite( $value );
 		}
 		
 		chdir( $current_dir );
@@ -51,7 +49,7 @@ class MultiTest extends PHPUnit_Framework_TestSuite {
 			if( $this->getName() === $short_name ) {
 				return;
 			}
-			$this->tempArray[filemtime($file)] = $short_name;
+			$this->tempArray[filemtime( $file )] = $short_name;
 		}
 	}
 	

@@ -40,12 +40,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 	public function __construct(array $options = array()) {
 		$cookieDefaults = session_get_cookie_params();
 		
-		$this->options = array_merge( 
-				array( 'name' => '_SESS', 'lifetime' => $cookieDefaults['lifetime'], 
-						'path' => $cookieDefaults['path'], 'domain' => $cookieDefaults['domain'], 
-						'secure' => $cookieDefaults['secure'], 
-						'httponly' => isset( $cookieDefaults['httponly'] ) ? $cookieDefaults['httponly'] : false ), 
-				$options );
+		$this->options = array_merge( array( 'name' => '_SESS', 'lifetime' => $cookieDefaults['lifetime'], 'path' => $cookieDefaults['path'], 'domain' => $cookieDefaults['domain'], 'secure' => $cookieDefaults['secure'], 'httponly' => isset( $cookieDefaults['httponly'] ) ? $cookieDefaults['httponly'] : false ), $options );
 		
 		session_name( $this->options['name'] );
 	}
@@ -58,8 +53,7 @@ class NativeSessionStorage implements SessionStorageInterface {
 			return;
 		}
 		
-		session_set_cookie_params( $this->options['lifetime'], $this->options['path'], $this->options['domain'], 
-				$this->options['secure'], $this->options['httponly'] );
+		session_set_cookie_params( $this->options['lifetime'], $this->options['path'], $this->options['domain'], $this->options['secure'], $this->options['httponly'] );
 		
 		// disable native cache limiter as this is managed by HeaderBag directly
 		session_cache_limiter( false );

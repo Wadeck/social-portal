@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TermRelationRepository extends EntityRepository {
 	
-	public function getAllTags($topicId){
+	public function getAllTags($topicId) {
 		//TODO to support tags
 		return array();
 	}

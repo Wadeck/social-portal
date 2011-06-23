@@ -28,27 +28,24 @@ namespace Doctrine\Common\Annotations;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class AnnotationException extends \Exception
-{
-    /**
-     * Creates a new AnnotationException describing a Syntax error.
-     *
-     * @param string $message Exception message
-     * @return AnnotationException
-     */
-    public static function syntaxError($message)
-    {
-        return new self('[Syntax Error] ' . $message);
-    }
-
-    /**
-     * Creates a new AnnotationException describing a Semantical error.
-     *
-     * @param string $message Exception message
-     * @return AnnotationException
-     */
-    public static function semanticalError($message)
-    {
-        return new self('[Semantical Error] ' . $message);
-    }
+class AnnotationException extends \Exception {
+	/**
+	 * Creates a new AnnotationException describing a Syntax error.
+	 *
+	 * @param string $message Exception message
+	 * @return AnnotationException
+	 */
+	public static function syntaxError($message) {
+		return new self( '[Syntax Error] ' . $message );
+	}
+	
+	/**
+	 * Creates a new AnnotationException describing a Semantical error.
+	 *
+	 * @param string $message Exception message
+	 * @return AnnotationException
+	 */
+	public static function semanticalError($message) {
+		return new self( '[Semantical Error] ' . $message );
+	}
 }

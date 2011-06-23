@@ -32,26 +32,24 @@ use Doctrine\DBAL\Connection;
  * @since       2.0
  * @todo Rename: AbstractSQLExecutor
  */
-abstract class AbstractSqlExecutor
-{
-    protected $_sqlStatements;
-
-    /**
-     * Gets the SQL statements that are executed by the executor.
-     *
-     * @return array  All the SQL update statements.
-     */
-    public function getSqlStatements()
-    {
-        return $this->_sqlStatements;
-    }
-
-    /**
-     * Executes all sql statements.
-     *
-     * @param Doctrine\DBAL\Connection $conn The database connection that is used to execute the queries.
-     * @param array $params  The parameters.
-     * @return Doctrine\DBAL\Driver\Statement
-     */
-    abstract public function execute(Connection $conn, array $params, array $types);    
+abstract class AbstractSqlExecutor {
+	protected $_sqlStatements;
+	
+	/**
+	 * Gets the SQL statements that are executed by the executor.
+	 *
+	 * @return array  All the SQL update statements.
+	 */
+	public function getSqlStatements() {
+		return $this->_sqlStatements;
+	}
+	
+	/**
+	 * Executes all sql statements.
+	 *
+	 * @param Doctrine\DBAL\Connection $conn The database connection that is used to execute the queries.
+	 * @param array $params  The parameters.
+	 * @return Doctrine\DBAL\Driver\Statement
+	 */
+	abstract public function execute(Connection $conn, array $params, array $types);
 }

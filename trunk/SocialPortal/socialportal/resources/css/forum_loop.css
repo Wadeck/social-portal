@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 /** message that are displayed when there is no topic for a given forum */
-.message{
+.message {
 	
 }
 
@@ -31,13 +31,13 @@ li.forums-tab a {
 	border: 1px solid #EEEEEE;
 }
 
-li.forums-tab a:hover{
+li.forums-tab a:hover {
 	background: #EAEAEA;
-	color: #111;	
-	border: 1px solid #aaa;		
+	color: #111;
+	border: 1px solid #aaa;
 }
 
-li.forums-tab.selected a{
+li.forums-tab.selected a {
 	color: #555;
 	font-weight: bold;
 	border-bottom: none;
@@ -88,6 +88,7 @@ table tr th {
 	padding: 8px;
 	vertical-align: middle;
 }
+
 table tr td {
 	padding: 15px 8px;
 	vertical-align: middle;
@@ -175,6 +176,7 @@ table.forum-loop td.poster,table.forum-loop td.group {
 table.forum-loop th#title {
 	width: 35%;
 }
+
 /*
 table.forum-loop th#author {
 	width: 1%;
@@ -187,11 +189,13 @@ table.forum-loop th#latest-poster {
 table.forum-loop th#postcount {
 	width: 1%;
 }
+
 table.forum-loop th#freshness {
 	width: 1%;
 }
-table.forum-loop td.author .author-name, table.forum-loop td.latest-poster .lastposter-name{ 
+
+table.forum-loop td.author .author-name,table.forum-loop td.latest-poster .lastposter-name
+	{
 	display: inline;
 	vertical-align: middle;
 }
-

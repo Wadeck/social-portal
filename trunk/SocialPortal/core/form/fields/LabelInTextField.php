@@ -23,6 +23,6 @@ class LabelInTextField extends TextField {
 	
 	/** no label because it is in the input field */
 	public function insertLabel() {
-		$this->form->addJavascriptFile('label_in_input.js');
+		$this->form->addJavascriptFile( 'label_in_input.js' );
 	}
 }

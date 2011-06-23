@@ -10,7 +10,7 @@ class Admin extends AbstractController {
 	 * Would be inserted in the header, to display the different admin links available
 	 * TODO add secured annotation with admin capability
 	 */
-	public function indexAction($parameters) {
+	public function indexAction() {
 		$links = array();
 		$links['Tool'] = $this->frontController->getViewHelper()->createHref( 'tool', 'index' );
 		$this->frontController->getResponse()->setVar( 'links', $links );

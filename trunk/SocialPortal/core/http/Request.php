@@ -1,6 +1,8 @@
 <?php
 
-namespace core;
+namespace core\http;
+
+use core\FrontController;
 
 use core\tools\Secured;
 
@@ -111,7 +113,7 @@ class Request {
 	}
 	
 	/** @return unix time at the arrival of the request */
-	public function getRequestTime(){
+	public function getRequestTime() {
 		return $this->requestTime;
 	}
 	

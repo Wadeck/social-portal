@@ -26,13 +26,13 @@ li.forums-tab a {
 	border: 1px solid #EEEEEE;
 }
 
-li.forums-tab a:hover{
+li.forums-tab a:hover {
 	background: #EAEAEA;
-	color: #111;	
-	border: 1px solid #aaa;		
+	color: #111;
+	border: 1px solid #aaa;
 }
 
-li.forums-tab.selected a{
+li.forums-tab.selected a {
 	color: #555;
 	font-weight: bold;
 	border-bottom: none;
@@ -83,6 +83,7 @@ table tr th {
 	padding: 8px;
 	vertical-align: middle;
 }
+
 table tr td {
 	padding: 15px 8px;
 	vertical-align: middle;
@@ -170,6 +171,7 @@ table.forum-loop td.poster,table.forum-loop td.group {
 table.forum-loop th#title {
 	width: 35%;
 }
+
 /*
 table.forum-loop th#author {
 	width: 1%;
@@ -182,171 +184,184 @@ table.forum-loop th#latest-poster {
 table.forum-loop th#postcount {
 	width: 1%;
 }
+
 table.forum-loop th#freshness {
 	width: 1%;
 }
-table.forum-loop td.author .author-name, table.forum-loop td.latest-poster .lastposter-name{ 
+
+table.forum-loop td.author .author-name,table.forum-loop td.latest-poster .lastposter-name
+	{
 	display: inline;
 	vertical-align: middle;
 }
 
 /* > WordPress Blog Comment Styles
 -------------------------------------------------------------- */
-
 #trackbacks {
 	margin-top: 30px;
 }
 
-#comments h3, #trackbacks h3, #respond h3, #topic h3 {
+#comments h3,#trackbacks h3,#respond h3,#topic h3 {
 	font-size: 20px;
 	margin: 5px 0 25px 0;
 	font-weight: normal;
 	color: #555;
 }
 
-#comments span.title, #trackbacks span.title {
+#comments span.title,#trackbacks span.title {
 	color: #aaa;
 }
 
 /*ol.commentlist li, div#topic, div#edit-topic, div#edit-post, div#topic-respond {*/
-ol.commentlist li, div.rounded-box #topic {
+ol.commentlist li,div.rounded-box #topic {
 	margin: 10px 0 20px 0;
 	border: 1px solid #eee;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }
-	ol.commentlist li:first-child {
-		margin: 0 0 20px 0;
-	}
-	ol.commentlist li:last-child {
-		margin: 10px 0 0 0;
-	}
 
-	div.rounded-box-topic.padded{
-		padding: 8px;	
-	}
-	
-	ol.commentlist td {
-		vertical-align: text-top;
-	}
-	ol.commentlist li.even {
-		background-color: #fdfdfd;
-	}
-	ol.commentlist li.odd {
-		background-color: #f9f9f9;
-	}
-	.comment-right-part {
-		/*margin-left: 110px;*/
-		padding: 7px;
-	}
-	
-	ol.commentlist td.avatar-box{
-		vertical-align: text-top;		
-	}
-	ol.commentlist td.comment-right-part{
-		vertical-align: text-top;		
-	}
-	ol.commentlist td {
-		font-size: 12px;
-		line-height: 20px;
-	}
-	/* the cell containing the avatar */
-	td.avatar-box{
-	/*	background: #f0f0f0; */
-		padding: 6px 6px 9px 6px;
-	/*	float: left; */ 
+ol.commentlist li:first-child {
+	margin: 0 0 20px 0;
+}
+
+ol.commentlist li:last-child {
+	margin: 10px 0 0 0;
+}
+
+div.rounded-box-topic.padded {
+	padding: 8px;
+}
+
+ol.commentlist td {
+	vertical-align: text-top;
+}
+
+ol.commentlist li.even {
+	background-color: #fdfdfd;
+}
+
+ol.commentlist li.odd {
+	background-color: #f9f9f9;
+}
+
+.comment-right-part { /*margin-left: 110px;*/
+	padding: 7px;
+}
+
+ol.commentlist td.avatar-box {
+	vertical-align: text-top;
+}
+
+ol.commentlist td.comment-right-part {
+	vertical-align: text-top;
+}
+
+ol.commentlist td {
+	font-size: 12px;
+	line-height: 20px;
+}
+
+/* the cell containing the avatar */
+td.avatar-box { /*	background: #f0f0f0; */
+	padding: 6px 6px 9px 6px;
+	/*	float: left; */
 	/*	font-family: georgia, times, serif; */
-		/*font-size: 12px;*/
-		font-weight: bold;
-		border-right: 1px solid #eee;
+	/*font-size: 12px;*/
+	font-weight: bold;
+	border-right: 1px solid #eee;
 	/*	text-align: center; */
-		width: 80px;
-		
-		vertical-align: text-top;
-		/* TODO to remove 
+	width: 80px;
+	vertical-align: text-top;
+	/* TODO to remove 
 		-moz-border-radius: 10px;
 		-webkit-border-radius: 10px;
 		border-radius: inherit;
 		*/
-	}
-		td.avatar-box img{
-			float: none;
-		}
-		td.avatar-box a{
-			font-family: georgia, times, serif;
-			text-decoration: none;
-		}
-		td.avatar-box a.profile{
-			line-height: 170%;
-			font-size: 12px;			
-			/*vertical-align: text-top;*/
-		}
-		td.avatar-box a.avatar{
-			display: block;
-			text-align: center;
-		}
+}
 
-	/*	comment-right-part p{
+td.avatar-box img {
+	float: none;
+}
+
+td.avatar-box a {
+	font-family: georgia, times, serif;
+	text-decoration: none;
+}
+
+td.avatar-box a.profile {
+	line-height: 170%;
+	font-size: 12px;
+	/*vertical-align: text-top;*/
+}
+
+td.avatar-box a.avatar {
+	display: block;
+	text-align: center;
+}
+
+/*	comment-right-part p{
 			font-size:12px;
 }*/
-		
-	a.comment-author-name, a.topic-author-name{
-		display: block;
- 		text-align: left;
-  	}
-	
-	.comment-avatar, .topic-avatar {
-		display: block;
-   		text-align: center;
-	}
+a.comment-author-name,a.topic-author-name {
+	display: block;
+	text-align: left;
+}
 
-	.comment-meta, #topic-bottom{
-		border-top: 1px solid #eee;
-		border-bottom: none;
-		margin: 0px;
-		padding: 0 5px;
-		/*padding-top: 2px;*/
-		/*clear: both;*/
-	}
-		.comment-meta .comment-date, #topic-bottom #topic-date{
-			/*float: right; */
-			padding-left: 5px;
-		}
-		.comment-meta .comment-tools, #topic-bottom #topic-tools {
-			float: right; 
-			padding-right: 5px;
-		}
-		.comment-meta a, #topic-bottom a {
-			text-decoration: none;
-		}
-		
-		.comment-meta, #topic-bottom{
-			font-size: 80%;			
-		}
-	
-		div.comment-options {
-			border-bottom: none;
-		}
+.comment-avatar,.topic-avatar {
+	display: block;
+	text-align: center;
+}
 
-	span.comment-upper-part {
-		
-	}
+.comment-meta,#topic-bottom {
+	border-top: 1px solid #eee;
+	border-bottom: none;
+	margin: 0px;
+	padding: 0 5px;
+	/*padding-top: 2px;*/
+	/*clear: both;*/
+}
+
+.comment-meta .comment-date,#topic-bottom #topic-date {
+	/*float: right; */
+	padding-left: 5px;
+}
+
+.comment-meta .comment-tools,#topic-bottom #topic-tools {
+	float: right;
+	padding-right: 5px;
+}
+
+.comment-meta a,#topic-bottom a {
+	text-decoration: none;
+}
+
+.comment-meta,#topic-bottom {
+	font-size: 80%;
+}
+
+div.comment-options {
+	border-bottom: none;
+}
+
+span.comment-upper-part {
 	
-	#topic-content{
-		border-top: 1px solid #eee;
-	}
-	/*
+}
+
+#topic-content {
+	border-top: 1px solid #eee;
+}
+
+/*
 #edit-topic, #edit-post{
 	padding: 8px;	
 }*/
-.with_space_before{
-	margin-top: 10px;	
-	margin-bottom: 0px;	
+.with_space_before {
+	margin-top: 10px;
+	margin-bottom: 0px;
 }
 
-.nsp_disable_li{
+.nsp_disable_li {
 	color: #ccc;
-	text-decoration: line-through;	
+	text-decoration: line-through;
 }
-	

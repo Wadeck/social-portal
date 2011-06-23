@@ -17,7 +17,6 @@
  * <http://www.doctrine-project.org>.
  */
 
-
 namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -46,34 +45,28 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  * @author      Jonathan Wage <jonwage@gmail.com>
  * @author      Roman Borschel <roman@code-factory.org>
  */
-class DateTimeTzType extends Type
-{
-    public function getName()
-    {
-        return Type::DATETIMETZ;
-    }
-    
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDateTimeTzTypeDeclarationSQL($fieldDeclaration);
-    }
-
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return ($value !== null)
-            ? $value->format($platform->getDateTimeTzFormatString()) : null;
-    }
-
-    public function convertToPHPValue($value, AbstractPlatform $platform)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $val = \DateTime::createFromFormat($platform->getDateTimeTzFormatString(), $value);
-        if (!$val) {
-            throw ConversionException::conversionFailed($value, $this->getName());
-        }
-        return $val;
-    }
+class DateTimeTzType extends Type {
+	public function getName() {
+		return Type::DATETIMETZ;
+	}
+	
+	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+		return $platform->getDateTimeTzTypeDeclarationSQL( $fieldDeclaration );
+	}
+	
+	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+		return ($value !== null) ? $value->format( $platform->getDateTimeTzFormatString() ) : null;
+	}
+	
+	public function convertToPHPValue($value, AbstractPlatform $platform) {
+		if( $value === null ) {
+			return null;
+		}
+		
+		$val = \DateTime::createFromFormat( $platform->getDateTimeTzFormatString(), $value );
+		if( !$val ) {
+			throw ConversionException::conversionFailed( $value, $this->getName() );
+		}
+		return $val;
+	}
 }

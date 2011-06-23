@@ -1,7 +1,7 @@
 <?php
 
 namespace socialportal\controller;
-use core\topics\ForumHeader;
+use core\templates\ForumHeader;
 
 use core\user\UserHelper;
 
@@ -27,7 +27,7 @@ class Forum extends AbstractController {
 	/**
 	 * [forumId(opt for edit)]
 	 */
-	public function displayFormAction($parameters){
+	public function displayFormAction() {
 		$get = $this->frontController->getRequest()->query;
 		$forumId = $get->get( 'forumId', false );
 		
@@ -36,10 +36,10 @@ class Forum extends AbstractController {
 		$form = new ForumForm( $this->frontController );
 		
 		$actionUrl = null;
-		if (false !== $forumId) {
+		if( false !== $forumId ) {
 			$forum = $this->em->find( 'Forum', $forumId );
-			if ($forum) {
-				$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'edit', array(), array('forumId' => $forumId ) );
+			if( $forum ) {
+				$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'edit', array(), array( 'forumId' => $forumId ) );
 				// fill the form with the forum current values 
 				$form->setupWithForum( $forum );
 				// then add the value retrieve from POST
@@ -48,7 +48,7 @@ class Forum extends AbstractController {
 				$form->setNonceAction( 'editForum' );
 			}
 		}
-		if (! $actionUrl) {
+		if( !$actionUrl ) {
 			$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'create' );
 			$form->setupWithArray( true );
 			$form->setNonceAction( 'createForum' );
@@ -64,7 +64,7 @@ class Forum extends AbstractController {
 	 * @Method(POST)
 	 * @Nonce(createForum)
 	 */
-	public function createAction($parameters){
+	public function createAction() {
 		$form = new ForumForm( $this->frontController );
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
@@ -76,13 +76,13 @@ class Forum extends AbstractController {
 		$forum->setNumTopics( 0 );
 		
 		$this->em->persist( $forum );
-		if (! $this->em->flushSafe( $forum )) {
-			$this->frontController->addMessage( __( 'There is already a forum called %name%', array('%name%' => $form->getForumName() ) ), 'error' );
+		if( !$this->em->flushSafe( $forum ) ) {
+			$this->frontController->addMessage( __( 'There is already a forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
-		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array('%name%' => $form->getForumName() ) ), 'correct' );
+		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
@@ -91,7 +91,7 @@ class Forum extends AbstractController {
 	 * @Nonce(editForum)
 	 * @GetAttributes(forumId)
 	 */
-	public function editAction($parameters){
+	public function editAction() {
 		$get = $this->frontController->getRequest()->query;
 		$forumId = $get->get( 'forumId' );
 		
@@ -104,30 +104,29 @@ class Forum extends AbstractController {
 		$forum->setDescription( $form->getForumDescription() );
 		
 		$this->em->persist( $forum );
-		if (! $this->em->flushSafe( $forum )) {
-			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array('%name%' => $form->getForumName() ) ), 'error' );
+		if( !$this->em->flushSafe( $forum ) ) {
+			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
-		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array('%name%' => $form->getForumName() ) ), 'correct' );
+		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
 	/**
 	 * @Nonce(deleteForum)
 	 */
-	public function deleteAction($parameters){
-	}
+	public function deleteAction() {}
 	
 	/**
 	 * @Nonce(moveForum)
 	 */
-	public function moveAction($parameters){
-	
+	public function moveAction() {
+
 	}
 	
-	public function viewAllAction($parameters){
+	public function viewAllAction() {
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
 		$this->frontController->getResponse()->setVar( 'forums', $forums );
 		$this->frontController->doDisplay( 'Forum', 'viewAll' );
@@ -136,7 +135,7 @@ class Forum extends AbstractController {
 	/**
 	 * @GetAttributes(forumId)
 	 */
-	public function displaySingleAction($parameters){
+	public function displaySingleAction() {
 		$get = $this->frontController->getRequest()->query;
 		$forumId = $get->get( 'forumId' );
 		$page_num = $get->get( 'p', 1 );
@@ -145,7 +144,7 @@ class Forum extends AbstractController {
 		$forum = $this->em->getRepository( 'Forum' )->find( $forumId );
 		$topics = $this->em->getRepository( 'TopicBase' )->findTopicsFromForum( $forumId, $page_num, $num_per_page );
 		
-		if (! $forum) {
+		if( !$forum ) {
 			Logger::getInstance()->debug( "The forum with id [$forumId] is not valid" );
 			$this->frontController->addMessage( __( 'The given forum is not valid' ), 'error' );
 			$this->frontController->doRedirect( 'forum', 'viewAll' );
@@ -153,10 +152,10 @@ class Forum extends AbstractController {
 		
 		$max_pages = $forum->getNumTopics();
 		$max_pages = ceil( $max_pages / $num_per_page );
-		if (! $max_pages) {
+		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array(), array('forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array(), array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$response = $this->frontController->getResponse();
 		
@@ -167,16 +166,16 @@ class Forum extends AbstractController {
 		$response->setVar( 'forum', $forum );
 		$response->setVar( 'topics', $topics );
 		
-		$userHelper = new UserHelper($this->frontController);
+		$userHelper = new UserHelper( $this->frontController );
 		$response->setVar( 'userHelper', $userHelper );
 		
 		$forumHeader = new ForumHeader();
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
-		usort( $forums, function (ForumEntity $a, ForumEntity $b){
-			if ($a == $b) {
+		usort( $forums, function (ForumEntity $a, ForumEntity $b) {
+			if( $a == $b ) {
 				return 0;
 			}
-			return ($a->getPosition() < $b->getPosition()) ? - 1 : 1;
+			return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
 		} );
 		$indexSelected = array_search( $forum, $forums );
 		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );

@@ -25,10 +25,8 @@ namespace Doctrine\ORM;
  * @author robo
  * @since 2.0
  */
-class EntityNotFoundException extends ORMException
-{
-    public function __construct()
-    {
-        parent::__construct('Entity was not found.');
-    }
+class EntityNotFoundException extends ORMException {
+	public function __construct() {
+		parent::__construct( 'Entity was not found.' );
+	}
 }

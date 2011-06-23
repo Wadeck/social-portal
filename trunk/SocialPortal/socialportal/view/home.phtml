@@ -1,8 +1,28 @@
 
-<?php $vars['helper']->response->setTitle('Home'); ?>
-<?php $vars['helper']->insertMessage(); ?>
+<?php
+$vars['helper']->response->setTitle( 'Home' );
+?>
+<?php
+
+$vars['helper']->insertMessage();
+?>
 <h2>Home!!!</h2>
-<a href="<?php echo $vars['helper']->createHref('Forum', 'displayForm')?>">Create forum</a><br/>
-<a href="<?php echo $vars['helper']->createHref('Topic', 'chooseType')?>">Create topic (choose type)</a><br/>
-<a href="<?php echo $vars['helper']->createHref('Forum', 'viewAll')?>">Forum view</a><br/>
-<a href="<?php echo $vars['helper']->createHref('Connection', 'displayRegisterForm')?>">Create new user</a><br/>
+<a
+	href="<?php
+	echo $vars['helper']->createHref( 'Forum', 'displayForm' )?>">Create
+forum</a>
+<br />
+<a
+	href="<?php
+	echo $vars['helper']->createHref( 'Topic', 'chooseType' )?>">Create
+topic (choose type)</a>
+<br />
+<a href="<?php
+echo $vars['helper']->createHref( 'Forum', 'viewAll' )?>">Forum
+view</a>
+<br />
+<a
+	href="<?php
+	echo $vars['helper']->createHref( 'Connection', 'displayRegisterForm' )?>">Create
+new user</a>
+<br />

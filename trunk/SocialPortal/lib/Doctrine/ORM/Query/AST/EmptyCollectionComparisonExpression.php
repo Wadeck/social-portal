@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 namespace Doctrine\ORM\Query\AST;
 
 /**
@@ -32,19 +32,16 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class EmptyCollectionComparisonExpression extends Node
-{
-    public $expression;
-    public $not;
-
-    public function __construct($expression)
-    {
-        $this->expression = $expression;
-    }
-
-    public function dispatch($sqlWalker)
-    {
-        return $sqlWalker->walkEmptyCollectionComparisonExpression($this);
-    }
+class EmptyCollectionComparisonExpression extends Node {
+	public $expression;
+	public $not;
+	
+	public function __construct($expression) {
+		$this->expression = $expression;
+	}
+	
+	public function dispatch($sqlWalker) {
+		return $sqlWalker->walkEmptyCollectionComparisonExpression( $this );
+	}
 }
 

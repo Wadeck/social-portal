@@ -1,26 +1,26 @@
 <?php
 
-namespace core\topics;
+namespace core\tools;
 
-use core\topics\templates\StrategyPostTemplate;
+use core\templates\StrategyPostTemplate;
 
-use core\topics\templates\StoryPostTemplate;
+use core\templates\StoryPostTemplate;
 
-use core\topics\templates\FreetextPostTemplate;
+use core\templates\FreetextPostTemplate;
 
-use core\topics\templates\ActivityPostTemplate;
+use core\templates\ActivityPostTemplate;
 
 use core\FrontController;
 
 use Doctrine\ORM\EntityManager;
 
-use core\topics\templates\StrategyTopicTemplate;
+use core\templates\StrategyTopicTemplate;
 
-use core\topics\templates\StoryTopicTemplate;
+use core\templates\StoryTopicTemplate;
 
-use core\topics\templates\FreetextTopicTemplate;
+use core\templates\FreetextTopicTemplate;
 
-use core\topics\templates\ActivityTopicTemplate;
+use core\templates\ActivityTopicTemplate;
 
 class TopicType {
 	public static $typeActivity = 1;
@@ -174,7 +174,7 @@ class TopicType {
 		if( $result ) {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
-			$result->setTopic($topic);
+			$result->setTopic( $topic );
 		}
 		return $result;
 	}
@@ -204,12 +204,8 @@ class TopicType {
 		if( $result ) {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
-			$result->setPosts($posts);
+			$result->setPosts( $posts );
 		}
 		return $result;
-	}
-	
-	public static function getCommentForm(){
-		
 	}
 }

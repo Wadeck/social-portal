@@ -765,11 +765,11 @@ class Parser {
 		if( strrpos( $schemaName, ':' ) !== false ) {
 			list( $namespaceAlias, $simpleClassName ) = explode( ':', $schemaName );
 			$schemaName = $this->_em->getConfiguration()->getEntityNamespace( $namespaceAlias ) . '\\' . $simpleClassName;
-		}else if( strrpos( $schemaName, '\\' ) !== false){
+		} else if( strrpos( $schemaName, '\\' ) !== false ) {
 			// if a namespace is present we don't add the default one
-		}else{
+		} else {
 			// allow the usage of default namespace
-			$schemaName = $this->_em->getConfiguration()->getDefaultEntityNamespace(). '\\' . $schemaName;
+			$schemaName = $this->_em->getConfiguration()->getDefaultEntityNamespace() . '\\' . $schemaName;
 		}
 		$exists = class_exists( $schemaName, true );
 		

@@ -1,11 +1,11 @@
 <?php
 
 namespace socialportal\controller;
-use core\topics\templates\ModuleInsertTemplate;
+use core\templates\ModuleInsertTemplate;
 
 use core\form\custom\PostFormFactory;
 
-use core\topics\templates\MessageInsertTemplate;
+use core\templates\MessageInsertTemplate;
 
 use core\user\UserRoles;
 
@@ -17,7 +17,7 @@ use core\user\UserManager;
 
 use core\form\custom\TopicFormFactory;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use core\debug\Logger;
 
@@ -40,15 +40,15 @@ class Topic extends AbstractController {
 	/**
 	 * 
 	 */
-	public function chooseTypeAction(){
+	public function chooseTypeAction() {
 		// set the nonce to each link that will be created, in an invisible manner for the view
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
 		$topicsFor = array();
-		if ($forums) {
+		if( $forums ) {
 			$metaRepo = $this->em->getRepository( 'ForumMeta' );
-			foreach ( $forums as $f ) {
+			foreach( $forums as $f ) {
 				$acceptedTopics = $metaRepo->getAcceptableTopics( $f->getId() );
-				array_walk( $acceptedTopics, function (&$item, $key){
+				array_walk( $acceptedTopics, function (&$item, $key) {
 					$item = TopicType::createById( $item );
 				} );
 				$topicsFor[$f->getId()] = $acceptedTopics;
@@ -65,14 +65,14 @@ class Topic extends AbstractController {
 	 * @GetAttributes({typeId, forumId})
 	 * [topic_id(opt, only for edit)]
 	 */
-	public function displayFormAction($parameters){
+	public function displayFormAction() {
 		$get = $this->frontController->getRequest()->query;
 		$topicType = $get->get( 'typeId' );
 		$forumId = $get->get( 'forumId' );
 		
 		// check if the forum accept the custom type proposed 
 		$forumMeta = $this->em->getRepository( 'ForumMeta' );
-		if (! $forumMeta->isAcceptedBy( $forumId, $topicType )) {
+		if( !$forumMeta->isAcceptedBy( $forumId, $topicType ) ) {
 			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
 			$this->frontController->doRedirect( 'home' );
 		}
@@ -80,15 +80,15 @@ class Topic extends AbstractController {
 		// retrieve information and then pass to the form
 		// if existing information, we put as action "edit" instead of create
 		$form = TopicFormFactory::createForm( $topicType, $this->frontController );
-		if (! $form) {
-			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array('%type%' => $topicType ) ), 'error' );
+		if( !$form ) {
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
 			$this->frontController->doRedirect( 'Topic', 'chooseType' );
 		}
 		$module = '';
 		
-		$getArgs = array('typeId' => $topicType );
+		$getArgs = array( 'typeId' => $topicType );
 		// now the form is valid we check if we can already fill it with previous value (from db)
-		if (count( $parameters ) >= 3) {
+		if( count( $parameters ) >= 3 ) {
 			$topic_id = $parameters[2];
 			
 			$topicRepo = $this->em->getRepository( 'TopicBase' );
@@ -96,7 +96,7 @@ class Topic extends AbstractController {
 			
 			// check if the class correspond to what is attempted !
 			$customClass = TopicType::translateTypeIdToName( $topicType );
-			if (! $currentTopic instanceof $customClass) {
+			if( !$currentTopic instanceof $customClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 				$this->frontController->doRedirect( 'forum', 'viewAll' );
 			}
@@ -124,7 +124,7 @@ class Topic extends AbstractController {
 	 * @GetAttributes({topicId, forumId})
 	 * [p, n]
 	 */
-	public function displaySingleTopicAction($parameters){
+	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
@@ -137,17 +137,17 @@ class Topic extends AbstractController {
 		$posts = $this->em->getRepository( 'PostBase' )->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page );
 		$max_pages = $base->getNumPosts();
 		$max_pages = ceil( $max_pages / $num_per_page );
-		if (! $max_pages) {
+		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array(), array('topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
 		
 		// condition to satisfy to be able to write a comment
-		if (! $this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role )) {
-			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array(), array('typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
+		if( !$this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
+			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array(), array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
 		} else {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
 		}
@@ -167,14 +167,14 @@ class Topic extends AbstractController {
 	 * @Nonce(createTopic)
 	 * @GetAttributes({typeId, forumId})
 	 */
-	public function createAction($parameters){
+	public function createAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$forumId = $get->get( 'forumId' );
 		
 		// check if the forum accept the custom type proposed 
 		$forumMeta = $this->em->getRepository( 'ForumMeta' );
-		if (! $forumMeta->isAcceptedBy( $forumId, $typeId )) {
+		if( !$forumMeta->isAcceptedBy( $forumId, $typeId ) ) {
 			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
 			$this->frontController->doRedirectUrl( 'home' );
 		}
@@ -191,7 +191,7 @@ class Topic extends AbstractController {
 		$base->setIsSticky( 0 );
 		$base->setLastposter( $this->em->getReference( 'User', UserManager::$nullUserId ) );
 		$base->setNumPosts( 0 );
-		if (! $this->frontController->getCurrentUser()->getId()) {
+		if( !$this->frontController->getCurrentUser()->getId() ) {
 			$base->setPoster( $this->em->getReference( 'User', UserManager::$anonUserId ) );
 		} else {
 			$base->setPoster( $this->frontController->getCurrentUser() );
@@ -204,7 +204,7 @@ class Topic extends AbstractController {
 		$topic = $form->createSpecificTopic( $base );
 		$this->em->persist( $base );
 		$this->em->persist( $topic );
-		if (! $this->em->flushSafe()) {
+		if( !$this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ), 'error' );
 			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
@@ -217,7 +217,7 @@ class Topic extends AbstractController {
 		
 		//TODO redirection vers le topic en question
 		$this->frontController->addMessage( __( 'The creation of the topic was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array('topicId' => $topicId, 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
 	/**
@@ -225,7 +225,7 @@ class Topic extends AbstractController {
 	 * @Nonce(editTopic)
 	 * @GetAttributes({typeId, topicId})
 	 */
-	public function editAction($parameters){
+	public function editAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$topicId = $get->get( 'topicId' );
@@ -236,14 +236,14 @@ class Topic extends AbstractController {
 		
 		$topicRepo = $this->em->getRepository( 'TopicBase' );
 		$existing = $topicRepo->findFullTopic( $topicId );
-		if (! $existing) {
+		if( !$existing ) {
 			$this->frontController->addMessage( __( 'The given id for the edition was invalid' ), 'error' );
 			$this->frontController->doRedirect( 'topic', 'displayForm' );
 		}
 		
 		// check if the forum accept the custom type proposed 
 		$customClass = TopicType::translateTypeIdToName( $typeId );
-		if (! $existing instanceof $customClass) {
+		if( !$existing instanceof $customClass ) {
 			$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 			$this->frontController->doRedirect( 'topic', 'displayForm' );
 		}
@@ -254,7 +254,7 @@ class Topic extends AbstractController {
 		$existing = $form->createSpecificTopic( $base, $existing );
 		$this->em->persist( $base );
 		$this->em->persist( $existing );
-		if (! $this->em->flushSafe()) {
+		if( !$this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'There was a problem during the edition of the topic' ), 'error' );
 			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
@@ -269,62 +269,53 @@ class Topic extends AbstractController {
 	/**
 	 * Wargning, do no forget to decrease the num topics of the forum
 	 * @Nonce(deleteTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function deleteAction($parameters){
-	}
+	public function deleteAction() {}
 	
 	/**
 	 * Warning, do not forget to increase the num topics of the forum
 	 * @Nonce(undeleteTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function undeleteAction($parameters){
-	}
+	public function undeleteAction() {}
 	
 	//	/**
 	//	 * @Nonce(moveTopic)
-	//	 * @Parameters(1)
 	//	 * Parameters[topicId]
 	//	 */
-	//	public function moveAction($parameters) {
+	//	public function moveAction() {
 	//
 	//	}
 	
 
 	/**
 	 * @Nonce(stickTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function stickAction($parameters){
-	
+	public function stickAction() {
+
 	}
 	/**
 	 * @Nonce(unstickTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function unstickAction($parameters){
-	
+	public function unstickAction() {
+
 	}
 	/**
 	 * @Nonce(closeTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function closeAction($parameters){
-	
+	public function closeAction() {
+
 	}
 	/**
 	 * @Nonce(openTopic)
-	 * @Parameters(1)
 	 * Parameters[topicId]
 	 */
-	public function openAction($parameters){
-	
+	public function openAction() {
+
 	}
 
 	//	public function viewAllAction($parameters) {

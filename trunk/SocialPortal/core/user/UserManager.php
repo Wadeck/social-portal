@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
 
 use core\security\Crypto;
 
-use core\Request;
+use core\http\Request;
 
 class UserManager {
 	public static $nullUserId = 1;
@@ -241,7 +241,7 @@ class UserManager {
 		$user->setActivationKey( $activationKey );
 		
 		// @ to enable the unix timestamp
-		$date = new \DateTime( '@'.$time );		
+		$date = new \DateTime( '@' . $time );
 		
 		$user->setRegistered( $date );
 		$user->setRoles( $role );

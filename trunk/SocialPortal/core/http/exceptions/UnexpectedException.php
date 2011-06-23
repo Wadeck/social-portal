@@ -7,13 +7,8 @@ namespace core\http\exceptions;
  * @see CustomException
  * @see FrontController
  */
-class UnexpectedException extends CustomException{
-	public function __construct(\Exception $e){
-		parent::__construct(500, __(
-			'A unexpected exception occurred: %exception_message%',
-			array(
-				'%exception_message%' => $e->getMessage(),
-			)
-		));
+class UnexpectedException extends CustomException {
+	public function __construct(\Exception $e) {
+		parent::__construct( 500, __( 'A unexpected exception occurred: %exception_message%', array( '%exception_message%' => $e->getMessage() ) ) );
 	}
 }

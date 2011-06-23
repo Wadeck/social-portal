@@ -26,34 +26,28 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  *
  * @since 2.0
  */
-class DateType extends Type
-{
-    public function getName()
-    {
-        return Type::DATE;
-    }
-
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDateTypeDeclarationSQL($fieldDeclaration);
-    }
-
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return ($value !== null) 
-            ? $value->format($platform->getDateFormatString()) : null;
-    }
-    
-    public function convertToPHPValue($value, AbstractPlatform $platform)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $val = \DateTime::createFromFormat('!'.$platform->getDateFormatString(), $value);
-        if (!$val) {
-            throw ConversionException::conversionFailed($value, $this->getName());
-        }
-        return $val;
-    }
+class DateType extends Type {
+	public function getName() {
+		return Type::DATE;
+	}
+	
+	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+		return $platform->getDateTypeDeclarationSQL( $fieldDeclaration );
+	}
+	
+	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+		return ($value !== null) ? $value->format( $platform->getDateFormatString() ) : null;
+	}
+	
+	public function convertToPHPValue($value, AbstractPlatform $platform) {
+		if( $value === null ) {
+			return null;
+		}
+		
+		$val = \DateTime::createFromFormat( '!' . $platform->getDateFormatString(), $value );
+		if( !$val ) {
+			throw ConversionException::conversionFailed( $value, $this->getName() );
+		}
+		return $val;
+	}
 }

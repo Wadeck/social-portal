@@ -50,15 +50,15 @@ class RegisterForm extends Form {
 <?php
 	}*/
 	
-	public function getUsername(){
+	public function getUsername() {
 		return $this->ready ? $this->data['register_username'] : null;
 	}
 	
-	public function getPassword(){
+	public function getPassword() {
 		return $this->ready ? $this->data['register_password'] : null;
 	}
 	
-	public function getEmail(){
+	public function getEmail() {
 		return $this->ready ? $this->data['register_email'] : null;
 	}
 }

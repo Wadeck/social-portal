@@ -26,104 +26,104 @@ use Doctrine\Common\Annotations\Annotation;
 /* Annotations */
 
 final class Entity extends Annotation {
-    public $repositoryClass;
+	public $repositoryClass;
 }
 final class MappedSuperclass extends Annotation {}
 final class InheritanceType extends Annotation {}
 final class DiscriminatorColumn extends Annotation {
-    public $name;
-    public $fieldName; // field name used in non-object hydration (array/scalar)
-    public $type;
-    public $length;
+	public $name;
+	public $fieldName; // field name used in non-object hydration (array/scalar)
+	public $type;
+	public $length;
 }
 final class DiscriminatorMap extends Annotation {}
 final class Id extends Annotation {}
 final class GeneratedValue extends Annotation {
-    public $strategy = 'AUTO';
+	public $strategy = 'AUTO';
 }
 final class Version extends Annotation {}
 final class JoinColumn extends Annotation {
-    public $name;
-    public $fieldName; // field name used in non-object hydration (array/scalar)
-    public $referencedColumnName = 'id';
-    public $unique = false;
-    public $nullable = true;
-    public $onDelete;
-    public $onUpdate;
-    public $columnDefinition;
+	public $name;
+	public $fieldName; // field name used in non-object hydration (array/scalar)
+	public $referencedColumnName = 'id';
+	public $unique = false;
+	public $nullable = true;
+	public $onDelete;
+	public $onUpdate;
+	public $columnDefinition;
 }
 final class JoinColumns extends Annotation {}
 final class Column extends Annotation {
-    public $type = 'string';
-    public $length;
-    // The precision for a decimal (exact numeric) column (Applies only for decimal column)
-    public $precision = 0;
-    // The scale for a decimal (exact numeric) column (Applies only for decimal column)
-    public $scale = 0;
-    public $unique = false;
-    public $index = false;
-    public $nullable = false;
-    public $name;
-    public $options = array();
-    public $columnDefinition;
-    // TODO implement this, default value set in constructor
-    public $default;
+	public $type = 'string';
+	public $length;
+	// The precision for a decimal (exact numeric) column (Applies only for decimal column)
+	public $precision = 0;
+	// The scale for a decimal (exact numeric) column (Applies only for decimal column)
+	public $scale = 0;
+	public $unique = false;
+	public $index = false;
+	public $nullable = false;
+	public $name;
+	public $options = array();
+	public $columnDefinition;
+	// TODO implement this, default value set in constructor
+	public $default;
 }
 final class OneToOne extends Annotation {
-    public $targetEntity;
-    public $mappedBy;
-    public $inversedBy;
-    public $cascade;
-    public $fetch = 'LAZY';
-    public $orphanRemoval = false;
+	public $targetEntity;
+	public $mappedBy;
+	public $inversedBy;
+	public $cascade;
+	public $fetch = 'LAZY';
+	public $orphanRemoval = false;
 }
 final class OneToMany extends Annotation {
-    public $mappedBy;
-    public $targetEntity;
-    public $cascade;
-    public $fetch = 'LAZY';
-    public $orphanRemoval = false;
+	public $mappedBy;
+	public $targetEntity;
+	public $cascade;
+	public $fetch = 'LAZY';
+	public $orphanRemoval = false;
 }
 final class ManyToOne extends Annotation {
-    public $targetEntity;
-    public $cascade;
-    public $fetch = 'LAZY';
-    public $inversedBy;
+	public $targetEntity;
+	public $cascade;
+	public $fetch = 'LAZY';
+	public $inversedBy;
 }
 final class ManyToMany extends Annotation {
-    public $targetEntity;
-    public $mappedBy;
-    public $inversedBy;
-    public $cascade;
-    public $fetch = 'LAZY';
+	public $targetEntity;
+	public $mappedBy;
+	public $inversedBy;
+	public $cascade;
+	public $fetch = 'LAZY';
 }
 final class ElementCollection extends Annotation {
-    public $tableName;
+	public $tableName;
 }
 final class Table extends Annotation {
-    public $name;
-    public $schema;
-    public $indexes;
-    public $uniqueConstraints;
+	public $name;
+	public $schema;
+	public $indexes;
+	public $uniqueConstraints;
 }
 final class UniqueConstraint extends Annotation {
-    public $name;
-    public $columns;
+	public $name;
+	public $columns;
 }
 final class Index extends Annotation {
-    public $name;
-    public $columns;
+	public $name;
+	public $columns;
 }
 final class JoinTable extends Annotation {
-    public $name;
-    public $schema;
-    public $joinColumns = array();
-    public $inverseJoinColumns = array();
+	public $name;
+	public $schema;
+	public $joinColumns = array();
+	public $inverseJoinColumns = array();
 }
 final class SequenceGenerator extends Annotation {
-    public $sequenceName;
-    public $allocationSize = 1;
-    public $initialValue = 1;
+	public $sequenceName;
+	public $allocationSize = 1;
+	public $initialValue = 1;
 }
 final class ChangeTrackingPolicy extends Annotation {}
 final class OrderBy extends Annotation {}

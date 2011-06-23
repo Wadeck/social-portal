@@ -32,21 +32,18 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class InExpression extends Node
-{
-    public $not;
-    public $pathExpression;
-    public $literals = array();
-    public $subselect;
-
-    public function __construct($pathExpression)
-    {
-        $this->pathExpression = $pathExpression;
-    }
-
-    public function dispatch($sqlWalker)
-    {
-        return $sqlWalker->walkInExpression($this);
-    }
+class InExpression extends Node {
+	public $not;
+	public $pathExpression;
+	public $literals = array();
+	public $subselect;
+	
+	public function __construct($pathExpression) {
+		$this->pathExpression = $pathExpression;
+	}
+	
+	public function dispatch($sqlWalker) {
+		return $sqlWalker->walkInExpression( $this );
+	}
 }
 

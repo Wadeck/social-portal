@@ -2,7 +2,7 @@
 
 namespace core\form\custom;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use socialportal\model\Forum;
 

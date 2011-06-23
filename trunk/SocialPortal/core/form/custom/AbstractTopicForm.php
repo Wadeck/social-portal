@@ -18,7 +18,7 @@ abstract class AbstractTopicForm extends Form implements iTopicForm {
 	protected $globalMode = 2;
 	protected function __construct($formName, FrontController $front, $submitName = '', $submitDescription = '') {
 		parent::__construct( $formName, $front, $submitName, $submitDescription );
-		$this->setCss('topic-form rounded-box', 'topic_form.css' );
+		$this->setCss( 'topic-form rounded-box', 'topic_form.css' );
 	}
 	
 	protected function setGlobalMode($globalMode = 1) {
@@ -27,12 +27,12 @@ abstract class AbstractTopicForm extends Form implements iTopicForm {
 	
 	/** Children use only, to build the different forms */
 	protected function addInputField(Field $field) {
-//		$this->fields[] = $field;
-//		$field->setMode( $this->globalMode );
-//		if( $field->isFileAccepter() ) {
-//			$this->mustAcceptFile = true;
-//		}
-		parent::addInputField($field);
+		//		$this->fields[] = $field;
+		//		$field->setMode( $this->globalMode );
+		//		if( $field->isFileAccepter() ) {
+		//			$this->mustAcceptFile = true;
+		//		}
+		parent::addInputField( $field );
 		$field->setMode( $this->globalMode );
 	}
 }

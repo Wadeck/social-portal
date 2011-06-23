@@ -1,9 +1,17 @@
 <h3>Tools page</h3>
-<?php $vars['helper']->insertMessage(); ?>
+<?php
+$vars['helper']->insertMessage();
+?>
 <ol>
-<?php foreach ($vars['links'] as $name => $link): ?>
-	<li>
-		<a href="<?php echo $link; ?>"><?php echo $name; ?></a>
-	</li>
-<?php endforeach; ?>
+<?php
+foreach( $vars['links'] as $name => $link ) :
+	?>
+	<li><a href="<?php
+	echo $link;
+	?>"><?php
+	echo $name;
+	?></a></li>
+<?php
+endforeach
+?>
 </ol>

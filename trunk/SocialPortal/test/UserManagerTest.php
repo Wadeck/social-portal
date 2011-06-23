@@ -7,7 +7,7 @@ use socialportal\model\User;
 use core\debug\ReflectionHelper;
 use core\DoctrineLink;
 use core\http\storage\ArraySessionStorage;
-use core\Request;
+use core\http\Request;
 use core\user\UserManager;
 require_once 'PHPUnit\Framework\TestCase.php';
 
@@ -27,7 +27,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase {
 	
 	private $username;
 	private $password;
-	private $email; 
+	private $email;
 	
 	/**
 	 * Prepares the environment before running a test.
@@ -49,7 +49,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase {
 		$user->setRandomKey( Crypto::createRandomKey() );
 		
 		$idRefl = ReflectionHelper::retrieveProperty( $user, 'id' );
-		$idRefl->setValue($user, 123);
+		$idRefl->setValue( $user, 123 );
 		
 		$this->um = new UserManager( $request, new UserProviderMock( $user ) );
 		$propRefl = ReflectionHelper::retrieveProperty( $this->um, 'user' );
@@ -85,7 +85,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testReversibilityConnectRememberMe() {
-		ReflectionHelper::useMethod( $this->um, 'connectUser', array($this->username, $this->password, true) );
+		ReflectionHelper::useMethod( $this->um, 'connectUser', array( $this->username, $this->password, true ) );
 		$result = ReflectionHelper::useMethod( $this->um, 'retrieveFromCookie' );
 		$this->assertTrue( $result, 'Cookie retrieval not working after connectUser' );
 		$result = ReflectionHelper::useMethod( $this->um, 'retrieveFromSession' );
@@ -96,7 +96,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue( $result, 'Session retrieval not working after connectUser' );
 	}
 	public function testReversibilityConnectForgetMe() {
-		ReflectionHelper::useMethod( $this->um, 'connectUser', array($this->username, $this->password, false) );
+		ReflectionHelper::useMethod( $this->um, 'connectUser', array( $this->username, $this->password, false ) );
 		$result = ReflectionHelper::useMethod( $this->um, 'retrieveFromSession' );
 		$this->assertTrue( $result, 'Session retrieval not working after connectUser' );
 		$result = ReflectionHelper::useMethod( $this->um, 'retrieveFromCookie' );
@@ -121,12 +121,13 @@ class UserProviderMock implements UserProviderInterface {
 	public function getUserByUsername($username) {
 		return $this->user;
 	}
-/* (non-PHPdoc)
+	/* (non-PHPdoc)
 	 * @see core\user.UserProviderInterface::addNewUser()
 	 */
 	public function addNewUser(User $user) {
 		// TODO Auto-generated method stub
-		
+	
+
 	}
 
 }

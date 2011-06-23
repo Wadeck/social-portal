@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 namespace Doctrine\ORM\Query\AST;
 
 /**
@@ -32,21 +32,18 @@ namespace Doctrine\ORM\Query\AST;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-class CollectionMemberExpression extends Node
-{
-    public $entityExpression;
-    public $collectionValuedPathExpression;
-    public $not;
-
-    public function __construct($entityExpr, $collValuedPathExpr)
-    {
-        $this->entityExpression = $entityExpr;
-        $this->collectionValuedPathExpression = $collValuedPathExpr;
-    }
-
-    public function dispatch($walker)
-    {
-        return $walker->walkCollectionMemberExpression($this);
-    }
+class CollectionMemberExpression extends Node {
+	public $entityExpression;
+	public $collectionValuedPathExpression;
+	public $not;
+	
+	public function __construct($entityExpr, $collValuedPathExpr) {
+		$this->entityExpression = $entityExpr;
+		$this->collectionValuedPathExpression = $collValuedPathExpr;
+	}
+	
+	public function dispatch($walker) {
+		return $walker->walkCollectionMemberExpression( $this );
+	}
 }
 

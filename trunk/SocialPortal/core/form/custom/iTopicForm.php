@@ -8,7 +8,7 @@ interface iTopicForm {
 	/**
 	 * Given a specific topic, we need to create the form
 	 * @param specific topic the additionnal information for that $base
-	 *	it contains the topic base !
+	 * it contains the topic base !
 	 */
 	function setupWithTopic($specific);
 	

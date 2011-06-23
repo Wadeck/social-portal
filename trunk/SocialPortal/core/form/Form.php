@@ -2,7 +2,7 @@
 
 namespace core\form;
 
-use core\topics\templates\iInsertable;
+use core\templates\iInsertable;
 
 use core\debug\Logger;
 
@@ -155,7 +155,8 @@ class Form implements iInsertable {
 		?>
 <input type="submit" name="<?php
 		echo $name;
-		?>" class="button" value="<?php
+		?>" class="button"
+	value="<?php
 		echo $description;
 		?>"
 	onClick="return validForm(this);">
@@ -272,7 +273,7 @@ class Form implements iInsertable {
 	/**
 	 * After this call, we can use either validate / display
 	 */
-	public function setupWithArray($withErrors=true, $forceEmptyForm = false) {
+	public function setupWithArray($withErrors = true, $forceEmptyForm = false) {
 		if( $forceEmptyForm ) {
 			$args = array();
 		} else {

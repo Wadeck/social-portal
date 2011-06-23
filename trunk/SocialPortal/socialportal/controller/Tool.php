@@ -3,7 +3,7 @@
 namespace socialportal\controller;
 use core\user\UserRoles;
 
-use core\topics\TopicType;
+use core\tools\TopicType;
 
 use core\user\UserManager;
 
@@ -22,7 +22,7 @@ use core\AbstractController;
  *
  */
 class Tool extends AbstractController {
-	public function indexAction($parameters) {
+	public function indexAction() {
 		$refl = new \ReflectionClass( $this );
 		$currentClass = $refl->getShortName();
 		$parentClass = $refl->getParentClass();
@@ -46,20 +46,20 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayAllTools' );
 	}
 	
-	public function generateErrorMessageAction($parameters) {
+	public function generateErrorMessageAction() {
 		$this->frontController->addMessage( 'Test error', 'error' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
-	public function generateCorrectMessageAction($parameters) {
+	public function generateCorrectMessageAction() {
 		$this->frontController->addMessage( 'Test correct', 'correct' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
-	public function generateInfoMessageAction($parameters) {
+	public function generateInfoMessageAction() {
 		$this->frontController->addMessage( 'Test info' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
-	public function directCreatePasswordAction($parameters) {
+	public function directCreatePasswordAction() {
 		if( count( $parameters ) >= 2 ) {
 			$randomkey = $parameters[0];
 			$password = $parameters[1];
@@ -74,7 +74,7 @@ class Tool extends AbstractController {
 	/**
 	 * Could be long as we want, cause it is called only once per installation
 	 */
-	public function createBaseForumAction($parameters) {
+	public function createBaseForumAction() {
 		$forumDiscussion = new Forum();
 		$forumDiscussion->setName( 'Discussion' );
 		$forumDiscussion->setDescription( 'Place where people can speak with others freely' );
@@ -124,7 +124,7 @@ class Tool extends AbstractController {
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TopicType::$typeActivity ) );
 			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TopicType::$typeFreeText ) );
 			if( $result ) {
-				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ) , 'correct');
+				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ), 'correct' );
 			} else {
 				$this->frontController->addMessage( __( 'The metadata were not added/modified' ), 'info' );
 			}
@@ -134,7 +134,7 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
-	public function createBaseUserAction($parameters) {
+	public function createBaseUserAction() {
 		$anonUser = UserManager::getAnonymousUser();
 		$nullUser = UserManager::getNullUser();
 		$admin = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, 0 );
@@ -142,14 +142,14 @@ class Tool extends AbstractController {
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Creation of the default users complete' ),'correct' );
+			$this->frontController->addMessage( __( 'Creation of the default users complete' ), 'correct' );
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the default users failed !' ),'error' );
+			$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
-	public function recountAllTopicsAction($parameters) {
+	public function recountAllTopicsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
 		$forums = $forumRep->findAll();
 		$total = 0;
@@ -163,19 +163,19 @@ class Tool extends AbstractController {
 		if( $this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'Recount topics complete total=%total%', array( '%total%' => $total ) ), 'info' );
 		} else {
-			$this->frontController->addMessage( __( 'Recount failed !' ),'error' );
+			$this->frontController->addMessage( __( 'Recount failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
-	public function recountAllPostsAction($parameters) {
+	public function recountAllPostsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
 		$forums = $forumRep->findAll();
 		$total = 0;
 		$error = false;
 		foreach( $forums as $f ) {
 			$count = $forumRep->recountAllPosts( $f->getId() );
-			if(false === $count){
+			if( false === $count ) {
 				$error = true;
 				break;
 			}
@@ -185,9 +185,9 @@ class Tool extends AbstractController {
 		}
 		
 		if( !$error && $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ) , 'info');
+			$this->frontController->addMessage( __( 'Recount posts complete total=%total%', array( '%total%' => $total ) ), 'info' );
 		} else {
-			$this->frontController->addMessage( __( 'Recount failed !' ),'error' );
+			$this->frontController->addMessage( __( 'Recount failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}

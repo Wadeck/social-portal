@@ -34,86 +34,80 @@ use Doctrine\ORM\PersistentCollection;
  * @author Roman Borschel <roman@code-factory.org>
  * @todo Remove
  */
-class OneToManyPersister extends AbstractCollectionPersister
-{
-    /**
-     * Generates the SQL UPDATE that updates a particular row's foreign
-     * key to null.
-     *
-     * @param PersistentCollection $coll
-     * @return string
-     * @override
-     */
-    protected function _getDeleteRowSQL(PersistentCollection $coll)
-    {
-        $mapping = $coll->getMapping();
-        $targetClass = $this->_em->getClassMetadata($mapping->getTargetEntityName());
-        $table = $targetClass->getTableName();
+class OneToManyPersister extends AbstractCollectionPersister {
+	/**
+	 * Generates the SQL UPDATE that updates a particular row's foreign
+	 * key to null.
+	 *
+	 * @param PersistentCollection $coll
+	 * @return string
+	 * @override
+	 */
+	protected function _getDeleteRowSQL(PersistentCollection $coll) {
+		$mapping = $coll->getMapping();
+		$targetClass = $this->_em->getClassMetadata( $mapping->getTargetEntityName() );
+		$table = $targetClass->getTableName();
+		
+		$ownerMapping = $targetClass->getAssociationMapping( $mapping['mappedBy'] );
+		
+		$setClause = '';
+		foreach( $ownerMapping->sourceToTargetKeyColumns as $sourceCol => $targetCol ) {
+			if( $setClause != '' )
+				$setClause .= ', ';
+			$setClause .= "$sourceCol = NULL";
+		}
+		
+		$whereClause = '';
+		foreach( $targetClass->getIdentifierColumnNames() as $idColumn ) {
+			if( $whereClause != '' )
+				$whereClause .= ' AND ';
+			$whereClause .= "$idColumn = ?";
+		}
+		
+		return array( "UPDATE $table SET $setClause WHERE $whereClause", $this->_uow->getEntityIdentifier( $element ) );
+	}
+	
+	protected function _getInsertRowSQL(PersistentCollection $coll) {
+		return "UPDATE xxx SET foreign_key = yyy WHERE foreign_key = zzz";
+	}
+	
+	/* Not used for OneToManyPersister */
+	protected function _getUpdateRowSQL(PersistentCollection $coll) {
+		return;
+	}
+	
+	/**
+	 * Generates the SQL UPDATE that updates all the foreign keys to null.
+	 *
+	 * @param PersistentCollection $coll
+	 */
+	protected function _getDeleteSQL(PersistentCollection $coll) {
 
-        $ownerMapping = $targetClass->getAssociationMapping($mapping['mappedBy']);
-
-        $setClause = '';
-        foreach ($ownerMapping->sourceToTargetKeyColumns as $sourceCol => $targetCol) {
-            if ($setClause != '') $setClause .= ', ';
-            $setClause .= "$sourceCol = NULL";
-        }
-
-        $whereClause = '';
-        foreach ($targetClass->getIdentifierColumnNames() as $idColumn) {
-            if ($whereClause != '') $whereClause .= ' AND ';
-            $whereClause .= "$idColumn = ?";
-        }
-
-        return array("UPDATE $table SET $setClause WHERE $whereClause", $this->_uow->getEntityIdentifier($element));
-    }
-
-    protected function _getInsertRowSQL(PersistentCollection $coll)
-    {
-        return "UPDATE xxx SET foreign_key = yyy WHERE foreign_key = zzz";
-    }
-
-    /* Not used for OneToManyPersister */
-    protected function _getUpdateRowSQL(PersistentCollection $coll)
-    {
-        return;
-    }
-
-    /**
-     * Generates the SQL UPDATE that updates all the foreign keys to null.
-     *
-     * @param PersistentCollection $coll
-     */
-    protected function _getDeleteSQL(PersistentCollection $coll)
-    {
-
-    }
-
-    /**
-     * Gets the SQL parameters for the corresponding SQL statement to delete
-     * the given collection.
-     *
-     * @param PersistentCollection $coll
-     */
-    protected function _getDeleteSQLParameters(PersistentCollection $coll)
-    {}
-
-    /**
-     * Gets the SQL parameters for the corresponding SQL statement to insert the given
-     * element of the given collection into the database.
-     *
-     * @param PersistentCollection $coll
-     * @param mixed $element
-     */
-    protected function _getInsertRowSQLParameters(PersistentCollection $coll, $element)
-    {}
-
-    /**
-     * Gets the SQL parameters for the corresponding SQL statement to delete the given
-     * element from the given collection.
-     *
-     * @param PersistentCollection $coll
-     * @param mixed $element
-     */
-    protected function _getDeleteRowSQLParameters(PersistentCollection $coll, $element)
-    {}
+	}
+	
+	/**
+	 * Gets the SQL parameters for the corresponding SQL statement to delete
+	 * the given collection.
+	 *
+	 * @param PersistentCollection $coll
+	 */
+	protected function _getDeleteSQLParameters(PersistentCollection $coll) {}
+	
+	/**
+	 * Gets the SQL parameters for the corresponding SQL statement to insert the given
+	 * element of the given collection into the database.
+	 *
+	 * @param PersistentCollection $coll
+	 * @param mixed $element
+	 */
+	protected function _getInsertRowSQLParameters(PersistentCollection $coll, $element) {}
+	
+	/**
+	 * Gets the SQL parameters for the corresponding SQL statement to delete the given
+	 * element from the given collection.
+	 *
+	 * @param PersistentCollection $coll
+	 * @param mixed $element
+	 */
+	protected function _getDeleteRowSQLParameters(PersistentCollection $coll, $element) {}
 }

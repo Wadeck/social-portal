@@ -1,11 +1,11 @@
 <?php
 
-namespace core\topics\templates;
+namespace core\templates;
 
 use core\FrontController;
 
 /**
- *	Simple object implementing iInsertable
+ * Simple object implementing iInsertable
  */
 class MessageInsertTemplate implements iInsertable {
 	/** @var FrontController */
@@ -23,12 +23,14 @@ class MessageInsertTemplate implements iInsertable {
 	}
 	
 	public function insert() {
-		$this->frontController->getViewHelper()->addCssFile('messages.css');
+		$this->frontController->getViewHelper()->addCssFile( 'messages.css' );
 		?>
-		<div class="rounded-box pagged">
-			<div class="message info centered"><?php echo $this->message; ?></div>
-		</div>
-	<?php
+<div class="rounded-box pagged">
+<div class="message info centered"><?php
+		echo $this->message;
+		?></div>
+</div>
+<?php
 	}
 
 }

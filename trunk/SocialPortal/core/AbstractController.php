@@ -17,9 +17,9 @@ class AbstractController {
 	public final function setEntityManager(EntityManager $em) {
 		$this->em = $em;
 	}
-
-	public function actionBefore($action, $parameters) {}
-	public function actionAfter($action, $parameters) {}
+	
+	public function actionBefore($action) {}
+	public function actionAfter($action) {}
 
 	// other function with names xxxAction where xxx is the name of the action with [parameters]
 }

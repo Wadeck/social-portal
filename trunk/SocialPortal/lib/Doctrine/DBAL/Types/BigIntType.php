@@ -29,20 +29,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
  * @author robo
  * @since 2.0
  */
-class BigIntType extends Type
-{
-    public function getName()
-    {
-        return Type::BIGINT;
-    }
-
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getBigIntTypeDeclarationSQL($fieldDeclaration);
-    }
-
-    public function getBindingType()
-    {
-        return \PDO::PARAM_INT;
-    }
+class BigIntType extends Type {
+	public function getName() {
+		return Type::BIGINT;
+	}
+	
+	public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+		return $platform->getBigIntTypeDeclarationSQL( $fieldDeclaration );
+	}
+	
+	public function getBindingType() {
+		return \PDO::PARAM_INT;
+	}
 }

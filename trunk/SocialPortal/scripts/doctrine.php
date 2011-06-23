@@ -25,15 +25,9 @@ $_SERVER['argv'][] = 'orm:generate-proxies';
 //$_SERVER['argv'][] = 'annotation'; 
 //$_SERVER['argv'][] = '.\mapping';
 
+
 require '../core/ClassLoader.php';
-core\ClassLoader::getInstance()
-->addMatch('socialportal')
-->addMatch('Doctrine', 'lib')
-->addMatch('Symfony', 'lib\Doctrine')
-->addMatch('Proxy', '\\socialportal\\proxy')
-->addMatch('core')
-->setRootDirectory( implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )
-->register();
+core\ClassLoader::getInstance()->addMatch( 'socialportal' )->addMatch( 'Doctrine', 'lib' )->addMatch( 'Symfony', 'lib\Doctrine' )->addMatch( 'Proxy', '\\socialportal\\proxy' )->addMatch( 'core' )->setRootDirectory( implode( DIRECTORY_SEPARATOR, array_slice( explode( DIRECTORY_SEPARATOR, getcwd() ), 0, -1 ) ) )->register();
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( __DIR__ . '\\socialportal\\model' ) );
@@ -43,13 +37,11 @@ $config->setProxyDir( __DIR__ . '/Proxies' );
 $config->setProxyNamespace( 'Proxies' );
 
 //TODO refactor this with create_database.php
-$connectionParams = array( 'driver' => 'pdo_mysql', 'user' => 'doctrine_user', 'password' => 'doctrine_s3cr3t', 
-		'dbname' => 'social_portal', 'host' => 'localhost', 'collation' => 'utf8_general_ci' );
+$connectionParams = array( 'driver' => 'pdo_mysql', 'user' => 'doctrine_user', 'password' => 'doctrine_s3cr3t', 'dbname' => 'social_portal', 'host' => 'localhost', 'collation' => 'utf8_general_ci' );
 
 $em = \Doctrine\ORM\EntityManager::create( $connectionParams, $config );
 
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet( 
-		array( 'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper( $entityManager ) ) );
+$helperSet = new \Symfony\Component\Console\Helper\HelperSet( array( 'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper( $entityManager ) ) );
 
 foreach( $GLOBALS as $helperSetCandidate ) {
 	if( $helperSetCandidate instanceof \Symfony\Component\Console\Helper\HelperSet ) {

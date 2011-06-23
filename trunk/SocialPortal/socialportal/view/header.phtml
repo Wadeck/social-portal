@@ -1,7 +1,13 @@
 <body>
 <!-- second version, we remove the responsability of the header to determine if the user can or cannot be displayed -->
 <div id="header">
-	<h1 id="logo"><a href="<?php $vars['helper']->insertHref('') ?>" title="Home"><?php echo __( 'Social Portal' ); ?></a></h1>
-	<?php $vars['helper']->insertModule( 'connection', 'displayUserPanel' ); ?>
+<h1 id="logo"><a href="<?php
+$vars['helper']->insertHref( '' )?>"
+	title="Home"><?php
+	echo __( 'Social Portal' );
+	?></a></h1>
+	<?php
+	$vars['helper']->insertModule( 'connection', 'displayUserPanel' );
+	?>
 	<div class="clear_both"></div>
 </div>

@@ -1,9 +1,17 @@
 <div id="admin_panel">
-	<ol>
-	<?php foreach ($vars['links'] as $name => $link): ?>
-		<li>
-			<a class="button" href="<?php echo $link; ?>"><?php echo $name; ?></a>
-		</li>
-	<?php endforeach; ?>
+<ol>
+	<?php
+	foreach( $vars['links'] as $name => $link ) :
+		?>
+		<li><a class="button" href="<?php
+		echo $link;
+		?>"><?php
+		echo $name;
+		?></a>
+	</li>
+	<?php
+	endforeach
+	;
+	?>
 	</ol>
 </div>

@@ -41,7 +41,7 @@ class ForumRepository extends EntityRepository {
 		
 		$forum = $this->_em->find( 'Forum', $forumId );
 		$forum->setNumTopics( $count );
-		if(!$this->_em->persistAndFlush( $forum )){
+		if( !$this->_em->persistAndFlush( $forum ) ) {
 			return false;
 		}
 		
