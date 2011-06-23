@@ -334,6 +334,10 @@ class SchemaTool {
 		$columnType = $mapping['type'];
 		
 		$options = array();
+		//XXX add comment support
+		if( isset($mapping['comment']) ){
+			$options['comment'] = $mapping['comment'];
+		}
 		$options['length'] = isset( $mapping['length'] ) ? $mapping['length'] : null;
 		$options['notnull'] = isset( $mapping['nullable'] ) ? !$mapping['nullable'] : true;
 		if( $class->isInheritanceTypeSingleTable() && count( $class->parentClasses ) > 0 ) {

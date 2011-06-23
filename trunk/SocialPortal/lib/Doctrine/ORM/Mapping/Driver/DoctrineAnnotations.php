@@ -53,6 +53,10 @@ final class JoinColumn extends Annotation {
 	public $columnDefinition;
 }
 final class JoinColumns extends Annotation {}
+final class Comment extends Annotation{
+	// only work with Column !
+	// use the value field instead of named field
+}
 final class Column extends Annotation {
 	public $type = 'string';
 	public $length;

@@ -202,6 +202,10 @@ class AnnotationDriver implements Driver {
 				if( $columnAnnot->type == null ) {
 					throw MappingException::propertyTypeIsRequired( $className, $property->getName() );
 				}
+				//XXX add comment support, support only when column is used
+				if( $commentAnnot = $this->_reader->getPropertyAnnotation( $property, 'Doctrine\ORM\Mapping\Comment' ) ) {
+					$mapping['comment'] = $commentAnnot->value;
+				}
 				
 				$mapping['type'] = $columnAnnot->type;
 				$mapping['length'] = $columnAnnot->length;

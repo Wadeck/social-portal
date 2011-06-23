@@ -370,3 +370,95 @@ Thu, 23 Jun 11 19:12:41 +0000	Avoid storing session name in cookie _SESS=>cu5arh
 Thu, 23 Jun 11 19:12:41 +0000	[DEBUG]	end of session
 ====================================
 
+Thu, 23 Jun 11 19:48:37 +0000	start of session Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.0
+Thu, 23 Jun 11 19:48:37 +0000	Request path: Forum :: displaySingle :: 
+Thu, 23 Jun 11 19:48:37 +0000	GET = array (
+  'forumId' => '4',
+)
+Thu, 23 Jun 11 19:48:37 +0000	POST = array (
+)
+Thu, 23 Jun 11 19:48:37 +0000	COOKIE = array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:37 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Thu, 23 Jun 11 19:48:37 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:37 +0000	Simple cookies: Array
+(
+    [_SESS] => cu5arhf3d8e9r0hj0olpbb9nj2
+)
+
+Thu, 23 Jun 11 19:48:37 +0000	Avoid storing session name in cookie _SESS=>cu5arhf3d8e9r0hj0olpbb9nj2
+Thu, 23 Jun 11 19:48:37 +0000	[DEBUG]	end of session
+====================================
+
+Thu, 23 Jun 11 19:48:38 +0000	start of session Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.0
+Thu, 23 Jun 11 19:48:38 +0000	Request path: Forum :: displaySingle :: 
+Thu, 23 Jun 11 19:48:38 +0000	GET = array (
+  'forumId' => '1',
+)
+Thu, 23 Jun 11 19:48:38 +0000	POST = array (
+)
+Thu, 23 Jun 11 19:48:38 +0000	COOKIE = array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:38 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Thu, 23 Jun 11 19:48:38 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:38 +0000	Simple cookies: Array
+(
+    [_SESS] => cu5arhf3d8e9r0hj0olpbb9nj2
+)
+
+Thu, 23 Jun 11 19:48:38 +0000	Avoid storing session name in cookie _SESS=>cu5arhf3d8e9r0hj0olpbb9nj2
+Thu, 23 Jun 11 19:48:38 +0000	[DEBUG]	end of session
+====================================
+
+Thu, 23 Jun 11 19:48:40 +0000	start of session Mozilla/5.0 (Windows NT 6.1; rv:5.0) Gecko/20100101 Firefox/5.0
+Thu, 23 Jun 11 19:48:40 +0000	Request path: home :: index :: 
+Thu, 23 Jun 11 19:48:40 +0000	GET = array (
+)
+Thu, 23 Jun 11 19:48:40 +0000	POST = array (
+)
+Thu, 23 Jun 11 19:48:40 +0000	COOKIE = array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:40 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+Thu, 23 Jun 11 19:48:40 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => 'cu5arhf3d8e9r0hj0olpbb9nj2',
+)
+Thu, 23 Jun 11 19:48:40 +0000	Simple cookies: Array
+(
+    [_SESS] => cu5arhf3d8e9r0hj0olpbb9nj2
+)
+
+Thu, 23 Jun 11 19:48:40 +0000	Avoid storing session name in cookie _SESS=>cu5arhf3d8e9r0hj0olpbb9nj2
+Thu, 23 Jun 11 19:48:40 +0000	[DEBUG]	end of session
+====================================
+

@@ -368,7 +368,7 @@ class MySqlPlatform extends AbstractPlatform
         $query.= 'TABLE ' . $tableName . ' (' . $queryFields . ')';
 
         $optionStrings = array();
-
+//XXX HERE is the point for table comment !!!! just come back after
         if (isset($options['comment'])) {
             $optionStrings['comment'] = 'COMMENT = ' . $options['comment'];
         }
