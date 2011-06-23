@@ -1,36 +1,69 @@
 <?php
 
 namespace socialportal\controller;
+use core\form\custom\RegisterForm;
+
+use core\user\UserHelper;
+
+use core\form\custom\LoginForm;
+
 use core\FrontController;
 
 use core;
 
 use core\AbstractController;
+use core\user\UserRoles;
 
 class Connection extends AbstractController {
+	public function displayUserPanelAction($parameters) {
+		$user = $this->frontController->getCurrentUser();
+		if( !$user->getId() ) {
+			$this->displayLoginFormAction($parameters);
+		} else {
+			$this->displayUserAction($parameters);
+		}
+	}
+	
 	public function displayUserAction($parameters) {
 		// show the connected user
 		$user = $this->frontController->getCurrentUser();
 		$this->frontController->getResponse()->setVar( 'user', $user );
+		
+		$userHelper = new UserHelper( $this->frontController );
+		$this->frontController->getResponse()->setVar( 'userHelper', $userHelper );
+		
+		//TODO remove when the capabilities will be done
+		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
+			$toolLink = $this->frontController->getViewHelper()->createHref( 'Tool', 'index' );
+			$this->frontController->getResponse()->setVar( 'toolLink', $toolLink );
+		}
+		
 		$this->frontController->doDisplay( 'connection', 'displayUser' );
 	}
 	
 	public function displayLoginFormAction($parameters) {
-		$error = $this->frontController->getRequest()->getSession()->getFlash( 'loginError', null );
-		if( $error ) {
-			$this->frontController->getResponse()->setVar( 'error', $error );
-		}
-		//TODO implement the form + error handling
+		$form = new LoginForm( $this->frontController );
+		$form->setNonceAction( 'login' );
+		$form->setupWithArray( true );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Connection', 'login' );
+		$form->setTargetUrl( $actionUrl );
+		
+		$this->frontController->getResponse()->setVar( 'form', $form );
 		$this->frontController->doDisplay( 'connection', 'displayLoginForm' );
 	}
 	
 	/**
+	 * @Nonce(login)
 	 * @Method(POST)
 	 */
 	public function loginAction($parameters) {
-		$username = $this->frontController->getRequest()->getPOSTAttribute( 'username', null );
-		$password = $this->frontController->getRequest()->getPOSTAttribute( 'password', null );
-		$rememberMe = $this->frontController->getRequest()->getPOSTAttribute( 'rememberMe', false );
+		$form = new LoginForm( $this->frontController );
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$username = $form->getUsername();
+		$password = $form->getPassword();
+		$rememberMe = $form->getIsRememberMe();
 		
 		// redirect to referer or something like that, the page that was ask previously
 		$referrer = $this->frontController->getRequest()->getReferrer();
@@ -38,17 +71,11 @@ class Connection extends AbstractController {
 			$referrer = '';
 		}
 		
-		if( !$username || !$password ) {
-			$message = __( 'The username or the password is missing' );
-			$this->frontController->getRequest()->getSession()->setFlash( 'loginError', $message );
-			$this->frontController->doRedirectUrl( $referrer );
-		}
-		
 		// pass to the user manager, connect
 		$user = $this->frontController->getUserManager()->connectUser( $username, $password, $rememberMe );
 		if( !$user ) {
 			$message = __( 'The username and the password are not in the database' );
-			$this->frontController->getRequest()->getSession()->setFlash( 'loginError', $message );
+			$this->frontController->addMessage( $message, 'error' );
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
@@ -63,37 +90,48 @@ class Connection extends AbstractController {
 	}
 	
 	public function displayRegisterFormAction($parameters) {
+		$form = new RegisterForm( $this->frontController );
+		$form->setNonceAction( 'register' );
+		$form->setupWithArray( true );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Connection', 'register' );
+		$form->setTargetUrl( $actionUrl );
+		
+		$this->frontController->getResponse()->setVar( 'form', $form );
 		$this->frontController->doDisplay( 'connection', 'displayRegisterForm' );
 	}
 	
 	/**
 	 * TODO debug version to create fake account
 	 * @Method(POST)
+	 * @Nonce(register)
 	 */
 	public function registerAction($parameters) {
-		$username = $this->frontController->getRequest()->getPOSTAttribute( 'username', null );
-		$password = $this->frontController->getRequest()->getPOSTAttribute( 'password', null );
+		$form = new RegisterForm( $this->frontController );
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$username = $form->getUsername();
+		$password = $form->getPassword();
+		$email = $form->getEmail();
+		
+//		$username = $this->frontController->getRequest()->getPOSTAttribute( 'username', null );
+//		$password = $this->frontController->getRequest()->getPOSTAttribute( 'password', null );
 		
 		// redirect to referer or something like that, the page that was ask previously
 		$referrer = $this->frontController->getRequest()->getReferrer();
 		if( !$referrer ) {
 			$referrer = '';
 		}
-		
-		if( !$username || !$password ) {
-			$message = __( 'The username or the password is missing' );
-			$this->frontController->addMessage( $message );
-			$this->frontController->doRedirectUrl( $referrer );
-		}
+
+		// TODO email-activation:: here the point to modify
 		$withActivation = false;
-		//TODO modify this to receive email by POST
-		$user = $this->frontController->getUserManager()->registerNewUser( $username, $password, 'no@email', $withActivation );
+		$user = $this->frontController->getUserManager()->registerNewUser( $username, $password, $email, $withActivation );
 		if( $user ) {
 			$this->frontController->getRequest()->getSession()->setFlash( 'withActivation', $withActivation ? 'true' : 'false' );
 			$this->frontController->doRedirect( 'connection', 'registerComplete' );
 		} else {
 			$message = __( 'The username is already in use' );
-//			$this->frontController->getRequest()->getSession()->setFlash( 'loginError', $message );
+			//			$this->frontController->getRequest()->getSession()->setFlash( 'loginError', $message );
 			$this->frontController->addMessage( $message );
 			$this->frontController->doRedirectUrl( $referrer );
 		}

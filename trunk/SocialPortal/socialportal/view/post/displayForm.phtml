@@ -3,7 +3,7 @@ use core\user\UserHelper;
 $vars['helper']->setContainerClass('');
 $form = $vars['form'];
 $user = $vars['user'];
-$userHelper = new UserHelper();
+$userHelper = $vars['userHelper'];
 $userHelper->setCurrentUser($user);
 ?>
 

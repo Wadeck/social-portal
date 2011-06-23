@@ -42,7 +42,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 			<?php
 			return;
 		}
-		$userHelper = new UserHelper();
+		$userHelper = new UserHelper($this->front);
 		?>
 		<ol id="topic-post-list" class="commentlist">
 		<?php

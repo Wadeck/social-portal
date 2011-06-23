@@ -1,0 +1,18 @@
+<body>
+<div id="header">
+	<?php 
+	use core\user\UserRoles;
+	//TODO remove when the capabilities will be done
+	if($vars['helper']->currentUserIs(UserRoles::$admin_role)){
+		$vars['helper']->insertModule('admin');
+	}
+	?>
+	<h1 id="logo"><a href="<?php $vars['helper']->insertHref('') ?>" title="Home"><?php echo __( 'Social Portal' ); ?></a></h1>
+		<?php
+			if($vars['helper']->getCurrentUser()->getId()){
+				$vars['helper']->insertModule( 'connection', 'displayUser' ); 
+			}else{
+				$vars['helper']->insertModule( 'connection', 'displayLoginForm' );
+			}?>
+	<div class="clear_both"></div>
+</div>

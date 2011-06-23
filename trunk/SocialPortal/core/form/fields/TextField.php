@@ -35,6 +35,13 @@ class TextField extends Field {
 				?></div><?php
 				$this->insertField();
 				break;
+			case 3 :
+				?><div class="label_error"><?php
+				$this->insertErrorMessage();
+				?></div><?php
+				$this->insertLabel();
+				$this->insertField();
+				break;
 		}
 	}
 	

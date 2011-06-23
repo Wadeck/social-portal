@@ -27,7 +27,7 @@ class TopicStoryForm extends AbstractTopicForm {
 		$this->addInputField( new TextAreaField( 'topic_automatic_thoughts', __( 'Automatic Thoughts' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_alternative_thoughts', __( 'Alternative Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_realistic_thoughts', __( 'Realistic Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
-		$this->addInputField( new TextAreaField( 'topic_ps', __( 'PS' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
+		$this->addInputField( new TextAreaField( 'topic_ps', __( 'PS' ), '', array( 'optional', 'strlen_at-least_4' ) ) );
 	}
 	
 	public function setupWithTopic($topic) {

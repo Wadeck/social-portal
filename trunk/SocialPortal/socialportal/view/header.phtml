@@ -1,18 +1,7 @@
 <body>
+<!-- second version, we remove the responsability of the header to determine if the user can or cannot be displayed -->
 <div id="header">
-	<?php 
-	use core\user\UserRoles;
-	//TODO remove when the capabilities will be done
-	if($vars['helper']->currentUserIs(UserRoles::$admin_role)){
-		$vars['helper']->insertModule('admin');
-	}
-	?>
 	<h1 id="logo"><a href="<?php $vars['helper']->insertHref('') ?>" title="Home"><?php echo __( 'Social Portal' ); ?></a></h1>
-		<?php
-			if($vars['helper']->getCurrentUser()->getId()){
-				$vars['helper']->insertModule( 'connection', 'displayUser' ); 
-			}else{
-				$vars['helper']->insertModule( 'connection', 'displayLoginForm' );
-			}?>
+	<?php $vars['helper']->insertModule( 'connection', 'displayUserPanel' ); ?>
 	<div class="clear_both"></div>
 </div>

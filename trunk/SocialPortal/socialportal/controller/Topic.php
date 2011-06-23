@@ -210,12 +210,14 @@ class Topic extends AbstractController {
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
+		
+		$topicId = $base->getId();
 		// increment the number of topic in the forum parent
 		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId );
 		
 		//TODO redirection vers le topic en question
 		$this->frontController->addMessage( __( 'The creation of the topic was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array('topicId' => $topic->getId(), 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array('topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
 	/**
