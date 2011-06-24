@@ -165,7 +165,8 @@ class UserManager {
 		}
 		
 		$status = $withActivation ? 0 : 1;
-		$user = self::createUser( $username, $password, $email, UserRoles::$full_user_role, $status );
+		$time = $this->request->getRequestTime();
+		$user = self::createUser( $username, $password, $email, UserRoles::$full_user_role, $time, $status );
 		
 		return $this->userProvider->addNewUser( $user );
 	}
