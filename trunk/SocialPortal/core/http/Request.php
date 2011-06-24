@@ -168,11 +168,76 @@ class Request {
 	}
 	
 	/**
-	 * Parse the requested url and retrieve the module/action/parameters
-	 * @return (module, action, parameters)
+	 * Parse the requested url and retrieve the module/action/gets
+	 * @return (module, action, gets)
 	 */
-	public function parseUrl($url = '') {
-		$path = $url ? $url : parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+	public function parseUrl($url) {
+		if(!$url){
+			throw new \InvalidArgumentException('No $url in parseUrl');
+		}
+		
+		$urlAssoc = parse_url( $url );
+		
+		$path = $urlAssoc['path'];
+		$requestUrl = $path;
+		if(isset($urlAssoc['query']) && $urlAssoc['query']){
+			$requestUrl .= '?'.$urlAssoc['query'];
+			
+			$temp = explode('&', $urlAssoc['query']);
+			$gets = array(); 
+		    foreach ($temp as $t) { 
+		        list($k, $v) = explode('=', $t); 
+		        $gets[$k] = $v;
+		    }    
+		}
+
+		// +1 for the / at the end
+		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+		
+		if( $requestPath ) {
+			$tokens = explode( '/', $requestPath );
+			$this->module = array_shift( $tokens );
+			$this->action = array_shift( $tokens );
+			$this->parameters = $tokens;
+		} else {
+			$this->module = 'home';
+			$this->action = 'index';
+			$this->parameters = array();
+		}
+		
+		// same format as the url builder in frontController
+		$this->requestedUrl = $requestUrl;
+//		$this->requestedUrl = '/' . FrontController::$SITE_NAME . '/' . $requestUrl;
+		
+		// debug mode in eclipse
+		if( 'index.php' == $this->module ) {
+			$this->module = 'home';
+		}
+		// when we don't specify the action, it is automatically set to index
+		if( '' == $this->action ) {
+			$this->action = 'index';
+		}
+
+		if($this->parameters){
+			Logger::getInstance()->debug_var('There are some get attributes in the url !', $this->parameters);
+		}
+		Logger::getInstance()->log( "Request path: {$this->module} :: {$this->action} :: " . ($this->parameters ? print_r( $this->parameters, true ) : '') );
+		
+		return array( $this->module, $this->action, $gets);
+	}
+	
+	/**
+	 * Parse the http requested url (from $_SERVER)
+	 * @return (module, action)
+	 */
+	public function parseDefaultUrl() {
+		$urlAssoc = parse_url( $_SERVER['REQUEST_URI'] );
+		$path = $urlAssoc['path'];
+		$requestUrl = $path;
+		if(isset($urlAssoc['query']) && $urlAssoc['query']){
+			$requestUrl .= '?'.$urlAssoc['query'];
+		}
+		
 		// +1 for the / at the end
 		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
 		if( $requestPath ) {
@@ -186,8 +251,9 @@ class Request {
 			$this->parameters = array();
 		}
 		// same format as the url builder in frontController
-		$this->requestedUrl = '/' . FrontController::$SITE_NAME . '/' . $requestPath;
+		$this->requestedUrl = $requestUrl;
 		
+		// debug mode in eclipse
 		if( 'index.php' == $this->module ) {
 			$this->module = 'home';
 		}
@@ -195,9 +261,66 @@ class Request {
 		if( '' == $this->action ) {
 			$this->action = 'index';
 		}
+		//TODO remove after debug, we need to setup $gets!!!
+		if($this->parameters){
+			Logger::getInstance()->debug_var('There are some get attributes in the url !', $this->parameters);
+		}
 		Logger::getInstance()->log( "Request path: {$this->module} :: {$this->action} :: " . ($this->parameters ? print_r( $this->parameters, true ) : '') );
-		return array( $this->module, $this->action, $this->parameters );
+		
+		return array( $this->module, $this->action);
 	}
+	//TODO to be removed after debug
+//	//TODO perhaps not necessary to parse get !
+//	/**
+//	 * Parse the requested url and retrieve the module/action/gets
+//	 * @return (module, action, gets)
+//	 */
+//	public function parseUrl($url = '') {
+//		if($url){
+//			$getsString = parse_url( $url, PHP_URL_QUERY );
+//		}else{
+//			$getsString = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
+//		}
+//		
+//		$temp = explode('&', $getsString);
+//		$gets = array(); 
+//	    foreach ($temp as $t) { 
+//	        list($k, $v) = explode('=', $t); 
+//	        $gets[$k] = $v;
+//	    }    
+//		
+//		$path = $url ? $url : parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
+//		// +1 for the / at the end
+//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+//		if( $requestPath ) {
+//			$tokens = explode( '/', $requestPath );
+//			$this->module = array_shift( $tokens );
+//			$this->action = array_shift( $tokens );
+//			$this->parameters = $tokens;
+//		} else {
+//			$this->module = 'home';
+//			$this->action = 'index';
+//			$this->parameters = array();
+//		}
+//		// same format as the url builder in frontController
+//		$this->requestedUrl = '/' . FrontController::$SITE_NAME . '/' . $requestPath;
+//		
+//		// debug mode in eclipse
+//		if( 'index.php' == $this->module ) {
+//			$this->module = 'home';
+//		}
+//		// when we don't specify the action, it is automatically set to index
+//		if( '' == $this->action ) {
+//			$this->action = 'index';
+//		}
+//		//TODO remove after debug, we need to setup $gets!!!
+//		if($this->parameters){
+//			Logger::getInstance()->debug_var('There are some get attributes in the url !', $this->parameters);
+//		}
+//		Logger::getInstance()->log( "Request path: {$this->module} :: {$this->action} :: " . ($this->parameters ? print_r( $this->parameters, true ) : '') );
+//		return array( $this->module, $this->action, $gets);
+////		return array( $this->module, $this->action, $this->parameters );
+//	}
 	
 	/**
 	 * Gets the request method.

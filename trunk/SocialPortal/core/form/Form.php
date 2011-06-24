@@ -247,7 +247,9 @@ class Form implements iInsertable {
 			$this->frontController->getRequest()->request->set( $this->formName . '_errors_form', $errors );
 			$url = $this->frontController->getRequest()->getReferrer();
 			// will exit
-			$this->frontController->dispatch( $url );
+//			$this->frontController->doRedirectUrl($url);
+			//TODO previous code
+			$this->frontController->dispatchUrl( $url );
 		}
 		$result = array();
 		foreach( $this->fields as $field ) {

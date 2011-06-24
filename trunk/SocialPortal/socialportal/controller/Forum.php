@@ -39,7 +39,7 @@ class Forum extends AbstractController {
 		if( false !== $forumId ) {
 			$forum = $this->em->find( 'Forum', $forumId );
 			if( $forum ) {
-				$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'edit', array(), array( 'forumId' => $forumId ) );
+				$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'edit', array( 'forumId' => $forumId ) );
 				// fill the form with the forum current values 
 				$form->setupWithForum( $forum );
 				// then add the value retrieve from POST
@@ -132,6 +132,7 @@ class Forum extends AbstractController {
 		$this->frontController->doDisplay( 'Forum', 'viewAll' );
 	}
 	
+	//TODO change name to displaySingleForum
 	/**
 	 * @GetAttributes(forumId)
 	 */
@@ -155,7 +156,7 @@ class Forum extends AbstractController {
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array(), array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$response = $this->frontController->getResponse();
 		

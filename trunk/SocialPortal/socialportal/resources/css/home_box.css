@@ -1,0 +1,93 @@
+@CHARSET "ISO-8859-1";
+
+/* > Boxes
+-------------------------------------------------------------- */
+.box-container {
+    padding: 5px;
+}
+
+.box {
+    padding: 5px;
+    margin: 15px;
+    min-height: 200px;
+    width: 300px; 
+    float: left;
+    
+    border: 1px solid #eee;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+    
+
+    .box-upper {
+        background-color: #EEE; 
+    /*  border: 1px solid blue;*/
+    }
+    
+    .box-logo {
+        float: left;
+        width: 30px;
+        height: 30px; 
+    /*  border: 1px dashed orange;*/
+    }
+    
+    #icon-ap {
+        /* background: transparent url('../images/social/phys_act_icon.png') no-repeat */
+    }
+
+    .box-title {
+        padding: 5px 5px;
+    }
+    
+    
+    .box-title h3 {
+        padding: 0px;
+        margin: 0px;
+    /*  border: 1px dashed purple;*/
+    }
+    
+    .box-toggle {
+        float: right;
+        padding: 0px;
+        margin: 0px;
+        border: 1px dashed red;
+    }
+    
+    .box-center {
+        background-color: #FEFEFE; 
+    /*  border: 1px solid green;*/
+        width: 100%;
+        height: 100%;
+    }
+    
+    .box-content {
+    }
+    
+    .box-line {
+        padding: 5px;
+    /*  border: 1px dashed DarkGreen;*/
+    }
+    
+    a.box-line-link {
+        float: right;
+    }
+    
+    .box-line-description {
+    }
+    
+    a.bulb_icon{
+        float: right;
+    }
+    
+    .box-tool{
+    	float: right;
+    	font-size: 12px;
+	}
+    div.box-container{
+    	clear: both;
+	    margin-left: auto;
+	    margin-right: auto;
+	    padding: 0;
+	    width: 685px;
+	}

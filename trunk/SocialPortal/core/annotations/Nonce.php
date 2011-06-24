@@ -27,6 +27,7 @@ class Nonce extends Annotation implements ValidableInterface {
 		$this->nonceAction = $value;
 	}
 	
+	//FIXME Ugly version !
 	public function isValid() {
 		$front = FrontController::getInstance();
 		$nonce = $front->getCurrentNonce();
@@ -35,7 +36,16 @@ class Nonce extends Annotation implements ValidableInterface {
 			Logger::getInstance()->debug( 'The nonce is not present' );
 			return false;
 		}
+		// triple check nonce...
+		$nonce = $front->getNoncePOST();
 		$result = $front->getNonceManager()->verifyNonce( $nonce, $this->nonceAction );
+		
+		if(!$result){
+			$nonce = $front->getNonceGET();
+			$result = $front->getNonceManager()->verifyNonce( $nonce, $this->nonceAction );
+		}
+		
+		
 		if( $result > 0 ) {
 			return true;
 		} else {
@@ -43,4 +53,20 @@ class Nonce extends Annotation implements ValidableInterface {
 			return false;
 		}
 	}
+//	public function isValid() {
+//		$front = FrontController::getInstance();
+//		$nonce = $front->getCurrentNonce();
+//		
+//		if( null === $nonce ) {
+//			Logger::getInstance()->debug( 'The nonce is not present' );
+//			return false;
+//		}
+//		$result = $front->getNonceManager()->verifyNonce( $nonce, $this->nonceAction );
+//		if( $result > 0 ) {
+//			return true;
+//		} else {
+//			Logger::getInstance()->debug( "The nonce is not valid: $nonce" );
+//			return false;
+//		}
+//	}
 }

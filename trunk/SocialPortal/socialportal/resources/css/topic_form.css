@@ -28,3 +28,8 @@ form.topic-form textarea {
 	width: 75%;
 	height: 120px;
 }
+
+/** perhaps could be available for every form */
+form.topic-form input[type="submit"]{
+	margin-top: 5px;
+}

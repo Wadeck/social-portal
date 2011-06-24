@@ -100,9 +100,11 @@ class Utils {
 		$since = $newer_date - $older_date;
 		
 		/* Something went wrong with date calculation and we ended up with a negative date. */
-		if( 0 > $since )
-			return __( 'sometime', 'buddypress' );
-		
+		if( 0 > $since ){
+			return __( 'sometime' );
+		}else if(0 == $since){
+			return __( 'now' );
+		}
 		/**
 		 * We only want to output two chunks of time here, eg:
 		 * x years, xx months
@@ -139,4 +141,12 @@ class Utils {
 		
 		return $output;
 	}
+	
+	public static function createExcerpt($text, $size) {
+		if( strlen( $text ) > $size + 2 ) {
+			$text = substr( $text, 0, $size ) . '...';
+		}
+		return $text;
+	}
+
 }

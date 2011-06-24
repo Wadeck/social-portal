@@ -99,36 +99,65 @@ class ViewHelper {
 		echo $this->frontController->renderFile( $file, $addVars );
 	}
 	
-	/** Could be used for login/pass/avatar template */
+	/**
+	 * 
+	 * Could be used for login/pass/avatar template
+	 * @param string $module
+	 * @param string $action
+	 * @param array $gets assoc array containing key=>value
+	 * @param string $nonceAction The name of the action we want to "nonce", not already hashed !
+	 */
 	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
+		// store the nonce to avoid giving bad nonce to the createHref method
+		if( false !== $nonceAction ) {
+			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
+			$gets['_nonce'] = $nonce;
+		}
+		
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
 		// like a stack
-		$tempGet = $this->frontController->getRequest()->query->all();
-		$this->frontController->getRequest()->query->replace( $gets );
+			$tempGet = $this->frontController->getRequest()->query->all();
+			$this->frontController->getRequest()->query->replace( $gets );
 		
-		// store the nonce to avoid giving bad nonce to the createHref method
-		if( $nonceAction ) {
-			$tempNonce = $this->frontController->getCurrentNonce();
-			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
-			$this->frontController->setNonce( $nonce );
-			// call the module with the temporary nonce
+			
 			$this->frontController->doAction( $module, $action );
-			// come back to the previous value of nonce
-			$this->frontController->setNonce( $tempNonce );
-		} else {
-			// call the module without care of the nonce
-			$this->frontController->doAction( $module, $action );
-		}
+			
+			
 		// reset the previously set GET values
 		$this->frontController->getRequest()->query->replace( $tempGet );
 		$this->frontController->getResponse()->setVars( $tempVars );
 	}
+//	/** Could be used for login/pass/avatar template */
+//	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
+//		$tempVars = $this->frontController->getResponse()->removeAllVars();
+//		// like a stack
+//		$tempGet = $this->frontController->getRequest()->query->all();
+//		$this->frontController->getRequest()->query->replace( $gets );
+//		
+//		// store the nonce to avoid giving bad nonce to the createHref method
+//		if( $nonceAction ) {
+//			$tempNonce = $this->frontController->getCurrentNonce();
+//			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
+//			$this->frontController->setNonce( $nonce );
+//			// call the module with the temporary nonce
+//			
+//			$this->frontController->doAction( $module, $action );
+//			
+//			// come back to the previous value of nonce
+//			$this->frontController->setNonce( $tempNonce );
+//		} else {
+//			// call the module without care of the nonce
+//			$this->frontController->doAction( $module, $action );
+//		}
+//		// reset the previously set GET values
+//		$this->frontController->getRequest()->query->replace( $tempGet );
+//		$this->frontController->getResponse()->setVars( $tempVars );
+//	}
 	
 	/**
 	 * Generate a specific url for the site
 	 * @param string $controllerName
 	 * @param string $actionName
-	 * @param array $parameters
 	 * @param array $GETAttributes
 	 */
 	public function createHref($controllerName, $actionName = '', array $gets = array()) {
@@ -154,12 +183,12 @@ class ViewHelper {
 	}
 	
 	/** @see ViewHelper#createHref */
-	public function insertHref($controllerName, $actionName = '', $gets = array()) {
+	public function insertHref($controllerName, $actionName = '', array $gets = array()) {
 		echo $this->createHref( $controllerName, $actionName, $gets );
 	}
 	
 	/** @see ViewHelper#createHrefWithNonce */
-	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', $gets = array()) {
+	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array()) {
 		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $gets );
 	}
 	
