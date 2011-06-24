@@ -2,8 +2,6 @@
 var jq = jQuery;
 
 function validForm(obj) {
-	//FIXME !!!!! remove that
-	return true;
 	if(obj.isAlreadySent){
 		alert(_error_messages['form_already_sent']);
 		return false;
