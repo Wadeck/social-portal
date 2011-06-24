@@ -28,13 +28,13 @@ li.forums-tab a {
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	margin: 0px 5px 0px 5px;
-	border: 1px solid #EEEEEE;
+	border: 1px solid #CCCCCC;
 }
 
 li.forums-tab a:hover {
 	background: #EAEAEA;
 	color: #111;
-	border: 1px solid #aaa;
+	border: 1px solid #666;
 }
 
 li.forums-tab.selected a {
@@ -53,7 +53,7 @@ li.forums-tab.selected a {
 
 li.forums-tab.selected a:hover {
 	background: #FAFAFA;
-	border: 1px solid #aaa;
+	border: 1px solid #666;
 	border-bottom: none;
 }
 

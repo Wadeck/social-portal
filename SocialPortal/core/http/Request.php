@@ -180,11 +180,11 @@ class Request {
 		
 		$path = $urlAssoc['path'];
 		$requestUrl = $path;
+		$gets = array(); 
 		if(isset($urlAssoc['query']) && $urlAssoc['query']){
 			$requestUrl .= '?'.$urlAssoc['query'];
 			
 			$temp = explode('&', $urlAssoc['query']);
-			$gets = array(); 
 		    foreach ($temp as $t) { 
 		        list($k, $v) = explode('=', $t); 
 		        $gets[$k] = $v;
