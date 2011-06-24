@@ -92,12 +92,14 @@ class Topic extends AbstractController {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
 		}
 		
-		$this->frontController->getResponse()->setVar( 'commentForm', $commentForm );
-		$this->frontController->getResponse()->setVar( 'pagination', $pagination );
-		$this->frontController->getResponse()->setVar( 'posts', $posts );
-		$this->frontController->getResponse()->setVar( 'topic', $topic );
-		$this->frontController->getResponse()->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic ) );
-		$this->frontController->getResponse()->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts ) );
+		$response = $this->frontController->getResponse();
+		$response->setVar( 'commentForm', $commentForm );
+		$response->setVar( 'pagination', $pagination );
+		$response->setVar( 'posts', $posts );
+		$response->setVar( 'topic', $topic );
+		$response->setVar( 'forumId', $forumId );
+		$response->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic ) );
+		$response->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts ) );
 		
 		$this->frontController->doDisplay( 'topic', 'displaySingleTopic' );
 	}

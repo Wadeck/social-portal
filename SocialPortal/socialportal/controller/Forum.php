@@ -126,6 +126,9 @@ class Forum extends AbstractController {
 
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public function viewAllAction() {
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
 		$this->frontController->getResponse()->setVar( 'forums', $forums );
@@ -136,7 +139,7 @@ class Forum extends AbstractController {
 	/**
 	 * @GetAttributes(forumId)
 	 */
-	public function displaySingleAction() {
+	public function displaySingleForumAction() {
 		$get = $this->frontController->getRequest()->query;
 		$forumId = $get->get( 'forumId' );
 		$page_num = $get->get( 'p', 1 );
@@ -156,7 +159,7 @@ class Forum extends AbstractController {
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingle', array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$response = $this->frontController->getResponse();
 		

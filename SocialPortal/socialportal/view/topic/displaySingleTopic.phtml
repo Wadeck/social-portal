@@ -9,6 +9,7 @@ $vars['helper']->setContainerClass('');
 $pagination = $vars['pagination'];
 $topicTemplate = $vars['topicTemplate'];
 $topic = $vars['topic'];
+$forumId = $vars['forumId'];
 $postsTemplate = $vars['postsTemplate'];
 $posts = $vars['posts'];
 $commentForm = $vars['commentForm'];
@@ -18,7 +19,7 @@ $commentForm = $vars['commentForm'];
 <!--	<div class="rounded-box">-->
 		<!-- Link to the parent forum -->
 		<div id="link-back">
-			<a class="button" href="<?php $vars['helper']->insertHref('Forum', 'viewAll') ?>"><?php echo __('Back to discussion place'); ?></a>
+			<a class="button" href="<?php $vars['helper']->insertHref('Forum', 'displaySingleForum', array('forumId' => $forumId)); ?>"><?php echo __('Back to discussion place'); ?></a>
 		</div>
 		<!-- title / content -->
 		<?php $topicTemplate->insert(); ?>

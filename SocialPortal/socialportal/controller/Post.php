@@ -46,7 +46,6 @@ class Post extends AbstractController {
 		$forumId = $get->get( 'forumId' );
 		$postId = $get->get( 'postId', false );
 		
-		$user = $this->frontController->getCurrentUser();
 		
 		// retrieve information and then pass to the form
 		// if existing information, we put as action "edit" instead of create
@@ -55,9 +54,13 @@ class Post extends AbstractController {
 			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
 			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 		}
+		
 		$module = '';
+		$nameAction = '';
+		$response = $this->frontController->getResponse();
 		
 		$getArgs = array( 'typeId' => $topicType );
+		
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $postId ) {
 			$postRepo = $this->em->getRepository( 'PostBase' );
@@ -70,15 +73,23 @@ class Post extends AbstractController {
 				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 			}
 			
+			$module = 'create';
 			$form->setupWithPost( $currentPost );
 			$form->setNonceAction( 'editPost' );
 			$module = 'edit';
 			$getArgs['postId'] = $postId;
+			$nameAction = 'displayFormEdit';
 		} else {
+			$user = $this->frontController->getCurrentUser();
+			$userHelper = new UserHelper( $this->frontController );
+			
+			$response->setVar( 'userHelper', $userHelper );
+			$response->setVar( 'user', $user );
+			
 			$form->setNonceAction( 'createPost' );
-			$module = 'create';
 			$getArgs['forumId'] = $forumId;
 			$getArgs['topicId'] = $topicId;
+			$nameAction = 'displayFormCreate';
 		}
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, $getArgs );
 		
@@ -86,13 +97,8 @@ class Post extends AbstractController {
 		$form->setupWithArray( true );
 		$form->setTargetUrl( $actionUrl );
 		
-		$userHelper = new UserHelper( $this->frontController );
-		
-		$response = $this->frontController->getResponse();
-		$response->setVar( 'userHelper', $userHelper );
-		$response->setVar( 'user', $user );
 		$response->setVar( 'form', $form );
-		$this->frontController->doDisplay( 'post', 'displayForm' );
+		$this->frontController->doDisplay( 'post', $nameAction );
 	}
 	
 	/**

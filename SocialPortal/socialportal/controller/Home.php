@@ -40,7 +40,7 @@ class Home extends AbstractController {
 		$name = __('Last Discussion');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
-		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingle', array( 'forumId' => $forumId));
+		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
 		
 		$freetextTemplate = new HomeBlockTemplate($this->frontController, $forum, $topics, $typeId, $name, $formattedLink, $linkDisplayForum);
 		//
@@ -55,7 +55,7 @@ class Home extends AbstractController {
 		$name = __('Last Strategies');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
-		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingle', array( 'forumId' => $forumId));
+		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
 		
 		$strategyTemplate = new HomeBlockTemplate($this->frontController, $forum, $topics, $typeId, $name, $formattedLink, $linkDisplayForum);
 		//
@@ -70,7 +70,7 @@ class Home extends AbstractController {
 		$name = __('Last Activities');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
-		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingle', array( 'forumId' => $forumId));
+		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
 		
 		$activityTemplate = new HomeBlockTemplate($this->frontController, $forum, $topics, $typeId, $name, $formattedLink, $linkDisplayForum);
 		//
@@ -85,7 +85,7 @@ class Home extends AbstractController {
 		$name = __('Last Stories');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
-		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingle', array( 'forumId' => $forumId));
+		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
 		
 		$storyTemplate = new HomeBlockTemplate($this->frontController, $forum, $topics, $typeId, $name, $formattedLink, $linkDisplayForum);
 		
