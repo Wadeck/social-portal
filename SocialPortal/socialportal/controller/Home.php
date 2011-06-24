@@ -52,7 +52,7 @@ class Home extends AbstractController {
 		$topics = $topicRepo->findTopicsFromForum($forumId, 1, 5);
 		$typeId = $forumMetaRepo->getAcceptableTopics($forumId);
 		$typeId = $typeId[0];
-		$name = __('Last Strategies');
+		$name = __('Last Stories');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
 		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
@@ -67,7 +67,7 @@ class Home extends AbstractController {
 		$topics = $topicRepo->findTopicsFromForum($forumId, 1, 5);
 		$typeId = $forumMetaRepo->getAcceptableTopics($forumId);
 		$typeId = $typeId[0];
-		$name = __('Last Activities');
+		$name = __('Last Strategies');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
 		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
@@ -82,7 +82,7 @@ class Home extends AbstractController {
 		$topics = $topicRepo->findTopicsFromForum($forumId, 1, 5);
 		$typeId = $forumMetaRepo->getAcceptableTopics($forumId);
 		$typeId = $typeId[0];
-		$name = __('Last Stories');
+		$name = __('Last Activities');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
 		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));
