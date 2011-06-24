@@ -300,6 +300,6 @@ vendredi 24 juin
 - refactor displaySingle en displaySingleForum pour etre coherent avec les autres
 - changement de lien sous le topic form, back to home a la place de viewAll qui est deprecié
 - correction css edit post, meilleur look, comme topic edit now
--
+- ajustement du retrait vertical pour le label dans le login box
 
 

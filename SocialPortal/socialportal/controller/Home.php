@@ -93,4 +93,8 @@ class Home extends AbstractController {
 		$this->frontController->getResponse()->setVar('blocks', $templates);
 		$this->frontController->doDisplay( 'home' );
 	}
+	
+	public function index2Action(){
+		$this->frontController->doDisplay( 'home2' );
+	}
 }

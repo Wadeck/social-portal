@@ -6,16 +6,10 @@ $vars['helper']->setContainerClass('');
 $vars['helper']->insertHref( 'Forum', 'viewAll' );
 ?>">Back to discussion place</a></div>
 <h3>Choose the type of topic</h3>
-<?php
-foreach( $vars['forums'] as $forum ) :
-	?>
-<div class="rounded-box padded margined">
-<h4><?php
-	echo $forum->getName();
-	?></h4>
-	<?php
-	foreach( $vars['topicsFor'][$forum->getId()] as $topicType ) :
-		?>
+<?php foreach( $vars['forums'] as $forum ): ?>
+	<div class="rounded-box padded margined">
+	<h4><?php echo $forum->getName(); ?></h4>
+	<?php foreach( $vars['topicsFor'][$forum->getId()] as $topicType ): ?>
 		<a href="<?php
 		$vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array( 'typeId' => $topicType->getId(), 'forumId' => $forum->getId() ) );
 		?>"
@@ -25,10 +19,6 @@ foreach( $vars['forums'] as $forum ) :
 		?>"><?php
 		echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
 		?></a>
-	<?php
-	endforeach
-	?>
+	<?php endforeach ?>
 	</div>
-<?php
-endforeach
-?>
+<?php endforeach ?>

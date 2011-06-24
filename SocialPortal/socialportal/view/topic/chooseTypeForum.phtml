@@ -1,0 +1,28 @@
+<?php
+$vars['helper']->insertMessage();
+$vars['helper']->setContainerClass('');
+
+$forum = $vars['forum'];
+$acceptedTopics = $vars['acceptedTopics'];
+?>
+<div id="link-back"><a class="button" href="<?php
+$vars['helper']->insertHref( 'Forum', 'viewAll' );
+?>">Back to discussion place</a></div>
+<h3>Choose the type of topic</h3>
+<div class="rounded-box padded margined">
+<h4><?php echo $forum->getName(); ?></h4>
+<?php foreach( $acceptedTopics as $topicType ) : ?>
+	<a href="<?php
+	$vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array( 'typeId' => $topicType->getId(), 'forumId' => $forum->getId() ) );
+	?>"
+class="button"
+title="<?php
+	echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
+	?>"><?php
+	echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
+	?></a>
+<?php endforeach ?>
+</div>
+<div id="links"><a class="button" href="<?php
+$vars['helper']->insertHref( 'Topic', 'chooseType' );
+?>"><?php echo __('Other types of topics ?'); ?></a></div>

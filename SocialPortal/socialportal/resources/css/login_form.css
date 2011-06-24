@@ -65,7 +65,3 @@ form.login-form span.error_message.active {
 	padding: 4px;
 	display: inline-block;
 }
-
-form.login-form label {
-	vertical-align: text-top;
-}
