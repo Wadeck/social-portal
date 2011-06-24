@@ -61,6 +61,32 @@ class Topic extends AbstractController {
 	}
 	
 	/**
+	 * @GetAttributes(forumId)
+	 */
+	public function chooseTypeForumAction() {
+		$get = $this->frontController->getRequest()->query;
+		$forumId = $get->get( 'forumId' );
+		
+		// set the nonce to each link that will be created, in an invisible manner for the view
+		$forum = $this->em->getRepository( 'Forum' )->find( $forumId );
+		$topicsFor = array();
+		if( !$forum ) {
+			$this->frontController->addMessage( __( 'The desired forum is not accessible, so all forum possibilities are displayed' ) );
+			$this->frontController->doRedirect( 'Topic', 'chooseType' );
+		}
+		
+		$metaRepo = $this->em->getRepository( 'ForumMeta' );
+		$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
+		array_walk( $acceptedTopics, function (&$item, $key) {
+			$item = TopicType::createById( $item );
+		} );
+		
+		$this->frontController->getResponse()->setVar( 'forum', $forum );
+		$this->frontController->getResponse()->setVar( 'acceptedTopics', $acceptedTopics );
+		$this->frontController->doDisplay( 'Topic', 'chooseTypeForum' );
+	}
+	
+	/**
 	 * @GetAttributes({topicId, forumId})
 	 * [p, n]
 	 */

@@ -26,6 +26,10 @@ form textarea,form input[type=text],form select,form input[type=password]
 	margin: 2px 0px;
 }
 
+form input[type=checkbox]{
+    vertical-align: top;
+}
+
 form div.block {
 	clear: both;
 	margin-bottom: 3px;
