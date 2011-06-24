@@ -1,28 +1,33 @@
 
 <?php
 $vars['helper']->response->setTitle( 'Home' );
-?>
-<?php
-
+$vars['helper']->setContainerClass('padded');
 $vars['helper']->insertMessage();
 ?>
-<h2>Home!!!</h2>
-<a
-	href="<?php
-	echo $vars['helper']->createHref( 'Forum', 'displayForm' )?>">Create
-forum</a>
-<br />
-<a
-	href="<?php
-	echo $vars['helper']->createHref( 'Topic', 'chooseType' )?>">Create
-topic (choose type)</a>
-<br />
-<a href="<?php
-echo $vars['helper']->createHref( 'Forum', 'viewAll' )?>">Forum
-view</a>
-<br />
-<a
-	href="<?php
-	echo $vars['helper']->createHref( 'Connection', 'displayRegisterForm' )?>">Create
-new user</a>
-<br />
+
+<?php
+$blocks = $vars['blocks'];
+$blockSize = count($blocks);
+if($blockSize % 2 == 0){
+	// even number, no problem
+	$isEven = true;
+}else{
+	$blockSize--;
+	$isEven = false;
+}
+for($i = 0; $i < $blockSize ;):
+	$block1 = $blocks[$i++];
+	$block2 = $blocks[$i++];
+	?><div class="box-container">
+		<?php $block1->insert(); 
+		$block2->insert(); ?>
+	</div> <?php 
+endfor;
+
+if(!$isEven){
+	$block = $blocks[$blockSize];
+	?><div class="box-container odd">
+		<?php $block->insert(); ?>
+	</div> <?php 
+}
+

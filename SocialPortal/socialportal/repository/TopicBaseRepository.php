@@ -34,7 +34,7 @@ class TopicBaseRepository extends EntityRepository {
 	 * @return array of TopicBase
 	 */
 	public function findTopicsFromForum($forumId, $page_num = 1, $num_per_page = false) {
-		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id' );
+		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id ORDER BY t.time DESC' );
 		$dql->setParameter( 'id', $forumId );
 		if( false !== $num_per_page ) {
 			$offset = ($page_num - 1) * $num_per_page;

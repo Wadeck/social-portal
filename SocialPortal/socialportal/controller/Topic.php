@@ -61,66 +61,6 @@ class Topic extends AbstractController {
 	}
 	
 	/**
-	 * @Nonce(displayTopicForm)
-	 * @GetAttributes({typeId, forumId})
-	 * [topic_id(opt, only for edit)]
-	 */
-	public function displayFormAction() {
-		$get = $this->frontController->getRequest()->query;
-		$topicType = $get->get( 'typeId' );
-		$forumId = $get->get( 'forumId' );
-		
-		// check if the forum accept the custom type proposed 
-		$forumMeta = $this->em->getRepository( 'ForumMeta' );
-		if( !$forumMeta->isAcceptedBy( $forumId, $topicType ) ) {
-			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
-			$this->frontController->doRedirect( 'home' );
-		}
-		
-		// retrieve information and then pass to the form
-		// if existing information, we put as action "edit" instead of create
-		$form = TopicFormFactory::createForm( $topicType, $this->frontController );
-		if( !$form ) {
-			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
-			$this->frontController->doRedirect( 'Topic', 'chooseType' );
-		}
-		$module = '';
-		
-		$getArgs = array( 'typeId' => $topicType );
-		// now the form is valid we check if we can already fill it with previous value (from db)
-		if( count( $parameters ) >= 3 ) {
-			$topic_id = $parameters[2];
-			
-			$topicRepo = $this->em->getRepository( 'TopicBase' );
-			$currentTopic = $topicRepo->findFullTopic( $topic_id );
-			
-			// check if the class correspond to what is attempted !
-			$customClass = TopicType::translateTypeIdToName( $topicType );
-			if( !$currentTopic instanceof $customClass ) {
-				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
-				$this->frontController->doRedirect( 'forum', 'viewAll' );
-			}
-			
-			$form->setupWithTopic( $currentTopic );
-			$form->setNonceAction( 'editTopic' );
-			$module = 'edit';
-			$getArgs['topicId'] = $topic_id;
-		} else {
-			$form->setNonceAction( 'createTopic' );
-			$module = 'create';
-			$getArgs['forumId'] = $forumId;
-		}
-		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, array(), $getArgs );
-		
-		// fill the form with the posted field and errors
-		$form->setupWithArray( true );
-		$form->setTargetUrl( $actionUrl );
-		
-		$this->frontController->getResponse()->setVar( 'form', $form );
-		$this->frontController->doDisplay( 'topic', 'displayForm' );
-	}
-	
-	/**
 	 * @GetAttributes({topicId, forumId})
 	 * [p, n]
 	 */
@@ -140,14 +80,14 @@ class Topic extends AbstractController {
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
 		
 		// condition to satisfy to be able to write a comment
 		if( !$this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
-			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array(), array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
+			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
 		} else {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
 		}
@@ -160,6 +100,66 @@ class Topic extends AbstractController {
 		$this->frontController->getResponse()->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts ) );
 		
 		$this->frontController->doDisplay( 'topic', 'displaySingleTopic' );
+	}
+	
+	/**
+	 * @Nonce(displayTopicForm)
+	 * @GetAttributes({typeId, forumId})
+	 * [topic_id(opt, only for edit)]
+	 */
+	public function displayFormAction() {
+		$get = $this->frontController->getRequest()->query;
+		$topicType = $get->get( 'typeId' );
+		$forumId = $get->get( 'forumId' );
+		$topicId = $get->get( 'topicId', false );
+		
+		// check if the forum accept the custom type proposed 
+		$forumMeta = $this->em->getRepository( 'ForumMeta' );
+		if( !$forumMeta->isAcceptedBy( $forumId, $topicType ) ) {
+			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
+			$this->frontController->doRedirect( 'home' );
+		}
+		
+		// retrieve information and then pass to the form
+		// if existing information, we put as action "edit" instead of create
+		$form = TopicFormFactory::createForm( $topicType, $this->frontController );
+		if( !$form ) {
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'chooseType' );
+		}
+		$module = '';
+		
+		$getArgs = array( 'typeId' => $topicType );
+		
+		// now the form is valid we check if we can already fill it with previous value (from db)
+		if( false !== $topicId ) {
+			$topicRepo = $this->em->getRepository( 'TopicBase' );
+			$currentTopic = $topicRepo->findFullTopic( $topicId );
+			
+			// check if the class correspond to what is attempted !
+			$customClass = TopicType::translateTypeIdToName( $topicType );
+			if( !$currentTopic instanceof $customClass ) {
+				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
+				$this->frontController->doRedirect( 'forum', 'viewAll' );
+			}
+			
+			$form->setupWithTopic( $currentTopic );
+			$form->setNonceAction( 'editTopic' );
+			$module = 'edit';
+			$getArgs['topicId'] = $topicId;
+		} else {
+			$form->setNonceAction( 'createTopic' );
+			$module = 'create';
+			$getArgs['forumId'] = $forumId;
+		}
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, $getArgs );
+		
+		// fill the form with the posted field and errors
+		$form->setupWithArray( true );
+		$form->setTargetUrl( $actionUrl );
+		
+		$this->frontController->getResponse()->setVar( 'form', $form );
+		$this->frontController->doDisplay( 'topic', 'displayForm' );
 	}
 	
 	/**
@@ -217,7 +217,7 @@ class Topic extends AbstractController {
 		
 		//TODO redirection vers le topic en question
 		$this->frontController->addMessage( __( 'The creation of the topic was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
 	/**

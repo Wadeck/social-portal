@@ -53,7 +53,7 @@ class Post extends AbstractController {
 		$form = PostFormFactory::createForm( $topicType, $this->frontController );
 		if( !$form ) {
 			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
-			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 		}
 		$module = '';
 		
@@ -67,7 +67,7 @@ class Post extends AbstractController {
 			$customClass = TopicType::translateTypeIdToPostName( $topicType );
 			if( !$currentPost instanceof $customClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
-				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 			}
 			
 			$form->setupWithPost( $currentPost );
@@ -80,7 +80,7 @@ class Post extends AbstractController {
 			$getArgs['forumId'] = $forumId;
 			$getArgs['topicId'] = $topicId;
 		}
-		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, array(), $getArgs );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
 		$form->setupWithArray( true );
@@ -112,6 +112,7 @@ class Post extends AbstractController {
 		
 		$topic = $this->em->find( 'TopicBase', $topicId );
 		
+		
 		$base = new PostEntity();
 		$base->setCustomType( $typeId );
 		$base->setTopic( $topic );
@@ -123,6 +124,9 @@ class Post extends AbstractController {
 		$position = $this->em->getRepository( 'PostBase' )->getLastPosition( $topicId );
 		$base->setPosition( $position );
 		
+		// update of the topic
+		$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
+		$topic->setTime( $now );
 		$topic->setLastPoster( $this->frontController->getCurrentUser() );
 		
 		$post = $form->createSpecificPost( $base );
@@ -140,7 +144,7 @@ class Post extends AbstractController {
 		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId );
 		
 		$this->frontController->addMessage( __( 'The creation of the post was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array(), array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
 	/**

@@ -124,35 +124,46 @@ class FrontController {
 	
 	/** 
 	 * Entry point of the class
-	 * Also used when a form is not valid, to redirect internally
+	 * Only be called by index.php !!!
+	 * @exit
+	 */
+	public function dispatch() {
+		list( $module, $action ) = $this->request->parseDefaultUrl();
+		
+		Logger::getInstance()->log_var( 'GET', $_GET );
+		Logger::getInstance()->log_var( 'POST', $_POST );
+		Logger::getInstance()->log_var( 'COOKIE', $_COOKIE );
+		Logger::getInstance()->log_var( 'SESSION', $_SESSION );
+		
+		// [Authentification] check who is the current user
+		// could lead to exit ? / redirect ? Not for the moment
+		$this->user = $this->firewall->getAuthentificatedUser();
+		
+		$this->doAction( $module, $action );
+		exit();
+	}
+	/** 
+	 * Used when a form is not valid, to redirect internally
+	 *	without real redirection to keep form fields values
 	 * @param string $url Optionally the url we want to use
 	 * @exit
 	 */
-	public function dispatch($url = '') {
-		list( $module, $action, $param ) = $this->request->parseUrl( $url );
-		
-		if( !$url ) {
-			Logger::getInstance()->log_var( 'GET', $_GET );
-			Logger::getInstance()->log_var( 'POST', $_POST );
-			Logger::getInstance()->log_var( 'COOKIE', $_COOKIE );
-			Logger::getInstance()->log_var( 'SESSION', $_SESSION );
-			
-			// [Authentification] check who is the current user
-			// could lead to exit ? / redirect ? Not for the moment
-			$this->user = $this->firewall->getAuthentificatedUser();
-		}
-		
-		$this->doAction( $module, $action, $param );
+	public function dispatchUrl($url) {
+		//TODO verify if there is not a problem with response vars !
+		list( $module, $action, $gets ) = $this->request->parseUrl( $url, true );
+		$this->request->query->replace($gets);
+		$this->doAction( $module, $action );
 		exit();
 	}
-	
+
 	/**
 	 * Could be call from a controller that see the previous action is not in his domain
 	 * @param string $module The controller name
 	 * @param string $action The action name (corresponding to the function name .'Action'
 	 * @param array $getAttributes Array of parameter in associative manner passed to the action by get method
 	 */
-	public function doAction($module, $action = '', array $getAttributes = array()) {
+//	public function doAction($module, $action = '', array $getAttributes = array()) {
+	public function doAction($module, $action = '') {
 		$action = $action ? $action : 'index';
 		$name = ucfirst( $module );
 		$className = self::$CONTROLLER_DIR . $name;
@@ -183,10 +194,12 @@ class FrontController {
 				$this->generateException( new NoSuchActionException( $className, $methodName ) );
 			}
 			
-			//			$tempParams = $this->request->parameters;
-			//			$this->request->parameters = $parameters;
+			//TODO clean after debug
+//			if( $getAttributes ) {
+//				$tempGets = $this->request->query->all();
+//				$this->request->query->replace( $getAttributes );
+//			}
 			
-
 			// [Authorization] check if the user has the right to access this action
 			// could lead to exit
 			$this->firewall->checkAuthorization( $controller, $methodName );
@@ -197,10 +210,11 @@ class FrontController {
 			//			$controller->$methodName( $parameters );
 			$controller->$methodName();
 			$controller->actionAfter( $action );
+			
+//			if( $getAttributes ) {
+//				$this->request->query->replace( $tempGets );
+//			}
 		
-		//			$this->request->parameters = $tempParams;
-		
-
 		} catch ( Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
@@ -459,5 +473,12 @@ class FrontController {
 	public function setNonce($nonce) {
 		$this->nonce = $nonce;
 	}
-
+	// FIXME better way to do that, for the moment it just works ...
+	// not linked with different nonce per href etc... could lead to problem in some sub request
+	public function getNonceGET(){
+		return $this->getRequest()->query->get( '_nonce', null );
+	}
+	public function getNoncePOST(){
+		return $this->getRequest()->request->get( '_nonce', null );
+	}
 }

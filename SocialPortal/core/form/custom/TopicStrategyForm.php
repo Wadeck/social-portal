@@ -26,7 +26,7 @@ class TopicStrategyForm extends AbstractTopicForm {
 		parent::__construct( 'Strategy', $frontController, 'formStrategySubmit', __( 'Submit' ) );
 		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
-		$this->addInputField( new RadioField( 'topic_radio_test', array( __( 'Radio test' ), __( 'second choice' ), __( 'third choice' ) ), 1, array( 10, 20, 30 ) ) );
+//		$this->addInputField( new RadioField( 'topic_radio_test', array( __( 'Radio test' ), __( 'second choice' ), __( 'third choice' ) ), 1, array( 10, 20, 30 ) ) );
 	}
 	
 	public function setupWithTopic($topic) {

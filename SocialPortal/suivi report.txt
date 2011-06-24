@@ -1,0 +1,303 @@
+lundi 21 mars
+- transformation des div en table pour avoir des jolis commentaires / posts
+- separation des css (lors de la mise en production, on les fusionnera)
+- utilisation de bp_core_add_root_component pour eviter d'utiliser les pages (not a solution for the moment)
+- suppression des bp_core_add_root_component, ca sert a rien
+- chargement du ajax.php du theme
+- ajout du filtre Support / Coach / Membre dans les onglets du forum
+- mise en place d'un systeme de log par journal (fichier) qui ne peut etre plus gros que 255ko
+- system dynamique de custom topic, on peut les personaliser sans avoir a regarder le code javascript
+- validation coté client et serveur avec gestion des topic supprimé uniquement coté serveur
+
+- insertion des groupes avec le nombre correspondant de topic dans la barre de navigation du forum
+
+Lundi 4 avril
+- le plugin des custom type fonctionne presque, reste à reussir a valider les type de topic
+	avec les metadata, semble etre un bug
+- séparation des custom type en class séparée
+
+
+Mardi 5 avril
+- insertion du menu admin de bbPress pour modifier les posts/topics
+- modification du content pour les custom topics, le content de base sera mis dans la base centrale
+	afin de gagner de la place
+- ajout d'un cache pour le retrieve des types de topics en fonction des identifiers
+
+Mercredi 6 avril
+- je regarde pour prendre l'ancien forum et le mettre a la place de la page /topic
+
+Jeudi 7 avril
+- mise en place d'une nouvelle architecture des custom topic orientée objet
+- form pour les topics fait, et reception => database aussi
+- affichage des topics (sans mise en forme) juste les attributs qu'on avait demandé en meta
+
+Vendredi 8 avril
+- les topics s'affichent correctement en forme et les reponses aussi, testé avec un poll/standard
+- simplification de la fonction qui donne le forum par defaut ou qui donne le forum en fonction de l'onglet selectionné
+
+---------------------
+
+lundi 11 avril
+- edit des topics fonctionne, topic_meta et post_meta, pas encore pour les posts, need encore testé les controlleurs
+- les champs optionnels sont fonctionnels, on peut supprimer en mettant un champ vide.
+- les champs mandatory obligent à rentrer du contenu sinon erreur
+- titre et text_topic obligatoire aussi maintenant
+
+mardi 12 avril
+- integration des tests controleurs dans le js
+- separation du js en global.js et nsp_script.js
+- generalisation du test de controle des formulaires
+- ajout d'un bouton de retour au topic lorsque l'on est dans la page "edit.php"
+- edition des topics marche completement (affichage, edition, sauvegarde)
+- trouver une solution pour installer le debugger php, cela va faciliter le developpement normalement
+- nettoyage des champs pour eviter des injection js (stripslashes, trim, striptags)
+
+mercredi 13 avril
+- cache par default du panel qui sert a creer un nouveau topic, donc moins d'attente sur le js
+- topic creation/edit completement fonctionnel
+- commentaire creation/edit completement fonctionnel
+- insertion petit a petit des autres commandes edit/delete/stick/open/close
+
+jeudi 14 avril
+- continue sur l'insertion, separation en fonction distincte pour plus de clarté
+- ajout d'un catch pour l'url /topic/ sans numero de topic apres, on renvoie aux forums
+- autres catchs, si le numbero n'est pas valide => 404, ou si on passe un slug (nom de post formaté) on le transforme en numero
+- ajout d'un bouton de retour lorsqu'on ne trouve pas un topic donné (no topic displayed)
+- ajout d'un bouton "save changes" après les capacités nsp (netunion social portal)
+- modification de l'affichge des forms lors de la creation des topics
+
+vendredi 15 avril
+- modification de la pagination, elle marche
+- ajout de first / last pour les pages et remplacement de < et > par previous et next
+- ajout du support du javascript pour la pagination (no-ajax comme attribut permet de virer le coté javascript)
+- generalisation du code js pour catcher les events (wp-paginate ou pagination wordpress supportée)
+- meilleure gestion du selected pour les topics, on le gere en php et non javascript, donc instantanné (même si le code javascript reste derrière pour d'autre 'object'), il reste des bugs malgré tout
+- pagination pour les posts et les topics fonctionnent bien (get_option(post_per_page / topic_per_page) pour modifier les quantités de posts/topics par page)
+
+======================================================
+
+lundi 18 avril
+- correction du bug de premier commentaire
+- retirement du javascript pour les forums tab, on va le faire à la vieille methode pour eviter les problemes de backlink
+- changement de design global, on fait des box en page d'acceuil pointant vers des forums ou des topics directement
+
+mardi 19 avril
+- mise en cache du nombre de topic par forum => 3.5s de load à 1s
+- mise en place d'un system de group pour les forums
+- correction du nsp_die pour quitter proprement lorsque l'utilisateur n'a pas accès
+- restructuration des topics / posts pour une reutilisabilité plus poussée
+
+mercredi 20 avril
+- correction d'un bug de database qui n'affiche pas le group du dernier message lorsqu'on fait f5, en fait c'etait un probleme du cache de wordpress
+- simplification du css, creation de div.rounded-box-topic / div.rounded-box-topic.padded pour les box
+- creation depuis la page create fonctionne
+
+jeudi 21 avril
+- affichage dans les box dans la page limited-home avec des query (sales pour le moment)
+- correction d'un bug pour l'edition des posts dont le post_text n'avait pas ete modifié
+- ajustement du css pour les forms, notamment pour list/physical activity
+- ajout de list-topic et physical-activity-topic, pas complet mais l'idée est là
+- home page aussi passée du coté du crossroad pour ne pas avoir a gerer les pages statiques
+- relinkage du bouton create_topic de la partie forum
+- ajout de story-topic
+
+========================================================
+
+mardi 26 avril
+- generalisation de la box
+- remove programs to try to speed up the pc
+
+mercredi 27 avril
+- modification des forums / groups comme convenu lors de la reunion list => strategies, physical activities => list
+- découverte de la necessité de creer un groupe en parallele au forum afin d'avoir les id qui correspondent
+- nettoyage du workspace
+- remove programs to try to speed up the pc
+- changement du type de reception des données pour les custom types afin d'accepter les nouvelles lists, chaque classe peut parser comme bon lui semble, bonne alternative au tout regex
+- insertion d'une table a l'activation et utilisation de celle ci pour stocker les items relatifs a une list pour les topics custom
+
+jeudi 28 avril
+- toujours en cours de creation de la class qui va gérer les differentes fonctions de stocker/mise a jour/vote etc des item de la list
+
+========================================================
+
+lundi 2 mai
+- ajout d'une colonne poster (hesitation encore sur le retrait du last_poster)
+- reduction de 1 des posts count pour prendre en compte le fait que le premier topic
+	soit le premier post dans la base de donnée
+- retrait du nsp_die trop tot dans le home, maintenant il meurt une fois que le header / footer sont en place
+- retrait du nsp_die trop tot dans le forum
+- correction des requetes dans les box (elles ne sont pour le moment pas optimizée, des jointures faire a la place des select
+- mise en place d'un systeme de test de fonction /wordpress/test/[function_name]/arg1/arg2
+
+mardi 3 mai
+- backup base de donnée et code version 11
+- correction du login redirect, il y avait une fonction qui hooké deja sur l'action (augmentation de la priorité)
+- mise en place de l'edition / deletion / vote pour les items d'une liste, javascript et post
+
+mercredi 4 mai
+- finition du systeme d'edition / deletion et affichage des items de la liste
+
+jeudi 5 mai
+- on repart sur une nouvelle base (vide)
+- structuration de l'architecture
+- implementation de user.dao
+- implementation de Tester / Displayer
+- test de user.dao
+
+vendredi 6 mai
+- second test sur user.dao, plus poussé
+- crypto des mdp
+
+=========================================================
+
+lundi 9 mai
+- test forum/user
+- separation de certaine method topic pour les enfants
+- code des custom type de topic : only freetext (sans les specifités autre que les attributs)
+- recodage de la connection a la base de donnée pour permettre le support des transactions (necessaire pour la coherence des données)
+
+mardi 10 mai
+- test topic
+- documentation pour tester des methods private (surtout constructeur privé qui n'a pas de solution en php 5.3.5)
+- implementation et testing de freetext (surtout de la structure heritée assez complexe)
+- impl. test. de activity (tres semblable a freetext pour le moment)
+- impl. test. de story (plus elaboré deja)
+- insertion des 3 tables
+
+mercredi 11 mai
+- creation des tables topics_strategy et topics_strategy_items
+- implementation de strategy et des items relatifs (très long, faut gerer aussi la table des items)
+
+jeudi 12 mai
+- test des strategies, tout marche sans le destroy qui ne destroy pas les items
+- preparation de la presentation
+
+vendredi 13 mai
+- preparation de la presentation
+
+=========================================================
+
+lundi 16 mai
+- finition de la presentation
+
+mardi 17 mai 
+[presentation midterm au prof/assistant]
+
+===========
+==========
+===========
+
+lundi 6 juin
+- new hash function to prevent rainbow attack table
+- detection of the repositories for the entities
+- extension of the inheritence for the posts like for the topics
+
+mardi 7 juin
+- add namespace to entity manager to avoid writing socialportal\\model\\User but just User
+- modification de certains objets
+
+mercredi 8 juin
+- certaines valeurs par defaut changées
+- mise en place du nonce (idée prise de wordpress)
+- mise en place d'un formulaire avec validation automatique, le concept de base est fait, les forms ont un cycle de vie defini, en cours de creation des different fields
+
+jeudi 9 juin
+- premier test du formulaire, ca a l'air de marcher l'affichage, reste a tester le retour
+- creation de l'utilisateur anonyme
+
+vendredi 10 juin
+- second test avancé sur les forms tout est ok
+- validation php ET javascript
+- translation possible
+- ajout du support de jquery
+- support de index / unique sur les tables
+- support informatif des index/unique qui sont relatif qu'a une seule colonne = placée dans l'annotation Column pour plus de clarté
+
+==============
+
+mardi 14 juintoujours en parlant de base de donnée
+- index / unique sur les columns directement it works perfectly
+- reformatage de la sortie de l'entity generator, les indexes/unique constraints sont plus readable
+- passage a google code
+- forum meta to have allowed topic type
+
+mercredi 15 juin
+- creation d'un petit panel pour l'administration
+- resetage de base de donnée => creation d'un administrateur / les forums de base
+- topic choose type page
+- topic create en tres bonne voie
+
+jeudi 16 juin
+- topic create 
+- reception topic create -> validation et mise en bdd
+- viewAll topic pour un forum donné
+- changement dans les forms pour etre consistant
+
+vendredi 17 juin
+- view all topic from single forum
+- recount function (tool) pour les posts (pas encore testé) et les topics
+- function incrementNumTopic/Post forum/post
+- changement de css, capacité de la vue de modifier le header et le footer viewHelper->setContainerClass
+
+==================
+
+lundi 20 juin
+- correction bugs dans les creations / editions de topics
+- ajout des message d'erreur/correct en plus des messages d'information pour les flash
+- les flash message (cf au dessus) sont desormais clickable pour etre caché
+- templates pour topics / posts en prenant ceux de wordpress et en adaptant, de maniere generique, mais pas testé
+
+mardi 21 juin
+- test des templates, correction de divers erreurs css
+- creation des forms pour les commentaires / posts pour chaque type de topic
+- ajout d'une interface iInsertable, pour faciliter les aides aux views. MessageInsertTemplate et ModuleInsertTemplate viennent se rajouter aux facilités deja intégrées
+- simplification du systeme de nonce imbriqué dans le viewHelper
+- parameters annotation to check the number of paramaters required
+- insertion du module post/displayForm dans le topic/displaySingleTopic pour rendre 
+
+mercredi 22 juin
+- test add post / view posts
+- edit des posts marchent !
+- debug du recount post (enfin moyen de tester)
+- redesign forum form, post form
+- test pagination pour les posts, marche à merveille
+- "unimplemented" class css pour les liens qui ne sont pas fonctionnels pour le moment
+- ajout des permalinks
+- creation forum correction de bug
+- retirement des merges (uniquement valable si on detach les entities ce qui n'est pas le cas dans le projet)
+
+bilan 1.0 au mercredi 22 juin
+- User: register / log in / remember me / disconnect
+- Forum: viewAll / displayOne / create / edit
+- Topic: displayOne / create / edit / recount
+- Post: create / edit / recount
+- custom interactions: stories have different fields, activities / freetext / strategies are for the moment identical
+
+jeudi 23 juin
+todo - create topic button mieux placé
+todo - topic custom accepted dans les forums créés
+todo - regarder si le nombre de forum croit enormement (espace insecable etc)
+- deplacer le lien du register user dans le login form
+- emploi d'un form pour login et reception du login action
+- refactor du user helper pour eviter le futur probleme avec le manque du front controller, du coup now le userHelper doit etre creer dans le controller et passer ensuite a la vue
+- emploi d'un form pour le register et reception du register action
+
+jeudi 23 soir
+- premiere partie de l'ajout des commentaires dans doctrine (annotation => database for column)
+- refactor des parameters en get attributes pour tous les controllers
+- move de response / request dans http/
+- move des templates dans /templates plutot que topics/templates
+
+vendredi 24 juin
+- fin du refactor des gets, il en manquait 5-6
+- traitement des redirection / redoDisplay avec les urls et gets
+- block template
+- home page display
+- topic base time update quand on cree un nouveau post !
+- correction des subrequest qui contenaient de mauvais nonces
+- resolu le probleme de la date since=0
+
+
+
+
+
