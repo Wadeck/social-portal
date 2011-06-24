@@ -13,7 +13,7 @@ class DoctrineLink {
 		$config = new Configuration();
 		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal\\model' );
 		$config->setMetadataDriverImpl( $driverImpl );
-		$config->setProxyDir( 'socialportal\\model\\proxies' );
+		$config->setProxyDir( 'socialportal'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR.'proxies' );
 		$config->setDefaultEntityNamespace( 'socialportal\\model' );
 		$config->setProxyNamespace( 'socialportal\\model\\proxies' );
 		if( true === DEBUG ) {

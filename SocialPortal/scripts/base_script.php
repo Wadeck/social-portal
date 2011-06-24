@@ -13,7 +13,7 @@ $config = new Configuration();
 $config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( TARGET ) );
 $config->setMetadataCacheImpl( $cache );
 $config->setQueryCacheImpl( $cache );
-$config->setProxyDir( __DIR__ . '\\socialportal\\proxy' );
+$config->setProxyDir( __DIR__ .DIRECTORY_SEPARATOR.'socialportal'.DIRECTORY_SEPARATOR.'proxy' );
 $config->setProxyNamespace( 'Proxy' );
 $config->setAutoGenerateProxyClasses( true );
 
