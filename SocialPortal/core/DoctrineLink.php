@@ -11,7 +11,7 @@ class DoctrineLink {
 	//TODO information from configuration file could be better
 	public static function getEntityManager() {
 		$config = new Configuration();
-		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal\\model' );
+		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal'.DIRECTORY_SEPARATOR.'model' );
 		$config->setMetadataDriverImpl( $driverImpl );
 		$config->setProxyDir( 'socialportal'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR.'proxies' );
 		$config->setDefaultEntityNamespace( 'socialportal\\model' );
