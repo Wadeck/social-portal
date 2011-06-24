@@ -297,8 +297,9 @@ vendredi 24 juin
 - correction des subrequest qui contenaient de mauvais nonces
 - resolu le probleme de la date since=0
 - resolu bug de form qui n'etait pas validé
-
-
-
+- refactor displaySingle en displaySingleForum pour etre coherent avec les autres
+- changement de lien sous le topic form, back to home a la place de viewAll qui est deprecié
+- correction css edit post, meilleur look, comme topic edit now
+-
 
 

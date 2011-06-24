@@ -9,7 +9,7 @@
 .box {
     padding: 5px;
     margin: 15px;
-    min-height: 200px;
+    min-height: 120px;
     width: 300px; 
     float: left;
     
@@ -84,6 +84,8 @@
     .box-tool{
     	float: right;
     	font-size: 12px;
+		line-height: 100%;
+		padding: 3px;    
 	}
     div.box-container{
     	clear: both;
