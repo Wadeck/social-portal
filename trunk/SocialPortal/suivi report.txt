@@ -296,6 +296,7 @@ vendredi 24 juin
 - topic base time update quand on cree un nouveau post !
 - correction des subrequest qui contenaient de mauvais nonces
 - resolu le probleme de la date since=0
+- resolu bug de form qui n'etait pas validé
 
 
 
