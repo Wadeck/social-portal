@@ -59,10 +59,14 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @_GetAttributes({key, password})
+	 */
 	public function directCreatePasswordAction() {
-		if( count( $parameters ) >= 2 ) {
-			$randomkey = $parameters[0];
-			$password = $parameters[1];
+		$get = $this->frontController->getRequest()->query;
+		$randomkey = $get->get( 'key', null );
+		$password = $get->get( 'password', null );
+		if( $randomkey && $password ) {
 			$encoded = Crypto::encodeDBPassword( $randomkey, $password );
 		} else {
 			$encoded = null;
@@ -118,7 +122,7 @@ class Tool extends AbstractController {
 		if( $this->em->flushSafe() ) {
 			$metaRep = $this->em->getRepository( 'ForumMeta' );
 			$result = true;
-			$result &= $metaRep->setAcceptableTopics( $forumDiscussion->getId(), array( TopicType::$typeFreeText ) );
+			$result &= $metaRep->setAcceptableTopics( $forumDiscussion->getId(), array( TopicType::$typeFreetext ) );
 			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( TopicType::$typeStory ) );
 			$result &= $metaRep->setAcceptableTopics( $forumStrategies->getId(), array( TopicType::$typeStrategy ) );
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TopicType::$typeActivity ) );

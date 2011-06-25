@@ -24,7 +24,7 @@ use core\templates\ActivityTopicTemplate;
 
 class TopicType {
 	public static $typeActivity = 1;
-	public static $typeFreeText = 2;
+	public static $typeFreetext = 2;
 	public static $typeStory = 3;
 	public static $typeStrategy = 4;
 	
@@ -72,7 +72,7 @@ class TopicType {
 			case 1 :
 				return 'socialportal\model\TopicActivity';
 			case 2 :
-				return 'socialportal\model\TopicFreeText';
+				return 'socialportal\model\TopicFreetext';
 			case 3 :
 				return 'socialportal\model\TopicStory';
 			case 4 :
@@ -90,7 +90,7 @@ class TopicType {
 			case 1 :
 				return 'socialportal\model\PostActivity';
 			case 2 :
-				return 'socialportal\model\PostFreeText';
+				return 'socialportal\model\PostFreetext';
 			case 3 :
 				return 'socialportal\model\PostStory';
 			case 4 :
@@ -108,7 +108,7 @@ class TopicType {
 			case 1 :
 				return 'Activity';
 			case 2 :
-				return 'FreeText';
+				return 'Freetext';
 			case 3 :
 				return 'Story';
 			case 4 :
@@ -123,7 +123,7 @@ class TopicType {
 		switch ( $typeName ) {
 			case 'socialportal\model\TopicActivity' :
 				return 1;
-			case 'socialportal\model\TopicFreeText' :
+			case 'socialportal\model\TopicFreetext' :
 				return 2;
 			case 'socialportal\model\TopicStory' :
 				return 3;
@@ -140,7 +140,7 @@ class TopicType {
 		switch ( $typeName ) {
 			case 'Activity' :
 				return 1;
-			case 'FreeText' :
+			case 'Freetext' :
 				return 2;
 			case 'Story' :
 				return 3;
