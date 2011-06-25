@@ -1,190 +1,372 @@
-Fri, 24 Jun 11 16:07:31 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 24 Jun 11 16:07:31 +0000	Request path: Topic :: create :: 
-Fri, 24 Jun 11 16:07:31 +0000	GET = array (
-  'typeId' => '1',
-  'forumId' => '4',
+Sat, 25 Jun 11 09:31:16 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:31:16 +0000	Request path: Topic :: displaySingleTopic :: 
+Sat, 25 Jun 11 09:31:16 +0000	GET = array (
+  'topicId' => '1',
+  'forumId' => '1',
 )
-Fri, 24 Jun 11 16:07:31 +0000	POST = array (
-  'topic_title' => 'asdfgsdfgasdfgsdfg',
-  'topic_description' => 'asdfgsdfgasdfgsdfgasdfgsdfg',
-  '_nonce' => 'd0b1098ed817',
-  '_nonce_clear' => 'createTopic',
-  '_http_referrer' => '/SocialPortal/Topic/displayForm?typeId=1&forumId=4&_nonce=b62d95a5a055',
-  'formActivitySubmit' => 'Submit',
+Sat, 25 Jun 11 09:31:16 +0000	POST = array (
 )
-Fri, 24 Jun 11 16:07:31 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'an7sca5veb9lb5c4am78arjng1',
+Sat, 25 Jun 11 09:31:16 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
 )
-Fri, 24 Jun 11 16:07:31 +0000	SESSION = array (
+Sat, 25 Jun 11 09:31:16 +0000	SESSION = array (
   '_socialportal' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJzYXJhaCI7aToxO3M6MToiNSI7aToyO3M6NToic2FyYWgiO30=',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Fri, 24 Jun 11 16:07:31 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '5',
-   'username' => 'sarah',
-   'randomKey' => 'da749e01a02ffb792c94e17d55f3eb55',
-   'password' => '305c73f18d5b3168b1ca9edd4e105e2df6325d45',
-   'email' => 'sarah',
+Sat, 25 Jun 11 09:31:16 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
    'registered' => 
   DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:01',
+     'date' => '1970-01-01 00:00:00',
      'timezone_type' => 3,
      'timezone' => 'UTC',
   )),
    'activationKey' => '',
    'status' => 0,
-   'roles' => 4,
-   'avatarKey' => 'sarah',
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
 ))
-Fri, 24 Jun 11 16:07:31 +0000	[DEBUG]	Cookies received: array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'an7sca5veb9lb5c4am78arjng1',
+Sat, 25 Jun 11 09:32:49 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
 )
-Fri, 24 Jun 11 16:07:31 +0000	Simple cookies: Array
+Sat, 25 Jun 11 09:32:49 +0000	Simple cookies: Array
 (
-    [debug_host] => 127.0.0.1
-    [debug_fastfile] => 1
-    [debug_port] => 10037
-    [start_debug] => 1
-    [send_debug_header] => 1
-    [send_sess_end] => 1
-    [debug_jit] => 1
-    [original_url] => http://localhost/SocialPortal/Topic/displaySingleTopic/1/1
-    [use_remote] => 1
-    [debug_session_id] => 66871452
-    [_SESS] => an7sca5veb9lb5c4am78arjng1
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
 )
 
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie debug_host=>127.0.0.1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie debug_fastfile=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie debug_port=>10037
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie start_debug=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie send_debug_header=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie send_sess_end=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie debug_jit=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie original_url=>http://localhost/SocialPortal/Topic/displaySingleTopic/1/1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie use_remote=>1
-Fri, 24 Jun 11 16:07:31 +0000	Storing cookie debug_session_id=>66871452
-Fri, 24 Jun 11 16:07:31 +0000	Avoid storing session name in cookie _SESS=>an7sca5veb9lb5c4am78arjng1
-Fri, 24 Jun 11 16:07:31 +0000	Redirect to /SocialPortal/Topic/displayForm?typeId=1&forumId=4&_nonce=b62d95a5a055 from /SocialPortal/Topic/create?typeId=1&forumId=4
-Fri, 24 Jun 11 16:07:31 +0000	[DEBUG]	end of session
+Sat, 25 Jun 11 09:32:49 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:32:49 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:32:49 +0000	[DEBUG]	end of session
 ====================================
 
-Fri, 24 Jun 11 16:07:32 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 24 Jun 11 16:07:32 +0000	Request path: Topic :: displayForm :: 
-Fri, 24 Jun 11 16:07:32 +0000	GET = array (
-  'typeId' => '1',
-  'forumId' => '4',
-  '_nonce' => 'b62d95a5a055',
+Sat, 25 Jun 11 09:32:50 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:32:50 +0000	Request path: Topic :: displaySingleTopic :: 
+Sat, 25 Jun 11 09:32:50 +0000	GET = array (
+  'topicId' => '1',
+  'forumId' => '1',
 )
-Fri, 24 Jun 11 16:07:32 +0000	POST = array (
+Sat, 25 Jun 11 09:32:50 +0000	POST = array (
 )
-Fri, 24 Jun 11 16:07:32 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'an7sca5veb9lb5c4am78arjng1',
+Sat, 25 Jun 11 09:32:50 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
 )
-Fri, 24 Jun 11 16:07:32 +0000	SESSION = array (
+Sat, 25 Jun 11 09:32:50 +0000	SESSION = array (
   '_socialportal' => 
   array (
     '_flash' => 
     array (
-      'notice_error' => 'There was a problem during the creation of the topic, try with an other title or in a moment',
-      'redirectFrom' => '/SocialPortal/Topic/create?typeId=1&forumId=4',
     ),
     '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJzYXJhaCI7aToxO3M6MToiNSI7aToyO3M6NToic2FyYWgiO30=',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
   ),
 )
-Fri, 24 Jun 11 16:07:32 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '5',
-   'username' => 'sarah',
-   'randomKey' => 'da749e01a02ffb792c94e17d55f3eb55',
-   'password' => '305c73f18d5b3168b1ca9edd4e105e2df6325d45',
-   'email' => 'sarah',
+Sat, 25 Jun 11 09:32:50 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
    'registered' => 
   DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:01',
+     'date' => '1970-01-01 00:00:00',
      'timezone_type' => 3,
      'timezone' => 'UTC',
   )),
    'activationKey' => '',
    'status' => 0,
-   'roles' => 4,
-   'avatarKey' => 'sarah',
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
 ))
-Fri, 24 Jun 11 16:07:32 +0000	[DEBUG]	Cookies received: array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'an7sca5veb9lb5c4am78arjng1',
+Sat, 25 Jun 11 09:34:00 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
 )
-Fri, 24 Jun 11 16:07:32 +0000	Simple cookies: Array
+Sat, 25 Jun 11 09:34:00 +0000	Simple cookies: Array
 (
-    [debug_host] => 127.0.0.1
-    [debug_fastfile] => 1
-    [debug_port] => 10037
-    [start_debug] => 1
-    [send_debug_header] => 1
-    [send_sess_end] => 1
-    [debug_jit] => 1
-    [original_url] => http://localhost/SocialPortal/Topic/displaySingleTopic/1/1
-    [use_remote] => 1
-    [debug_session_id] => 66871452
-    [_SESS] => an7sca5veb9lb5c4am78arjng1
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
 )
 
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie debug_host=>127.0.0.1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie debug_fastfile=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie debug_port=>10037
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie start_debug=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie send_debug_header=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie send_sess_end=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie debug_jit=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie original_url=>http://localhost/SocialPortal/Topic/displaySingleTopic/1/1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie use_remote=>1
-Fri, 24 Jun 11 16:07:32 +0000	Storing cookie debug_session_id=>66871452
-Fri, 24 Jun 11 16:07:32 +0000	Avoid storing session name in cookie _SESS=>an7sca5veb9lb5c4am78arjng1
-Fri, 24 Jun 11 16:07:32 +0000	[DEBUG]	end of session
+Sat, 25 Jun 11 09:34:00 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:34:00 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:34:00 +0000	[DEBUG]	end of session
+====================================
+
+Sat, 25 Jun 11 09:34:03 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:34:03 +0000	Request path: Topic :: displaySingleTopic :: 
+Sat, 25 Jun 11 09:34:03 +0000	GET = array (
+  'topicId' => '1',
+  'forumId' => '1',
+)
+Sat, 25 Jun 11 09:34:03 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:34:03 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:34:03 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:34:03 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:34:22 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:34:22 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:34:22 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:34:22 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:34:22 +0000	[DEBUG]	end of session
+====================================
+
+Sat, 25 Jun 11 09:39:37 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:39:37 +0000	Request path: home :: index :: 
+Sat, 25 Jun 11 09:39:37 +0000	GET = array (
+)
+Sat, 25 Jun 11 09:39:37 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:39:37 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:37 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:39:37 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:39:42 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:42 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:39:42 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:39:42 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:39:42 +0000	[DEBUG]	end of session
+====================================
+
+Sat, 25 Jun 11 09:39:47 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:39:47 +0000	Request path: Tool :: index :: 
+Sat, 25 Jun 11 09:39:47 +0000	GET = array (
+)
+Sat, 25 Jun 11 09:39:47 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:39:47 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:47 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:39:47 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:39:47 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:47 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:39:47 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:39:47 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:39:47 +0000	[DEBUG]	end of session
+====================================
+
+Sat, 25 Jun 11 09:39:48 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:39:48 +0000	Request path: Tool :: directCreatePassword :: 
+Sat, 25 Jun 11 09:39:48 +0000	GET = array (
+)
+Sat, 25 Jun 11 09:39:48 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:39:48 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:48 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:39:48 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:39:48 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:39:48 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:39:48 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:39:48 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:39:48 +0000	[DEBUG]	end of session
+====================================
+
+Sat, 25 Jun 11 09:40:01 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:40:01 +0000	Request path: Tool :: directCreatePassword :: 
+Sat, 25 Jun 11 09:40:01 +0000	GET = array (
+  'key' => 'xxx',
+  'password' => 'yyy',
+)
+Sat, 25 Jun 11 09:40:01 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:40:01 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:40:01 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:40:01 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:40:01 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:40:01 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:40:01 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:40:01 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:40:01 +0000	[DEBUG]	end of session
 ====================================
 
