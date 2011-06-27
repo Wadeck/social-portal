@@ -370,3 +370,55 @@ Sat, 25 Jun 11 09:40:01 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
 Sat, 25 Jun 11 09:40:01 +0000	[DEBUG]	end of session
 ====================================
 
+Sat, 25 Jun 11 09:44:49 +0000	start of session Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+Sat, 25 Jun 11 09:44:49 +0000	Request path: home :: index :: 
+Sat, 25 Jun 11 09:44:49 +0000	GET = array (
+)
+Sat, 25 Jun 11 09:44:49 +0000	POST = array (
+)
+Sat, 25 Jun 11 09:44:49 +0000	COOKIE = array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:44:49 +0000	SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+  ),
+)
+Sat, 25 Jun 11 09:44:50 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '3',
+   'username' => 'admin',
+   'randomKey' => '71e9b911c9fd50b079c3383f4ee28eeb',
+   'password' => 'f3c9b4ddb3398bef15338f3d852d4108c0e51740',
+   'email' => 'w.follonier@netunion.com',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '1970-01-01 00:00:00',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '',
+   'status' => 0,
+   'roles' => 1,
+   'avatarKey' => 'w.follonier@netunion.com',
+))
+Sat, 25 Jun 11 09:44:50 +0000	[DEBUG]	Cookies received: array (
+  '_SESS' => '0sqeu65r22c0dhlmj8ql7jtfn0',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+Sat, 25 Jun 11 09:44:50 +0000	Simple cookies: Array
+(
+    [_SESS] => 0sqeu65r22c0dhlmj8ql7jtfn0
+    [XDEBUG_SESSION] => ECLIPSE_DBGP
+)
+
+Sat, 25 Jun 11 09:44:50 +0000	Avoid storing session name in cookie _SESS=>0sqeu65r22c0dhlmj8ql7jtfn0
+Sat, 25 Jun 11 09:44:50 +0000	Storing cookie XDEBUG_SESSION=>ECLIPSE_DBGP
+Sat, 25 Jun 11 09:44:50 +0000	[DEBUG]	end of session
+====================================
+
