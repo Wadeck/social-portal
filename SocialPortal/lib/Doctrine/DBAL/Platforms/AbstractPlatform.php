@@ -1211,13 +1211,22 @@ abstract class AbstractPlatform
      * XXX comment support, perhaps only supported by mysql
      */
     public function getCommentValueDeclarationSQL($field){
-    	if(isset($field)){
-	    	$comment = "COMMENT '$field'";
-    	}else{
-    		$comment ='';
-    	}
-    	return $comment;
+    	return '';
+//    	if(isset($field)){
+//	    	$comment = "COMMENT '$field'";
+//    	}else{
+//    		$comment ='';
+//    	}
+//    	return $comment;
     }
+//    public function getCommentValueDeclarationSQL($field){
+//    	if(isset($field)){
+//	    	$comment = "COMMENT '$field'";
+//    	}else{
+//    		$comment ='';
+//    	}
+//    	return $comment;
+//    }
 
     /**
      * Obtain DBMS specific SQL code portion needed to set a CHECK constraint

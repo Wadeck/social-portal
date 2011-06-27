@@ -109,7 +109,7 @@ class Topic extends AbstractController {
 		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$pagination = new Paginator();
-		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
+		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false);
 		
 		// condition to satisfy to be able to write a comment
 		if( !$this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {

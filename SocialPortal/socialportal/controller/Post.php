@@ -63,6 +63,7 @@ class Post extends AbstractController {
 		
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $postId ) {
+			// we edit a post, cause we receive a post id
 			$postRepo = $this->em->getRepository( 'PostBase' );
 			$currentPost = $postRepo->findFullPost( $postId );
 			
@@ -79,6 +80,7 @@ class Post extends AbstractController {
 			$getArgs['postId'] = $postId;
 			$nameAction = 'displayFormEdit';
 		} else {
+			// we create a post
 			$user = $this->frontController->getCurrentUser();
 			$userHelper = new UserHelper( $this->frontController );
 			

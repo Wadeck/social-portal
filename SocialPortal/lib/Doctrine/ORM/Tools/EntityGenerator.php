@@ -561,9 +561,9 @@ public function <methodName>(){
 			$indexes = array();
 			foreach( $metadata->table['indexes'] as $key => $index ) {
 				$columns = $index->getColumns();
-				array_walk($columns, function(&$item, $key){
-					$item = '"'.$item.'"';
-				});
+				array_walk( $columns, function (&$item, $key) {
+					$item = '"' . $item . '"';
+				} );
 				$indexes[] = " *\t\t@Index(name=\"" . $key . '", columns={' . implode( ', ', $columns ) . '})';
 			}
 			$table[] = "indexes={\n" . implode( ",\n", $indexes ) . "\n *\t}";
@@ -574,9 +574,9 @@ public function <methodName>(){
 			$uniques = array();
 			foreach( $metadata->table['uniqueConstraints'] as $key => $unique ) {
 				$columns = $unique->getColumns();
-				array_walk($columns, function(&$item, $key){
-					$item = '"'.$item.'"';
-				});
+				array_walk( $columns, function (&$item, $key) {
+					$item = '"' . $item . '"';
+				} );
 				$uniques[] = " *\t\t@UniqueConstraint(name=\"" . $key . '", columns={' . implode( ', ', $columns ) . '})';
 			}
 			$table[] = "uniqueConstraints={\n" . implode( ",\n", $uniques ) . "\n *\t}";
@@ -930,46 +930,47 @@ public function <methodName>(){
 			}
 			
 			// need to check if the unique/index are alone, otherwise that leads to errors after 1 loop
-			if(isset($metadata->table['indexes'])){
+			if( isset( $metadata->table['indexes'] ) ) {
 				$searchKey = $fieldMapping['columnName'];
-				$result = array_filter($metadata->table['indexes'], function(Index $index) use ($searchKey){
+				$result = array_filter( $metadata->table['indexes'], function (Index $index) use($searchKey) {
 					$cols = $index->getColumns();
-					if( 1 == count($cols)){
-						if($searchKey === $cols[0]){
+					if( 1 == count( $cols ) ) {
+						if( $searchKey === $cols[0] ) {
 							return true;
 						}
 					}
 					return false;
-				});
-				if($result){
+				} );
+				if( $result ) {
 					$column[] = 'index=' . var_export( $fieldMapping['index'], true );
 				}
-				
+			
 			}
-			if(isset($metadata->table['uniqueConstraints'])){
+			if( isset( $metadata->table['uniqueConstraints'] ) ) {
 				$searchKey = $fieldMapping['columnName'];
-				$result = array_filter($metadata->table['uniqueConstraints'], function(Index $index) use ($searchKey){
+				$result = array_filter( $metadata->table['uniqueConstraints'], function (Index $index) use($searchKey) {
 					$cols = $index->getColumns();
-					if( 1 == count($cols)){
-						if($searchKey === $cols[0]){
+					if( 1 == count( $cols ) ) {
+						if( $searchKey === $cols[0] ) {
 							return true;
 						}
 					}
 					return false;
-				});
-				if($result){
+				} );
+				if( $result ) {
 					$column[] = 'unique=' . var_export( $fieldMapping['unique'], true );
 				}
-				
-			}
-//			if( isset( $fieldMapping['unique'] ) && $fieldMapping['unique'] ) {
-//				$column[] = 'unique=' . var_export( $fieldMapping['unique'], true );
-//			}
-//			
-//			if( isset( $fieldMapping['index'] ) && $fieldMapping['index'] ) {
-//				$column[] = 'index=' . var_export( $fieldMapping['index'], true );
-//			}
 			
+			}
+			//			if( isset( $fieldMapping['unique'] ) && $fieldMapping['unique'] ) {
+			//				$column[] = 'unique=' . var_export( $fieldMapping['unique'], true );
+			//			}
+			//			
+			//			if( isset( $fieldMapping['index'] ) && $fieldMapping['index'] ) {
+			//				$column[] = 'index=' . var_export( $fieldMapping['index'], true );
+			//			}
+			
+
 			//XXX add
 			if( isset( $fieldMapping['default'] ) ) {
 				if( is_string( $fieldMapping['default'] ) ) {
@@ -980,6 +981,11 @@ public function <methodName>(){
 			}
 			
 			$lines[] = $this->_spaces . ' * @' . $this->_annotationsPrefix . 'Column(' . implode( ', ', $column ) . ')';
+			
+			// XXX add comment support
+			if( isset( $fieldMapping['comment'] ) && $fieldMapping['comment'] ) {
+				$lines[] = $this->_spaces . ' * @' . $this->_annotationsPrefix . 'Comment("' . $fieldMapping['comment'] . '")';
+			}
 			
 			if( isset( $fieldMapping['id'] ) && $fieldMapping['id'] ) {
 				$lines[] = $this->_spaces . ' * @' . $this->_annotationsPrefix . 'Id';

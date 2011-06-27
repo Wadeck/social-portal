@@ -48,7 +48,7 @@ class Paginator {
 	 * @param string $nextPage translated name of the link
 	 * @param string $title translated name that is displayed before pagination
 	 */
-	public function paginate(FrontController $front, $page, $pages, $per_page, $base_url, $firstPage, $lastPage, $previousPage, $nextPage, $title = '') {
+	public function paginate(FrontController $front, $page, $pages, $per_page, $base_url, $firstPage, $lastPage, $previousPage, $nextPage, $withBefore = true, $withAfter = true, $title = '') {
 		$this->frontController = $front;
 		if( $this->cache ) {
 			return $this->cache;
@@ -58,8 +58,8 @@ class Paginator {
 			$this->cache = '';
 			return $this->cache;
 		}
-		$before = '<div class="navigation">';
-		$after = '</div>';
+		$before = $withBefore ? '<div class="navigation">' : '';
+		$after = $withAfter ? '</div>' : '';
 		$range = 3;
 		$anchor = 1;
 		$gap = 3;

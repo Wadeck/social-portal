@@ -212,15 +212,17 @@ table.forum-loop td.author .author-name,table.forum-loop td.latest-poster .lastp
 	color: #aaa;
 }
 
-/*ol.commentlist li, div#topic, div#edit-topic, div#edit-post, div#topic-respond {*/
-ol.commentlist li,div.rounded-box #topic {
+/*ol.commentlist li,div.rounded-box #topic {
 	margin: 10px 0 20px 0;
 	border: 1px solid #eee;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
+}*/
+ol.commentlist li{
+	margin: 10px 0 10px 0;
 }
-
+/*
 ol.commentlist li:first-child {
 	margin: 0 0 20px 0;
 }
@@ -228,6 +230,7 @@ ol.commentlist li:first-child {
 ol.commentlist li:last-child {
 	margin: 10px 0 0 0;
 }
+*/
 
 div.rounded-box-topic.padded {
 	padding: 8px;
