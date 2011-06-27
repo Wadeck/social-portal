@@ -210,6 +210,8 @@ class DatabaseDriver implements Driver {
 			} else if( $column->getType() instanceof \Doctrine\DBAL\Types\IntegerType ) {
 				$fieldMapping['unsigned'] = $column->getUnsigned();
 			}
+			
+			$fieldMapping['comment'] = $column->getComment();
 			$fieldMapping['nullable'] = $column->getNotNull() ? false : true;
 			$fieldMapping['unique'] = in_array( $column->getName(), $_columnUnique );
 			$fieldMapping['index'] = in_array( $column->getName(), $_columnIndex );

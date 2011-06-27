@@ -162,7 +162,9 @@ class MySqlSchemaManager extends AbstractSchemaManager
             $options['scale'] = $scale;
             $options['precision'] = $precision;
         }
-
+        if(isset($tableColumn['comment'])){
+			$options['comment'] = $tableColumn['comment'];
+        }
         return new Column($tableColumn['field'], \Doctrine\DBAL\Types\Type::getType($type), $options);
     }
 

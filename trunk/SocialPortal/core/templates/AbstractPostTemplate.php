@@ -54,7 +54,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 			
 		?>
 			<!-- Here to add the condition on the post status -->
-			<li id="post-<?php echo $postId; ?>">
+			<li class="rounded-box" id="post-<?php echo $postId; ?>">
 				<a name="post-<?php echo $postId; ?>" ></a>
 				<table>
 			    	<tr>
