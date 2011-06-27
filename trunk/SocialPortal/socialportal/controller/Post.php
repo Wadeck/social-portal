@@ -73,7 +73,6 @@ class Post extends AbstractController {
 				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 			}
 			
-			$module = 'create';
 			$form->setupWithPost( $currentPost );
 			$form->setNonceAction( 'editPost' );
 			$module = 'edit';
@@ -86,6 +85,7 @@ class Post extends AbstractController {
 			$response->setVar( 'userHelper', $userHelper );
 			$response->setVar( 'user', $user );
 			
+			$module = 'create';
 			$form->setNonceAction( 'createPost' );
 			$getArgs['forumId'] = $forumId;
 			$getArgs['topicId'] = $topicId;
@@ -98,7 +98,7 @@ class Post extends AbstractController {
 		$form->setTargetUrl( $actionUrl );
 		
 		$response->setVar( 'form', $form );
-		$this->frontController->doDisplay( 'post', $nameAction );
+		$this->frontController->doDisplay( 'Post', $nameAction );
 	}
 	
 	/**
