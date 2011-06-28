@@ -250,8 +250,8 @@ class FrontController {
 	 * @param string $gets
 	 * @exit
 	 */
-	public function doRedirect($module, $action = '', array $gets = array(), $noLoopControl = false) {
-		$url = $this->getViewHelper()->createHref( $module, $action, $gets );
+	public function doRedirect($module, $action = '', array $gets = array(), $targetId=false, $noLoopControl = false) {
+		$url = $this->getViewHelper()->createHref( $module, $action, $gets, $targetId );
 		$this->doRedirectUrl( $url, $noLoopControl );
 	}
 	

@@ -33,6 +33,7 @@ class User{
      * @var string $randomKey
      *
      * @Column(name="random_key", type="string", length=32, nullable=false)
+     * @Comment("Key that is used to hash to password, it is fixed at the creation, should never be changed or the password retrieval become impossible")
      */
     private $randomKey;
 
@@ -54,6 +55,7 @@ class User{
      * @var datetime $registered
      *
      * @Column(name="registered", type="datetime", nullable=false)
+     * @Comment("The date when the user was registered")
      */
     private $registered;
 
@@ -61,6 +63,7 @@ class User{
      * @var string $activationKey
      *
      * @Column(name="activation_key", type="string", length=60, nullable=true)
+     * @Comment("The key that is used by the user to register his account, could be given by other application")
      */
     private $activationKey;
 
@@ -68,6 +71,7 @@ class User{
      * @var integer $status
      *
      * @Column(name="status", type="integer", nullable=false)
+     * @Comment("0: normal status, 1: pending email activation, 2: banned")
      */
     private $status;
 
@@ -75,6 +79,7 @@ class User{
      * @var integer $roles
      *
      * @Column(name="roles", type="integer", nullable=false)
+     * @Comment("Integer containing different roles, use OR operator to determine if the user has a given role. This will be used in conjunction with capabilities")
      */
     private $roles;
 
@@ -82,6 +87,7 @@ class User{
      * @var string $avatarKey
      *
      * @Column(name="avatar_key", type="string", length=255, nullable=true)
+     * @Comment("The key that will be used to retrieve avatar from Gravatar, to be consistent with user avatar on gravatar, we must use the email as key")
      */
     private $avatarKey;
 

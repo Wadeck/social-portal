@@ -301,5 +301,26 @@ vendredi 24 juin
 - changement de lien sous le topic form, back to home a la place de viewAll qui est deprecié
 - correction css edit post, meilleur look, comme topic edit now
 - ajustement du retrait vertical pour le label dans le login box
+- correction du bug avec linux pour les directory separators
 
+we 25-27 juin
+- correction du bug de post
+- correction du bug de minuscule pour freeText
+- support complet des comments pour les columns/attributs, bidirectionnel entities=>database et database->entities
 
+mardi 28 juin
+- ajout du bouton de creation de topic au fond du forum
+- correction de certain liens de redirection en cas d'erreur
+- ajout d'un confirm pour les links
+- ajout de la possibilité de mettre un # dans les liens crées
+- redirection apres la creation d'un post à la derniere page du topic display
+- redirection apres l'edition d'un post à la page qui contient le post en question
+- redirection apres delete topic en fonction du time 
+- ajout de la possibilité de cibler un topic par le temps, un post par le temps, la position et pour les deux aller directement a la derniere page
+- redirection apres undelete topic en fonction du time
+- deletion topic / post ok
+- undeletion topic ok
+
+todo - undeletion post
+todo - sticky/unsticky/close/open
+todo - chmod la ou il faut, creation des proxy, creation du log.txt

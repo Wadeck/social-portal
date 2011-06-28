@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\tools\TopicType;
+
 use core\templates\ForumHeader;
 
 use core\user\UserHelper;
@@ -22,6 +24,8 @@ use Doctrine\ORM\EntityManager;
 use socialportal\model;
 
 use core\AbstractController;
+
+use DateTime;
 
 class Forum extends AbstractController {
 	/**
@@ -83,6 +87,7 @@ class Forum extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
+		// TODO redirect to the created forum !
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
@@ -111,6 +116,8 @@ class Forum extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
+		
+		// TODO redirect to the edited forum !
 		$this->frontController->doRedirect( 'forum', 'viewAll' );
 	}
 	
@@ -135,23 +142,33 @@ class Forum extends AbstractController {
 		$this->frontController->doDisplay( 'Forum', 'viewAll' );
 	}
 	
-	//TODO change name to displaySingleForum
 	/**
 	 * @GetAttributes(forumId)
+	 * [p, n, timeTarget, lastPage]
 	 */
 	public function displaySingleForumAction() {
 		$get = $this->frontController->getRequest()->query;
 		$forumId = $get->get( 'forumId' );
 		$page_num = $get->get( 'p', 1 );
 		$num_per_page = $get->get( 'n', 20 );
+		$timeTarget = $get->get( 'timeTarget', false );
+		$lastPage = $get->get( 'lastPage', false );
 		
-		$forum = $this->em->getRepository( 'Forum' )->find( $forumId );
-		$topics = $this->em->getRepository( 'TopicBase' )->findTopicsFromForum( $forumId, $page_num, $num_per_page );
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$topicBaseRepo = $this->em->getRepository('TopicBase');
+		$forum = $forumRepo->find( $forumId );
 		
 		if( !$forum ) {
-			Logger::getInstance()->debug( "The forum with id [$forumId] is not valid" );
-			$this->frontController->addMessage( __( 'The given forum is not valid' ), 'error' );
-			$this->frontController->doRedirect( 'forum', 'viewAll' );
+			Logger::getInstance()->log( "The forum with id [$forumId] is not valid" );
+			
+			$defaultForumId = $forumRepo->findFirstId();
+			if( false === $defaultForumId ) {
+				$this->frontController->addMessage( __( 'There is no forum at the moment' ), 'error' );
+				$this->frontController->doRedirect( 'home' );
+			} else {
+				$this->frontController->addMessage( __( 'The given forum is not valid, redirection to default forum' ), 'info' );
+				$this->frontController->doRedirect( 'forum', 'displaySingleForum', array( 'forumId' => $defaultForumId ) );
+			}
 		}
 		
 		$max_pages = $forum->getNumTopics();
@@ -159,9 +176,28 @@ class Forum extends AbstractController {
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
+
+		if(false !== $timeTarget){
+			// we want to go to a specific topic given by date
+			$timeTarget = new DateTime("@$timeTarget" );
+			$page_num = $forumRepo->getTopicPageByDate( $forumId, $timeTarget, $num_per_page );
+		}else if(false !== $lastPage){
+			// we want to go to the last page
+//			$page_num = $forumRepo->getLastPage( $forumId, $num_per_page );
+			$page_num = $max_pages;
+		}
+		
+		$topics = $topicBaseRepo->findTopicsFromForum( $forumId, $page_num, $num_per_page );
 		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$response = $this->frontController->getResponse();
+		
+		$metaRepo = $this->em->getRepository( 'ForumMeta' );
+		$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
+		array_walk( $acceptedTopics, function (&$item, $key) {
+			$item = TopicType::createById( $item );
+		} );
+		$response->setVar('acceptedTopics', $acceptedTopics);
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );

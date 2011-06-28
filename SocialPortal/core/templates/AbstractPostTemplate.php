@@ -51,7 +51,6 @@ abstract class AbstractPostTemplate implements iInsertable{
 			$postAuthor = $base->getPoster();
 			$postId = $base->getId();
 			$userHelper->setCurrentUser($postAuthor);
-			
 		?>
 			<!-- Here to add the condition on the post status -->
 			<li class="rounded-box" id="post-<?php echo $postId; ?>">
@@ -108,17 +107,18 @@ abstract class AbstractPostTemplate implements iInsertable{
 		$topic = $base->getTopic();
 		$topicId = $topic->getId();
 		$forumId = $topic->getForum()->getId();
+		$viewHelper = $this->front->getViewHelper();
 		?>
 		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array('typeId'=>$customTypeId, 'topicId'=>$topicId, 'forumId'=>$forumId, 'postId'=>$postId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsDeleted()): ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Post', 'undelete', array('postId'=>$postId)); ?>"
+			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeletePost', 'Post', 'undelete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
 				title="<?php echo __( 'Restore the post from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Post', 'delete', array('postId'=>$postId)); ?>"
-				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"><?php echo __('Delete'); ?></a>
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deletePost', 'Post', 'delete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
+				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"<?php $viewHelper->insertConfirmLink(__('Do you really want to delete this post ?'));?>><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		

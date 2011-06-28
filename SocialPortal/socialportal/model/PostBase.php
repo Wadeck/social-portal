@@ -27,6 +27,7 @@ class PostBase{
      * @var smallint $customType
      *
      * @Column(name="custom_type", type="smallint", nullable=false)
+     * @Comment("1: activity, 2: freetext, 3: story, 4: strategy")
      */
     private $customType;
 
@@ -34,6 +35,7 @@ class PostBase{
      * @var datetime $time
      *
      * @Column(name="time", type="datetime", nullable=false)
+     * @Comment("Time of creation, never modified afterwards")
      */
     private $time;
 
@@ -55,6 +57,7 @@ class PostBase{
      * @var bigint $position
      *
      * @Column(name="position", type="bigint", nullable=false)
+     * @Comment("The order of display for the post, it is not necessarily continuous because of deleted posts")
      */
     private $position;
 

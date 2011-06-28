@@ -1,6 +1,13 @@
 <?php
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
+$forumId = $vars['forumId'];
+?>
+<div id="link-back"><a class="button" href="<?php
+$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId ));
+?>">Back to discussion place</a></div>
+
+<?php
 echo "<h3>Topic form</h3>";
 if($vars['form']){
 	echo '<div class="rounded-box">';

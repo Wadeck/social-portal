@@ -23,7 +23,6 @@ class Activity{
      * @var bigint $userId
      *
      * @Column(name="user_id", type="bigint", nullable=false)
-     * @Comment("sdfcribe blabla True chose")
      */
     private $userId;
 

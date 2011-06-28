@@ -28,6 +28,7 @@ class TopicBase{
      * @var smallint $customType
      *
      * @Column(name="custom_type", type="smallint", nullable=false)
+     * @Comment("1: activity, 2: freetext, 3: story, 4: strategy")
      */
     private $customType;
 
@@ -42,6 +43,7 @@ class TopicBase{
      * @var datetime $startTime
      *
      * @Column(name="start_time", type="datetime", nullable=false)
+     * @Comment("Time of creation, never modified afterwards")
      */
     private $startTime;
 
@@ -49,6 +51,7 @@ class TopicBase{
      * @var datetime $time
      *
      * @Column(name="time", type="datetime", nullable=false)
+     * @Comment("Time of last modification")
      */
     private $time;
 
@@ -56,6 +59,7 @@ class TopicBase{
      * @var boolean $isDeleted
      *
      * @Column(name="is_deleted", type="boolean", nullable=false)
+     * @Comment("0: the item is not deleted, 1: the item is deleted")
      */
     private $isDeleted;
 
@@ -63,6 +67,7 @@ class TopicBase{
      * @var boolean $isOpen
      *
      * @Column(name="is_open", type="boolean", nullable=false, default="1")
+     * @Comment("Only an open topic can accept feedbacks, 0: the topic is open, 1: the topic is close")
      */
     private $isOpen;
 
@@ -70,6 +75,7 @@ class TopicBase{
      * @var boolean $isSticky
      *
      * @Column(name="is_sticky", type="boolean", nullable=false)
+     * @Comment("0: normally displayed, 1: the topic is placed at the top of the forum, could be used for rules, policy, important message from moderators")
      */
     private $isSticky;
 
@@ -114,6 +120,7 @@ class TopicBase{
      * @JoinColumns({
      *   @JoinColumn(name="poster_id", referencedColumnName="id")
      * })
+     * @Comment("Author of the topic")
      */
     private $poster;
 
