@@ -321,6 +321,16 @@ mardi 28 juin
 - deletion topic / post ok
 - undeletion topic ok
 
-todo - undeletion post
+mardi 28 soir
+test de charge - 10 posts ou 1000 posts dans un topic, aucune differences en page 1 ou en last (ou milieu)
+test de charge - 20 topics ou 1000 topics dans un forum, aucune different en page 1 ou en last (ou milieu)
+- undeletion post ok
+- afficher les deletes dans les forums / topics
+- ajout d'un bouton en mode admin pour switcher show/hide deleted
+
+
+
+
+
 todo - sticky/unsticky/close/open
 todo - chmod la ou il faut, creation des proxy, creation du log.txt

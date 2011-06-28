@@ -57,6 +57,11 @@ ul#forums-header li:first-child {
 	margin-left: 20px;
 }
 */
+
+ol.commentlist li.deleted{
+	background-color: #Fcc;	
+}
+
 table {
 	width: 100%;
 }

@@ -12,6 +12,14 @@ use socialportal\model\User;
 use Doctrine\ORM\EntityRepository;
 
 class TopicBaseRepository extends EntityRepository {
+	/** @return the total number of post, included the deleted ones */
+	public function getCountWithDeleted($topicId) {
+		$query = $this->_em->createQuery( 'SELECT COUNT(p.id) FROM PostBase p WHERE p.topic = :tid' );
+		$query->setParameter( 'tid', $topicId );
+		$count = $query->getSingleScalarResult();
+		return $count;
+	}
+	
 	/** @return TopicBase|false if not found */
 	public function findBaseTopic($topicId) {
 		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.id = :id' );
@@ -31,10 +39,15 @@ class TopicBaseRepository extends EntityRepository {
 	 * @param int $forumId
 	 * @param int $page_num Must be >= 1
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 * @return array of TopicBase
 	 */
-	public function findTopicsFromForum($forumId, $page_num = 1, $num_per_page = false) {
-		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id AND t.isDeleted=0 ORDER BY t.time DESC' );
+	public function findTopicsFromForum($forumId, $page_num = 1, $num_per_page = false, $withDeleted = false) {
+		if( $withDeleted ) {
+			$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id ORDER BY t.time DESC' );
+		} else {
+			$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id AND t.isDeleted=0 ORDER BY t.time DESC' );
+		}
 		$dql->setParameter( 'id', $forumId );
 		if( false !== $num_per_page ) {
 			$offset = ($page_num - 1) * $num_per_page;
@@ -76,24 +89,28 @@ class TopicBaseRepository extends EntityRepository {
 		$q = $qb->getQuery();
 		$p = $q->execute();
 	}
-
+	
 	/**
 	 * Used to retrieve the page number where the post will be displayed, given the num_per_page parameters
 	 * @param int $topicId
 	 * @param int $topicTypeId
 	 * @param int $topicPosition
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 */
-	public function getPostPagePerPosition($topicId, $topicTypeId, $topicPosition, $num_per_page) {
+	public function getPostPagePerPosition($topicId, $topicTypeId, $topicPosition, $num_per_page, $withDeleted = false) {
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
-		
-		$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.position < :pos" );
+		if($withDeleted){
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.position < :pos" );
+		}else{
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.position < :pos" );
+		}
 		$dql->setParameter( 'id', $topicId );
 		$dql->setParameter( 'pos', $topicPosition );
 		$totalBefore = $dql->getSingleScalarResult();
 		// to count the given posts
 		$totalBefore += 1;
-		$totalPage = ceil($totalBefore / $num_per_page);
+		$totalPage = ceil( $totalBefore / $num_per_page );
 		return $totalPage;
 	}
 	/**
@@ -102,17 +119,21 @@ class TopicBaseRepository extends EntityRepository {
 	 * @param int $topicTypeId
 	 * @param DateTime $topicTime 
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 */
-	public function getPostPagePerTime($topicId, $topicTypeId, $topicTime, $num_per_page) {
+	public function getPostPagePerTime($topicId, $topicTypeId, $topicTime, $num_per_page, $withDeleted = false) {
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
-		
-		$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.time < :time" );
+		if($withDeleted){
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.time < :time" );
+		}else{
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.time < :time" );
+		}
 		$dql->setParameter( 'id', $topicId );
-		$dql->setParameter( 'time', $topicTime, \Doctrine\DBAL\Types\Type::DATETIME  );
+		$dql->setParameter( 'time', $topicTime, \Doctrine\DBAL\Types\Type::DATETIME );
 		$totalBefore = $dql->getSingleScalarResult();
 		// to count the given posts
 		$totalBefore += 1;
-		$totalPage = ceil($totalBefore / $num_per_page);
+		$totalPage = ceil( $totalBefore / $num_per_page );
 		return $totalPage;
 	}
 	
@@ -121,16 +142,20 @@ class TopicBaseRepository extends EntityRepository {
 	 * @param int $topicId
 	 * @param int $topicTypeId
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 * @deprecated Use Topic#getNumPosts instead
 	 */
-	public function getLastPage($topicId, $topicTypeId, $num_per_page) {
+	public function getLastPage($topicId, $topicTypeId, $num_per_page, $withDeleted = false) {
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
-		
-		$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0" );
+		if($withDeleted){
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id" );
+		}else{
+			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0" );
+		}
 		$dql->setParameter( 'id', $topicId );
 		$total = $dql->getSingleScalarResult();
 		
-		$totalPage = ceil($total / $num_per_page);
+		$totalPage = ceil( $total / $num_per_page );
 		
 		return $totalPage;
 	}

@@ -25,11 +25,15 @@ class PostBaseRepository extends EntityRepository {
 		}
 	}
 
-	public function findAllFullPosts($topicId, $topicTypeId, $page_num, $num_per_page) {
+	public function findAllFullPosts($topicId, $topicTypeId, $page_num, $num_per_page, $withDeleted=false) {
 		$offset = ($page_num - 1) * $num_per_page;
 		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
 		// special join to fetch the customtype and the postbase information
-		$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 ORDER BY p.position ASC" );
+		if($withDeleted){
+			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id ORDER BY p.position ASC" );
+		}else{
+			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 ORDER BY p.position ASC" );
+		}
 		$dql->setParameter( 'id', $topicId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
 		$fullPosts = $dql->getResult();
 		return $fullPosts;
@@ -59,7 +63,10 @@ class PostBaseRepository extends EntityRepository {
 		}
 	}
 	
-	/** @return int */
+	/** 
+	 * No matter of deleted / not
+	 * @return int
+	 */
 	public function getLastPosition($topicId) {
 		$dql = $this->_em->createQuery( 'SELECT PARTIAL p.{id,position} FROM PostBase p WHERE p.topic = :id ORDER BY p.position DESC' );
 		$dql->setParameter( 'id', $topicId )->setMaxResults( 1 );

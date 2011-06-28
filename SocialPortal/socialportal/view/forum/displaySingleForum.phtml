@@ -10,8 +10,18 @@ $userHelper = $vars['userHelper'];
 $vars['helper']->addCssFile('forum_loop.css');
 // to remove the container css class
 $vars['helper']->setContainerClass('');
-?>
 
+$displayDeletedLink = $vars['displayDeletedLink'];
+?>
+<?php if($displayDeletedLink):?>
+<div id="display-deleted">
+	<?php if($vars['isDisplayDeleted']): ?>
+		<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
+	<?php else: ?>
+		<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
+	<?php endif; ?>
+</div>
+<?php endif; ?>
 <?php $forumHeader->insert(); // the different link to other forums ?>
 <?php if($topics): // forum loop ?>
 	<div class="rounded-box">
@@ -32,8 +42,16 @@ $vars['helper']->setContainerClass('');
 					for($i = 0 ; $i < $size ; $i++):
 						$topic = $topics[$i];
 						$title = $topic->getTitle();
+						$class = array();
+						if( $i % 2 == 1 ) {
+							$class[] = 'alt background_secondary' ;
+						}
+						if($topic->getIsDeleted()){
+							$class[] = 'deleted';
+						}
+						$class = implode(' ', $class);
 				?>
-					<tr <?php if( $i % 2 == 1 ){ echo ' class="alt background_secondary"' ; }?>>
+					<tr<?php if( $class ){ echo ' class="'.$class.'"' ; }?>>
 						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
 							title="<?php echo $title; ?>"><?php echo $title; ?></a></td>
 						<td class="author">

@@ -18,6 +18,16 @@ $commentForm = $vars['commentForm'];
 <?php if($topic): // forum loop ?>
 <!--	<div class="rounded-box">-->
 		<!-- Link to the parent forum -->
+		<?php $displayDeletedLink = $vars['displayDeletedLink'];
+			if($displayDeletedLink):?>
+			<div id="display-deleted">
+				<?php if($vars['isDisplayDeleted']): ?>
+					<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
+				<?php else: ?>
+					<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 		<div id="link-back">
 			<a class="button" href="<?php $vars['helper']->insertHref('Forum', 'displaySingleForum', array('forumId' => $forumId)); ?>"><?php echo __('Back to discussion place'); ?></a>
 		</div>
