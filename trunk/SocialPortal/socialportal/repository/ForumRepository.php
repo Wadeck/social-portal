@@ -2,6 +2,8 @@
 
 namespace socialportal\repository;
 
+use core\debug\Logger;
+
 use core\security\Crypto;
 
 use core\user\UserManager;
@@ -11,6 +13,19 @@ use socialportal\model\User;
 use Doctrine\ORM\EntityRepository;
 
 class ForumRepository extends EntityRepository {
+	
+	/** @return int|false the id of the first forum or false if not forum are present */
+	public function findFirstId() {
+		$query = $this->_em->createQuery( 'SELECT partial f.{id} FROM Forum f ORDER BY f.id' );
+		$query->setMaxResults( 1 );
+		try {
+			$forum = $query->getSingleResult();
+			return $forum->getId();
+		} catch (\Exception $e ) {
+			Logger::getInstance()->log_var('Exception in findFirstId', $e);
+			return false;
+		}
+	}
 	
 	/** Warning, after this call the forum entity must be reloaded to have the correct value */
 	public function incrementTopicCount($forumId, $num = 1) {
@@ -70,16 +85,6 @@ class ForumRepository extends EntityRepository {
 			$total += $count;
 		}
 		
-		//		$query = $this->_em->createQuery('SELECT COUNT(p.id) FROM PostBase p JOIN p.topic t JOIN t.forum f WHERE f.id = :id AND t.isDeleted = 0 AND p.isDeleted = 0');
-		//		$query->setParameter('id', $forumId);
-		//		$count = $query->getSingleScalarResult();
-		
-
-		//		$forum = $this->_em->find('Forum', $forumId);
-		//		$forum->setNumPosts($count);
-		//		$this->_em->persistAndFlush($forum);
-		
-
 		$forum = $this->_em->find( 'Forum', $forumId );
 		$forum->setNumPosts( $total );
 		$this->_em->persist( $forum );
@@ -88,5 +93,38 @@ class ForumRepository extends EntityRepository {
 		}
 		
 		return $total;
+	}
+	
+	/**
+	 * Used to retrieve the page number where the topic will be displayed, given the num_per_page parameters
+	 * @param int $forumId
+	 * @param DateTime $topicTime
+	 * @param int $num_per_page
+	 */
+	public function getTopicPageByDate($forumId, $topicTime, $num_per_page) {
+		$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0 AND tb.time > :time" );
+		$dql->setParameter( 'id', $forumId );
+		$dql->setParameter( 'time', $topicTime, \Doctrine\DBAL\Types\Type::DATETIME );
+		$totalBefore = $dql->getSingleScalarResult();
+		// to count the given topics
+		$totalBefore += 1;
+		$totalPage = ceil($totalBefore / $num_per_page);
+		return $totalPage;
+	}
+	
+	/**
+	 * Used to retrieve the last page number
+	 * @param int $forumId
+	 * @param int $num_per_page
+	 * @deprecated Use Forum#getNumTopics instead
+	 */
+	public function getLastPage($forumId, $num_per_page) {
+		$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0" );
+		$dql->setParameter( 'id', $forumId );
+		$total = $dql->getSingleScalarResult();
+		
+		$totalPage = ceil($total / $num_per_page);
+		
+		return $totalPage;
 	}
 }

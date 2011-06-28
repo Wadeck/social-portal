@@ -46,7 +46,6 @@ class Post extends AbstractController {
 		$forumId = $get->get( 'forumId' );
 		$postId = $get->get( 'postId', false );
 		
-		
 		// retrieve information and then pass to the form
 		// if existing information, we put as action "edit" instead of create
 		$form = PostFormFactory::createForm( $topicType, $this->frontController );
@@ -59,8 +58,7 @@ class Post extends AbstractController {
 		$nameAction = '';
 		$response = $this->frontController->getResponse();
 		
-		$getArgs = array( 'typeId' => $topicType );
-		
+		$getArgs = array( 'typeId' => $topicType, 'forumId' => $forumId, 'topicId' => $topicId );
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $postId ) {
 			// we edit a post, cause we receive a post id
@@ -89,10 +87,9 @@ class Post extends AbstractController {
 			
 			$module = 'create';
 			$form->setNonceAction( 'createPost' );
-			$getArgs['forumId'] = $forumId;
-			$getArgs['topicId'] = $topicId;
 			$nameAction = 'displayFormCreate';
 		}
+		
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
@@ -119,7 +116,6 @@ class Post extends AbstractController {
 		$form->checkAndPrepareContent();
 		
 		$topic = $this->em->find( 'TopicBase', $topicId );
-		
 		
 		$base = new PostEntity();
 		$base->setCustomType( $typeId );
@@ -152,18 +148,20 @@ class Post extends AbstractController {
 		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId );
 		
 		$this->frontController->addMessage( __( 'The creation of the post was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'lastPage' => true ) );
 	}
 	
 	/**
 	 * @Method(POST)
 	 * @Nonce(editPost)
-	 * @GetAttributes({typeId, postId})
+	 * @GetAttributes({typeId, forumId, topicId, postId})
 	 */
 	public function editAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$postId = $get->get( 'postId' );
+		$forumId = $get->get( 'forumId' );
+		$topicId = $get->get( 'topicId' );
 		
 		$form = PostFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
@@ -186,6 +184,7 @@ class Post extends AbstractController {
 		}
 		
 		$base = $existing->getPostbase();
+		$position = $base->getPosition();
 		$existing = $form->createSpecificPost( $base, $existing );
 		
 		//		$this->em->persist( $base );
@@ -201,16 +200,58 @@ class Post extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Forum', 'viewAll' );
-	
+		// TODO redirect to the edited post !
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'positionTarget' => $position ), "post-$postId" );
 	}
 	
 	/**
-	 * Wargning, do no forget to decrease the num topics of the forum
-	 * @Nonce(deleteTopic)
-	 * Parameters[postId]
+	 * Wargning, do no forget to decrease the num post of the forum/topic
+	 * @Nonce(deletePost)
+	 * @Method(GET)
+	 * @GetAttributes({postId, topicId, forumId})
 	 */
-	public function deleteAction() {}
+	public function deleteAction() {
+		$get = $this->frontController->getRequest()->query;
+		$postId = $get->get( 'postId' );
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		
+		$postRepo = $this->em->getRepository( 'PostBase' );
+		
+		$post = $postRepo->find( $postId );
+		
+		if( 0 === $post->getIsDeleted() ) {
+			// the topic was already deleted 
+			$position = $post->getPosition();
+			// redirection with position, cause the post is still there
+			$this->frontController->addMessage( __( 'Deletion failed, the post was not deleted' ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'positionTarget' => $position ) );
+		}
+		// main operation
+		$post->setIsDeleted( 1 );
+		
+		$this->em->persist( $post );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$position = $post->getPosition();
+			// redirection with position, cause the post is still there
+			$this->frontController->addMessage( __( 'Deletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'positionTarget' => $position ) );
+		}
+		
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$forumRepo->incrementPostCount( $forumId, -1 );
+		
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topicRepo->incrementPostCount( $topicId, -1 );
+		
+		// redirection with time, cause the post is no more visible, with time we reach the approximative point where it was
+		$time = $post->getTime();
+		$time = $time->getTimestamp();
+		
+		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'timeTarget' => $time ) );
+	}
 	
 	/**
 	 * Warning, do not forget to increase the num topics of the forum

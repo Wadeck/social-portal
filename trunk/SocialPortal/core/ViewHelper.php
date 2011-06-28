@@ -160,7 +160,7 @@ class ViewHelper {
 	 * @param string $actionName
 	 * @param array $GETAttributes
 	 */
-	public function createHref($controllerName, $actionName = '', array $gets = array()) {
+	public function createHref($controllerName, $actionName = '', array $gets = array(), $targetId=false) {
 		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
 		if( $actionName ) {
 			$result .= '/' . $actionName;
@@ -170,10 +170,14 @@ class ViewHelper {
 				return "$key=$value";
 			}, array_keys( $gets ), array_values( $gets ) ) );
 		}
+		// to force the browser to go to the given id
+		if(false !== $targetId){
+			$result .= "#$targetId";
+		}
 		return $result;
 	}
 	
-	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array()) {
+	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId=false) {
 		if( $nonce ) {
 			$nonceHash = $this->frontController->getNonceManager()->createNonce( $nonce );
 			$gets['_nonce'] = $nonceHash;
@@ -183,13 +187,21 @@ class ViewHelper {
 	}
 	
 	/** @see ViewHelper#createHref */
-	public function insertHref($controllerName, $actionName = '', array $gets = array()) {
-		echo $this->createHref( $controllerName, $actionName, $gets );
+	public function insertHref($controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+		echo $this->createHref( $controllerName, $actionName, $gets, $targetId );
 	}
 	
 	/** @see ViewHelper#createHrefWithNonce */
-	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array()) {
-		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $gets );
+	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $gets, $targetId );
+	}
+	
+	/**
+	 * @param $message Translated message that will be shown
+	 */
+	public function insertConfirmLink($message){
+		$this->addJavascriptFile('confirm_link.js');
+		echo ' onclick="return confirmLink(this, \''. $message . '\')"';
 	}
 	
 	/** @return User */

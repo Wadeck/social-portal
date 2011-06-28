@@ -34,7 +34,7 @@ use Doctrine\ORM\EntityManager;
 use socialportal\model;
 
 use core\AbstractController;
-
+use DateTime;
 class Topic extends AbstractController {
 	
 	/**
@@ -88,28 +88,50 @@ class Topic extends AbstractController {
 	
 	/**
 	 * @GetAttributes({topicId, forumId})
-	 * [p, n]
+	 * [p, n, positionTarget, timeTarget, lastPage]
 	 */
 	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
 		$page_num = $get->get( 'p', 1 );
-		$num_per_page = $get->get( 'n', 10 );
+		$num_per_page = $get->get( 'n', 4 ); //TODO change after debug
+		$positionTarget = $get->get( 'positionTarget', false );
+		$timeTarget = $get->get( 'timeTarget', false );
+		$lastPage = $get->get( 'lastPage', false );
 		
-		$topic = $this->em->getRepository( 'TopicBase' )->findFullTopic( $topicId );
+		$postBaseRepo = $this->em->getRepository( 'PostBase' );
+		$topicBaseRepo = $this->em->getRepository( 'TopicBase' );
+		
+		$topic = $topicBaseRepo->findFullTopic( $topicId );
 		$base = $topic->getTopicbase();
 		$typeId = $base->getCustomType();
-		$posts = $this->em->getRepository( 'PostBase' )->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page );
+		
 		$max_pages = $base->getNumPosts();
 		$max_pages = ceil( $max_pages / $num_per_page );
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
+		
+		if( false !== $positionTarget ) {
+			// we want to go to a specific topic
+			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $positionTarget, $num_per_page );
+		} else if( false !== $timeTarget ) {
+			// we want to go to a specific topic
+			$timeTarget = new DateTime( "@$timeTarget" );
+			$page_num = $topicBaseRepo->getPostPagePerTime( $topicId, $typeId, $timeTarget, $num_per_page );
+		} else if( false !== $lastPage ) {
+			// we want to go to the last page
+			//			$page_num = $topicBaseRepo->getLastPage( $topicId, $typeId, $num_per_page );
+			$page_num = max( 1, $max_pages );
+		}
+		
+		$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page );
+		
 		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
 		
 		$pagination = new Paginator();
-		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false);
+		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
 		
 		// condition to satisfy to be able to write a comment
 		if( !$this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
@@ -157,7 +179,7 @@ class Topic extends AbstractController {
 		}
 		$module = '';
 		
-		$getArgs = array( 'typeId' => $topicType );
+		$getArgs = array( 'typeId' => $topicType, 'forumId' => $forumId );
 		
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $topicId ) {
@@ -178,7 +200,6 @@ class Topic extends AbstractController {
 		} else {
 			$form->setNonceAction( 'createTopic' );
 			$module = 'create';
-			$getArgs['forumId'] = $forumId;
 		}
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, $getArgs );
 		
@@ -186,6 +207,7 @@ class Topic extends AbstractController {
 		$form->setupWithArray( true );
 		$form->setTargetUrl( $actionUrl );
 		
+		$this->frontController->getResponse()->setVar( 'forumId', $forumId );
 		$this->frontController->getResponse()->setVar( 'form', $form );
 		$this->frontController->doDisplay( 'topic', 'displayForm' );
 	}
@@ -251,12 +273,13 @@ class Topic extends AbstractController {
 	/**
 	 * @Method(POST)
 	 * @Nonce(editTopic)
-	 * @GetAttributes({typeId, topicId})
+	 * @GetAttributes({typeId, forumId, topicId})
 	 */
 	public function editAction() {
 		$get = $this->frontController->getRequest()->query;
 		$typeId = $get->get( 'typeId' );
 		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
 		
 		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
 		$form->setupWithArray( true );
@@ -290,23 +313,95 @@ class Topic extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );
-		$this->frontController->doRedirect( 'Forum', 'viewAll' );
-	
+		//		$this->frontController->doRedirect( 'Forum', 'viewAll' );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
 	/**
-	 * Wargning, do no forget to decrease the num topics of the forum
+	 * Warning, do no forget to decrease the num topics of the forum
+	 * @Method(GET)
 	 * @Nonce(deleteTopic)
-	 * Parameters[topicId]
+	 * @GetAttributes({topicId, forumId})
 	 */
-	public function deleteAction() {}
+	public function deleteAction() {
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		if( 0 === $topic->getIsDeleted() ) {
+			// the topic was already deleted 
+			$time = $topic->getTime();
+			// time is a DateTime
+			$time = $time->getTimestamp();
+			$this->frontController->addMessage( __( 'Deletion failed, the topic is already deleted' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$topic->setIsDeleted( 1 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$time = $topic->getTime();
+			// time is a DateTime
+			$time = $time->getTimestamp();
+			$this->frontController->addMessage( __( 'Deletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$numPost = $topic->getNumPosts();
+		
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$forumRepo->incrementTopicCount( $forumId, -1 );
+		$forumRepo->incrementPostCount( $forumId, -$numPost );
+		
+		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+	}
 	
 	/**
 	 * Warning, do not forget to increase the num topics of the forum
+	 * @Method(GET)
+	 * @GetAttributes({topicId, forumId})
 	 * @Nonce(undeleteTopic)
-	 * Parameters[topicId]
 	 */
-	public function undeleteAction() {}
+	public function undeleteAction() {
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		if( 1 === $topic->getIsDeleted() ) {
+			// the topic was already deleted 
+			$this->frontController->addMessage( __( 'Undeletion failed, the topic was not deleted' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+		}
+		// main operation
+		$topic->setIsDeleted( 0 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$this->frontController->addMessage( __( 'Undeletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+		}
+		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
+		$numPost = $topic->getNumPosts();
+		
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$forumRepo->incrementTopicCount( $forumId, 1 );
+		$forumRepo->incrementPostCount( $forumId, $numPost );
+		
+		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+	}
 	
 	//	/**
 	//	 * @Nonce(moveTopic)
@@ -319,28 +414,32 @@ class Topic extends AbstractController {
 
 	/**
 	 * @Nonce(stickTopic)
-	 * Parameters[topicId]
+	 * @Method(GET)
+	 * @GetAttributes({topicId, forumId})
 	 */
 	public function stickAction() {
 
 	}
 	/**
 	 * @Nonce(unstickTopic)
-	 * Parameters[topicId]
+	 * @Method(GET)
+	 * @GetAttributes({topicId, forumId})
 	 */
 	public function unstickAction() {
 
 	}
 	/**
 	 * @Nonce(closeTopic)
-	 * Parameters[topicId]
+	 * @Method(GET)
+	 * @GetAttributes({topicId, forumId})
 	 */
 	public function closeAction() {
 
 	}
 	/**
 	 * @Nonce(openTopic)
-	 * Parameters[topicId]
+	 * @Method(GET)
+	 * @GetAttributes({topicId, forumId})
 	 */
 	public function openAction() {
 

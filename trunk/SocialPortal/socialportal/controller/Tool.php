@@ -126,7 +126,7 @@ class Tool extends AbstractController {
 			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( TopicType::$typeStory ) );
 			$result &= $metaRep->setAcceptableTopics( $forumStrategies->getId(), array( TopicType::$typeStrategy ) );
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TopicType::$typeActivity ) );
-			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TopicType::$typeFreeText ) );
+			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TopicType::$typeFreetext ) );
 			if( $result ) {
 				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ), 'correct' );
 			} else {

@@ -56,9 +56,35 @@ $vars['helper']->setContainerClass('');
 		</table>
 		<?php $pagination->insert(); ?>
 	</div>
+	
 <?php else: // no topics in this forum ?>
 	<?php $vars['helper']->addCssFile('messages.css'); ?>
 	<div class="rounded-box pagged">
 		<div class="message info centered"><?php echo __('No topic in this forum');?></div>
 	</div>
 <?php endif; ?>
+
+
+<div id="bottom-button">
+<?php 
+$acceptedTopics = $vars['acceptedTopics'];
+$size = count($acceptedTopics);
+if($size > 4){
+	$size = 4;
+	$needMore = true;
+}else{
+	$needMore = false;
+}
+for($i = 0 ; $i< $size ; $i++):
+$topicType = $acceptedTopics[$i];
+// TODO necessité d'avoir un module pour gerer les traductions de la base de donnée
+// sans passer par la base, id=>name, un array contenant les noms de la base,
+// peut etre melangé avec le topic "souple"
+	?><a href="<?php $vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array('typeId'=>$topicType->getId(),'forumId'=>$forumId)); ?>" title="<?php echo $topicType->getSimpleName(); ?>"><?php 
+		echo 'New '.$topicType->getSimpleName(); ?></a><?php 
+endfor; if($needMore): ?><a
+	href="<?php $vars['helper']->insertHref('Topic', 'chooseTypeForum', array('forumId'=>$forumId)); ?>"
+	title="<?php echo __('Click here to have more custom type of topics'); ?>"><?php
+	echo __('More types...'); ?></a><?php 
+endif; ?>
+</div>

@@ -6,8 +6,9 @@ $forum = $vars['forum'];
 $acceptedTopics = $vars['acceptedTopics'];
 ?>
 <div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'viewAll' );
+$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forum->getId() ));
 ?>">Back to discussion place</a></div>
+
 <h3>Choose the type of topic</h3>
 <div class="rounded-box padded margined">
 <h4><?php echo $forum->getName(); ?></h4>

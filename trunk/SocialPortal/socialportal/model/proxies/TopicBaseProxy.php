@@ -141,18 +141,6 @@ class TopicBaseProxy extends \socialportal\model\TopicBase implements \Doctrine\
         return parent::getTagCount();
     }
 
-    public function setPoster(\socialportal\model\User $poster)
-    {
-        $this->_load();
-        return parent::setPoster($poster);
-    }
-
-    public function getPoster()
-    {
-        $this->_load();
-        return parent::getPoster();
-    }
-
     public function setForum(\socialportal\model\Forum $forum)
     {
         $this->_load();
@@ -177,10 +165,22 @@ class TopicBaseProxy extends \socialportal\model\TopicBase implements \Doctrine\
         return parent::getLastposter();
     }
 
+    public function setPoster(\socialportal\model\User $poster)
+    {
+        $this->_load();
+        return parent::setPoster($poster);
+    }
+
+    public function getPoster()
+    {
+        $this->_load();
+        return parent::getPoster();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'customType', 'title', 'startTime', 'time', 'isDeleted', 'isOpen', 'isSticky', 'numPosts', 'tagCount', 'poster', 'forum', 'lastposter');
+        return array('__isInitialized__', 'id', 'customType', 'title', 'startTime', 'time', 'isDeleted', 'isOpen', 'isSticky', 'numPosts', 'tagCount', 'forum', 'lastposter', 'poster');
     }
 
     public function __clone()
