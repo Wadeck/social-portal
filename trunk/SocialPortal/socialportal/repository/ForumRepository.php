@@ -3,6 +3,7 @@
 namespace socialportal\repository;
 
 use core\debug\Logger;
+use Exception;
 
 use core\security\Crypto;
 
@@ -13,16 +14,23 @@ use socialportal\model\User;
 use Doctrine\ORM\EntityRepository;
 
 class ForumRepository extends EntityRepository {
+	/** @return the total number of topics, included the deleted ones */
+	public function getCountWithDeleted($forumId) {
+		$query = $this->_em->createQuery( 'SELECT COUNT(t.id) FROM TopicBase t WHERE t.forum = :fid' );
+		$query->setParameter( 'fid', $forumId );
+		$count = $query->getSingleScalarResult();
+		return $count;
+	}
 	
 	/** @return int|false the id of the first forum or false if not forum are present */
-	public function findFirstId() {
+	public function getFirstId() {
 		$query = $this->_em->createQuery( 'SELECT partial f.{id} FROM Forum f ORDER BY f.id' );
 		$query->setMaxResults( 1 );
 		try {
 			$forum = $query->getSingleResult();
 			return $forum->getId();
-		} catch (\Exception $e ) {
-			Logger::getInstance()->log_var('Exception in findFirstId', $e);
+		} catch ( Exception $e ) {
+			Logger::getInstance()->log_var( 'Exception in getFirstId', $e );
 			return false;
 		}
 	}
@@ -100,15 +108,20 @@ class ForumRepository extends EntityRepository {
 	 * @param int $forumId
 	 * @param DateTime $topicTime
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 */
-	public function getTopicPageByDate($forumId, $topicTime, $num_per_page) {
-		$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0 AND tb.time > :time" );
+	public function getTopicPageByDate($forumId, $topicTime, $num_per_page, $withDeleted = false) {
+		if( $withDeleted ) {
+			$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.time > :time" );
+		} else {
+			$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0 AND tb.time > :time" );
+		}
 		$dql->setParameter( 'id', $forumId );
 		$dql->setParameter( 'time', $topicTime, \Doctrine\DBAL\Types\Type::DATETIME );
 		$totalBefore = $dql->getSingleScalarResult();
 		// to count the given topics
 		$totalBefore += 1;
-		$totalPage = ceil($totalBefore / $num_per_page);
+		$totalPage = ceil( $totalBefore / $num_per_page );
 		return $totalPage;
 	}
 	
@@ -116,14 +129,19 @@ class ForumRepository extends EntityRepository {
 	 * Used to retrieve the last page number
 	 * @param int $forumId
 	 * @param int $num_per_page
+	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 * @deprecated Use Forum#getNumTopics instead
 	 */
-	public function getLastPage($forumId, $num_per_page) {
-		$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0" );
+	public function getLastPage($forumId, $num_per_page, $withDeleted = false) {
+		if( $withDeleted ) {
+			$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id" );
+		} else {
+			$dql = $this->_em->createQuery( "SELECT COUNT(tb) FROM TopicBase tb WHERE tb.forum = :id AND tb.isDeleted = 0" );
+		}
 		$dql->setParameter( 'id', $forumId );
 		$total = $dql->getSingleScalarResult();
 		
-		$totalPage = ceil($total / $num_per_page);
+		$totalPage = ceil( $total / $num_per_page );
 		
 		return $totalPage;
 	}

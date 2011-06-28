@@ -317,6 +317,7 @@ class EntityManager {
 	}
 	
 	/**
+	 * XXX added to avoid managing exception
 	 * @return bool true if the flush was ok, false otherwise
 	 */
 	public function flushSafe() {
@@ -324,7 +325,7 @@ class EntityManager {
 			$this->errorIfClosed();
 			$this->unitOfWork->commit();
 		} catch (\Exception $e ) {
-			Logger::getInstance()->debug_var( 'Exception thrown in persistAndFlush', $e );
+			Logger::getInstance()->debug_var( 'Exception thrown in flushSafe', $e );
 			return false;
 		}
 		return true;

@@ -254,9 +254,52 @@ class Post extends AbstractController {
 	}
 	
 	/**
-	 * Warning, do not forget to increase the num topics of the forum
-	 * @Nonce(undeleteTopic)
-	 * Parameters[postId]
+	 * Wargning, do no forget to increase the num post of the forum/topic
+	 * @Nonce(undeletePost)
+	 * @Method(GET)
+	 * @GetAttributes({postId, topicId, forumId})
 	 */
-	public function undeleteAction($parameters) {}
+	public function undeleteAction() {
+		$get = $this->frontController->getRequest()->query;
+		$postId = $get->get( 'postId' );
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		
+		$postRepo = $this->em->getRepository( 'PostBase' );
+		
+		$post = $postRepo->find( $postId );
+		
+		if( 1 === $post->getIsDeleted() ) {
+			// the topic was already deleted 
+			// redirection with time, cause the post is no more visible, with time we reach the approximative point where it was
+			$time = $post->getTime();
+			$time = $time->getTimestamp();
+			$this->frontController->addMessage( __( 'Undeletion failed, the post was deleted' ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$post->setIsDeleted( 0 );
+		
+		$this->em->persist( $post );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			// redirection with time, cause the post is no more visible, with time we reach the approximative point where it was
+			$time = $post->getTime();
+			$time = $time->getTimestamp();
+			$this->frontController->addMessage( __( 'Undeletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$forumRepo->incrementPostCount( $forumId, 1 );
+		
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topicRepo->incrementPostCount( $topicId, 1 );
+		
+		// redirection with position, cause the post is still there
+		$position = $post->getPosition();
+		
+		$this->frontController->addMessage( __( 'Undeletion success' ), 'correct' );
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'positionTarget' => $position ) );
+	}
 }

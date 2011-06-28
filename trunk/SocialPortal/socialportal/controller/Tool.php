@@ -1,6 +1,14 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\model\PostFreetext;
+
+use socialportal\model\PostBase;
+
+use socialportal\model\TopicFreetext;
+
+use socialportal\model\TopicBase;
+
 use core\user\UserRoles;
 
 use core\tools\TopicType;
@@ -150,6 +158,122 @@ class Tool extends AbstractController {
 		} else {
 			$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
 		}
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
+	public function createFloodFirstForumAction() {
+		$get = $this->frontController->getRequest()->query;
+		$numFlood = $get->get( 'num', 10 );
+		
+		$forumId = $this->em->getRepository( 'Forum' )->getFirstId();
+		$typeId = $this->em->getRepository('ForumMeta')->getAcceptableTopics($forumId);
+		$typeId = $typeId[0];
+		
+		for( $i = 1; $i <= $numFlood; $i++ ) {
+			$base = new TopicBase();
+			$topic = new TopicFreetext();
+			
+			$base->setCustomType( $typeId );
+			$base->setForum( $this->em->getReference( 'Forum', $forumId ) );
+			$base->setIsDeleted( 0 );
+			$base->setIsOpen( 1 );
+			$base->setIsSticky( 0 );
+			$base->setLastposter( $this->em->getReference( 'User', UserManager::$nullUserId ) );
+			$base->setNumPosts( 0 );
+			if( !$this->frontController->getCurrentUser()->getId() ) {
+				$base->setPoster( $this->em->getReference( 'User', UserManager::$anonUserId ) );
+			} else {
+				$base->setPoster( $this->frontController->getCurrentUser() );
+			}
+			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i) );
+			$base->setStartTime( $now );
+			$base->setTime( $now );
+			$base->setTagCount( 0 );
+			$base->setTitle( "flooooooooooood($i / $numFlood)" );
+			
+			$topic->setTopicbase( $base );
+			$topic->setContent( 'floooooooooo oooooooooo ooooooooooo ooooooooooo ooooooooood' );
+			
+			$this->em->persist( $base );
+			$this->em->persist( $topic );
+		
+		}
+		if( !$this->em->flushSafe() ) {
+			$this->frontController->addMessage( 'Forum flood failed', 'error' );
+			$this->frontController->doRedirect( 'tool', 'index' );
+		}
+		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId, $numFlood );
+		$this->frontController->addMessage( "Forum flood success: $numFlood topics created", 'correct' );
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	public function createFloodFirstTopicAction() {
+		$get = $this->frontController->getRequest()->query;
+		$numFlood = $get->get( 'num', 1000 );
+		
+		$forumId = $this->em->getRepository( 'Forum' )->getFirstId();
+		$typeId = $this->em->getRepository('ForumMeta')->getAcceptableTopics($forumId);
+		$typeId = $typeId[0];
+		
+			$baseTopic = new TopicBase();
+			$topic = new TopicFreetext();
+			
+			$baseTopic->setCustomType( $typeId );
+			$baseTopic->setForum( $this->em->getReference( 'Forum', $forumId ) );
+			$baseTopic->setIsDeleted( 0 );
+			$baseTopic->setIsOpen( 1 );
+			$baseTopic->setIsSticky( 0 );
+			$baseTopic->setNumPosts( 0 );
+			if( !$this->frontController->getCurrentUser()->getId() ) {
+				$baseTopic->setPoster( $this->em->getReference( 'User', UserManager::$anonUserId ) );
+				$baseTopic->setLastposter( $this->em->getReference( 'User', UserManager::$anonUserId ) );
+			} else {
+				$baseTopic->setPoster( $this->frontController->getCurrentUser() );
+				$baseTopic->setLastposter( $this->frontController->getCurrentUser() );
+			}
+			$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
+			$baseTopic->setStartTime( $now );
+			$baseTopic->setTime( $now );
+			$baseTopic->setTagCount( 0 );
+			$baseTopic->setTitle( "flood receiver" );
+			
+			$topic->setTopicbase( $baseTopic );
+			$topic->setContent( 'floood receiver,.........' );
+			
+			$this->em->persist( $baseTopic );
+			$this->em->persist( $topic );
+		
+		for( $i = 1; $i <= $numFlood; $i++ ) {
+			$basePost = new PostBase();
+			$post = new PostFreetext();
+			$basePost->setTopic($baseTopic);
+			$basePost->setCustomType( $typeId );
+			$basePost->setPosition( $i );
+			$basePost->setPosterIp( $this->frontController->getRequest()->getClientIp() );
+			$basePost->setIsDeleted( 0 );
+			if( !$this->frontController->getCurrentUser()->getId() ) {
+				$basePost->setPoster( $this->em->getReference( 'User', UserManager::$anonUserId ) );
+			} else {
+				$basePost->setPoster( $this->frontController->getCurrentUser() );
+			}
+			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i) );
+			$basePost->setTime( $now );
+			
+			$post->setPostbase( $basePost );
+			$post->setContent( "$i ) floooooooooo oooooooooo ooooooooooo ooooooooooo ooooooooood" );
+			
+			$this->em->persist( $basePost );
+			$this->em->persist( $post );
+		
+		}
+		if( !$this->em->flushSafe() ) {
+			$this->frontController->addMessage( 'Topic flood failed', 'error' );
+			$this->frontController->doRedirect( 'tool', 'index' );
+		}
+		$topicId = $baseTopic->getId();
+		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId, 1 );
+		$this->em->getRepository( 'Forum' )->incrementPostCount( $forumId, $numFlood );
+		$this->em->getRepository( 'TopicBase' )->incrementPostCount( $topicId, $numFlood );
+		$this->frontController->addMessage( "Topic flood success: $numFlood post created", 'correct' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	

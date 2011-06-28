@@ -53,7 +53,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 			$userHelper->setCurrentUser($postAuthor);
 		?>
 			<!-- Here to add the condition on the post status -->
-			<li class="rounded-box" id="post-<?php echo $postId; ?>">
+			<li class="rounded-box<?php if($base->getIsDeleted()) echo ' deleted'; ?>" id="post-<?php echo $postId; ?>">
 				<a name="post-<?php echo $postId; ?>" ></a>
 				<table>
 			    	<tr>

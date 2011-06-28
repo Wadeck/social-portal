@@ -97,6 +97,10 @@ div#link-back {
 	padding-bottom: 15px;
 }
 
+div#display-deleted{
+	float: right;
+}
+
 .background_primary {
 	background: #ddd;
 }

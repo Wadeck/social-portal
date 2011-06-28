@@ -88,17 +88,18 @@ class Topic extends AbstractController {
 	
 	/**
 	 * @GetAttributes({topicId, forumId})
-	 * [p, n, positionTarget, timeTarget, lastPage]
+	 * [p, n, positionTarget(int), timeTarget(timestamp int), lastPage(boolean), withDeleted(boolean)]
 	 */
 	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
 		$page_num = $get->get( 'p', 1 );
-		$num_per_page = $get->get( 'n', 4 ); //TODO change after debug
+		$num_per_page = $get->get( 'n', 10 ); 
 		$positionTarget = $get->get( 'positionTarget', false );
 		$timeTarget = $get->get( 'timeTarget', false );
 		$lastPage = $get->get( 'lastPage', false );
+		$withDeleted = $get->get( 'withDeleted', false );
 		
 		$postBaseRepo = $this->em->getRepository( 'PostBase' );
 		$topicBaseRepo = $this->em->getRepository( 'TopicBase' );
@@ -107,7 +108,11 @@ class Topic extends AbstractController {
 		$base = $topic->getTopicbase();
 		$typeId = $base->getCustomType();
 		
-		$max_pages = $base->getNumPosts();
+		if( $withDeleted ) {
+			$max_pages = $topicBaseRepo->getCountWithDeleted( $topicId );
+		} else {
+			$max_pages = $base->getNumPosts();
+		}
 		$max_pages = ceil( $max_pages / $num_per_page );
 		if( !$max_pages ) {
 			$max_pages = 0;
@@ -115,20 +120,23 @@ class Topic extends AbstractController {
 		
 		if( false !== $positionTarget ) {
 			// we want to go to a specific topic
-			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $positionTarget, $num_per_page );
+			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $positionTarget, $num_per_page, $withDeleted );
 		} else if( false !== $timeTarget ) {
 			// we want to go to a specific topic
 			$timeTarget = new DateTime( "@$timeTarget" );
-			$page_num = $topicBaseRepo->getPostPagePerTime( $topicId, $typeId, $timeTarget, $num_per_page );
+			$page_num = $topicBaseRepo->getPostPagePerTime( $topicId, $typeId, $timeTarget, $num_per_page, $withDeleted );
 		} else if( false !== $lastPage ) {
 			// we want to go to the last page
 			//			$page_num = $topicBaseRepo->getLastPage( $topicId, $typeId, $num_per_page );
 			$page_num = max( 1, $max_pages );
 		}
 		
-		$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page );
-		
-		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page, $withDeleted );
+		$getArgs = array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
+		if( $withDeleted ) {
+			$getArgs['withDeleted'] = true;
+		}
+		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
@@ -140,6 +148,7 @@ class Topic extends AbstractController {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
 		}
 		
+		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'commentForm', $commentForm );
 		$response->setVar( 'pagination', $pagination );
@@ -148,6 +157,20 @@ class Topic extends AbstractController {
 		$response->setVar( 'forumId', $forumId );
 		$response->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic ) );
 		$response->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts ) );
+		
+		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
+			$getArgs = array( 'n' => $num_per_page, 'p'=>$page_num, 'topicId' => $topicId, 'forumId' => $forumId);
+			if(!$withDeleted){
+				$getArgs['withDeleted'] = true;
+				$response->setVar('isDisplayDeleted', true);
+			}else{
+				$response->setVar('isDisplayDeleted', false);
+			}
+			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
+		} else {
+			$displayDeletedLink = false;
+		}
+		$response->setVar( 'displayDeletedLink', $displayDeletedLink );
 		
 		$this->frontController->doDisplay( 'topic', 'displaySingleTopic' );
 	}
@@ -330,11 +353,12 @@ class Topic extends AbstractController {
 		$topicRepo = $this->em->getRepository( 'TopicBase' );
 		$topic = $topicRepo->find( $topicId );
 		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
 		if( 0 === $topic->getIsDeleted() ) {
 			// the topic was already deleted 
-			$time = $topic->getTime();
-			// time is a DateTime
-			$time = $time->getTimestamp();
 			$this->frontController->addMessage( __( 'Deletion failed, the topic is already deleted' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
@@ -344,9 +368,6 @@ class Topic extends AbstractController {
 		$this->em->persist( $topic );
 		if( !$this->em->flushSafe() ) {
 			// operation fail
-			$time = $topic->getTime();
-			// time is a DateTime
-			$time = $time->getTimestamp();
 			$this->frontController->addMessage( __( 'Deletion failed, please re try in a moment' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
@@ -358,7 +379,7 @@ class Topic extends AbstractController {
 		$forumRepo->incrementPostCount( $forumId, -$numPost );
 		
 		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
-		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
 	
 	/**
@@ -374,10 +395,14 @@ class Topic extends AbstractController {
 		$topicRepo = $this->em->getRepository( 'TopicBase' );
 		$topic = $topicRepo->find( $topicId );
 		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
 		if( 1 === $topic->getIsDeleted() ) {
 			// the topic was already deleted 
 			$this->frontController->addMessage( __( 'Undeletion failed, the topic was not deleted' ), 'error' );
-			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
 		// main operation
 		$topic->setIsDeleted( 0 );
@@ -386,12 +411,8 @@ class Topic extends AbstractController {
 		if( !$this->em->flushSafe() ) {
 			// operation fail
 			$this->frontController->addMessage( __( 'Undeletion failed, please re try in a moment' ), 'error' );
-			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId ) );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
-		
-		$time = $topic->getTime();
-		// time is a DateTime
-		$time = $time->getTimestamp();
 		
 		$numPost = $topic->getNumPosts();
 		

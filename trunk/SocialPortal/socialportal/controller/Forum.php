@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\user\UserRoles;
+
 use core\tools\TopicType;
 
 use core\templates\ForumHeader;
@@ -144,7 +146,7 @@ class Forum extends AbstractController {
 	
 	/**
 	 * @GetAttributes(forumId)
-	 * [p, n, timeTarget, lastPage]
+	 * [p, n, timeTarget(timestamp int), lastPage(boolean), withDeleted(boolean)]
 	 */
 	public function displaySingleForumAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -153,15 +155,16 @@ class Forum extends AbstractController {
 		$num_per_page = $get->get( 'n', 20 );
 		$timeTarget = $get->get( 'timeTarget', false );
 		$lastPage = $get->get( 'lastPage', false );
+		$withDeleted = $get->get( 'withDeleted', false );
 		
 		$forumRepo = $this->em->getRepository( 'Forum' );
-		$topicBaseRepo = $this->em->getRepository('TopicBase');
+		$topicBaseRepo = $this->em->getRepository( 'TopicBase' );
 		$forum = $forumRepo->find( $forumId );
 		
 		if( !$forum ) {
 			Logger::getInstance()->log( "The forum with id [$forumId] is not valid" );
 			
-			$defaultForumId = $forumRepo->findFirstId();
+			$defaultForumId = $forumRepo->getFirstId();
 			if( false === $defaultForumId ) {
 				$this->frontController->addMessage( __( 'There is no forum at the moment' ), 'error' );
 				$this->frontController->doRedirect( 'home' );
@@ -170,25 +173,28 @@ class Forum extends AbstractController {
 				$this->frontController->doRedirect( 'forum', 'displaySingleForum', array( 'forumId' => $defaultForumId ) );
 			}
 		}
+		if( $withDeleted ) {
+			$max_pages = $forumRepo->getCountWithDeleted( $forumId );
+		} else {
+			$max_pages = $forum->getNumTopics();
+		}
 		
-		$max_pages = $forum->getNumTopics();
 		$max_pages = ceil( $max_pages / $num_per_page );
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
-
-		if(false !== $timeTarget){
+		
+		if( false !== $timeTarget ) {
 			// we want to go to a specific topic given by date
-			$timeTarget = new DateTime("@$timeTarget" );
-			$page_num = $forumRepo->getTopicPageByDate( $forumId, $timeTarget, $num_per_page );
-		}else if(false !== $lastPage){
+			$timeTarget = new DateTime( "@$timeTarget" );
+			$page_num = $forumRepo->getTopicPageByDate( $forumId, $timeTarget, $num_per_page, $withDeleted );
+		} else if( false !== $lastPage ) {
 			// we want to go to the last page
-//			$page_num = $forumRepo->getLastPage( $forumId, $num_per_page );
+			//			$page_num = $forumRepo->getLastPage( $forumId, $num_per_page );
 			$page_num = $max_pages;
 		}
 		
-		$topics = $topicBaseRepo->findTopicsFromForum( $forumId, $page_num, $num_per_page );
-		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" ) );
+		$topics = $topicBaseRepo->findTopicsFromForum( $forumId, $page_num, $num_per_page, $withDeleted );
 		
 		$response = $this->frontController->getResponse();
 		
@@ -197,7 +203,13 @@ class Forum extends AbstractController {
 		array_walk( $acceptedTopics, function (&$item, $key) {
 			$item = TopicType::createById( $item );
 		} );
-		$response->setVar('acceptedTopics', $acceptedTopics);
+		$response->setVar( 'acceptedTopics', $acceptedTopics );
+		
+		$getArgs = array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
+		if( $withDeleted ) {
+			$getArgs['withDeleted'] = true;
+		}
+		$link = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', $getArgs );
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
@@ -221,6 +233,20 @@ class Forum extends AbstractController {
 		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );
 		
 		$response->setVar( 'forumHeader', $forumHeader );
+		
+		if($this->frontController->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
+			$getArgs = array( 'n' => $num_per_page, 'p'=>$page_num, 'forumId' => $forumId);
+			if(!$withDeleted){
+				$getArgs['withDeleted'] = true;
+				$response->setVar('isDisplayDeleted', true);
+			}else{
+				$response->setVar('isDisplayDeleted', false);
+			}
+			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', $getArgs );
+		}else{
+			$displayDeletedLink = false;
+		}
+		$response->setVar( 'displayDeletedLink', $displayDeletedLink );
 		
 		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}

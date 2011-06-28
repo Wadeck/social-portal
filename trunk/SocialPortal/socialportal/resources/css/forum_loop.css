@@ -111,6 +111,10 @@ div#sidebar table {
 	width: 117%;
 }
 
+.deleted {
+	background-color: #F99;	
+}
+
 table tr th {
 	padding: 8px;
 	vertical-align: middle;
