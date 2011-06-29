@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\debug\Logger;
+
 use socialportal\model\PostFreetext;
 
 use socialportal\model\PostBase;
@@ -318,5 +320,11 @@ class Tool extends AbstractController {
 			$this->frontController->addMessage( __( 'Recount failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
+	public function displayLogAction(){
+		$filename = 'log.txt';
+		$log = file_get_contents($filename);
+		$this->frontController->doDisplay('tool', 'displayLog', array('log' => $log));
 	}
 }

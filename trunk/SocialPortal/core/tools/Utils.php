@@ -81,7 +81,7 @@ class Utils {
 	 * @param $newer_date int Unix timestamp of date to compare older date to. Default false (current time).
 	 * @return str The time since.
 	 */
-	public static function getDataSince($older_date, $newer_date = null) {
+	public static function getDataSince($older_date, $newer_date = null, $singleChunk = true) {
 		if( $older_date instanceof \DateTime ) {
 			$older_date = $older_date->getTimestamp();
 		}
@@ -124,18 +124,19 @@ class Utils {
 		/* Set output var */
 		$output = (1 == $count) ? '1 ' . $chunks[$i][1] : $count . ' ' . $chunks[$i][2];
 		
-		/* Step two: the second chunk */
-		if( $i + 2 < $j ) {
-			$seconds2 = $chunks[$i + 1][0];
-			$name2 = $chunks[$i + 1][1];
-			
-			if( ($count2 = floor( ($since - ($seconds * $count)) / $seconds2 )) != 0 ) {
-				/* Add to output var */
-				//				$output .= (1 == $count2) ? _x( ',', 'Separator in time since', 'buddypress' ) . ' 1 ' . $chunks[$i + 1][1] : _x( ',', 'Separator in time since', 'buddypress' ) . ' ' . $count2 . ' ' . $chunks[$i + 1][2];
-				$output .= (1 == $count2) ? ', 1 ' . $chunks[$i + 1][1] : ', ' . $count2 . ' ' . $chunks[$i + 1][2];
+		if( !$singleChunk ) {
+			/* Step two: the second chunk */
+			if( $i + 2 < $j ) {
+				$seconds2 = $chunks[$i + 1][0];
+				$name2 = $chunks[$i + 1][1];
+				
+				if( ($count2 = floor( ($since - ($seconds * $count)) / $seconds2 )) != 0 ) {
+					/* Add to output var */
+					//				$output .= (1 == $count2) ? _x( ',', 'Separator in time since', 'buddypress' ) . ' 1 ' . $chunks[$i + 1][1] : _x( ',', 'Separator in time since', 'buddypress' ) . ' ' . $count2 . ' ' . $chunks[$i + 1][2];
+					$output .= (1 == $count2) ? ', 1 ' . $chunks[$i + 1][1] : ', ' . $count2 . ' ' . $chunks[$i + 1][2];
+				}
 			}
 		}
-		
 		if( !( int ) trim( $output ) )
 			$output = '0 ' . __( 'seconds' );
 		

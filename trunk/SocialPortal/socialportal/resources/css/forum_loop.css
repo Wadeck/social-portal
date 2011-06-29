@@ -111,17 +111,14 @@ div#sidebar table {
 	width: 117%;
 }
 
-.deleted {
-	background-color: #F99;	
-}
-
 table tr th {
 	padding: 8px;
 	vertical-align: middle;
 }
 
 table tr td {
-	padding: 15px 8px;
+	/*padding: 15px 8px;*/
+	padding: 15px 3px;
 	vertical-align: middle;
 }
 
@@ -158,12 +155,27 @@ table.forum-loop tr.alt { /* managed by background secondary */
 /*
 
 */
+table.forum-loop tr.sticky{
+	background: #FFF9DB;
+	border-top: 1px solid #FFE8C4;
+	border-bottom: 1px solid #FFE8C4;
+}
+table.forum-loop tr.deleted{
+	background: #FDD;
+	border-top: 1px solid #F99;
+	border-bottom: 1px solid #F99;
+}
+/*
+.deleted {
+	background-color: #F99;	
+}*/
+/*
 table.forum-loop tr.sticky td {
 	background: #FFF9DB;
 	border-top: 1px solid #FFE8C4;
 	border-bottom: 1px solid #FFE8C4;
 }
-
+*/
 /*
     table.forum-loop tr.closed td.td-title {
         padding-left: 35px;

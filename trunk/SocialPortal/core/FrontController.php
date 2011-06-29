@@ -103,8 +103,8 @@ class FrontController {
 	
 	private function __construct() {
 		if( false === self::$INIT ) {
-			self::$CONTROLLER_DIR = 'socialportal' . '/' . 'controller' . '/';
-			self::$VIEW_DIR = 'socialportal' . '/' . 'view' . '/';
+			self::$CONTROLLER_DIR = 'socialportal' . '\\' . 'controller' . '\\';
+			self::$VIEW_DIR = 'socialportal' . '\\' . 'view' . '\\';
 //			self::$CONTROLLER_DIR = 'socialportal' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR;
 //			self::$VIEW_DIR = 'socialportal' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR;
 			self::$JS_DIR = 'socialportal/resources/js/';

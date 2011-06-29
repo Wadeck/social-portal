@@ -142,10 +142,12 @@ class Topic extends AbstractController {
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
 		
 		// condition to satisfy to be able to write a comment
-		if( !$this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
-			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
-		} else {
+		if(!$base->getIsOpen()){
+			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'The topic is closed, no more comment accepted' ) );
+		}else if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
+		} else {
+			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
 		}
 		
 		
@@ -359,7 +361,7 @@ class Topic extends AbstractController {
 		
 		if( 0 === $topic->getIsDeleted() ) {
 			// the topic was already deleted 
-			$this->frontController->addMessage( __( 'Deletion failed, the topic is already deleted' ), 'error' );
+			$this->frontController->addMessage( __( 'Deletion operation failed, the topic is already deleted' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
 		// main operation
@@ -368,7 +370,7 @@ class Topic extends AbstractController {
 		$this->em->persist( $topic );
 		if( !$this->em->flushSafe() ) {
 			// operation fail
-			$this->frontController->addMessage( __( 'Deletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->addMessage( __( 'Deletion operation failed, please re try in a moment' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
 		
@@ -378,7 +380,7 @@ class Topic extends AbstractController {
 		$forumRepo->incrementTopicCount( $forumId, -1 );
 		$forumRepo->incrementPostCount( $forumId, -$numPost );
 		
-		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
+		$this->frontController->addMessage( __( 'Deletion operation success' ), 'correct' );
 		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
 	
@@ -401,7 +403,7 @@ class Topic extends AbstractController {
 		
 		if( 1 === $topic->getIsDeleted() ) {
 			// the topic was already deleted 
-			$this->frontController->addMessage( __( 'Undeletion failed, the topic was not deleted' ), 'error' );
+			$this->frontController->addMessage( __( 'Undeletion operation failed, the topic was not deleted' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
 		// main operation
@@ -410,7 +412,7 @@ class Topic extends AbstractController {
 		$this->em->persist( $topic );
 		if( !$this->em->flushSafe() ) {
 			// operation fail
-			$this->frontController->addMessage( __( 'Undeletion failed, please re try in a moment' ), 'error' );
+			$this->frontController->addMessage( __( 'Undeletion operation failed, please re try in a moment' ), 'error' );
 			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 		}
 		
@@ -420,7 +422,7 @@ class Topic extends AbstractController {
 		$forumRepo->incrementTopicCount( $forumId, 1 );
 		$forumRepo->incrementPostCount( $forumId, $numPost );
 		
-		$this->frontController->addMessage( __( 'Deletion success' ), 'correct' );
+		$this->frontController->addMessage( __( 'Deletion operation success' ), 'correct' );
 		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
 	
@@ -439,7 +441,34 @@ class Topic extends AbstractController {
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function stickAction() {
-
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
+		if( 0 === $topic->getIsSticky() ) {
+			// the topic was already deleted 
+			$this->frontController->addMessage( __( 'Stick operation failed, the topic is already stuck' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$topic->setIsSticky( 1 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$this->frontController->addMessage( __( 'Stick operation failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$this->frontController->addMessage( __( 'Stick operation success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+	
 	}
 	/**
 	 * @Nonce(unstickTopic)
@@ -447,7 +476,34 @@ class Topic extends AbstractController {
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function unstickAction() {
-
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
+		if( 1 === $topic->getIsSticky() ) {
+			// the topic was already deleted 
+			$this->frontController->addMessage( __( 'Unstick operation failed, the topic is not stuck' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$topic->setIsSticky( 0 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$this->frontController->addMessage( __( 'Unstick operation failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$this->frontController->addMessage( __( 'Unstick operation success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+	
 	}
 	/**
 	 * @Nonce(closeTopic)
@@ -455,7 +511,33 @@ class Topic extends AbstractController {
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function closeAction() {
-
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
+		if( 1 === $topic->getIsOpen() ) {
+			// the topic was already deleted 
+			$this->frontController->addMessage( __( 'Close operation failed, the topic is already closed' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$topic->setIsOpen( 0 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$this->frontController->addMessage( __( 'Close operation failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$this->frontController->addMessage( __( 'Close operation success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
 	/**
 	 * @Nonce(openTopic)
@@ -463,7 +545,33 @@ class Topic extends AbstractController {
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function openAction() {
-
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		
+		$time = $topic->getTime();
+		// time is a DateTime
+		$time = $time->getTimestamp();
+		
+		if( 0 === $topic->getIsOpen() ) {
+			// the topic was already deleted 
+			$this->frontController->addMessage( __( 'Open operation failed, the topic is already opened' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		// main operation
+		$topic->setIsOpen( 1 );
+		
+		$this->em->persist( $topic );
+		if( !$this->em->flushSafe() ) {
+			// operation fail
+			$this->frontController->addMessage( __( 'Open operation failed, please re try in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
+		}
+		
+		$this->frontController->addMessage( __( 'Open operation success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
 
 	//	public function viewAllAction($parameters) {

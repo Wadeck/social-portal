@@ -133,19 +133,19 @@ abstract class AbstractTopicTemplate implements iInsertable {
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 		<?php if($base->getIsSticky()): ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Unstick the topic, it will be shown like other topics by order of last modification' ); ?>"><?php echo __('Unstick'); ?></a>
 		<?php else: ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Stick the topic at the top of the forum' ); ?>"><?php echo __('Stick'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsOpen()): ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Close the topic, so that no other comments could be left, and so the topic falls in the forget' ); ?>"><?php echo __('Close'); ?></a>
 		<?php else: ?>
-			<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHrefWithNonce('openTopic', 'Topic', 'open', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('openTopic', 'Topic', 'open', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Open the topic, it will re accept comments' ); ?>"><?php echo __('Open'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;

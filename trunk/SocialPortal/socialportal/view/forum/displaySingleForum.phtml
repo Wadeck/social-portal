@@ -42,18 +42,28 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 					for($i = 0 ; $i < $size ; $i++):
 						$topic = $topics[$i];
 						$title = $topic->getTitle();
+						$titleDescription = $title;
 						$class = array();
 						if( $i % 2 == 1 ) {
 							$class[] = 'alt background_secondary' ;
 						}
 						if($topic->getIsDeleted()){
 							$class[] = 'deleted';
+							$title = '<b>[D]</b> '.$title;
+						}
+						if($topic->getIsSticky()){
+							$class[] = 'sticky';
+							$title = '<b>[S]</b> '.$title;
+						}
+						if(!$topic->getIsOpen()){
+							$class[] = 'closed';
+							$title = '<b>[C]</b> '.$title;
 						}
 						$class = implode(' ', $class);
 				?>
 					<tr<?php if( $class ){ echo ' class="'.$class.'"' ; }?>>
 						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
-							title="<?php echo $title; ?>"><?php echo $title; ?></a></td>
+							title="<?php echo $titleDescription; ?>"><?php echo $title; ?></a></td>
 						<td class="author">
 							<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
 								<?php echo $userHelper->insertAvatar(30); ?>
