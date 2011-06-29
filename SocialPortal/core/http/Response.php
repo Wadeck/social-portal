@@ -200,13 +200,13 @@ class Response {
 		}
 		//TODO remove after debug
 		$cs = $this->headers->getCookies();
-		if( $cs ) {
-			Logger::getInstance()->log( "Header cookies: " . print_r( $cs, true ) );
-		}
+//		if( $cs ) {
+//			Logger::getInstance()->log( "Header cookies: " . print_r( $cs, true ) );
+//		}
 		$cs = $this->cookies;
-		if( $cs ) {
-			Logger::getInstance()->log( "Simple cookies: " . print_r( $cs, true ) );
-		}
+//		if( $cs ) {
+//			Logger::getInstance()->log( "Simple cookies: " . print_r( $cs, true ) );
+//		}
 		// cookies
 		foreach( $this->headers->getCookies() as $cookie ) {
 			setcookie( $cookie->getName(), $cookie->getValue(), $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly() );
@@ -214,10 +214,10 @@ class Response {
 		$sname = session_name();
 		foreach( $this->cookies as $key => $value ) {
 			if( $key === $sname ) {
-				Logger::getInstance()->log( "Avoid storing session name in cookie $key=>$value" );
+//				Logger::getInstance()->log( "Avoid storing session name in cookie $key=>$value" );
 				continue;
 			} else {
-				Logger::getInstance()->log( "Storing cookie $key=>$value" );
+//				Logger::getInstance()->log( "Storing cookie $key=>$value" );
 			}
 			if( $value ) {
 				setcookie( $key, $value, time() + 60 * 60 * 24 * 15, '/' );
@@ -276,7 +276,7 @@ class Response {
 	 * @param array $cookies key=>value, could contains the session_name => session_id, but will not be sent (actually it's done by php directly)
 	 */
 	public function setCookies($cookies) {
-		Logger::getInstance()->debug( 'Cookies received: ' . var_export( $cookies, true ) );
+//		Logger::getInstance()->debug( 'Cookies received: ' . var_export( $cookies, true ) );
 		$this->cookies = $cookies;
 	}
 	

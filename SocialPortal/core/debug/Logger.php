@@ -30,10 +30,6 @@ class Logger {
 		} else {
 			$this->file = fopen( $this->fileName, 'a' );
 		}
-		if(!chmod($this->fileName, '0777')){
-			echo 'Impossible to chmod the file';
-			die();
-		}
 		$this->log( 'start of session ' . $_SERVER['HTTP_USER_AGENT'] );
 	}
 	

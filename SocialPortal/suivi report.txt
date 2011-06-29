@@ -333,4 +333,3 @@ test de charge - 20 topics ou 1000 topics dans un forum, aucune different en pag
 
 
 todo - sticky/unsticky/close/open
-todo - chmod la ou il faut, creation des proxy, creation du log.txt
