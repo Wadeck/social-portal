@@ -100,9 +100,9 @@ class Utils {
 		$since = $newer_date - $older_date;
 		
 		/* Something went wrong with date calculation and we ended up with a negative date. */
-		if( 0 > $since ){
+		if( 0 > $since ) {
 			return __( 'sometime' );
-		}else if(0 == $since){
+		} else if( 0 == $since ) {
 			return __( 'now' );
 		}
 		/**
@@ -147,6 +147,21 @@ class Utils {
 			$text = substr( $text, 0, $size ) . '...';
 		}
 		return $text;
+	}
+	
+	/**
+	 * @return true iff the protocol used is HTTPS, otherwise false
+	 */
+	public static function isSSL() {
+		if( isset( $_SERVER['HTTPS'] ) ) {
+			if( 'on' == strtolower( $_SERVER['HTTPS'] ) )
+				return true;
+			if( '1' == $_SERVER['HTTPS'] )
+				return true;
+		} elseif( isset( $_SERVER['SERVER_PORT'] ) && ('443' == $_SERVER['SERVER_PORT']) ) {
+			return true;
+		}
+		return false;
 	}
 
 }
