@@ -328,8 +328,15 @@ test de charge - 20 topics ou 1000 topics dans un forum, aucune different en pag
 - afficher les deletes dans les forums / topics
 - ajout d'un bouton en mode admin pour switcher show/hide deleted
 
+mercredi 29 juin
+- ajout des balises pour les delete/close/sticky
+- correction du bug de front controller DIRECTORY_SEPARATOR qui sont pas tjs utile
+- support du open/close topics
+- support partiel sticky topics, not the "real" stick display
+-
 
+bug - les permalinks marcheront pas avec les n/p custom
+bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
-
-
-todo - sticky/unsticky/close/open
+todo - sticky/unsticky display
+todo - description des dates en format normal

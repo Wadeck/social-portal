@@ -1,0 +1,9 @@
+<h3>Log page</h3>
+<?php
+$vars['helper']->insertMessage();
+$log = $vars['log'];
+$log = str_replace(' ', '&nbsp;', $log);
+$log = str_replace("\t", '&nbsp;&nbsp;&nbsp;', $log);
+$log = nl2br($log);
+echo $log;
+?>

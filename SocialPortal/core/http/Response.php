@@ -92,7 +92,6 @@ class Response {
 		}
 	}
 	
-	//TODO perhaps a better way to manager variables, look into symfony
 	public function getVar($key, $default = null) {
 		if( isset( $this->vars[$key] ) ) {
 			return $this->vars[$key];
@@ -198,15 +197,6 @@ class Response {
 				header( $name . ': ' . $value );
 			}
 		}
-		//TODO remove after debug
-		$cs = $this->headers->getCookies();
-//		if( $cs ) {
-//			Logger::getInstance()->log( "Header cookies: " . print_r( $cs, true ) );
-//		}
-		$cs = $this->cookies;
-//		if( $cs ) {
-//			Logger::getInstance()->log( "Simple cookies: " . print_r( $cs, true ) );
-//		}
 		// cookies
 		foreach( $this->headers->getCookies() as $cookie ) {
 			setcookie( $cookie->getName(), $cookie->getValue(), $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly() );
@@ -214,18 +204,15 @@ class Response {
 		$sname = session_name();
 		foreach( $this->cookies as $key => $value ) {
 			if( $key === $sname ) {
-//				Logger::getInstance()->log( "Avoid storing session name in cookie $key=>$value" );
 				continue;
-			} else {
-//				Logger::getInstance()->log( "Storing cookie $key=>$value" );
-			}
+			} 
 			if( $value ) {
+				// timeout 15 days
 				setcookie( $key, $value, time() + 60 * 60 * 24 * 15, '/' );
 			} else {
 				setcookie( $key, null, 1, '/' );
 			}
 		
-		// timeout 15 days
 		}
 	}
 	
@@ -255,8 +242,7 @@ class Response {
 			?>
 		<link rel="shortcut icon" href="<?php
 			echo $this->favicon;
-			?>"
-	type="image/x-icon" />		
+			?>" type="image/x-icon" />		
 	
 		<?php endif ;
 		$this->insertCSS();
