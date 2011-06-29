@@ -196,6 +196,13 @@ class Forum extends AbstractController {
 		
 		$topics = $topicBaseRepo->findTopicsFromForum( $forumId, $page_num, $num_per_page, $withDeleted );
 		
+		if(1 == $page_num){
+			// we retrieve the stickies
+			$stickyTopics = $topicBaseRepo->findStickyTopicsFromForum($forumId);
+		}else{
+			$stickyTopics = null;
+		}
+		
 		$response = $this->frontController->getResponse();
 		
 		$metaRepo = $this->em->getRepository( 'ForumMeta' );
@@ -217,6 +224,7 @@ class Forum extends AbstractController {
 		
 		$response->setVar( 'forum', $forum );
 		$response->setVar( 'topics', $topics );
+		$response->setVar( 'stickyTopics', $stickyTopics );
 		
 		$userHelper = new UserHelper( $this->frontController );
 		$response->setVar( 'userHelper', $userHelper );

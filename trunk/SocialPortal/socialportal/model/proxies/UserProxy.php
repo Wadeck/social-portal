@@ -129,6 +129,18 @@ class UserProxy extends \socialportal\model\User implements \Doctrine\ORM\Proxy\
         return parent::getRoles();
     }
 
+    public function setAvatarType($avatarType)
+    {
+        $this->_load();
+        return parent::setAvatarType($avatarType);
+    }
+
+    public function getAvatarType()
+    {
+        $this->_load();
+        return parent::getAvatarType();
+    }
+
     public function setAvatarKey($avatarKey)
     {
         $this->_load();
@@ -144,7 +156,7 @@ class UserProxy extends \socialportal\model\User implements \Doctrine\ORM\Proxy\
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'username', 'randomKey', 'password', 'email', 'registered', 'activationKey', 'status', 'roles', 'avatarKey');
+        return array('__isInitialized__', 'id', 'username', 'randomKey', 'password', 'email', 'registered', 'activationKey', 'status', 'roles', 'avatarType', 'avatarKey');
     }
 
     public function __clone()

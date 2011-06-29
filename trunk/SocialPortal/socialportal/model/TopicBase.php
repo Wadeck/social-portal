@@ -120,7 +120,6 @@ class TopicBase{
      * @JoinColumns({
      *   @JoinColumn(name="poster_id", referencedColumnName="id")
      * })
-     * @Comment("Author of the topic")
      */
     private $poster;
 

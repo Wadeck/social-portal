@@ -57,6 +57,18 @@ class TopicBaseRepository extends EntityRepository {
 		return $topics;
 	}
 	
+	/**
+	 * Retrieve the topics that are sticky
+	 * @param int $forumId
+	 * @return array of TopicBase
+	 */
+	public function findStickyTopicsFromForum($forumId){
+		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.forum = :id AND t.isSticky=1 ORDER BY t.time DESC' );
+		$dql->setParameter( 'id', $forumId );
+		$stickyTopics = $dql->getResult();
+		return $stickyTopics;
+	}
+	
 	/** @return TopicFull|false if not found */
 	public function findFullTopic($topicId) {
 		$topicBase = $this->findBaseTopic( $topicId );
