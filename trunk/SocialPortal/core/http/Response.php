@@ -2,6 +2,8 @@
 
 namespace core\http;
 
+use core\tools\Utils;
+
 use core\FrontController;
 
 use core\debug\Logger;
@@ -62,7 +64,9 @@ class Response {
 		if( false === strpos( $jsFile, '.js' ) ) {
 			$jsFile .= '.js';
 		}
-		$jsFile = 'http://' . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$JS_DIR . $jsFile;
+		$http = Utils::isSSL() ? 'https://' : 'http://';
+		
+		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$JS_DIR . $jsFile;
 		if( !in_array( $jsFile, $this->desiredJs ) ) {
 			$this->desiredJs[] = $jsFile;
 		}
@@ -80,7 +84,9 @@ class Response {
 		if( false === strpos( $cssFile, '.css' ) ) {
 			$cssFile .= '.css';
 		}
-		$cssFile = 'http://' . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$CSS_DIR . $cssFile;
+		$http = Utils::isSSL() ? 'https://' : 'http://';
+		
+		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$CSS_DIR . $cssFile;
 		if( !in_array( $cssFile, $this->desiredCss ) ) {
 			$this->desiredCss[] = $cssFile;
 		}
