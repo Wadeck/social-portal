@@ -84,10 +84,18 @@ class User{
     private $roles;
 
     /**
+     * @var boolean $avatarType
+     *
+     * @Column(name="avatar_type", type="boolean", nullable=false)
+     * @Comment("0: gravatar geometric type, 1: custom image")
+     */
+    private $avatarType;
+
+    /**
      * @var string $avatarKey
      *
      * @Column(name="avatar_key", type="string", length=255, nullable=true)
-     * @Comment("The key that will be used to retrieve avatar from Gravatar, to be consistent with user avatar on gravatar, we must use the email as key")
+     * @Comment("The key that will be used to retrieve avatar from Gravatar, to be consistent with user avatar on gravatar, we must use the email as key. If the user has uploaded an image, this will represent the link to that file")
      */
     private $avatarKey;
 
@@ -142,6 +150,12 @@ class User{
 
     /** Get roles @return integer $roles */
     public function getRoles(){ return $this->roles; }
+
+    /** Set avatarType @param boolean $avatarType */
+    public function setAvatarType($avatarType){ $this->avatarType = $avatarType; }
+
+    /** Get avatarType @return boolean $avatarType */
+    public function getAvatarType(){ return $this->avatarType; }
 
     /** Set avatarKey @param string $avatarKey */
     public function setAvatarKey($avatarKey){ $this->avatarKey = $avatarKey; }

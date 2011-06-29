@@ -154,6 +154,15 @@ function containsError(value, constraints) {
 						break;
 				}
 				break;
+//			case 'date':
+//				switch($args[0]){
+//					case 'non-empty-dmy':
+//					if($value && ($value['day'] && $value['month'] && $value['year'] ) ) {
+//						return __(_error_messages['date_nonemptydmy']);
+//					}
+//					break;
+//				}
+//				break;
 		}
 	}
 	return false;

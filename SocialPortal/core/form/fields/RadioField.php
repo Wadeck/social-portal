@@ -6,11 +6,13 @@ use core\form\Field;
 
 class RadioField extends Field {
 	protected $values;
-	public function __construct($identifier, array $descriptions, $defaultValue, array $values, array $constraints = array()) {
+	protected $canBeReset;
+	public function __construct($identifier, array $descriptions, $defaultValue, array $values, $canBeReset=false, array $constraints = array()) {
 		parent::__construct( $identifier, $descriptions, $defaultValue, 'radio', $constraints );
 		if( count( $descriptions ) != count( $values ) ) {
 			throw new \InvalidArgumentException( 'The radio fields must have same number of descriptions and values' );
 		}
+		$this->canBeReset = $canBeReset;
 		$this->values = $values;
 	}
 	

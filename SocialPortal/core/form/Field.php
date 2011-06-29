@@ -3,7 +3,7 @@
 namespace core\form;
 
 class Field {
-	private static $errorMessages;
+	protected static $errorMessages;
 	
 	/** @var array mandatory|optional|not-default|value_greater-equal-than_x|count_less-than_y */
 	protected $constraints;
@@ -27,7 +27,7 @@ class Field {
 	protected $form;
 	
 	private static function initMessages() {
-		self::$errorMessages = array( 'form_already_sent' => __js( 'This form was already sent to the server, please refresh the page' ), 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ) );
+		self::$errorMessages = array( 'form_already_sent' => __js( 'This form was already sent to the server, please refresh the page' ), 'mandatory' => __js( 'This field cannot be empty' ), 'optional' => '', 'strlen_lessthan' => __js( 'The length of the answer must be less than %value%' ), 'strlen_lessequal' => __js( 'The length of the answer must be less than %value% or equal' ), 'strlen_atleast' => __js( 'The length of the answer must be at least %value%' ), 'value_lessthan' => __js( 'The value of this field must be less than %value%' ), 'value_greaterequalthan' => __js( 'The value of this field must be greater or equal than %value%' ), 'value_greaterthan' => __js( 'The value of this field must be greater than %value%' ), 'value_notequal' => __js( 'The default (%value%) is not accepted as an answer' ), 'date_nonemptydmy' => __js( 'The date cannot be empty' ) );
 	}
 	
 	public static function getErrorMessages() {
@@ -105,7 +105,8 @@ class Field {
 			switch ( $base ) {
 				case 'mandatory' :
 					if( !$value ) {
-						return __( 'This field cannot be empty' );
+						return __( self::$errorMessages['mandatory']);
+//						return __( 'This field cannot be empty' );
 					}
 					break;
 				case 'optional' :
@@ -154,6 +155,14 @@ class Field {
 							break;
 					}
 					break;
+//				case 'date' :
+//					switch ( $args[0] ) {
+//						case 'non-empty-dmy' :
+//							if( $value && (isset( $value['day'] ) && $value['day'] && isset( $value['month'] ) && $value['month'] && isset( $value['year'] ) && $value['year']) ) {
+//								return __( self::$errorMessages['date_nonemptydmy'] );
+//							}
+//							break;
+//					}
 			
 		// default other word that are not constraints like "raw" to avoid clean text, or labelInInput by example
 			}
@@ -192,8 +201,7 @@ class Field {
 	}
 	
 	public function insertErrorMessage() {
-		?><span
-	class="error_message<?php
+		?><span class="error_message<?php
 		if( $this->error )
 			echo ' active'?>"><?php
 		echo $this->error;
@@ -204,20 +212,17 @@ class Field {
 		?>
 <input type="<?php
 		echo $this->type;
-		?>"
-	id="<?php
+		?>" id="<?php
 		echo $this->identifier;
 		?>"
 	name="<?php
 		echo $this->identifier;
-		?>"
-	class="<?php
+		?>" class="<?php
 		echo $this->getConstraintsAsString();
 		?>"
 	title="<?php
 		echo $this->description;
-		?>"
-	value="<?php
+		?>" value="<?php
 		echo $this->getValue();
 		?>" />
 <?php

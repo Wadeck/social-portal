@@ -4,6 +4,7 @@ $vars['helper']->insertMessage();
 $forum = $vars['forum'];
 $forumId = $forum->getId();
 $topics = $vars['topics'];
+$stickyTopics = $vars['stickyTopics'];
 $pagination = $vars['pagination'];
 $forumHeader = $vars['forumHeader'];
 $userHelper = $vars['userHelper'];
@@ -37,6 +38,53 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 				</tr>
 			</thead>
 			<tbody>
+			<?php if(null !== $stickyTopics): 
+						$size = count($stickyTopics);
+						for($i = 0 ; $i < $size ; $i++):
+							$topic = $stickyTopics[$i];
+							$title = $topic->getTitle();
+							$titleDescription = $title;
+							$class = array();
+							if( $i % 2 == 1 ) {
+								$class[] = 'alt background_secondary' ;
+							}
+							if($topic->getIsDeleted()){
+								$class[] = 'deleted';
+								$title = '<b>[D]</b> '.$title;
+							}
+							if($topic->getIsSticky()){
+								$class[] = 'sticky';
+								$title = '<b>[S]</b> '.$title;
+							}
+							if(!$topic->getIsOpen()){
+								$class[] = 'closed';
+								$title = '<b>[C]</b> '.$title;
+							}
+							$class = implode(' ', $class);
+					?>
+						<tr<?php if( $class ){ echo ' class="'.$class.'"' ; }?>>
+							<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
+								title="<?php echo $titleDescription; ?>"><?php echo $title; ?></a></td>
+							<td class="author">
+								<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
+									<?php echo $userHelper->insertAvatar(30); ?>
+									<div class="author-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
+								<?php endif ?>
+							</td>
+							<td class="latest-poster">
+								<?php if($userHelper->setCurrentUser($topic->getLastPoster())):?>
+									<?php echo $userHelper->insertAvatar(30); ?>
+									<div class="lastposter-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
+								<?php endif ?>
+							</td>
+							<td class="postcount"><?php echo $topic->getNumPosts();?></td>
+							<td class="freshness"><?php echo Utils::getDataSince($topic->getTime());?></td>
+						</tr>
+					<?php endfor ?>
+				<tr>
+				<td class="tcat background_primary" colspan="99" style="height:5px"><!-- --></td>
+				</tr>
+			<?php endif; ?>
 				<?php
 					$size = count($topics);
 					for($i = 0 ; $i < $size ; $i++):

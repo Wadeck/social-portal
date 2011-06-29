@@ -193,6 +193,7 @@ class UserManager {
 		$date = new \DateTime( "@0" );
 		$user->setRegistered( $date );
 		$user->setAvatarKey( 'anon' );
+		$user->setAvatarType(0);
 		
 		self::$anonUser = $user;
 		return $user;
@@ -218,6 +219,7 @@ class UserManager {
 		$date = new \DateTime( "@0" );
 		$user->setRegistered( $date );
 		$user->setAvatarKey( 'null' );
+		$user->setAvatarType(0);
 		
 		self::$nullUser = $user;
 		return $user;
@@ -240,6 +242,7 @@ class UserManager {
 		$user->setEmail( $email );
 		$user->setStatus( $status );
 		$user->setActivationKey( $activationKey );
+		$user->setAvatarType(0);
 		
 		// @ to enable the unix timestamp
 		$date = new \DateTime( '@' . $time );
