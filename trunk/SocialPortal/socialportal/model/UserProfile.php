@@ -7,7 +7,7 @@ namespace socialportal\model;
  * @Table(
  *	name="user_profile"
  * )
- * @Entity
+ * @Entity(repositoryClass="UserProfileRepository")
  */
 class UserProfile{
     /**
@@ -20,11 +20,11 @@ class UserProfile{
     private $id;
 
     /**
-     * @var bigint $userid
+     * @var bigint $userId
      *
-     * @Column(name="userId", type="bigint", nullable=false)
+     * @Column(name="user_id", type="bigint", nullable=false)
      */
-    private $userid;
+    private $userId;
 
     /**
      * @var boolean $gender
@@ -61,15 +61,22 @@ class UserProfile{
      */
     private $quote;
 
+    /**
+     * @var datetime $lastModified
+     *
+     * @Column(name="last_modified", type="datetime", nullable=true)
+     */
+    private $lastModified;
+
 
     /** Get id @return bigint $id */
     public function getId(){ return $this->id; }
 
-    /** Set userid @param bigint $userid */
-    public function setUserid($userid){ $this->userid = $userid; }
+    /** Set userId @param bigint $userId */
+    public function setUserId($userId){ $this->userId = $userId; }
 
-    /** Get userid @return bigint $userid */
-    public function getUserid(){ return $this->userid; }
+    /** Get userId @return bigint $userId */
+    public function getUserId(){ return $this->userId; }
 
     /** Set gender @param boolean $gender */
     public function setGender($gender){ $this->gender = $gender; }
@@ -100,4 +107,10 @@ class UserProfile{
 
     /** Get quote @return text $quote */
     public function getQuote(){ return $this->quote; }
+
+    /** Set lastModified @param datetime $lastModified */
+    public function setLastModified($lastModified){ $this->lastModified = $lastModified; }
+
+    /** Get lastModified @return datetime $lastModified */
+    public function getLastModified(){ return $this->lastModified; }
 }

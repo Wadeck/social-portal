@@ -1,18 +1,18 @@
 @CHARSET "ISO-8859-1";
 
-form.topic-form {
+form.profile-form {
 	padding: 8px;
 }
 
-form.topic-form .label_error {
+form.profile-form .label_error {
 	display: block;
 }
 
-form.topic-form .field_container {
+form.profile-form .field_container {
 	
 }
 
-form.topic-form label {
+form.profile-form label {
 	font-weight: bold;
 	margin: 15px 0 5px 0;
 	text-align: left;
@@ -20,16 +20,16 @@ form.topic-form label {
 	display: inline;
 }
 
-form.topic-form input[type="text"] {
+form.profile-form input[type="text"] {
 	width: 75%;
 }
 
-form.topic-form textarea {
+form.profile-form textarea {
 	width: 75%;
 	height: 120px;
 }
 
 /** perhaps could be available for every form */
-form.topic-form input[type="submit"]{
+form.profile-form input[type="submit"]{
 	margin-top: 5px;
 }

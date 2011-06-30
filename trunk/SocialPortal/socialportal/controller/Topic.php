@@ -150,6 +150,11 @@ class Topic extends AbstractController {
 			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
 		}
 		
+		$getArgs = array('topicId' => $topicId, 'forumId' => $forumId);
+		$permalinkTopic = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
+		$getArgs['n'] = $num_per_page;
+		$getArgs['p'] = $page_num;
+		$permalinkPost = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'commentForm', $commentForm );
@@ -157,18 +162,27 @@ class Topic extends AbstractController {
 		$response->setVar( 'posts', $posts );
 		$response->setVar( 'topic', $topic );
 		$response->setVar( 'forumId', $forumId );
-		$response->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic ) );
-		$response->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts ) );
+		$response->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic, $permalinkTopic ) );
+		$response->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts, $permalinkPost ) );
 		
 		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
-			$getArgs = array( 'n' => $num_per_page, 'p'=>$page_num, 'topicId' => $topicId, 'forumId' => $forumId);
+			// optimization if we use permalink before
 			if(!$withDeleted){
 				$getArgs['withDeleted'] = true;
 				$response->setVar('isDisplayDeleted', true);
+				$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 			}else{
 				$response->setVar('isDisplayDeleted', false);
+				// already computed
+				$displayDeletedLink = $permalinkPost;
 			}
-			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
+//			if(!$withDeleted){
+//				$getArgs['withDeleted'] = true;
+//				$response->setVar('isDisplayDeleted', true);
+//			}else{
+//				$response->setVar('isDisplayDeleted', false);
+//			}
+//			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		} else {
 			$displayDeletedLink = false;
 		}

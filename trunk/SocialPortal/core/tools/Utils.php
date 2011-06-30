@@ -143,6 +143,20 @@ class Utils {
 		return $output;
 	}
 	
+	/**
+	 * @param int $date Unix timestamp
+	 */
+	public static function getAgeFromBirthday($date) {
+		$year_diff = date( "Y" ) - date( 'Y', $date );
+		$month_diff = date( "m" ) - date( 'm', $date );
+		$day_diff = date( "d" ) - date( 'd', $date );
+		if( $month_diff < 0 )
+			$year_diff--;
+		elseif( ($month_diff == 0) && ($day_diff < 0) )
+			$year_diff--;
+		return $year_diff;
+	}
+	
 	public static function createExcerpt($text, $size) {
 		if( strlen( $text ) > $size + 2 ) {
 			$text = substr( $text, 0, $size ) . '...';

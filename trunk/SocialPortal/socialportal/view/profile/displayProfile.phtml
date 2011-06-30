@@ -1,0 +1,23 @@
+<?php
+$vars['helper']->setContainerClass('');
+$vars['helper']->insertMessage();
+//$userId = $vars['userId'];
+//$user = $vars['user'];
+//$profile = $vars['profile'];
+$profileTemplate = $vars['profileTemplate'];
+$user = $vars['user'];
+$vars['helper']->setTitle( __( "%username%'s profile", array( '%username%' => $user->getUsername() ) ) );
+?>
+
+<div id="link-back"><a class="button" href="<?php
+$vars['helper']->insertHref( 'Home' );
+?>"><?php echo __('Back to homepage'); ?></a></div>
+
+<?php 
+echo "<h3>".__('Profile')."</h3>";
+if($profileTemplate){
+//	echo '<div class="rounded-box">';
+	$profileTemplate->insert();
+//	echo '</div>';
+}
+?>

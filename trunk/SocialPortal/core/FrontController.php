@@ -116,7 +116,8 @@ class FrontController {
 		$this->em = DoctrineLink::getEntityManager();
 		$this->request = Request::createFromGlobals();
 		
-		$this->request->setSession( new Session( new NativeSessionStorage( array( 'lifetime' => 3600 ) ) ) );
+		$this->request->setSession( new Session( new NativeSessionStorage( array( 'lifetime' => 0 ) ) ) );
+//		$this->request->setSession( new Session( new NativeSessionStorage( array( 'lifetime' => 3600 ) ) ) );
 		$this->request->getSession()->start();
 		
 		$this->response = new Response();
@@ -254,6 +255,20 @@ class FrontController {
 	 */
 	public function doRedirect($module, $action = '', array $gets = array(), $targetId=false, $noLoopControl = false) {
 		$url = $this->getViewHelper()->createHref( $module, $action, $gets, $targetId );
+		$this->doRedirectUrl( $url, $noLoopControl );
+	}
+	
+	/**
+	 * When we want to make a redirection to the given module/action/...
+	 * @param string $nonceAction Not hashed
+	 * @param string $module
+	 * @param string $action
+	 * @param string $params
+	 * @param string $gets
+	 * @exit
+	 */
+	public function doRedirectWithNonce($nonceAction, $module, $action = '', array $gets = array(), $targetId=false, $noLoopControl = false) {
+		$url = $this->getViewHelper()->createHrefWithNonce($nonceAction, $module, $action, $gets, $targetId );
 		$this->doRedirectUrl( $url, $noLoopControl );
 	}
 	

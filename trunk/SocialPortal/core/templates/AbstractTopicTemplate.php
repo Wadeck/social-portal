@@ -24,6 +24,8 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	protected $front;
 	/** @var Topic */
 	protected $topic;
+	/** @var string Url to the topic, page 1, default number of post per page */
+	protected $permalink;
 	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
@@ -35,6 +37,10 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	
 	public function setTopic($topic){
 		$this->topic = $topic;
+	}
+	
+	public function setPermalink($permalink){
+		$this->permalink = $permalink;
 	}
 	
 	public function insert(){
@@ -175,7 +181,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		<!--<a href="#comment" onClick="onQuoteClick(); return true"
 			title="<?php echo __( 'Quote this topic in your answer' ); ?>"><?php echo __('Quote'); ?></a>
 		&nbsp;|&nbsp;
-		--><a href="#topic-<?php echo $topic->getId(); ?>"
+		--><a href="<?php echo $this->permalink. '#topic-'. $topic->getId(); ?>"
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
 								
 	<?php

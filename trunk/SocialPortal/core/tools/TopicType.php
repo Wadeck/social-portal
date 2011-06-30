@@ -154,7 +154,7 @@ class TopicType {
 	 * @param string $typeName
 	 * @return iTopicTemplate
 	 */
-	public static function getTopicTemplate($typeId, FrontController $front, EntityManager $em, $topic) {
+	public static function getTopicTemplate($typeId, FrontController $front, EntityManager $em, $topic, $permalink) {
 		$typeId = intval( $typeId );
 		$result = null;
 		switch ( $typeId ) {
@@ -175,6 +175,7 @@ class TopicType {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
 			$result->setTopic( $topic );
+			$result->setPermalink( $permalink );
 		}
 		return $result;
 	}
@@ -184,7 +185,7 @@ class TopicType {
 	 * @param string $typeName
 	 * @return iTopicTemplate
 	 */
-	public static function getPostTemplate($typeId, FrontController $front, EntityManager $em, array $posts) {
+	public static function getPostTemplate($typeId, FrontController $front, EntityManager $em, array $posts, $permalink) {
 		$typeId = intval( $typeId );
 		$result = null;
 		switch ( $typeId ) {
@@ -205,6 +206,7 @@ class TopicType {
 			$result->setFrontController( $front );
 			$result->setEntityManager( $em );
 			$result->setPosts( $posts );
+			$result->setPermalink( $permalink );
 		}
 		return $result;
 	}

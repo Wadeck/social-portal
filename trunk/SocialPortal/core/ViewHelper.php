@@ -116,51 +116,50 @@ class ViewHelper {
 		
 		$tempVars = $this->frontController->getResponse()->removeAllVars();
 		// like a stack
-			$tempGet = $this->frontController->getRequest()->query->all();
-			$this->frontController->getRequest()->query->replace( $gets );
+		$tempGet = $this->frontController->getRequest()->query->all();
+		$this->frontController->getRequest()->query->replace( $gets );
 		
-			
-			$this->frontController->doAction( $module, $action );
-			
-			
+		$this->frontController->doAction( $module, $action );
+		
 		// reset the previously set GET values
 		$this->frontController->getRequest()->query->replace( $tempGet );
 		$this->frontController->getResponse()->setVars( $tempVars );
 	}
-//	/** Could be used for login/pass/avatar template */
-//	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
-//		$tempVars = $this->frontController->getResponse()->removeAllVars();
-//		// like a stack
-//		$tempGet = $this->frontController->getRequest()->query->all();
-//		$this->frontController->getRequest()->query->replace( $gets );
-//		
-//		// store the nonce to avoid giving bad nonce to the createHref method
-//		if( $nonceAction ) {
-//			$tempNonce = $this->frontController->getCurrentNonce();
-//			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
-//			$this->frontController->setNonce( $nonce );
-//			// call the module with the temporary nonce
-//			
-//			$this->frontController->doAction( $module, $action );
-//			
-//			// come back to the previous value of nonce
-//			$this->frontController->setNonce( $tempNonce );
-//		} else {
-//			// call the module without care of the nonce
-//			$this->frontController->doAction( $module, $action );
-//		}
-//		// reset the previously set GET values
-//		$this->frontController->getRequest()->query->replace( $tempGet );
-//		$this->frontController->getResponse()->setVars( $tempVars );
-//	}
+	//	/** Could be used for login/pass/avatar template */
+	//	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
+	//		$tempVars = $this->frontController->getResponse()->removeAllVars();
+	//		// like a stack
+	//		$tempGet = $this->frontController->getRequest()->query->all();
+	//		$this->frontController->getRequest()->query->replace( $gets );
+	//		
+	//		// store the nonce to avoid giving bad nonce to the createHref method
+	//		if( $nonceAction ) {
+	//			$tempNonce = $this->frontController->getCurrentNonce();
+	//			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
+	//			$this->frontController->setNonce( $nonce );
+	//			// call the module with the temporary nonce
+	//			
+	//			$this->frontController->doAction( $module, $action );
+	//			
+	//			// come back to the previous value of nonce
+	//			$this->frontController->setNonce( $tempNonce );
+	//		} else {
+	//			// call the module without care of the nonce
+	//			$this->frontController->doAction( $module, $action );
+	//		}
+	//		// reset the previously set GET values
+	//		$this->frontController->getRequest()->query->replace( $tempGet );
+	//		$this->frontController->getResponse()->setVars( $tempVars );
+	//	}
 	
+
 	/**
 	 * Generate a specific url for the site
 	 * @param string $controllerName
 	 * @param string $actionName
 	 * @param array $GETAttributes
 	 */
-	public function createHref($controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+	public function createHref($controllerName, $actionName = '', array $gets = array(), $targetId = false) {
 		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
 		if( $actionName ) {
 			$result .= '/' . $actionName;
@@ -171,37 +170,41 @@ class ViewHelper {
 			}, array_keys( $gets ), array_values( $gets ) ) );
 		}
 		// to force the browser to go to the given id
-		if(false !== $targetId){
+		if( false !== $targetId ) {
 			$result .= "#$targetId";
 		}
 		return $result;
 	}
 	
-	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+	public function createHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId = false) {
 		if( $nonce ) {
 			$nonceHash = $this->frontController->getNonceManager()->createNonce( $nonce );
 			$gets['_nonce'] = $nonceHash;
+			if(defined('DEBUG') && DEBUG){
+				//TODO remove after debug
+				$gets['_nonce_clear'] = $nonce;
+			}				
 		}
 		$href = $this->createHref( $controllerName, $actionName, $gets );
 		return $href;
 	}
 	
 	/** @see ViewHelper#createHref */
-	public function insertHref($controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+	public function insertHref($controllerName, $actionName = '', array $gets = array(), $targetId = false) {
 		echo $this->createHref( $controllerName, $actionName, $gets, $targetId );
 	}
 	
 	/** @see ViewHelper#createHrefWithNonce */
-	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId=false) {
+	public function insertHrefWithNonce($nonce, $controllerName, $actionName = '', array $gets = array(), $targetId = false) {
 		echo $this->createHrefWithNonce( $nonce, $controllerName, $actionName, $gets, $targetId );
 	}
 	
 	/**
 	 * @param $message Translated message that will be shown
 	 */
-	public function insertConfirmLink($message){
-		$this->addJavascriptFile('confirm_link.js');
-		echo ' onclick="return confirmLink(this, \''. $message . '\')"';
+	public function insertConfirmLink($message) {
+		$this->addJavascriptFile( 'confirm_link.js' );
+		echo ' onclick="return confirmLink(this, \'' . $message . '\')"';
 	}
 	
 	/** @return User */
@@ -211,6 +214,10 @@ class ViewHelper {
 	
 	public function setContainerClass($class) {
 		$this->frontController->getResponse()->setContainerClass( $class );
+	}
+	
+	public function setTitle($title) {
+		$this->frontController->getResponse()->setTitle( $title );
 	}
 	
 	// TODO refactor to put in security 

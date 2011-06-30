@@ -13,8 +13,7 @@ form input[type="text"],.generic_form input[type="password"] {
 	font-weight: normal;
 }
 
-form textarea,form input[type=text],form select,form input[type=password]
-	{
+form textarea,form input[type=text],form select,form input[type=password] {
 	border: 1px dashed #ccc;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
@@ -26,8 +25,8 @@ form textarea,form input[type=text],form select,form input[type=password]
 	margin: 2px 0px;
 }
 
-form input[type=checkbox]{
-    vertical-align: top;
+form input[type=checkbox] {
+	vertical-align: top;
 }
 
 form div.block {
@@ -59,4 +58,18 @@ form span.error_message {
 
 form span.error_message.active {
 	display: inline;
+}
+
+form .field_container {
+	margin-bottom: 10px;
+}
+
+form .field_container:last-child{
+	margin-bottom: 0px;
+}
+
+form .radio_reset a{
+	margin-left: 5px;
+	font-size: 90%;
+	text-decoration: underline;
 }

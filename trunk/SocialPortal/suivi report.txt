@@ -334,9 +334,26 @@ mercredi 29 juin
 - support du open/close topics
 - support partiel sticky topics, not the "real" stick display
 -
+- display des sticky topics
+- ajout d'une annotation '@FilePresent'
+- creation de DatePickerField
+- ajout d'une contrainte sur les dates en php / js
+current - construction du profile
 
-bug - les permalinks marcheront pas avec les n/p custom
+jeudi 30 juin
+- display / creation du form
+- display de la partie droite du profile
+- display tools for profile
+- bug corrigé, les permalinks marcheront pas avec les n/p custom, pour topic / post
+
+vendredi 1 juillet
+-
+
 bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
-todo - sticky/unsticky display
-todo - description des dates en format normal
+todo - profile tools link (good link but nothing behind)
+todo - profile image cropable avec jCrop
+todo - topic plus souple, tout passe par l'orienté objet
+todo - listes d'items pour les strategies
+todo - description des dates en format normal, hover
+todo - mettre des titres aux pages

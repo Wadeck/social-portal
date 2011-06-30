@@ -1,0 +1,77 @@
+@CHARSET "ISO-8859-1";
+
+table.profile-container {
+	margin-bottom: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
+
+table.profile-container td.profil-avatar-column {
+	padding: 8px;
+	padding-right: 16px;
+	text-align: right;
+	width: 110px;
+}
+
+table.profile-container td.vertical-bar {
+	border-left: 1px solid black;
+	min-width: 1px;
+	max-width: 1px;
+}
+
+table.profile-container td.profil-content-column {
+	padding: 8px;
+	padding-left: 24px;
+	vertical-align: top;
+	/*width: 99%;*/
+}
+
+table.profile-container #last_modification {
+	color: #ccc;
+	font-size: 80%;
+}
+
+table.profile-container #description{
+	margin: 20px 0;
+}
+
+.label{
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+div#quote {
+	margin: 35px auto 10px;
+	width: 60%;
+}
+#quote span{
+	vertical-align: top;
+}
+.start_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/up_apo.png') no-repeat;
+}
+.end_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/down_apo.png') no-repeat;
+}
+
+.profile-ask-creation{
+	width: 100px;
+	text-align: right;
+}
+
+.tool_links{
+	margin-top: 25px;
+	font-size: 90%;
+}
+.tool_links a{
+	display: block;
+}

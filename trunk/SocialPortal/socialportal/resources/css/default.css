@@ -32,6 +32,11 @@
 	margin: 10px 0 20px 0;
 }
 
+em.discrete{
+	font-size: 80%;
+	color: #ccc;
+}
+
 div.rounded-box.padded {
 	padding: 8px;
 }
