@@ -55,23 +55,28 @@ class UserHelper {
 	/** @display the avatar img tag with link to the profile integrated */
 	public function insertAvatar($size) {
 		$key = $this->currentUser->getAvatarKey();
-		if( $key === 'null' ) {
-			return '';
-		} elseif( $key === 'anon' ) {
+		$type = $this->currentUser->getAvatarType();
+		if(0 == $type){
+			// gravatar avatar
+			if( $key === 'null' ) {
+				return '';
+			} elseif( $key === 'anon' ) {
+				$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
+			} else {
+				$imgLink = $this->getGravatar( $key, $size, 'identicon' );
+			}
+		}else if(1 == $type){
+			// custom
 			$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
-		} else {
-			$imgLink = $this->getGravatar( $key, $size, 'identicon' );
 		}
-		?><a rel="nofollow" class="avatar"
-	href="<?php
+		?><a rel="nofollow" class="avatar" href="<?php
 		echo $this->getUrlToProfile();
 		?>"><img src="<?php
 		echo $imgLink;
-		?>" alt="Avatar Image"
-	class="avatar user-11-avatar" width="<?php
+		?>" alt="Avatar Image" class="avatar user-11-avatar"
+	width="<?php
 		echo $size;
-		?>"
-	height="<?php
+		?>" height="<?php
 		echo $size;
 		?>"></a>
 <?php
@@ -105,6 +110,7 @@ class UserHelper {
 	/** @return the url to the profile of the current user, only the url */
 	public function getUrlToProfile() {
 		// doing stuff with frontController
-		return '#';	
+//		return '#';	
+		return $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId'=>$this->currentUser->getId()));
 	}
 }

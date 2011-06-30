@@ -168,11 +168,13 @@ class Form implements iInsertable {
 	}
 	
 	public function insertFields() {
+		echo '<div class="form_content">';
 		foreach( $this->fields as $key => $field ) {
 			echo '<div class="field_container">';
 			$field->displayAll();
 			echo '</div>';
 		}
+		echo '</div>';
 	}
 	
 	//#################### creation part #####################

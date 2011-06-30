@@ -19,6 +19,8 @@ abstract class AbstractPostTemplate implements iInsertable{
 	protected $front;
 	/** @var array of posts */
 	protected $posts;
+	/** @var string url to the given post with p/n parameters to avoid relativity */
+	protected $permalink;
 	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
@@ -30,6 +32,16 @@ abstract class AbstractPostTemplate implements iInsertable{
 	
 	public function setPosts(array $posts){
 		$this->posts = $posts;
+	}
+	
+	/**
+	 * @param string $permalink url with n/p parameters, to avoid lastPage, etc that are relative to a moment
+	 */
+	public function setPermalink($permalink){
+//		if(false !== ($index = strpos($permalink, '#') ) ){
+//			$permalink = substr($permalink, $index);
+//		}
+		$this->permalink = $permalink;
 	}
 	
 	public function insert(){
@@ -131,6 +143,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 * report / -quote- / permalink 
 	 */
 	protected function insertUserTools($post){
+		//TODO quote function!
 		?>
 		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array('postId'=>$post->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
@@ -138,7 +151,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 		<a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"
 			title="<?php echo __( 'Quote this post in your answer' ); ?>"><?php echo __('Quote'); ?></a>
 		&nbsp;|&nbsp;
-		<a href="#post-<?php echo $post->getId(); ?>"
+		<a href="<?php echo $this->permalink . '#post-' . $post->getId(); ?>"
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
 								
 	<?php

@@ -19,16 +19,17 @@ use core\form\Field;
 use core\FrontController;
 
 use core\form\Form;
+use DateTime;
 
 class ProfileForm extends Form {
 	protected $globalMode = 2;
-	protected function __construct($formName, FrontController $front, $submitName = '', $submitDescription = '') {
-		parent::__construct( $formName, $front, $submitName, $submitDescription );
-		$this->addInputField( new RadioField('profile_gender',  __( 'Gender' ), null, array(__('Male'), __('Female')), true));
+	public function __construct(FrontController $front) {
+		parent::__construct( 'Profile', $front, 'formProfileSubmit', __('Submit') );
+		$this->addInputField( new RadioField('profile_gender', __('Gender'),  array(__('Male'), __('Female')), null, array(1,2), true));
 		$this->addInputField( new DatePickerField('profile_birth', __('Birth date')));
 		$this->addInputField( new TextAreaField( 'profile_description', __( 'Describe yourself' ), '', array( 'strlen_at-least_25' ) ) );
-		$this->addInputField( new TextAreaField( 'profile_objectives', __( 'Your objective' ), '', array( 'strlen_at-least_15' ) ) );
-		$this->addInputField( new TextAreaField( 'profile_quote', __( 'Your favourite quote' ), '', array( 'strlen_at-least_5' ) ) );
+		$this->addInputField( new TextAreaField( 'profile_objectives', __( 'Your objectives' ), '', array( 'strlen_at-least_15' ) ) );
+		$this->addInputField( new TextField( 'profile_quote', __( 'Your favourite quote' ), '', 'text', array( 'strlen_at-least_5' ) ) );
 	
 		$this->setCss( 'profile-form', 'profile_form.css' );
 	}
@@ -60,12 +61,14 @@ class ProfileForm extends Form {
 		if(!$profile){
 			$profile = new UserProfile();
 		}
+		$birth = $this->data['profile_birth'];
+		$birthDate = new DateTime('@'.$birth);
 		
-		$profile->setGender($args['profile_gender']);
-		$profile->setBirth($args['profile_birth']);
-		$profile->setDescription($args['profile_description']);
-		$profile->setObjectives($args['profile_objectives']);
-		$profile->setQuote($args['profile_quote']);
+		$profile->setGender($this->data['profile_gender']);
+		$profile->setBirth($birthDate);
+		$profile->setDescription($this->data['profile_description']);
+		$profile->setObjectives($this->data['profile_objectives']);
+		$profile->setQuote($this->data['profile_quote']);
 		
 		return $profile;
 	}

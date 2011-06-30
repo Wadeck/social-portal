@@ -1,14 +1,14 @@
 <?php
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
-$forumId = $vars['forumId'];
+$userId = $vars['userId'];
 ?>
 <div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId ));
-?>"><?php echo __('Back to discussion place'); ?></a></div>
+$vars['helper']->insertHrefWithNonce('displayProfile', 'Profile', 'display', array('userId'=>$userId ));
+?>"><?php echo __('Back to profile'); ?></a></div>
 
 <?php
-echo "<h3>Topic form</h3>";
+echo "<h3>".__('Profile form')."</h3>";
 if($vars['form']){
 	echo '<div class="rounded-box">';
 	$vars['form']->insert();
