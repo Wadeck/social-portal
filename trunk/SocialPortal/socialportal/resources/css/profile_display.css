@@ -32,9 +32,10 @@ table.profile-container #last_modification {
 	font-size: 80%;
 }
 
-table.profile-container #description{
-	margin: 20px 0;
+table.profile_information #description .label, table.profile_information #objectives .label{
+	margin: 20px 0 0 0;
 }
+
 
 .label{
 	display: inline-block;
@@ -43,20 +44,21 @@ table.profile-container #description{
 	padding-right: 10px;
 }
 
-div#quote {
+#quote {
 	margin: 35px auto 10px;
-	width: 60%;
+	width: 70%;
+	text-align: justify;
 }
 #quote span{
 	vertical-align: top;
 }
-.start_quote {
+#quote .start_quote {
 	display: inline-block;
 	width: 16px;
 	height: 30px;
 	background: transparent url('../img/up_apo.png') no-repeat;
 }
-.end_quote {
+#quote .end_quote {
 	display: inline-block;
 	width: 16px;
 	height: 30px;

@@ -187,12 +187,8 @@ class ProfileTemplate implements iInsertable {
 		<div class="profile-field" id="username">
 			<h1><?php echo $username; ?></h1>
 		</div>
-		<div class="profile-field" id="email">
-			<span class="label"><?php echo __('Email:'); ?></span>
-			<span><?php echo $email; ?></span>
-			<em class="discrete"><?php echo __('(Email is not visible to other)'); ?></em>
-		</div>
 	<?php
+		$this->insertEmail();
 		if(null !== $this->profile){
 			$this->insertInformation();
 		}else{
@@ -210,7 +206,6 @@ class ProfileTemplate implements iInsertable {
 	
 	private function insertContentVisitor(){
 		$username = $this->user->getUsername();
-		$email = $this->user->getEmail();
 		?>
 		<div class="profile-field" id="username">
 			<h2><?php echo $username; ?></h2>
@@ -228,16 +223,12 @@ class ProfileTemplate implements iInsertable {
 	
 	private function insertContentAdmin(){
 		$username = $this->user->getUsername();
-		$email = $this->user->getEmail();
 		?>
 		<div class="profile-field" id="username">
 			<h2><?php echo $username; ?></h2>
 		</div>
-		<div class="profile-field" id="email">
-			<span class="label"><?php echo __('Email:'); ?></span>
-			<em class="discrete"><?php echo __('(Email is not visible to other)'); ?></em>
-		</div>
 	<?php
+		$this->insertEmail();
 		if(null !== $this->profile){
 			$this->insertInformation();
 		}else{
@@ -248,15 +239,112 @@ class ProfileTemplate implements iInsertable {
 		}	
 	}
 	
+	private function insertEmail(){
+		$email = $this->user->getEmail();
+		?>
+		<table>
+			<tr class="profile-field" id="email">
+				<td><span class="label"><?php echo __('Email:'); ?></span></td>
+				<td>
+					<span><?php echo $email; ?></span>
+					<em class="discrete"><?php echo __('(Email is not visible to other)'); ?></em>
+				</td>
+			</tr>
+		</table>
+	<?php
+	}
+	
 	private function insertInformation(){
 		$birth = $this->profile->getBirth();
 		$gender = $this->profile->getGender();
-		if(1 == $gender){
+		
+		if(null === $gender){
+			$gender = null;
+		}elseif(!$gender){
 			$gender = __('Male');
-		}elseif(2 == $gender){
-			$gender = __('Female');
 		}else{
-			$gender = null;	
+			$gender = __('Female');
+		}
+			
+		$description = $this->profile->getDescription();
+		$objectives = $this->profile->getObjectives();
+		$quote = $this->profile->getQuote();
+		if($birth){
+			$age = Utils::getAgeFromBirthday($birth->getTimestamp());
+			$age = __('%age% years old', array('%age%'=>$age));
+		}else{
+			$age = null;
+		}
+		$lastModificationDate = $this->profile->getLastModified();
+		$lastModificationDate = Utils::getDataSince($lastModificationDate, false);
+		?>
+		<table class="profile_information">
+		<?php if(null !== $gender):?>
+			<tr class="profile-field" id="gender">
+				<td class="label"><?php echo __('Gender:'); ?></td>
+				<td><?php echo $gender; ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if(null !== $age):?>
+			<tr class="profile-field" id="age">
+				<td class="label"><?php echo __('Age:'); ?></td>
+				<td><?php echo $age; ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if($description):?>
+			<tr class="profile-field" id="description">
+				<td class="label"><?php echo __('Description:'); ?></td>
+				<td><?php echo $description; ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if($objectives):?>
+			<tr class="profile-field" id="objectives">
+				<td class="label"><?php echo __('Objectives:'); ?></td>
+				<td><?php echo $objectives; ?></td>
+			</tr>
+		<?php endif; ?>
+			<tr class="profile-field" id="quote">
+				<td colspan="99">
+					<div id="quote">
+						<span class="start_quote">&nbsp;</span>&nbsp;
+						<span><?php echo $quote .'&nbsp;'; ?></span>&nbsp;<span class="end_quote">&nbsp;</span>
+					</div>
+				</td>
+			</tr>
+			<tr class="profile-field" id="quote">
+				<td colspan="99">
+					<div id="quote">
+						
+						<span><span class="start_quote">&nbsp;</span><?php
+							echo $quote; ?><span class="end_quote"></span></span>
+					</div>
+				</td>
+			</tr>
+			<tr class="profile-field" id="quote">
+				<td colspan="99">
+					<div id="quote">
+						
+						<span><span class="start_quote"></span>&nbsp;<?php
+							echo $quote; ?>&nbsp;<span class="end_quote"></span></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div class="profile-field" id="last_modification">
+			<span><?php echo __('Last modification: %date%', array('%date%'=>$lastModificationDate)); ?></span>
+		</div>
+		<?php
+	}
+	private function insertInformation2(){
+		$birth = $this->profile->getBirth();
+		$gender = $this->profile->getGender();
+		
+		if(null === $gender){
+			$gender = null;
+		}elseif(!$gender){
+			$gender = __('Male');
+		}else{
+			$gender = __('Female');
 		}
 			
 		$description = $this->profile->getDescription();

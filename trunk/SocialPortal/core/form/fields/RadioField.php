@@ -72,7 +72,7 @@ class RadioField extends Field {
 		$this->form->addJavascriptFile('jquery.js');
 		$this->form->addJavascriptFile('radio_field_reset.js');
 		?>
-		<span class="radio_reset"><a href="#" onClick="radio_reset(this)"><?php echo __('Clear'); ?></a></span>
+		<span class="radio_reset"><a href="#" onClick="radio_reset(this); return false;"><?php echo __('Clear'); ?></a></span>
 		<?php
 	}
 }
