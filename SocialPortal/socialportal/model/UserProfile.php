@@ -30,6 +30,7 @@ class UserProfile{
      * @var boolean $gender
      *
      * @Column(name="gender", type="boolean", nullable=true)
+     * @Comment("0: male, 1: female, null: unknown")
      */
     private $gender;
 

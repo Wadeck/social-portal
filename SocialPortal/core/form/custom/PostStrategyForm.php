@@ -18,7 +18,9 @@ class PostStrategyForm extends AbstractPostForm {
 	
 	public function __construct(FrontController $frontController) {
 		parent::__construct( 'StrategyComment', $frontController, 'formStrategyCommentSubmit', __( 'Submit' ) );
-		$this->addInputField( new TextAreaField( 'post_content', __( 'Content' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
+		//		$this->addInputField( new TextAreaField( 'post_content', '', '', array( 'mandatory', 'strlen_at-least_10' ) ) );
+		// no label desired on this form
+		$this->addInputField( new TextAreaField( 'post_content', __( 'Comment' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
 	}
 	
 	public function setupWithPost($post) {
