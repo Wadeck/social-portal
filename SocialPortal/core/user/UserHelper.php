@@ -53,24 +53,30 @@ class UserHelper {
 	}
 	
 	/** @display the avatar img tag with link to the profile integrated */
-	public function insertAvatar($size) {
+	public function insertAvatar($size, $link=false) {
 		$key = $this->currentUser->getAvatarKey();
 		$type = $this->currentUser->getAvatarType();
-		if(0 == $type){
-			// gravatar avatar
-			if( $key === 'null' ) {
-				return '';
-			} elseif( $key === 'anon' ) {
+		switch($type){
+			case 0:
+				// gravatar avatar
+				if( $key === 'null' ) {
+					return '';
+				} elseif( $key === 'anon' ) {
+					$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
+				} else {
+					$imgLink = $this->getGravatar( $key, $size, 'identicon' );
+				}
+				break;
+			case 1:
+				// custom
 				$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
-			} else {
-				$imgLink = $this->getGravatar( $key, $size, 'identicon' );
-			}
-		}else if(1 == $type){
-			// custom
-			$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
+				break;
+		}
+		if(false === $link){
+			$link = $this->getUrlToProfile();
 		}
 		?><a rel="nofollow" class="avatar" href="<?php
-		echo $this->getUrlToProfile();
+		echo $link;
 		?>"><img src="<?php
 		echo $imgLink;
 		?>" alt="Avatar Image" class="avatar user-11-avatar"
@@ -82,8 +88,16 @@ class UserHelper {
 <?php
 	}
 	
-	/** Taken from http://fr.gravatar.com/site/implement/images/php/ */
-	private function getGravatar($avatarKey, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array()) {
+	/**
+	 * Taken from http://fr.gravatar.com/site/implement/images/php/
+	 * @param string $avatarKey key used to generate avatar, could be the email
+	 * @param int $s size
+	 * @param string $d [identicon, mm]
+	 * @param string $r rating
+	 * @param boolean $img directly inserted into an img tag
+	 * @param array $atts additionnal class
+	 */
+	public function getGravatar($avatarKey, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array()) {
 		$url = 'http://www.gravatar.com/avatar/';
 		$url .= md5( strtolower( trim( $avatarKey ) ) );
 		$url .= "?s=$s&d=$d&r=$r";

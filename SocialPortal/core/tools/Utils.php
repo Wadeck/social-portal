@@ -178,5 +178,44 @@ class Utils {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * @param int $length Number of character in the result
+	 * @param string $type ['number', 'alphanumeric', 'letters', 'symbol', 'alphanumericsymbol', 'numberuppercase', 'numberuppercasesymbol']
+	 */
+	public static function createRandomString($length, $type = 'alphanumeric') {
+		switch ( $type ) {
+			case 'alphanumeric' :
+				$characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+				break;
+			case 'number' :
+				$characters = '0123456789';
+				break;
+			case 'letters' :
+				$characters = 'abcdefghijklmnopqrstuvwxyz';
+				break;
+			case 'symbol' :
+				$characters = '+*ч%&/()=?ж@#░зм|в~][}{-!г_:;$.,_<>^';
+				break;
+			case 'alphanumericsymbol' :
+				$characters = '0123456789abcdefghijklmnopqrstuvwxyz+*ч%&/()=?ж@#░зм|в~][}{-!г_:;$.,_<>^';
+				break;
+			case 'numberuppercase' :
+				$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				break;
+			case 'numberuppercasesymbol' :
+				$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+*ч%&/()=?ж@#░зм|в~][}{-!г_:;$.,_<>^';
+				break;
+			default :
+				$characters = '';
+				break;
+		}
+		$size = strlen( $characters ) - 1;
+		$string = '';
+		for( $p = 0; $p < $length; $p++ ) {
+			$string .= $characters[mt_rand( 0, $size )];
+		}
+		return $string;
+	
+	}
 }

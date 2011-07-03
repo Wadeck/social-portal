@@ -89,6 +89,7 @@ class ProfileTemplate implements iInsertable {
 		$editUsername = __('Edit username');
 		$editPassword = __('Edit password');
 		$editEmail = __('Edit email');
+		$changeAvatar = __('Change avatar');
 		?><div class="tool_links"><?php
 		if(null !== $this->profile):
 		?>
@@ -101,17 +102,21 @@ class ProfileTemplate implements iInsertable {
 			<a title="<?php echo $createProfile; ?>" href="<?php 
 				$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $createProfile; ?></a>
 		<?php endif; ?>
+		<!-- change avatar -->
+		<a title="<?php echo $changeAvatar; ?>" href="<?php 
+			$this->front->getViewHelper()->insertHrefWithNonce('displayEditAvatarForm', 'Profile', 'displayEditAvatarForm', array('userId'=>$this->userId))?>"><?php
+			echo $changeAvatar; ?></a>
 		<!-- edit username -->
 		<a class="unimplemented" title="<?php echo $editUsername; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsername', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
+			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
 			echo $editUsername; ?></a>
 		<!-- edit password -->
 		<a class="unimplemented" title="<?php echo $editPassword; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditPassword', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
+			$this->front->getViewHelper()->insertHrefWithNonce('displayEditPasswordForm', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
 			echo $editPassword; ?></a>
 		<!-- edit email -->
 		<a class="unimplemented" title="<?php echo $editEmail; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmail', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
+			$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
 			echo $editEmail; ?></a>
 		
 		</div>
@@ -303,33 +308,14 @@ class ProfileTemplate implements iInsertable {
 				<td><?php echo $objectives; ?></td>
 			</tr>
 		<?php endif; ?>
-			<tr class="profile-field" id="quote">
-				<td colspan="99">
-					<div id="quote">
-						<span class="start_quote">&nbsp;</span>&nbsp;
-						<span><?php echo $quote .'&nbsp;'; ?></span>&nbsp;<span class="end_quote">&nbsp;</span>
-					</div>
-				</td>
-			</tr>
-			<tr class="profile-field" id="quote">
-				<td colspan="99">
-					<div id="quote">
-						
-						<span><span class="start_quote">&nbsp;</span><?php
-							echo $quote; ?><span class="end_quote"></span></span>
-					</div>
-				</td>
-			</tr>
-			<tr class="profile-field" id="quote">
-				<td colspan="99">
-					<div id="quote">
-						
-						<span><span class="start_quote"></span>&nbsp;<?php
-							echo $quote; ?>&nbsp;<span class="end_quote"></span></span>
-					</div>
-				</td>
-			</tr>
 		</table>
+			<div class="profile-field" id="quote">
+					<div>
+						<div class="center">
+							<div class="start_quote"></div>&nbsp;<?php echo $quote ; ?>&nbsp;<div class="end_quote"></div>
+						</div>
+					</div>
+			</div>
 		<div class="profile-field" id="last_modification">
 			<span><?php echo __('Last modification: %date%', array('%date%'=>$lastModificationDate)); ?></span>
 		</div>

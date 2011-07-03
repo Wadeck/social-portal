@@ -1,0 +1,54 @@
+@CHARSET "ISO-8859-1";
+
+table#main_table tr.main_row td {
+	padding: 12px 0;
+}
+table#main_table tr.main_row td td{
+	padding: 0;
+}
+table#main_table tr.main_row {
+	border-top: 2px dashed black;
+}
+table#main_table tr.main_row:first-child {
+	border-top: none;
+}
+
+table#top_choice {
+	width: 100%;
+}
+table#top_choice tr td{
+	padding: 5px;
+	width: 50%;
+	text-align: center;
+}
+
+table#image_row tr td a img{
+	padding: 8px;
+}
+table#image_row tr td {
+	border: 1px solid black;
+}
+
+table#image_row tr td:hover {
+	background: #ffa;
+}
+
+table#image_row tr td a {
+	/* no effect on chrome, necessary at least for firefox */
+	line-height: 0;
+}
+
+#random_key{
+	
+}
+
+a.avatar{
+}
+
+.avatar_link{
+	/*text-align: center;*/
+}
+
+table{
+	margin: 0 auto;
+}

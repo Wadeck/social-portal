@@ -151,7 +151,6 @@ class Connection extends AbstractController {
 	}
 	
 	/**
-	 * @Method(GET)
 	 */
 	public function activationAction() {
 		//TODO email activation, check with database key etc

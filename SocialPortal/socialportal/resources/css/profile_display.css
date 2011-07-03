@@ -44,6 +44,34 @@ table.profile_information #description .label, table.profile_information #object
 	padding-right: 10px;
 }
 
+#quote{
+	margin: 35px auto 10px;
+	width: 70%;
+	text-align: justify;
+}
+
+#quote div{
+	vertical-align: top;
+}
+#quote .start_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/up_apo.png') no-repeat;
+}
+#quote .end_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/down_apo.png') no-repeat;
+}
+
+#quote .symbol {
+	font-size: 24px;
+	font-family: Rosewwod;
+}
+
+/*
 #quote {
 	margin: 35px auto 10px;
 	width: 70%;
@@ -64,7 +92,7 @@ table.profile_information #description .label, table.profile_information #object
 	height: 30px;
 	background: transparent url('../img/down_apo.png') no-repeat;
 }
-
+*/
 .profile-ask-creation{
 	width: 100px;
 	text-align: right;
