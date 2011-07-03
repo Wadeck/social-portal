@@ -358,7 +358,6 @@ class Topic extends AbstractController {
 	
 	/**
 	 * Warning, do no forget to decrease the num topics of the forum
-	 * @Method(GET)
 	 * @Nonce(deleteTopic)
 	 * @GetAttributes({topicId, forumId})
 	 */
@@ -400,7 +399,6 @@ class Topic extends AbstractController {
 	
 	/**
 	 * Warning, do not forget to increase the num topics of the forum
-	 * @Method(GET)
 	 * @GetAttributes({topicId, forumId})
 	 * @Nonce(undeleteTopic)
 	 */
@@ -451,7 +449,6 @@ class Topic extends AbstractController {
 
 	/**
 	 * @Nonce(stickTopic)
-	 * @Method(GET)
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function stickAction() {
@@ -486,7 +483,6 @@ class Topic extends AbstractController {
 	}
 	/**
 	 * @Nonce(unstickTopic)
-	 * @Method(GET)
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function unstickAction() {
@@ -521,7 +517,6 @@ class Topic extends AbstractController {
 	}
 	/**
 	 * @Nonce(closeTopic)
-	 * @Method(GET)
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function closeAction() {
@@ -555,7 +550,6 @@ class Topic extends AbstractController {
 	}
 	/**
 	 * @Nonce(openTopic)
-	 * @Method(GET)
 	 * @GetAttributes({topicId, forumId})
 	 */
 	public function openAction() {

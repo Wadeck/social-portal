@@ -157,7 +157,8 @@ class FrontController {
 	}
 	/** 
 	 * Used when a form is not valid, to redirect internally
-	 * without real redirection to keep form fields values
+	 *	without real redirection to keep form fields values
+	 * Will modify the get attributes
 	 * @param string $url Optionally the url we want to use
 	 * @exit
 	 */
@@ -236,8 +237,11 @@ class FrontController {
 				// this could append typically in the $methodName() action
 				$this->generateException( $e->getCustomException() );
 			} else {
-				Logger::getInstance()->debug_var( "Unknown Exception thrown: ", $e );
+				Logger::getInstance()->debug( "Unknown Exception thrown: ". get_class($e) );
 				Logger::getInstance()->debug( "Trace: " . $e->getTraceAsString() );
+				Logger::getInstance()->debug( "Code: " . $e->getCode());
+				Logger::getInstance()->debug( "Line: " . $e->getLine());
+				Logger::getInstance()->debug( "Previous: " . $e->getPrevious());
 				// like the name says, we don't expect to have another exception type
 				// so we wrap it into UnexpectedException to be able to go through generateException
 				$this->generateException( new UnexpectedException( $e ) );

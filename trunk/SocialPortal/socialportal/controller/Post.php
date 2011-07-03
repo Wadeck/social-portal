@@ -207,7 +207,6 @@ class Post extends AbstractController {
 	/**
 	 * Wargning, do no forget to decrease the num post of the forum/topic
 	 * @Nonce(deletePost)
-	 * @Method(GET)
 	 * @GetAttributes({postId, topicId, forumId})
 	 */
 	public function deleteAction() {
@@ -256,7 +255,6 @@ class Post extends AbstractController {
 	/**
 	 * Wargning, do no forget to increase the num post of the forum/topic
 	 * @Nonce(undeletePost)
-	 * @Method(GET)
 	 * @GetAttributes({postId, topicId, forumId})
 	 */
 	public function undeleteAction() {
