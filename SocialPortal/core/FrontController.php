@@ -483,6 +483,11 @@ class FrontController {
 		return $this->nonceManager;
 	}
 	
+	/** @return EntityManager */
+	public function getEntityManager(){
+		return $this->em;
+	}
+	
 	/**
 	 * @var string specific nonce used only to buffer a nonce when we want to add a particular module inside another
 	 * in other case the normal nonce is used

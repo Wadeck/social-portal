@@ -4,6 +4,7 @@ namespace core\form\fields;
 
 use core\form\Field;
 
+/** @Tested */
 class SingleCheckBoxField extends Field {
 	public function __construct($identifier, $description, $defaultValue, array $constraints = array()) {
 		parent::__construct( $identifier, $description, $defaultValue, 'checkbox', $constraints );

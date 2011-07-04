@@ -73,3 +73,7 @@ form .radio_reset a{
 	font-size: 90%;
 	text-decoration: underline;
 }
+
+form .bold_button{
+	font-weight: bold;
+}

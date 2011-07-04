@@ -4,6 +4,7 @@ namespace core\form\fields;
 
 use core\form\Field;
 
+/** @UnTested */
 class CheckBoxField extends Field {
 	private $values;
 	public function __construct($identifier, array $descriptions, $defaultValue, array $values, array $constraints = array()) {

@@ -10,7 +10,7 @@ namespace socialportal\model;
  *		@Index(name="idx_93358a991f55203d", columns={"topic_id"})
  *	}
  * )
- * @Entity
+ * @Entity(repositoryClass="TopicStrategyItemRepository")
  */
 class TopicStrategyItem{
     /**
@@ -32,7 +32,7 @@ class TopicStrategyItem{
     /**
      * @var integer $numVote
      *
-     * @Column(name="num_vote", type="integer", nullable=false)
+     * @Column(name="num_vote", type="integer", nullable=true)
      */
     private $numVote;
 
@@ -46,7 +46,7 @@ class TopicStrategyItem{
     /**
      * @var datetime $lastVoteTime
      *
-     * @Column(name="last_vote_time", type="datetime", nullable=false)
+     * @Column(name="last_vote_time", type="datetime", nullable=true)
      */
     private $lastVoteTime;
 
@@ -63,6 +63,14 @@ class TopicStrategyItem{
      * @Column(name="is_deleted", type="boolean", nullable=false)
      */
     private $isDeleted;
+
+    /**
+     * @var integer $position
+     *
+     * @Column(name="position", type="integer", nullable=false)
+     * @Comment("Determine not only the position, but also the identifier in the form")
+     */
+    private $position;
 
     /**
      * @var socialportal\model\TopicStrategy
@@ -113,6 +121,12 @@ class TopicStrategyItem{
 
     /** Get isDeleted @return boolean $isDeleted */
     public function getIsDeleted(){ return $this->isDeleted; }
+
+    /** Set position @param integer $position */
+    public function setPosition($position){ $this->position = $position; }
+
+    /** Get position @return integer $position */
+    public function getPosition(){ return $this->position; }
 
     /** Set topic @param socialportal\model\TopicStrategy $topic */
     public function setTopic(\socialportal\model\TopicStrategy $topic){ $this->topic = $topic; }

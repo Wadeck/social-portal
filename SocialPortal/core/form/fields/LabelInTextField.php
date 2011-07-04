@@ -6,6 +6,7 @@ use core\tools\Utils;
 
 use core\form\Field;
 
+/** @Tested */
 class LabelInTextField extends TextField {
 	public function __construct($identifier, $description, $value, $type, array $constraints = array(), $cleanText = true) {
 		parent::__construct( $identifier, $description, $value, $type, $constraints, $cleanText );
