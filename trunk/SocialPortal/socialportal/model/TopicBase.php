@@ -7,9 +7,9 @@ namespace socialportal\model;
  * @Table(
  *	name="topic__base", 
  *	indexes={
- *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"}),
  *		@Index(name="idx_26a222185bb66c05", columns={"poster_id"}),
- *		@Index(name="idx_26a2221829ccbad0", columns={"forum_id"})
+ *		@Index(name="idx_26a2221829ccbad0", columns={"forum_id"}),
+ *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"})
  *	}
  * )
  * @Entity(repositoryClass="TopicBaseRepository")
@@ -94,16 +94,6 @@ class TopicBase{
     private $tagCount;
 
     /**
-     * @var socialportal\model\Forum
-     *
-     * @ManyToOne(targetEntity="socialportal\model\Forum")
-     * @JoinColumns({
-     *   @JoinColumn(name="forum_id", referencedColumnName="id")
-     * })
-     */
-    private $forum;
-
-    /**
      * @var socialportal\model\User
      *
      * @ManyToOne(targetEntity="socialportal\model\User")
@@ -122,6 +112,16 @@ class TopicBase{
      * })
      */
     private $poster;
+
+    /**
+     * @var socialportal\model\Forum
+     *
+     * @ManyToOne(targetEntity="socialportal\model\Forum")
+     * @JoinColumns({
+     *   @JoinColumn(name="forum_id", referencedColumnName="id")
+     * })
+     */
+    private $forum;
 
     public function __construct(){
         $this->isOpen = '1';
@@ -185,12 +185,6 @@ class TopicBase{
     /** Get tagCount @return bigint $tagCount */
     public function getTagCount(){ return $this->tagCount; }
 
-    /** Set forum @param socialportal\model\Forum $forum */
-    public function setForum(\socialportal\model\Forum $forum){ $this->forum = $forum; }
-
-    /** Get forum @return socialportal\model\Forum $forum */
-    public function getForum(){ return $this->forum; }
-
     /** Set lastposter @param socialportal\model\User $lastposter */
     public function setLastposter(\socialportal\model\User $lastposter){ $this->lastposter = $lastposter; }
 
@@ -202,4 +196,10 @@ class TopicBase{
 
     /** Get poster @return socialportal\model\User $poster */
     public function getPoster(){ return $this->poster; }
+
+    /** Set forum @param socialportal\model\Forum $forum */
+    public function setForum(\socialportal\model\Forum $forum){ $this->forum = $forum; }
+
+    /** Get forum @return socialportal\model\Forum $forum */
+    public function getForum(){ return $this->forum; }
 }

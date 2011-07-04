@@ -6,10 +6,10 @@ use core\tools\Utils;
 
 use core\form\Field;
 use DateTime;
+
+/** @Tested */
 class DatePickerField extends Field {
 	// value is a timestamp that we convert
-	
-
 	/**
 	 * @param string $identifier 
 	 * @param string $description Translated description
@@ -83,18 +83,21 @@ class DatePickerField extends Field {
 		?>
 <select id="<?php
 		echo $dayId?>" name="<?php
-		echo $dayName?>" class="<?php
+		echo $dayName?>"
+	class="<?php
 		echo $this->getConstraintsAsString();
 		?>">
 	<option <?php
 		if( 0 == $selected[0] )
-			echo 'selected '?> value="">--</option>
+			echo 'selected '?>
+		value="">--</option>
 			<?php
 		for( $i = 1; $i <= 31; $i++ ) :
 			?>
 				<option <?php
 			if( $i == $selected[0] )
-				echo 'selected '?> value="<?php
+				echo 'selected '?>
+		value="<?php
 			echo $i;
 			?>"><?php
 			echo $i;
@@ -111,13 +114,15 @@ class DatePickerField extends Field {
 		?>">
 	<option <?php
 		if( 0 == $selected[1] )
-			echo 'selected '?> value="">------</option>
+			echo 'selected '?>
+		value="">------</option>
 			<?php
 		for( $i = 1; $i <= 12; $i++ ) :
 			?>
 				<option <?php
 			if( $i == $selected[1] )
-				echo 'selected '?> value="<?php
+				echo 'selected '?>
+		value="<?php
 			echo $i;
 			?>"><?php
 			echo $months[$i - 1];
@@ -128,18 +133,21 @@ class DatePickerField extends Field {
 		?></select>
 <select id="<?php
 		echo $yearId?>" name="<?php
-		echo $yearName?>" class="<?php
+		echo $yearName?>"
+	class="<?php
 		echo $this->getConstraintsAsString();
 		?>">
 	<option <?php
 		if( 0 == $selected[2] )
-			echo 'selected '?> value="">----</option>
+			echo 'selected '?>
+		value="">----</option>
 			<?php
 		for( $i = 112; $i >= 1; $i-- ) :
 			?>
 				<option <?php
 			if( $i == $selected[2] )
-				echo 'selected '?> value="<?php
+				echo 'selected '?>
+		value="<?php
 			echo ($startYear + $i);
 			?>"><?php
 			echo ($startYear + $i);

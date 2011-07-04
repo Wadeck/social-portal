@@ -4,6 +4,7 @@ namespace core\form\fields;
 
 use core\form\Field;
 
+/** @Tested */
 class RadioField extends Field {
 	protected $values;
 	protected $fieldDescriptions;

@@ -246,11 +246,11 @@ class Response {
 	
 		<?php endif ;
 		$this->insertCSS();
-		$this->insertJavascript();
 		?>
 </head>
 <body><?php
 		echo $this->body;
+		$this->insertJavascript();
 		?>
 </body>
 </html><?php

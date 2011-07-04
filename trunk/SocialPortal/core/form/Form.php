@@ -311,13 +311,28 @@ class Form implements iInsertable {
 		}
 	}
 	
-	//#############################
-	//TODO remove those methods after having changed the login form
-	// still used by the register form (non-form)
-	
-
-	public static function insertReferrerField() {
-		$referrer = FrontController::getInstance()->getRequest()->getRequestedUrl();
-		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+	public function hasSecondAction(){
+		return false;
 	}
+	
+	/**
+	 * Called only if hasSecondAction return true 
+	 * @param Specific topic $topic
+	 * @return false if the flush fail, and so will generate error
+	 */
+	public function doSecondAction($topic){
+		return true;
+	}
+	
+	
+//	//#############################
+//	//TODO remove those methods after having changed the login form
+//	// still used by the register form (non-form)
+//	
+//
+//	public static function insertReferrerField() {
+//		$referrer = FrontController::getInstance()->getRequest()->getRequestedUrl();
+//		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+//	}
+//	
 }

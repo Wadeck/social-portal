@@ -295,11 +295,17 @@ class Topic extends AbstractController {
 		$this->em->persist( $topic );
 		if( !$this->em->flushSafe() ) {
 			$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ), 'error' );
-			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
+		if($form->hasSecondAction()){
+			if(!$form->doSecondAction($topic)){
+				$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ), 'error' );
+				$referrer = $this->frontController->getRequest()->getReferrer();
+				$this->frontController->doRedirectUrl( $referrer );
+			}
+		}
 		$topicId = $base->getId();
 		// increment the number of topic in the forum parent
 		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId );
@@ -349,6 +355,13 @@ class Topic extends AbstractController {
 			//TODO problem here the referrer needs authentification that we don't have
 			$referrer = $this->frontController->getRequest()->getReferrer();
 			$this->frontController->doRedirectUrl( $referrer );
+		}
+		if($form->hasSecondAction()){
+			if(!$form->doSecondAction($existing)){
+				$this->frontController->addMessage( __( 'There was a problem during the creation of the topic, try with an other title or in a moment' ), 'error' );
+				$referrer = $this->frontController->getRequest()->getReferrer();
+				$this->frontController->doRedirectUrl( $referrer );
+			}
 		}
 		
 		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );

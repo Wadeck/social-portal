@@ -1,0 +1,5 @@
+
+ol.strategy_list li{
+	list-style:circle;
+	list-style-position: inside;
+}
