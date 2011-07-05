@@ -25,25 +25,29 @@ class DatePickerField extends Field {
 	
 	public function displayAll() {
 		?>
-<div class="datebox">
-<div class="label_error"><?php
-		$this->insertLabel();
-		$this->insertErrorMessage();
-		?></div><?php
+		<div class="datebox">
+			<div class="label_error"><?php 
+				$this->insertLabel();
+				$this->insertErrorMessage();
+			?></div><?php
 		$this->insertField();
-		?></div><?php
-	
+		?></div>
+	<?php
 	}
 	
 	public function insertLabel() {
-		?><label for="<?php
-		echo $this->identifier;
-		?>_day"><?php
-		echo $this->description?></label><?php
+		?>
+		<label for="<?php echo $this->identifier; ?>_day">
+			<?php echo $this->description?>
+		</label>
+	<?php
 	}
 	
 	public function getValue() {
 		if( !$this->value ) {
+			return 0;
+		}
+		if(!$this->value['month'] || !$this->value['day'] || !$this->value['year']){
 			return 0;
 		}
 		$date = mktime( 0, 0, 0, intval( $this->value['month'] ), intval( $this->value['day'] ), intval( $this->value['year'] ) );
@@ -81,81 +85,38 @@ class DatePickerField extends Field {
 		$startYear -= 1;
 		$months = array( __( 'January' ), __( 'February' ), __( 'March' ), __( 'April' ), __( 'May' ), __( 'June' ), __( 'July' ), __( 'August' ), __( 'September' ), __( 'October' ), __( 'November' ), __( 'December' ) );
 		?>
-<select id="<?php
-		echo $dayId?>" name="<?php
-		echo $dayName?>"
-	class="<?php
-		echo $this->getConstraintsAsString();
-		?>">
-	<option <?php
-		if( 0 == $selected[0] )
-			echo 'selected '?>
-		value="">--</option>
-			<?php
-		for( $i = 1; $i <= 31; $i++ ) :
-			?>
-				<option <?php
-			if( $i == $selected[0] )
-				echo 'selected '?>
-		value="<?php
-			echo $i;
-			?>"><?php
-			echo $i;
-			?></option>
-			<?php
-		endfor
-		;
-		?></select>
-<select id="<?php
-		echo $monthId?>" name="<?php
-		echo $monthName?>"
-	class="<?php
-		echo $this->getConstraintsAsString();
-		?>">
-	<option <?php
-		if( 0 == $selected[1] )
-			echo 'selected '?>
-		value="">------</option>
-			<?php
-		for( $i = 1; $i <= 12; $i++ ) :
-			?>
-				<option <?php
-			if( $i == $selected[1] )
-				echo 'selected '?>
-		value="<?php
-			echo $i;
-			?>"><?php
-			echo $months[$i - 1];
-			?></option>
-			<?php
-		endfor
-		;
-		?></select>
-<select id="<?php
-		echo $yearId?>" name="<?php
-		echo $yearName?>"
-	class="<?php
-		echo $this->getConstraintsAsString();
-		?>">
-	<option <?php
-		if( 0 == $selected[2] )
-			echo 'selected '?>
-		value="">----</option>
-			<?php
-		for( $i = 112; $i >= 1; $i-- ) :
-			?>
-				<option <?php
-			if( $i == $selected[2] )
-				echo 'selected '?>
-		value="<?php
-			echo ($startYear + $i);
-			?>"><?php
-			echo ($startYear + $i);
-			?></option>
-			<?php
-		endfor
-		;
-		?></select>
+		<select
+			id="<?php echo $dayId?>"
+			name="<?php  echo $dayName?>" 
+			class="<?php echo $this->getConstraintsAsString(); ?>">
+			<option <?php if( 0 == $selected[0] ) echo 'selected '?>
+				value="">--</option>
+			<?php for( $i = 1; $i <= 31; $i++ ) : ?>
+				<option <?php if( $i == $selected[0] ) echo 'selected '?>
+					value="<?php echo $i; ?>"><?php echo $i; ?></option>
+			<?php endfor ; ?></select>
+			
+		<select
+			id="<?php echo $monthId; ?>"
+			name="<?php echo $monthName; ?>"
+			class="<?php echo $this->getConstraintsAsString(); ?>">
+			<option <?php if( 0 == $selected[1] ) echo 'selected '?>
+				value="">------</option>
+			<?php for( $i = 1; $i <= 12; $i++ ) : ?>
+				<option <?php if( $i == $selected[1] ) echo 'selected '?>
+					value="<?php echo $i; ?>"><?php echo $months[$i - 1]; ?></option>
+			<?php endfor ; ?></select>
+			
+		<select
+			id="<?php echo $yearId?>"
+			name="<?php echo $yearName?>"
+			class="<?php echo $this->getConstraintsAsString(); ?>">
+			<option <?php if( 0 == $selected[2] ) echo 'selected '?>
+				value="">----</option>
+			<?php for( $i = 112; $i >= 1; $i-- ) : ?>
+				<option <?php if( $i == $selected[2] ) echo 'selected '?>
+					value="<?php echo ($startYear + $i); ?>"><?php echo ($startYear + $i); ?></option>
+			<?php endfor ; ?></select>
 <?php
 	}
 	

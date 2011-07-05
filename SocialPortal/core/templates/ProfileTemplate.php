@@ -260,7 +260,37 @@ class ProfileTemplate implements iInsertable {
 	}
 	
 	private function insertInformation(){
+		$country = $this->profile->getCountry();
+		$state = $this->profile->getState();
+		
 		$birth = $this->profile->getBirth();
+		$dateDisplay = $this->profile->getDateDisplay();
+		if($birth){
+			// "0: not shown, 1: only day/month, 2: only age, 3: total"
+			switch($dateDisplay){
+				case '0': default: // not shown
+					$date = null;
+					$dateLabel = null;
+					break;
+				case '1': // only day/month
+					$date = date('F d', $birth->getTimestamp());
+					$dateLabel = __('Birth:');
+					break;
+				case '2': // only age
+					$date = Utils::getAgeFromBirthday($birth->getTimestamp());
+					$date = __('%age% years old', array('%age%'=>$date));
+					$dateLabel = __('Age:');
+					break;
+				case '3': // total
+					$date = date('F d Y', $birth->getTimestamp());
+					$dateLabel = __('Birth:');
+					break;
+			}
+		}else{
+			$date = null;
+			$dateLabel = null;
+		}
+
 		$gender = $this->profile->getGender();
 		
 		if(null === $gender){
@@ -274,14 +304,13 @@ class ProfileTemplate implements iInsertable {
 		$description = $this->profile->getDescription();
 		$objectives = $this->profile->getObjectives();
 		$quote = $this->profile->getQuote();
-		if($birth){
-			$age = Utils::getAgeFromBirthday($birth->getTimestamp());
-			$age = __('%age% years old', array('%age%'=>$age));
-		}else{
-			$age = null;
-		}
 		$lastModificationDate = $this->profile->getLastModified();
 		$lastModificationDate = Utils::getDataSince($lastModificationDate, false);
+		
+		$hobbies = $this->profile->getHobbies();
+		if($hobbies){
+			$hobbies = unserialize($hobbies);
+		}
 		?>
 		<table class="profile_information">
 		<?php if(null !== $gender):?>
@@ -290,35 +319,70 @@ class ProfileTemplate implements iInsertable {
 				<td><?php echo $gender; ?></td>
 			</tr>
 		<?php endif; ?>
-		<?php if(null !== $age):?>
+		
+		<?php if(null !== $date):?>
 			<tr class="profile-field" id="age">
-				<td class="label"><?php echo __('Age:'); ?></td>
-				<td><?php echo $age; ?></td>
+				<td class="label"><?php echo $dateLabel; ?></td>
+				<td><?php echo $date; ?></td>
 			</tr>
 		<?php endif; ?>
+		
+		<?php if(null !== $country):?>
+			<tr class="profile-field" id="country">
+				<td class="label"><?php echo __('Country'); ?></td>
+				<td><?php echo $country; ?></td>
+			</tr>
+			<?php if(null !== $state):?>
+				<tr class="profile-field" id="state">
+					<td class="label"><?php echo __('State'); ?></td>
+					<td><?php echo $state; ?></td>
+				</tr>
+			<?php endif; ?>
+		<?php endif; ?>
+		
 		<?php if($description):?>
 			<tr class="profile-field" id="description">
 				<td class="label"><?php echo __('Description:'); ?></td>
 				<td><?php echo $description; ?></td>
 			</tr>
 		<?php endif; ?>
+		
 		<?php if($objectives):?>
 			<tr class="profile-field" id="objectives">
 				<td class="label"><?php echo __('Objectives:'); ?></td>
 				<td><?php echo $objectives; ?></td>
 			</tr>
 		<?php endif; ?>
+		<?php if($hobbies):?>
+			<tr class="profile-field" id="hobbies">
+				<td class="label"><?php echo __('Hobbies:'); ?></td>
+				<td>
+					<ul>
+					<?php foreach($hobbies as $h): ?>
+						<li>
+							<?php echo $h; ?>
+						</li>
+					<?php endforeach; ?>
+					</ul>
+				</td>
+			</tr>
+		<?php endif; ?>
 		</table>
+		
+			<?php if($quote): ?>
 			<div class="profile-field" id="quote">
-					<div>
-						<div class="center">
-							<div class="start_quote"></div>&nbsp;<?php echo $quote ; ?>&nbsp;<div class="end_quote"></div>
-						</div>
+				<div>
+					<div class="center">
+						<div class="start_quote"></div>&nbsp;<?php echo $quote ; ?>&nbsp;<div class="end_quote"></div>
 					</div>
+				</div>
 			</div>
+			<?php endif; ?>
+		
 		<div class="profile-field" id="last_modification">
 			<span><?php echo __('Last modification: %date%', array('%date%'=>$lastModificationDate)); ?></span>
 		</div>
+		
 		<?php
 	}
 	private function insertInformation2(){
