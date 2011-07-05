@@ -303,6 +303,8 @@ vendredi 24 juin
 - ajustement du retrait vertical pour le label dans le login box
 - correction du bug avec linux pour les directory separators
 
+==================
+
 we 25-27 juin
 - correction du bug de post
 - correction du bug de minuscule pour freeText
@@ -338,7 +340,7 @@ mercredi 29 juin
 - ajout d'une annotation '@FilePresent'
 - creation de DatePickerField
 - ajout d'une contrainte sur les dates en php / js
-current - construction du profile
+- construction du profile
 
 jeudi 30 juin
 - display / creation du form
@@ -347,7 +349,38 @@ jeudi 30 juin
 - bug corrigé, les permalinks marcheront pas avec les n/p custom, pour topic / post
 
 vendredi 1 juillet
--
+- full discussion about general design
+
+==================
+
+we 2-4 juillet
+- choix d'une image parmis un set aleatoire pour l'avatar
+- meilleur css pour les quotes
+- static multi row list field
+
+mardi 5 juillet
+- nettoyage du dossier Wfollonier et SocialPortal
+- legere modif css pour les feedbacks (textarea plus large)
+- raccourcissement de certains liens pour eviter les overheads
+- ajout de lien pour l'ergonomie, back to home / discussion / topic, et mise en page plus jolie des liens
+- flush left sur toute la table du forum loop
+- mettre des titres aux pages
+- correction des droits sur topics/posts
+- correction du bug de date non renseignée dans le profile
+- ajout des hobbies, avec clean du texte, fixé pour le moment a 5 element, on verra une fois qu'on a un dynamic list pour l'étendre à n
+- ajout du choix de display pour la date, 4 choix: not shown, day/month, day/month/year, age
+current - ajout du country
+current - ajout du state
+
+
+
+
+
+
+
+
+
+
 
 bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
@@ -356,4 +389,4 @@ todo - profile image cropable avec jCrop
 todo - topic plus souple, tout passe par l'orienté objet
 todo - listes d'items pour les strategies
 todo - description des dates en format normal, hover
-todo - mettre des titres aux pages
+todo - maintenance
