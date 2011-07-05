@@ -76,6 +76,7 @@ class Post extends AbstractController {
 			$form->setNonceAction( 'editPost' );
 			$module = 'edit';
 			$getArgs['postId'] = $postId;
+			$form->setCss( 'post_form post_edit', 'post_form.css' );
 			$nameAction = 'displayFormEdit';
 		} else {
 			// we create a post
@@ -86,6 +87,7 @@ class Post extends AbstractController {
 			$response->setVar( 'user', $user );
 			
 			$module = 'create';
+			$form->setCss( 'post_form post_create', 'post_form.css' );
 			$form->setNonceAction( 'createPost' );
 			$nameAction = 'displayFormCreate';
 		}
@@ -97,6 +99,8 @@ class Post extends AbstractController {
 		$form->setTargetUrl( $actionUrl );
 		
 		$response->setVar( 'form', $form );
+		$response->setVar( 'topicId', $topicId );
+		$response->setVar( 'forumId', $forumId );
 		$this->frontController->doDisplay( 'Post', $nameAction );
 	}
 	

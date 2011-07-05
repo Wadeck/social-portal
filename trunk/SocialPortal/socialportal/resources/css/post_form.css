@@ -1,18 +1,19 @@
 @CHARSET "ISO-8859-1";
 
-form.post-form {
-	padding: 8px;
+form.post_form {
+	/*padding: 8px;*/
+	padding: 0px;
 }
 
-form.post-form .label_error {
+form.post_form .label_error {
 	display: block;
 }
 
-form.post-form .field_container {
+form.post_form .field_container {
 	
 }
 
-form.post-form label {
+form.post_form label {
 	font-weight: bold;
 	margin: 15px 0 5px 0;
 	text-align: left;
@@ -20,15 +21,21 @@ form.post-form label {
 	display: inline;
 }
 
-form.post-form input[type="text"] {
+form.post_form input[type="text"] {
 	width: 75%;
 }
 
-form.post-form textarea {
-	width: 75%;
-	height: 120px;
+form.post_form.post_edit textarea {
+	width: 98.7%;	
+	/*width: 75%;*/
+	height: 55px;
 }
 
-form.post-form input[type=submit] {
+form.post_form.post_create textarea {
+	width: 98.7%;
+	height: 55px;
+}
+
+form.post_form input[type=submit] {
 	margin-top: 5px;
 }

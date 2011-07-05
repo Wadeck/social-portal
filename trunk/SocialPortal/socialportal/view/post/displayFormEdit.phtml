@@ -1,11 +1,33 @@
 <?php
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
-echo "<h3>Post form</h3>";
+$vars['helper']->setTitle(__('Post edition'));
+
+$forumId = $vars['forumId'];
+$topicId = $vars['topicId'];
+
+?>
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId' => $forumId )); ?>">
+		<?php echo __('Discussions'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId' => $topicId, 'forumId' => $forumId )); ?>">
+		<?php echo __('Topic'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Post edition'); ?></h4>
+</div>
+
+<?php 
 if($vars['form']){
-	echo '<div class="rounded-box">';
+	echo '<div class="rounded-box padded">';
 	$vars['form']->insert();
 	echo '</div>';
 }
 ?>
-<a href="<?php echo $vars['helper']->createHref('Home')?>"><?php echo __('Back home');?></a><br/>

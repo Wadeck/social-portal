@@ -42,6 +42,14 @@ class UserProfile{
     private $birth;
 
     /**
+     * @var smallint $dateDisplay
+     *
+     * @Column(name="date_display", type="smallint", nullable=true)
+     * @Comment("0: not shown, 1: only day/month, 2: only age, 3: both")
+     */
+    private $dateDisplay;
+
+    /**
      * @var text $description
      *
      * @Column(name="description", type="text", nullable=true)
@@ -69,6 +77,30 @@ class UserProfile{
      */
     private $lastModified;
 
+    /**
+     * @var string $hobbies
+     *
+     * @Column(name="hobbies", type="string", length=255, nullable=true)
+     * @Comment("String representation of an array, use serialize/unserialize to interact with")
+     */
+    private $hobbies;
+
+    /**
+     * @var bigint $country
+     *
+     * @Column(name="country", type="bigint", nullable=true)
+     * @Comment("Id of the country from user_profile_country")
+     */
+    private $country;
+
+    /**
+     * @var bigint $state
+     *
+     * @Column(name="state", type="bigint", nullable=true)
+     * @Comment("Id of the state from user_profile_state")
+     */
+    private $state;
+
 
     /** Get id @return bigint $id */
     public function getId(){ return $this->id; }
@@ -90,6 +122,12 @@ class UserProfile{
 
     /** Get birth @return date $birth */
     public function getBirth(){ return $this->birth; }
+
+    /** Set dateDisplay @param smallint $dateDisplay */
+    public function setDateDisplay($dateDisplay){ $this->dateDisplay = $dateDisplay; }
+
+    /** Get dateDisplay @return smallint $dateDisplay */
+    public function getDateDisplay(){ return $this->dateDisplay; }
 
     /** Set description @param text $description */
     public function setDescription($description){ $this->description = $description; }
@@ -114,4 +152,22 @@ class UserProfile{
 
     /** Get lastModified @return datetime $lastModified */
     public function getLastModified(){ return $this->lastModified; }
+
+    /** Set hobbies @param string $hobbies */
+    public function setHobbies($hobbies){ $this->hobbies = $hobbies; }
+
+    /** Get hobbies @return string $hobbies */
+    public function getHobbies(){ return $this->hobbies; }
+
+    /** Set country @param bigint $country */
+    public function setCountry($country){ $this->country = $country; }
+
+    /** Get country @return bigint $country */
+    public function getCountry(){ return $this->country; }
+
+    /** Set state @param bigint $state */
+    public function setState($state){ $this->state = $state; }
+
+    /** Get state @return bigint $state */
+    public function getState(){ return $this->state; }
 }
