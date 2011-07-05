@@ -1,12 +1,25 @@
 <?php
 $vars['helper']->insertMessage();
 $vars['helper']->setContainerClass('');
-?>
-<div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'viewAll' );
-?>"><?php echo __('Back to discussion place'); ?></a></div>
 
-<h3>Choose the type of topic</h3>
+$vars['helper']->setTitle(__('Choose topic type'));
+$defaultForumId = $vars['defaultForumId'];
+?>
+
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId' => $defaultForumId )); ?>">
+		<?php echo __('Discussions'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Choose topic type'); ?></h4>
+</div>
+
+
 <?php foreach( $vars['forums'] as $forum ): ?>
 	<div class="rounded-box padded margined">
 	<h4><?php echo $forum->getName(); ?></h4>

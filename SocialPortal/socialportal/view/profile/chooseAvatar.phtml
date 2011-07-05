@@ -13,12 +13,24 @@ $cols = $vars['cols'];
 $size = $vars['size'];
 $linkWithPlaceholder = $vars['linkWithPlaceholder'];
 $userId = $vars['userId'];
+$vars['helper']->setTitle(__('Avatar change'));
 
 $vars['helper']->addCssFile('profile_avatar_change.css');
 ?>
-<h3>
-	<?php echo __('Avatar change');?>
-</h3>
+
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHrefWithNonce('displayProfile', 'Profile', 'display', array('userId'=>$userId )); ?>">
+		<?php echo __('Profile'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Avatar change'); ?></h4>
+</div>
+
 <table id="main_table">
 	<tr class="main_row">
 		<td>

@@ -30,6 +30,7 @@ table.profile-container td.profil-content-column {
 table.profile-container #last_modification {
 	color: #ccc;
 	font-size: 80%;
+	margin-top: 25px;
 }
 
 table.profile_information #description .label, table.profile_information #objectives .label{
@@ -71,28 +72,10 @@ table.profile_information #description .label, table.profile_information #object
 	font-family: Rosewwod;
 }
 
-/*
-#quote {
-	margin: 35px auto 10px;
-	width: 70%;
-	text-align: justify;
+tr#hobbies ul{
+	list-style: circle inside none;
 }
-#quote span{
-	vertical-align: top;
-}
-#quote .start_quote {
-	display: inline-block;
-	width: 16px;
-	height: 30px;
-	background: transparent url('../img/up_apo.png') no-repeat;
-}
-#quote .end_quote {
-	display: inline-block;
-	width: 16px;
-	height: 30px;
-	background: transparent url('../img/down_apo.png') no-repeat;
-}
-*/
+
 .profile-ask-creation{
 	width: 100px;
 	text-align: right;

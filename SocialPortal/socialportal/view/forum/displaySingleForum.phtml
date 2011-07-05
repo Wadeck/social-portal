@@ -11,18 +11,31 @@ $userHelper = $vars['userHelper'];
 $vars['helper']->addCssFile('forum_loop.css');
 // to remove the container css class
 $vars['helper']->setContainerClass('');
+$vars['helper']->setTitle(__('Discussion place'));
 
 $displayDeletedLink = $vars['displayDeletedLink'];
 ?>
-<?php if($displayDeletedLink):?>
-<div id="display-deleted">
-	<?php if($vars['isDisplayDeleted']): ?>
-		<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
-	<?php else: ?>
-		<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
-	<?php endif; ?>
+
+<!-- floating left -->
+<div id="display_link_back_floating">
+	<a class="button" 
+		href="<?php echo $vars['helper']->createHref('Home')?>">
+			<?php echo __('Home'); ?>
+	</a>
 </div>
+
+
+<?php if($displayDeletedLink):?>
+	<!-- floating right -->	
+	<div id="display-deleted">
+		<?php if($vars['isDisplayDeleted']): ?>
+			<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
+		<?php else: ?>
+			<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
+		<?php endif; ?>
+	</div>
 <?php endif; ?>
+
 <?php $forumHeader->insert(); // the different link to other forums ?>
 <?php if($topics): // forum loop ?>
 	<div class="rounded-box">
@@ -30,9 +43,9 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 		<table class="forum-loop">
 			<thead>
 				<tr class="background_primary">
-					<th id="title"><?php echo __('Topic Title');?></th>
+					<th id="title"><?php echo __('Topic');?></th>
 					<th id="author"><?php echo __('Author');?></th>
-					<th id="latest-poster"><?php echo __('Latest Poster');?></th>
+					<th id="latest-poster"><?php echo __('Last commented by');?></th>
 					<th id="postcount"><?php echo __('Posts');?></th>
 					<th id="freshness"><?php echo __('Freshness');?></th>
 				</tr>

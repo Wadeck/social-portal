@@ -1,10 +1,8 @@
 @CHARSET "ISO-8859-1";
 
-/** message that are displayed when there is no topic for a given forum */
-.message {
-	
+#display_link_back_floating{
+	float: left;
 }
-
 ul#forums-header {
 	padding: 10px;
 	/*margin: 0 auto;*/
@@ -197,10 +195,14 @@ table.forum-loop tr>td:last-child,table.forum-loop tr>th:last-child {
 	padding-right: 15px;
 }
 
+table{
+	text-align: left;
+}
+/*
 table.forum-loop tr th#title,table.forum-loop tr th#poster,table.forum-loop tr th#group,table.forum-loop td.poster,table.forum-loop td.group,table.forum-loop td.title
 	{
 	text-align: left;
-}
+}*/
 
 table.forum-loop td.td-freshness {
 	font-size: 11px;

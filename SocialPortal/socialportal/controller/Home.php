@@ -37,7 +37,7 @@ class Home extends AbstractController {
 		$topics = $topicRepo->findTopicsFromForum($forumId, 1, 5);
 		$typeId = $forumMetaRepo->getAcceptableTopics($forumId);
 		$typeId = $typeId[0];
-		$name = __('Last Discussion');
+		$name = __('Last Discussions');
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
 		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));

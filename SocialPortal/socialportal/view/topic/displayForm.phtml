@@ -2,17 +2,32 @@
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
 $forumId = $vars['forumId'];
+$topicId = $vars['topicId'];
+
+$vars['helper']->setTitle(__('Topic form'));
 ?>
-<div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId ));
-?>"><?php echo __('Back to discussion place'); ?></a></div>
+
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId )); ?>">
+		<?php echo __('Discussions'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId' => $topicId, 'forumId' => $forumId )); ?>">
+		<?php echo __('Topic'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Topic form'); ?></h4>
+</div>
 
 <?php
-echo "<h3>Topic form</h3>";
 if($vars['form']){
 	echo '<div class="rounded-box">';
 	$vars['form']->insert();
 	echo '</div>';
 }
 ?>
-<a href="<?php echo $vars['helper']->createHref('Home')?>"><?php echo __('Back home');?></a><br/>

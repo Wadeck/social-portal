@@ -32,7 +32,7 @@
 	margin: 10px 0 20px 0;
 }
 
-em.discrete{
+em.discrete {
 	font-size: 80%;
 	color: #ccc;
 }
@@ -53,6 +53,10 @@ div#container {
 	line-height: 170%;
 	margin: 0 auto;
 	width: 80%;
+}
+
+#link-back h1,#link-back h2,#link-back h3,#link-back h4,#link-back h5,#link-back h6 {
+	display: inline;
 }
 
 h1,h2,h3,h4,h5,h6 { /* margin: 5px 0 15px 0; */
@@ -102,7 +106,7 @@ div#link-back {
 	padding-bottom: 15px;
 }
 
-div#display-deleted{
+div#display-deleted {
 	float: right;
 }
 

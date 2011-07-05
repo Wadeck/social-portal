@@ -42,7 +42,9 @@ class Topic extends AbstractController {
 	 */
 	public function chooseTypeAction() {
 		// set the nonce to each link that will be created, in an invisible manner for the view
-		$forums = $this->em->getRepository( 'Forum' )->findAll();
+		$forumRepo = $this->em->getRepository( 'Forum' );
+		$forums = $forumRepo->findAll();
+		$defaultForumId = $forumRepo->getFirstId();
 		$topicsFor = array();
 		if( $forums ) {
 			$metaRepo = $this->em->getRepository( 'ForumMeta' );
@@ -55,8 +57,10 @@ class Topic extends AbstractController {
 			}
 		}
 		
-		$this->frontController->getResponse()->setVar( 'forums', $forums );
-		$this->frontController->getResponse()->setVar( 'topicsFor', $topicsFor );
+		$response = $this->frontController->getResponse();
+		$response->setVar( 'defaultForumId', $defaultForumId );
+		$response->setVar( 'forums', $forums );
+		$response->setVar( 'topicsFor', $topicsFor );
 		$this->frontController->doDisplay( 'Topic', 'chooseType' );
 	}
 	
@@ -246,8 +250,10 @@ class Topic extends AbstractController {
 		$form->setupWithArray( true );
 		$form->setTargetUrl( $actionUrl );
 		
-		$this->frontController->getResponse()->setVar( 'forumId', $forumId );
-		$this->frontController->getResponse()->setVar( 'form', $form );
+		$response = $this->frontController->getResponse();
+		$response->setVar( 'topicId', $topicId );
+		$response->setVar( 'forumId', $forumId );
+		$response->setVar( 'form', $form );
 		$this->frontController->doDisplay( 'topic', 'displayForm' );
 	}
 	
