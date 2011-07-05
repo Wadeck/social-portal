@@ -56,6 +56,11 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$userHelper->setCurrentUser($author);
 		$tagRepo = $this->em->getRepository('TermRelation');
 		$tags = $tagRepo->getAllTags($topicId);
+		
+		$isAdmin = $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role);
+		$isModo = $this->front->getViewHelper()->currentUserIs(UserRoles::$moderator_role);
+		$currentUserId = $this->front->getCurrentUser()->getId();
+		
 		?>
 		<!-- Topic initial post -->
 			<div class="rounded-box" id="topic">
@@ -101,9 +106,16 @@ abstract class AbstractTopicTemplate implements iInsertable {
 					<tr><!-- row of admin tool -->
 						<td colspan="2" id="topic-bottom">
 							<span id="topic-tools">
-							<?php if($author->getId() === $this->front->getCurrentUser()->getId() || $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
-								$this->insertAdminTools($this->topic);//TODO change this when capabilities will be implemented
+							<?php 
+							//TODO change this when capabilities will be implemented
+							if( $author->getId() === $currentUserId || $isAdmin || $isModo ){
+								// only for author / admin/moderator
+								$this->insertEditTool($this->topic);
 							}
+							if( $isAdmin || $isModo ){
+								$this->insertAdminTools($this->topic);
+							}
+							// for everybody 
 							$this->insertUserTools($this->topic);
 							?>
 							</span>
@@ -123,6 +135,19 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	/** Displayed the body of the topic in the internal process */
 	protected abstract function insertTopicBody($topic);
 	
+	protected function insertEditTool($topic){
+		$base = $topic->getTopicbase();
+		$customTypeId = $base->getCustomType();
+		$topicId = $base->getId();
+		$forumId = $base->getForum()->getId();
+		$viewHelper = $this->front->getViewHelper();
+		?>
+		<a href="<?php $viewHelper->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array('typeId'=>$customTypeId, 'forumId'=>$forumId,'topicId'=> $topicId)); ?>"
+			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
+		&nbsp;|&nbsp;
+	<?php
+	}	
+	
 	/**
 	 * Only for admin/moderator/author
 	 * Insert all the administrative stuff
@@ -135,32 +160,29 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$forumId = $base->getForum()->getId();
 		$viewHelper = $this->front->getViewHelper();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array('typeId'=>$customTypeId, 'forumId'=>$forumId,'topicId'=> $topicId)); ?>"
-			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
-		&nbsp;|&nbsp;
 		<?php if($base->getIsSticky()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Unstick the topic, it will be shown like other topics by order of last modification' ); ?>"><?php echo __('Unstick'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('stickTopic', 'Topic', 'stick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Stick the topic at the top of the forum' ); ?>"><?php echo __('Stick'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsOpen()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('closeTopic', 'Topic', 'close', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('closeTopic', 'Topic', 'close', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Close the topic, so that no other comments could be left, and so the topic falls in the forget' ); ?>"><?php echo __('Close'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('openTopic', 'Topic', 'open', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('openTopic', 'Topic', 'open', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Open the topic, it will re accept comments' ); ?>"><?php echo __('Open'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
 		
 		<?php if($base->getIsDeleted()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeleteTopic', 'Topic', 'undelete', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('undeleteTopic', 'Topic', 'undelete', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Restore the topic from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deleteTopic', 'Topic', 'delete', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('deleteTopic', 'Topic', 'delete', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Delete the topic, stay in database but it is no more displayed' ); ?>"<?php $viewHelper->insertConfirmLink(__('Do you really want to delete this topic ?'));?>><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;

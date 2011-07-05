@@ -29,7 +29,15 @@ class StaticListField extends Field {
 	}
 
 	public function getValue() {
-		return $this->value;
+		$result = array();
+		$i = 1;
+		foreach ($this->value as $val){
+			if($val && ($clean = Utils::getCleanText($val))){
+				$result[$i++] = $clean;
+			}
+		}
+		return $result;
+//		return $this->value;
 	}
 //	
 	protected function isAcceptType($type) {
@@ -51,7 +59,7 @@ class StaticListField extends Field {
 				$lastKey = $key;
 				?>
 				<div class="list_item_field" id="item_<?php echo $key; ?>"><?php
-					$this->_insertField( $key, $value->getContent() );
+					$this->_insertField( $key, $value );
 				?></div><?php
 			}
 			$size = count( $this->values );

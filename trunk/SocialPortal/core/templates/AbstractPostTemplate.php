@@ -55,6 +55,11 @@ abstract class AbstractPostTemplate implements iInsertable{
 			return;
 		}
 		$userHelper = new UserHelper($this->front);
+		
+		$isAdmin = $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role);
+		$isModo = $this->front->getViewHelper()->currentUserIs(UserRoles::$moderator_role);
+		$currentUserId = $this->front->getCurrentUser()->getId();
+		
 		?>
 		<ol id="topic-post-list" class="commentlist">
 		<?php
@@ -83,9 +88,16 @@ abstract class AbstractPostTemplate implements iInsertable{
 					<tr><!-- row of admin tool -->
 						<td colspan="2" id="topic-bottom">
 							<span id="topic-tools">
-							<?php if($postAuthor->getId() === $this->front->getCurrentUser()->getId() || $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
-								$this->insertAdminTools($post);//TODO change this when capabilities will be implemented
+							<?php
+							//TODO change this when capabilities will be implemented
+							if($postAuthor->getId() === $currentUserId || $isAdmin || $isModo){
+								$this->insertEditTool($post);
 							}
+							
+							if($isAdmin || $isModo){
+								$this->insertAdminTools($post);
+							}
+							
 							$this->insertUserTools($post);
 							?>
 							</span>
@@ -107,6 +119,23 @@ abstract class AbstractPostTemplate implements iInsertable{
 	protected abstract function insertPostContent($post);
 
 	
+	protected function insertEditTool($post){
+		$base = $post->getPostbase();
+		$customTypeId = $base->getCustomType();
+		$postId = $base->getId();
+		$topic = $base->getTopic();
+		$topicId = $topic->getId();
+		$forumId = $topic->getForum()->getId();
+		$viewHelper = $this->front->getViewHelper();
+		?>
+		
+		<a href="<?php $viewHelper->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array('typeId'=>$customTypeId, 'topicId'=>$topicId, 'forumId'=>$forumId, 'postId'=>$postId)); ?>"
+			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
+		&nbsp;|&nbsp;
+		
+	<?php
+	}
+	
 	/**
 	 * Only for admin/moderator/author
 	 * Insert all the administrative stuff
@@ -121,15 +150,11 @@ abstract class AbstractPostTemplate implements iInsertable{
 		$forumId = $topic->getForum()->getId();
 		$viewHelper = $this->front->getViewHelper();
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('displayPostForm', 'Post', 'displayForm', array('typeId'=>$customTypeId, 'topicId'=>$topicId, 'forumId'=>$forumId, 'postId'=>$postId)); ?>"
-			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
-		&nbsp;|&nbsp;
-		
 		<?php if($base->getIsDeleted()): ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('undeletePost', 'Post', 'undelete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('undeletePost', 'Post', 'undelete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
 				title="<?php echo __( 'Restore the post from the database trash' ); ?>"><?php echo __('Undelete'); ?></a>
 		<?php else: ?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('deletePost', 'Post', 'delete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
+			<a href="<?php $viewHelper->insertHrefWithNonce('deletePost', 'Post', 'delete', array('postId'=>$postId, 'topicId'=>$topicId, 'forumId'=>$forumId)); ?>"
 				title="<?php echo __( 'Delete the post, stay in database but it is no more displayed' ); ?>"<?php $viewHelper->insertConfirmLink(__('Do you really want to delete this post ?'));?>><?php echo __('Delete'); ?></a>
 		<?php endif ?>
 		&nbsp;|&nbsp;
@@ -145,7 +170,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 	protected function insertUserTools($post){
 		//TODO quote function!
 		?>
-		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array('postId'=>$post->getId())); ?>"
+		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array( 'postId' => $post->getId() )); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
 		<a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"

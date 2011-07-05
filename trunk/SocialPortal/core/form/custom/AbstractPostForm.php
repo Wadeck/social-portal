@@ -18,7 +18,7 @@ abstract class AbstractPostForm extends Form implements iPostForm {
 	protected $globalMode = 2;
 	protected function __construct($formName, FrontController $front, $submitName = '', $submitDescription = '') {
 		parent::__construct( $formName, $front, $submitName, $submitDescription );
-		$this->setCss( 'post-form', 'post_form_2.css' );
+		$this->setCss( 'post-form', 'post_form.css' );
 	}
 	
 	protected function setGlobalMode($globalMode = 1) {
