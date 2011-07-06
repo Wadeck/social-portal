@@ -1,0 +1,27 @@
+<h3>Country page</h3>
+<?php
+$vars['helper']->insertMessage();
+$countries = $vars['countries'];
+$states = $vars['states'];
+?>
+Countries
+<ol>
+<?php
+foreach( $countries as $c ) :
+	?>
+	<li><?php echo utf8_decode($c->getCountryName()); ?></li>
+<?php
+endforeach
+?>
+</ol>
+
+States
+<ol>
+<?php
+foreach( $states as $s ) :
+	?>
+	<li><?php echo utf8_decode($s->getStateName()); ?></li>
+<?php
+endforeach
+?>
+</ol>

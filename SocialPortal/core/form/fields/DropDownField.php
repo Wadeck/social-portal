@@ -4,7 +4,7 @@ namespace core\form\fields;
 
 use core\form\Field;
 
-/** @UnTested */
+/** @Tested */
 class DropDownField extends Field {
 	// protected $value inherit from Field contains the value of the currently selected item
 	protected $values;

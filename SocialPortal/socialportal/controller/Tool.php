@@ -344,7 +344,6 @@ class Tool extends AbstractController {
 		//		where state = [countryCode, shortName, stateName]
 		$countries = $reader->getAllCountries();
 		$entity = null;
-//FIXME mauvais encodage !!!!!!
 		foreach ($countries as $country){
 			$entity = new UserProfileCountry();
 			$entity->setCountryCode($country['countryCode']);
@@ -369,5 +368,11 @@ class Tool extends AbstractController {
 		}
 		$this->frontController->addMessage('Creation of the countries done.', 'correct');
 		$this->frontController->doRedirect('Tool');
+	}
+	
+	public function displayAllCountryAction(){
+		$countries = $this->em->getRepository('UserProfileCountry')->findAll();
+		$states = $this->em->getRepository('UserProfileState')->findAll();
+		$this->frontController->doDisplay('tool', 'displayCountriesTest', array('countries' => $countries, 'states'=>$states));
 	}
 }

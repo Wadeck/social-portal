@@ -30,6 +30,7 @@ class UserProfileState{
      * @var string $stateName
      *
      * @Column(name="state_name", type="string", length=255, nullable=false)
+     * @Comment("Use utf8_encode to set and utf8_decode to get")
      */
     private $stateName;
 
