@@ -2,9 +2,9 @@
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
 $forumId = $vars['forumId'];
-$topicId = $vars['topicId'];
+$topicId = isset($vars['topicId']) ? $vars['topicId'] : false;
 
-$vars['helper']->setTitle(__('Topic form'));
+$vars['helper']->setTitle(__('Topic edition'));
 ?>
 
 <div id="link-back">
@@ -16,12 +16,14 @@ $vars['helper']->setTitle(__('Topic form'));
 	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId )); ?>">
 		<?php echo __('Discussions'); ?>
 </a>
+<?php if(false !== $topicId): ?>
 <a class="button" 
 	href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId' => $topicId, 'forumId' => $forumId )); ?>">
 		<?php echo __('Topic'); ?>
 </a>
+<?php endif; ?>
 &nbsp;
-<h4> <?php echo __('Topic form'); ?></h4>
+<h4> <?php echo __('Topic edition'); ?></h4>
 </div>
 
 <?php

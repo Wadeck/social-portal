@@ -2,6 +2,8 @@
 
 namespace core\http;
 
+use core\Config;
+
 use core\FrontController;
 
 use core\tools\Secured;
@@ -32,7 +34,7 @@ class Request {
 	/** $_SERVER @var core\http\bags\ParameterBag */
 	public $server;
 	
-	/** $_FILE @var core\http\bags\ParameterBag */
+	/** $_FILES @var core\http\bags\ParameterBag */
 	public $files;
 	
 	/** $_COOKIE @var core\http\bags\ParameterBag */
@@ -95,7 +97,7 @@ class Request {
 		$this->request = new ParameterBag( $request );
 		$this->attributes = new ParameterBag( $attributes );
 		$this->cookies = new ParameterBag( $cookies );
-		$this->files = new FileBag( $files );
+//		$this->files = new FileBag( $files );
 		$this->server = new ServerBag( $server );
 		$this->headers = new HeaderBag( $this->server->getHeaders() );
 		$this->requestTime = time();
@@ -192,7 +194,8 @@ class Request {
 		}
 
 		// +1 for the / at the end
-		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+		$requestPath = substr( $path, strpos( $path, Config::$instance->SITE_NAME ) + strlen( Config::$instance->SITE_NAME ) + 1 );
 		
 		if( $requestPath ) {
 			$tokens = explode( '/', $requestPath );
@@ -239,7 +242,8 @@ class Request {
 		}
 		
 		// +1 for the / at the end
-		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
+		$requestPath = substr( $path, strpos( $path, Config::$instance->SITE_NAME ) + strlen( Config::$instance->SITE_NAME ) + 1 );
 		if( $requestPath ) {
 			$tokens = explode( '/', $requestPath );
 			$this->module = array_shift( $tokens );
@@ -269,58 +273,6 @@ class Request {
 		
 		return array( $this->module, $this->action);
 	}
-	//TODO to be removed after debug
-//	//TODO perhaps not necessary to parse get !
-//	/**
-//	 * Parse the requested url and retrieve the module/action/gets
-//	 * @return (module, action, gets)
-//	 */
-//	public function parseUrl($url = '') {
-//		if($url){
-//			$getsString = parse_url( $url, PHP_URL_QUERY );
-//		}else{
-//			$getsString = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
-//		}
-//		
-//		$temp = explode('&', $getsString);
-//		$gets = array(); 
-//	    foreach ($temp as $t) { 
-//	        list($k, $v) = explode('=', $t); 
-//	        $gets[$k] = $v;
-//	    }    
-//		
-//		$path = $url ? $url : parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
-//		// +1 for the / at the end
-//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
-//		if( $requestPath ) {
-//			$tokens = explode( '/', $requestPath );
-//			$this->module = array_shift( $tokens );
-//			$this->action = array_shift( $tokens );
-//			$this->parameters = $tokens;
-//		} else {
-//			$this->module = 'home';
-//			$this->action = 'index';
-//			$this->parameters = array();
-//		}
-//		// same format as the url builder in frontController
-//		$this->requestedUrl = '/' . FrontController::$SITE_NAME . '/' . $requestPath;
-//		
-//		// debug mode in eclipse
-//		if( 'index.php' == $this->module ) {
-//			$this->module = 'home';
-//		}
-//		// when we don't specify the action, it is automatically set to index
-//		if( '' == $this->action ) {
-//			$this->action = 'index';
-//		}
-//		//TODO remove after debug, we need to setup $gets!!!
-//		if($this->parameters){
-//			Logger::getInstance()->debug_var('There are some get attributes in the url !', $this->parameters);
-//		}
-//		Logger::getInstance()->log( "Request path: {$this->module} :: {$this->action} :: " . ($this->parameters ? print_r( $this->parameters, true ) : '') );
-//		return array( $this->module, $this->action, $gets);
-////		return array( $this->module, $this->action, $this->parameters );
-//	}
 	
 	/**
 	 * Gets the request method.
@@ -330,10 +282,6 @@ class Request {
 	public function getMethod() {
 		if( null === $this->method ) {
 			$this->method = strtoupper( $this->server->get( 'REQUEST_METHOD', 'GET' ) );
-		
-		//            if ('POST' === $this->method) {
-		//                $this->method = strtoupper($this->request->get('_method', 'POST'));
-		//            }
 		}
 		
 		return $this->method;

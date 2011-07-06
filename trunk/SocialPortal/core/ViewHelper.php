@@ -86,7 +86,8 @@ class ViewHelper {
 	
 	/** Could be used for static view insertion */
 	public function insertView($module, $action = '', $addVars = array()) {
-		$fileName = FrontController::$VIEW_DIR . $module;
+//		$fileName = FrontController::$VIEW_DIR . $module;
+		$fileName = Config::$instance->VIEW_DIR . $module;
 		if( $action ) {
 			$fileName .= DIRECTORY_SEPARATOR . $action;
 		}
@@ -160,7 +161,8 @@ class ViewHelper {
 	 * @param array $GETAttributes
 	 */
 	public function createHref($controllerName, $actionName = '', array $gets = array(), $targetId = false) {
-		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
+//		$result = '/' . FrontController::$SITE_NAME . '/' . $controllerName;
+		$result = '/' . Config::$instance->SITE_NAME . '/' . $controllerName;
 		if( $actionName ) {
 			$result .= '/' . $actionName;
 		}

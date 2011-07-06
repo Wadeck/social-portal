@@ -43,6 +43,5 @@ function addField(obj, field){
 	}
 	parent = parent.parent();
 	parent = parent[parent.length-1];
-	
-	parent.
+	//TODO working here
 }

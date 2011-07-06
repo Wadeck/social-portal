@@ -311,6 +311,16 @@ class ProfileTemplate implements iInsertable {
 		if($hobbies){
 			$hobbies = unserialize($hobbies);
 		}
+		
+		if(null !== $country){
+			$country = $this->front->getEntityManager()->find('UserProfileCountry', $country);
+			$country = utf8_decode($country->getCountryName());
+			if(null !== $state){
+				$state = $this->front->getEntityManager()->find('UserProfileState', $state);
+				$state = utf8_decode($state->getStateName());
+			}	
+		}	
+		
 		?>
 		<table class="profile_information">
 		<?php if(null !== $gender):?>

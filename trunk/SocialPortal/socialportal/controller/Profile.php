@@ -1,6 +1,10 @@
 <?php
 
 namespace socialportal\controller;
+use core\debug\Logger;
+
+use core\Config;
+
 use socialportal\model\User;
 
 use core\tools\Utils;
@@ -268,16 +272,128 @@ class Profile extends AbstractController {
 	
 	}
 	
+	// receive an image, propose to the user to crop it and send it to saveImage
 	/**
-	 * @Method(POST)
-	 * @Nonce(imageReceive)
+	 * @Nonce(displayCropAvatar)
+	 * @GetAttributes({userId})
 	 * @FilePresent
-	 * @GetAttributes([userId, avatarKey, type])
 	 */
-	public function imageReceiveAction() {
+	public function displayCropImageAction() {
 		$get = $this->frontController->getRequest()->query;
 		$userId = $get->get( 'userId' );
-		$avatarKey = $get->get( 'avatarKey' );
-		$type = $get->get( 'type' );
+
+		$viewHelper = $this->frontController->getViewHelper();
+		$viewHelper->addJavascriptFile('jquery.js');
+		$viewHelper->addJavascriptFile('jcrop.js');
+		$viewHelper->addJavascriptFile('crop_interaction.js');
+		
+		$filename = $this->saveImage();
+		$imageLink = Config::$instance->TEMP_DIR . $filename;
+		$avatarKey = $filename;
+		$imageSrcLink = $imageLink;
+		
+		
+		$http = Utils::isSSL() ? 'https://' : 'http://';
+		$imageLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::$instance->SITE_NAME . '/' . $imageLink;
+		
+		
+		$actionLink = $viewHelper->createHrefWithNonce('cropAvatar', 'Profile', 'cropImage', array('userId' => $userId, 'avatarKey' => $avatarKey));
+		
+		$this->frontController->getResponse()->setVar('actionLink', $actionLink);
+		$this->frontController->getResponse()->setVar('imageLink', $imageLink);
+		$this->frontController->getResponse()->setVar('imageSrcLink', $imageSrcLink);
+		$this->frontController->doDisplay('profile', 'displayCropImage', array('avatarKey' => $avatarKey, 'userId' => $userId));
+	}
+	
+	/**
+	 * @Nonce(cropAvatar)
+	 * @GetAttributes({userId, avatarKey})
+	 */
+	public function cropImageAction(){
+		
+	}
+	
+	/**
+	 *  receive cropped image, save it and call editAvatarAction
+	 * @return string|false filename to the file or false if an error occurred
+	 */
+	private function saveImage(){
+		if(!$this->verifyFile($_FILES['avatar_file'])){
+			return false;
+		}
+		$filename = $this->createRandomFilename(Config::$instance->TEMP_DIR);
+		if(false === $filename){
+			return false;
+		}
+		$url = $this->writeToFilename($_FILES['avatar_file'], Config::$instance->TEMP_DIR, $filename);
+		if(false === $url){
+			return false;
+		}
+		
+		return $filename;
+		
+//		$targ_w = $targ_h = 150;
+//		$jpeg_quality = 90;
+//	
+//		$src = 'demo_files/flowers.jpg';
+//		$img_r = imagecreatefromjpeg($src);
+//		$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+//
+//		imagecopyresampled($dst_r, $img_r, 0, 0, $_POST['x'], $_POST['y'], $targ_w, $targ_h, $_POST['w'], $_POST['h']);
+//	
+//		header('Content-type: image/jpeg');
+//		imagejpeg($dst_r,null,$jpeg_quality);
+	}
+	
+	private function verifyFile($file){
+		if ( $file['error'] ){
+			return false;
+		}
+		if ( $file['size'] > Config::$instance->MAX_AVATAR_FILE_SIZE ){
+			return false;
+		}
+		if ( ( !empty( $file['type'] ) &&
+				!preg_match('/(jpe?g|gif|png|pjpeg)$/', $file['type'] ) ) ||
+				!preg_match( '/(jpe?g|gif|png|pjpeg)$/', $file['name'] ) ){
+			return false;
+		}
+		return true;
+	}
+	
+	/** @return string representing a filename that is not used in folder */
+	private function createRandomFilename($folder){
+		if( !file_exists( $folder ) ) {
+			Logger::getInstance()->log( 'Creation of the temp path: ' . $folder );
+			mkdir( $folder, '0777', true );
+		}
+		
+		$num = 0;
+		do{
+			$name = Utils::createRandomString(6, 'alphanumeric');
+			$num++;
+			if($num > 100){
+				Logger::getInstance()->log('Number of attempt to create random filename is reached...');
+				return false;
+			}
+		}while(file_exists($folder . $name));
+		
+		return $name;
+	}
+	
+	private function writeToFilename($file, $folder, $filename){
+		// Move the file to the uploads dir
+		$new_file = $folder . '/' . $filename;
+		if ( false === @move_uploaded_file( $file['tmp_name'], $new_file ) ){
+			return false;
+//			return $upload_error_handler( $file, sprintf( __('The uploaded file could not be moved to %s.' ), $uploads['path'] ) );
+		}
+	
+		// Set correct file permissions
+		$stat = stat( dirname( $new_file ));
+		$perms = $stat['mode'] & 0000666;
+		@chmod( $new_file, $perms );
+	
+		return $new_file;
+		
 	}
 }

@@ -1,0 +1,33 @@
+<?php
+$vars['helper']->setContainerClass('');
+$vars['helper']->insertMessage();
+$actionLink = $vars['actionLink'];
+$imageSrcLink = $vars['imageSrcLink'];
+$imageLink = $vars['imageLink'];
+
+$vars['helper']->setTitle(__('Avatar crop'));
+?>
+
+<h5><?php echo __( 'Crop Your New Avatar' ) ?></h5>
+<form action="<?php echo $actionLink?>" id="avatar_crop" method="post" onSubmit="return checkCoords();">
+	<img src="<?php echo $imageLink; ?>" id="avatar-to-crop" class="avatar" alt="<?php echo __( 'Avatar to crop' ) ?>" />
+
+	<div id="avatar-crop-pane">
+	<!-- en 30, forum loop page -->
+		<img src="<?php echo $imageLink; ?>" id="avatar-crop-preview size_30" class="avatar" alt="<?php echo __( 'Avatar preview') ?>" />
+	<!-- en 35, login panel -->
+		<img src="<?php echo $imageLink; ?>" id="avatar-crop-preview size_35" class="avatar" alt="<?php echo __( 'Avatar preview') ?>" />
+	<!-- en 60, post author -->
+		<img src="<?php echo $imageLink; ?>" id="avatar-crop-preview size_60" class="avatar" alt="<?php echo __( 'Avatar preview') ?>" />
+	<!-- en 75, profile page AND topic author AND feedback form -->
+		<img src="<?php echo $imageLink; ?>" id="avatar-crop-preview size_75" class="avatar" alt="<?php echo __( 'Avatar preview') ?>" />
+	</div>
+
+	<input type="submit" name="avatar-crop-submit" id="avatar-crop-submit" value="<?php echo __( 'Crop Image' ) ?>" />
+
+	<input type="hidden" name="image_src" id="image_src" value="<?php echo $imageSrcLink; ?>" />
+	<input type="hidden" id="x" name="x" />
+	<input type="hidden" id="y" name="y" />
+	<input type="hidden" id="w" name="w" />
+	<input type="hidden" id="h" name="h" />
+</form>

@@ -55,14 +55,16 @@ use Exception;
 require_once 'i18n/language.php';
 
 class FrontController {
-	private static $INIT = false;
-	public static $JS_DIR = null;
-	public static $IMG_DIR = null;
-	public static $CSS_DIR = null;
-	public static $CONTROLLER_DIR = null;
-	public static $VIEW_DIR = null;
-	//TODO must be loaded by configuration
-	public static $SITE_NAME = 'SocialPortal';
+//	private static $INIT = false;
+//	public static $JS_DIR = null;
+//	public static $IMG_DIR = null;
+//	public static $TEMP_DIR = null;
+//	public static $AVATAR_DIR = null;
+//	public static $CSS_DIR = null;
+//	public static $CONTROLLER_DIR = null;
+//	public static $VIEW_DIR = null;
+//	//TODO must be loaded by configuration
+//	public static $SITE_NAME = 'SocialPortal';
 	
 	/** @var core\FrontController */
 	private static $instance = null;
@@ -102,15 +104,8 @@ class FrontController {
 	private $firstCallDisplay;
 	
 	private function __construct() {
-		if( false === self::$INIT ) {
-			self::$CONTROLLER_DIR = 'socialportal' . '\\' . 'controller' . '\\';
-			self::$VIEW_DIR = 'socialportal' . '\\' . 'view' . '\\';
-//			self::$CONTROLLER_DIR = 'socialportal' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR;
-//			self::$VIEW_DIR = 'socialportal' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR;
-			self::$JS_DIR = 'socialportal/resources/js/';
-			self::$IMG_DIR = 'socialportal/resources/img';
-			self::$CSS_DIR = 'socialportal/resources/css/';
-			self::$INIT = true;
+		if(null === Config::$instance){
+			new Config();
 		}
 		
 		$this->em = DoctrineLink::getEntityManager();
@@ -180,7 +175,7 @@ class FrontController {
 	public function doAction($module, $action = '') {
 		$action = $action ? $action : 'index';
 		$name = ucfirst( $module );
-		$className = self::$CONTROLLER_DIR . $name;
+		$className = Config::$instance->CONTROLLER_DIR . $name;
 		try {
 			if( !isset( $this->alreadyIncludedController[$name] ) ) {
 				// find the corresponding controller
@@ -305,7 +300,7 @@ class FrontController {
 	//TODO reflechir encore si on garde le tableau de parametre ou si on passe plutot par la response vars
 	public function doDisplay($module, $action = null, array $addVars = array()) {
 		$module = strtolower( $module );
-		$fileName = self::$VIEW_DIR . $module;
+		$fileName = Config::$instance->VIEW_DIR . $module;
 		if( $action ) {
 			$fileName .= DIRECTORY_SEPARATOR . $action;
 		}
@@ -332,13 +327,13 @@ class FrontController {
 			// header_footer.css is used for the common part like header / footer
 			$this->getResponse()->addCssFile( 'header_footer.css' );
 			
-			$headerFileName = self::$VIEW_DIR . 'header';
+			$headerFileName = Config::$instance->VIEW_DIR . 'header';
 			$headerFileName = $this->loader->getFileName( $headerFileName, '.phtml' );
 			if( false === $headerFileName ) {
 				$this->generateException( new PageNotFoundException( $headerFileName ) );
 			}
 			
-			$footerFileName = self::$VIEW_DIR . 'footer';
+			$footerFileName = Config::$instance->VIEW_DIR . 'footer';
 			$footerFileName = $this->loader->getFileName( $footerFileName, '.phtml' );
 			if( false === $footerFileName ) {
 				$this->generateException( new PageNotFoundException( $footerFileName ) );

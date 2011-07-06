@@ -66,7 +66,18 @@ $vars['helper']->addCssFile('profile_avatar_change.css');
 	
 	<tr class="main_row">
 		<td>
-			Insert here the line that allow user to choose file
+			<form
+				method="post"
+				enctype="multipart/form-data"
+				action="<?php $vars['helper']->insertHrefWithNonce('displayCropAvatar', 'Profile', 'displayCropImage', array('userId' => $userId)); ?>">
+					
+					<p style="width: 520px"><?php echo __( 'Click below to select a JPG, GIF or PNG format photo from your computer and then click \'Upload Image\' to proceed.' ) ?></p>
+				
+					<p id="avatar-upload">
+						<input type="file" name="avatar_file" id="file" />
+						<input type="submit" name="upload" id="upload" value="<?php echo __( 'Upload Image' ) ?>" />
+					</p>
+			</form>
 		</td>
 	</tr>
 	

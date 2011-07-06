@@ -218,4 +218,30 @@ class Utils {
 		return $string;
 	
 	}
+	
+	public static function php2js($value){
+	    if (is_array($value)) {
+	        $res = "[";
+	        $array = array();
+	        foreach ($value as $key => $a_var) {
+	            $array[] = self::php2js($key) . ':' . self::php2js($a_var);
+	        }
+	        return "{" . join(",", $array) . "}";
+//	        foreach ($value as $a_var) {
+//	            $array[] = self::php2js($a_var);
+//	        }
+//	        return "[" . join(",", $array) . "]";
+	    }
+	    elseif (is_bool($value)) {
+	        return $value ? "true" : "false";
+	    }
+	    elseif (is_int($value) || is_integer($value) || is_double($value) || is_float($value)) {
+	        return $value;
+	    }
+	    elseif (is_string($value)) {
+	        return "'" . addslashes(stripslashes($value)) . "'";
+	    }
+	    // autres cas: objets, on ne les gère pas
+	    return false;
+	}
 }
