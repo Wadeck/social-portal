@@ -244,4 +244,20 @@ class Utils {
 	    // autres cas: objets, on ne les gère pas
 	    return false;
 	}
+	
+	public static function getNiceSize( $bytes ) {
+		$quant = array(
+			// ========================= Origin ====
+			'TB' => 1099511627776,  // pow( 1024, 4)
+			'GB' => 1073741824,     // pow( 1024, 3)
+			'MB' => 1048576,        // pow( 1024, 2)
+			'kB' => 1024,           // pow( 1024, 1)
+			'B ' => 1,              // pow( 1024, 0)
+		);
+		foreach ( $quant as $unit => $mag )
+			if ( doubleval($bytes) >= $mag )
+				return  ( $bytes / $mag ) . ' ' . $unit;
+
+		return false;
+	}
 }

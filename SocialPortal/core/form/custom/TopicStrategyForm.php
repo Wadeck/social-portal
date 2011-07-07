@@ -34,7 +34,7 @@ class TopicStrategyForm extends AbstractTopicForm {
 		parent::__construct( 'Strategy', $frontController, 'formStrategySubmit', __( 'Submit' ) );
 		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
-		$this->addInputField( new StaticListField('topic_list', __('Your list'), array(4 => 'test'), 5, array( '' )) );
+		$this->addInputField( new StaticListField('topic_list', __('Your list'), array(), 5, array( '' )) );
 	}
 	
 	public function setupWithTopic($topic) {
@@ -45,7 +45,7 @@ class TopicStrategyForm extends AbstractTopicForm {
 		
 		$list = array();
 		foreach ($listTemp as $value) {
-			$list[$value->getPosition()] = $value;
+			$list[$value->getPosition()] = $value->getContent();
 		}
 		
 		$args = array();

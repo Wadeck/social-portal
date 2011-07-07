@@ -32,8 +32,9 @@ class PostAttributes extends Annotation implements ValidableInterface {
 	
 	public function isValid() {
 		$front = FrontController::getInstance();
-		$query = $front->getRequest()->request->all();
-		$emptyArray = array_diff( $this->attributes, $query );
+		$request = $front->getRequest()->request->all();
+		$request = array_keys( $request );
+		$emptyArray = array_diff( $this->attributes, $request );
 		if( $this->attributes && count( $emptyArray ) > 0 ) {
 			Logger::getInstance()->debug_var( 'Some get attributes are missing', $emptyArray );
 			return false;

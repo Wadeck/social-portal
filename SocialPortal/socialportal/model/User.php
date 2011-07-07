@@ -86,7 +86,7 @@ class User{
     /**
      * @var boolean $avatarType
      *
-     * @Column(name="avatar_type", type="boolean", nullable=false)
+     * @Column(name="avatar_type", type="smallint", nullable=false)
      * @Comment("0: gravatar geometric type, 1: custom image")
      */
     private $avatarType;

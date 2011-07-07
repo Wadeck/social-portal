@@ -11,7 +11,6 @@ class Config{
 			throw new Exception('Configuration already loaded');
 		}
 		self::$instance = $this;
-		
 		$this->init();
 	}
 	
@@ -30,6 +29,7 @@ class Config{
 	// front controller variable
 	public $JS_DIR = null;
 	public $IMG_DIR = null;
+	/** waiting crop */
 	public $TEMP_DIR = null;
 	public $AVATAR_DIR = null;
 	public $CSS_DIR = null;
@@ -39,5 +39,15 @@ class Config{
 	
 	// controller Profile
 	public $MAX_AVATAR_FILE_SIZE = 2560000 ; /* 2.5mb */
+	public $MIN_AVATAR_FILE_SIZE = 10;
+	public $AVATAR_ORIGINAL_MAX_WIDTH = 650;
+	public $AVATAR_ORIGINAL_MAX_HEIGHT = 650;
+	public $AVATAR_CROP_MAX_WIDTH = 200;
+	public $AVATAR_CROP_MAX_HEIGHT = 200;
+	public $AVATAR_CROP_MIN_WIDTH = 15;
+	public $AVATAR_CROP_MIN_HEIGHT = 15;
+	
+	// request referrer form
+	public $REFERRER_FIELD_NAME = '_http_referrer';
 	
 }

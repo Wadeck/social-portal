@@ -2,6 +2,8 @@
 
 namespace core\form;
 
+use core\Config;
+
 use core\templates\iInsertable;
 
 use core\debug\Logger;
@@ -47,8 +49,6 @@ use core\FrontController;
 
  */
 class Form implements iInsertable {
-	private static $REFERRER_FIELD_NAME = '_http_referrer';
-	
 	/** @var FrontController */
 	protected $frontController;
 	protected $fields;
@@ -105,7 +105,8 @@ class Form implements iInsertable {
 	/** @return string Url */
 	public function getCurrentReferrerUrl() {
 		if( !$this->currentReferrerUrl ) {
-			$this->currentReferrerUrl = $_REQUEST[self::$REFERRER_FIELD_NAME];
+//			$this->currentReferrerUrl = $_REQUEST[self::$REFERRER_FIELD_NAME];
+			$this->currentReferrerUrl = $_REQUEST[Config::$instance->REFERRER_FIELD_NAME];
 		}
 		return $this->currentReferrerUrl;
 	}
@@ -135,7 +136,8 @@ class Form implements iInsertable {
 	public function _insertReferrerField() {
 		$referrer = $this->getFutureReferrerUrl();
 		// add this variable into an hidden field
-		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+//		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+		echo '<input type="hidden" name="' . Config::$instance->REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
 	}
 	
 	public function insertNonceField() {
@@ -323,16 +325,4 @@ class Form implements iInsertable {
 	public function doSecondAction($topic){
 		return true;
 	}
-	
-	
-//	//#############################
-//	//TODO remove those methods after having changed the login form
-//	// still used by the register form (non-form)
-//	
-//
-//	public static function insertReferrerField() {
-//		$referrer = FrontController::getInstance()->getRequest()->getRequestedUrl();
-//		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
-//	}
-//	
 }
