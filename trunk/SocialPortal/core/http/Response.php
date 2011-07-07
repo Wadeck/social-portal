@@ -292,13 +292,17 @@ class Response {
 		if( $this->javascriptVars ) {
 			$result .= '<script type="text/javascript">/* <![CDATA[ */';
 			foreach( $this->javascriptVars as $name => $assoc ) {
-				$result .= "var $name={";
-				$temp = array();
-				foreach( $assoc as $key => $value ) {
-					$temp[] = "$key: \"$value\"";
+				if(is_array($assoc)){
+					$result .= "var $name={";
+					$temp = array();
+					foreach( $assoc as $key => $value ) {
+						$temp[] = "$key: \"$value\"";
+					}
+					$result .= implode( ',', $temp );
+					$result .= '};';
+				}else{
+					$result .= "var $name=\"$assoc\";";
 				}
-				$result .= implode( ',', $temp );
-				$result .= '};';
 			}
 			$result .= '/* ]]> */</script>';
 		}

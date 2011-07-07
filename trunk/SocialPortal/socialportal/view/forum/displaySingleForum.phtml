@@ -80,13 +80,13 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 								title="<?php echo $titleDescription; ?>"><?php echo $title; ?></a></td>
 							<td class="author">
 								<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
-									<?php echo $userHelper->insertAvatar(30); ?>
+									<?php echo $userHelper->insertAvatar(35); ?>
 									<div class="author-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
 								<?php endif ?>
 							</td>
 							<td class="latest-poster">
 								<?php if($userHelper->setCurrentUser($topic->getLastPoster())):?>
-									<?php echo $userHelper->insertAvatar(30); ?>
+									<?php echo $userHelper->insertAvatar(35); ?>
 									<div class="lastposter-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
 								<?php endif ?>
 							</td>
@@ -127,13 +127,13 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 							title="<?php echo $titleDescription; ?>"><?php echo $title; ?></a></td>
 						<td class="author">
 							<?php if($userHelper->setCurrentUser($topic->getPoster())):?>
-								<?php echo $userHelper->insertAvatar(30); ?>
+								<?php echo $userHelper->insertAvatar(35); ?>
 								<div class="author-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
 							<?php endif ?>
 						</td>
 						<td class="latest-poster">
 							<?php if($userHelper->setCurrentUser($topic->getLastPoster())):?>
-								<?php echo $userHelper->insertAvatar(30); ?>
+								<?php echo $userHelper->insertAvatar(35); ?>
 								<div class="lastposter-name"><?php echo $userHelper->insertLinkToProfile(); ?></div>
 							<?php endif ?>
 						</td>

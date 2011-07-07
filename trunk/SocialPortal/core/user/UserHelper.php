@@ -1,6 +1,10 @@
 <?php
 
 namespace core\user;
+use core\tools\Utils;
+
+use core\Config;
+
 use core\FrontController;
 
 use socialportal\model\User;
@@ -69,7 +73,10 @@ class UserHelper {
 				break;
 			case 1:
 				// custom
-				$imgLink = 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
+				$http = Utils::isSSL() ? 'https://' : 'http://';
+				$imgLink = Config::$instance->AVATAR_DIR . $key .'.jpg';
+				$imgLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::$instance->SITE_NAME . '/' . $imgLink;
+		
 				break;
 		}
 		if(false === $link){

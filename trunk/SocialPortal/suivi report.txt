@@ -372,8 +372,15 @@ mardi 5 juillet
 current - ajout du country
 current - ajout du state
 
+mercredi 6 juillet
+- ajout des country/state avec bon encodage et select javascript
+- support de l'edition sur les states par le biais d'une class javascript
 
-
+jeudi 7 juillet
+- support complet des uploads d'images, format jpg/png/gif
+- profile image cropable avec jCrop
+- correction d'un bug dans les topics strategy
+- listes d'items pour les strategies
 
 
 
@@ -385,8 +392,6 @@ current - ajout du state
 bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
 todo - profile tools link (good link but nothing behind)
-todo - profile image cropable avec jCrop
 todo - topic plus souple, tout passe par l'orienté objet
-todo - listes d'items pour les strategies
 todo - description des dates en format normal, hover
 todo - maintenance

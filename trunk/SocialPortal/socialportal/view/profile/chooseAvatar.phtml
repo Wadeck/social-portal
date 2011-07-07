@@ -15,6 +15,8 @@ $linkWithPlaceholder = $vars['linkWithPlaceholder'];
 $userId = $vars['userId'];
 $vars['helper']->setTitle(__('Avatar change'));
 
+$referrerField = $vars['referrerField'];
+
 $vars['helper']->addCssFile('profile_avatar_change.css');
 ?>
 
@@ -77,6 +79,7 @@ $vars['helper']->addCssFile('profile_avatar_change.css');
 						<input type="file" name="avatar_file" id="file" />
 						<input type="submit" name="upload" id="upload" value="<?php echo __( 'Upload Image' ) ?>" />
 					</p>
+					<?php echo $referrerField; ?>
 			</form>
 		</td>
 	</tr>

@@ -289,8 +289,9 @@ class Request {
 	
 	/** @return string The url that was asked, false if not specified */
 	public function getReferrer() {
-		$ref = $this->request->get( '_http_referrer', null );
-		$ref = $ref ? $ref : $this->query->get( '_http_referrer', null );
+		$refFieldName = Config::$instance->REFERRER_FIELD_NAME;
+		$ref = $this->request->get( $refFieldName, null );
+		$ref = $ref ? $ref : $this->query->get( $refFieldName, null );
 		return $ref;
 	}
 	
