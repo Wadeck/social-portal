@@ -123,16 +123,8 @@ class UserManager {
 	 * @return User if the connection succeeds, false otherwise
 	 */
 	public function connectUser($username, $password, $rememberMe = false) {
-		//TODO implement me
-		$user = $this->userProvider->getUserByUsername( $username );
-		if( !$user ) {
-			return false;
-		}
-		if( $user->getId() <= 1 ) {
-			// nullUser not allowed to be connected
-			return false;
-		}
-		if( Crypto::verifyDBPassword( $user->getRandomKey(), $password, $user->getPassword() ) ) {
+		$user = $this->getUser($username, $password);
+		if( null !== $user ) {
 			$this->user = $user;
 			if( $rememberMe ) {
 				$this->populateCookie();
@@ -141,6 +133,25 @@ class UserManager {
 			return $user;
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * @return User|null
+	 */
+	public function getUser($username, $password){
+		$user = $this->userProvider->getUserByUsername( $username );
+		if( !$user ) {
+			return null;
+		}
+		if( $user->getId() <= 1 ) {
+			// nullUser not allowed to be connected
+			return null;
+		}
+		if( Crypto::verifyDBPassword( $user->getRandomKey(), $password, $user->getPassword() ) ) {
+			return $user;
+		} else {
+			return null;
 		}
 	}
 	

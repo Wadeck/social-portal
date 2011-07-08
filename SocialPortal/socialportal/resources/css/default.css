@@ -23,6 +23,11 @@
 	background-color: #fafafa;
 }
 
+.centered_500{
+	margin: 0 auto;
+    width: 500px;
+}
+
 /* perhaps find a better way */
 .width_40 {
 	width: 40% !important;

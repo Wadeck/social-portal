@@ -1,6 +1,14 @@
 <?php
 
 namespace socialportal\controller;
+use core\security\Crypto;
+
+use core\form\custom\ProfileEditEmailForm;
+
+use core\form\custom\ProfileEditPasswordForm;
+
+use core\form\custom\ProfileEditUsernameForm;
+
 use core\debug\Logger;
 
 use core\Config;
@@ -83,7 +91,7 @@ class Profile extends AbstractController {
 		
 		$this->frontController->getResponse()->setVar( 'userId', $userId );
 		$this->frontController->getResponse()->setVar( 'form', $form );
-		$this->frontController->doDisplay( 'profile', 'displayForm' );
+		$this->frontController->doDisplay( 'profile', 'displayProfileForm' );
 	}
 	
 	/**
@@ -145,13 +153,70 @@ class Profile extends AbstractController {
 		$this->frontController->addMessage( __( 'Profile edition success' ), 'correct' );
 		$this->frontController->doRedirectWithNonce( 'displayProfile', 'Profile', 'display', array( 'userId' => $userId ) );
 	}
+
+	/**
+	 * @Nonce(displayEditUsernameForm)
+	 * @GetAttributes(userId)
+	 */
+	public function displayEditUsernameFormAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
+		$form = new ProfileEditUsernameForm($this->frontController);
+		$form->setNonceAction( 'editUsername' );
+		
+		$targetUrl = $this->frontController->getViewHelper()->createHref( 'Profile', 'editUsername', array('userId' => $userId) );
+		
+		$form->setTargetUrl($targetUrl);
+		$this->frontController->getResponse()->setVar('userId', $userId);
+		$this->frontController->getResponse()->setVar('form', $form);
+		$this->frontController->doDisplay('profile', 'displayEditUsernameForm');
+	}
+	
+	/**
+	 * @Method(POST)
+	 * @Nonce(editUsername)
+	 * @GetAttributes(userId)
+	 */
+	public function editUsernameAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
+		
+		$form = new ProfileEditUsernameForm($this->frontController);
+		$form->setupWithArray(true);
+		$form->checkAndPrepareContent();
+		
+		$oldUsername = $form->getOldUsername();
+		$newUsername = $form->getNewUsername();
+		$password = $form->getPassword();
+		$user = $this->frontController->getUserManager()->getUser($oldUsername, $password);
+		
+		if(null === $user){
+//			$this->frontController->addMessage(__('The username / password are not related to a user'), 'error');
+//			$this->frontController->doRedirectToReferrer();
+			$this->frontController->doRedirectToReferrer(__('The username / password are not related to a user'), 'error');
+		}
+		
+		$user->setUsername($newUsername);
+		$this->em->persist($user);
+		if( !$this->em->flushSafe() ){
+//			$this->frontController->addMessage(__('Problem during the update of the username'), 'error');
+//			$this->frontController->doRedirectToReferrer();
+			$this->frontController->doRedirectToReferrer(__('This username is already taken, please choose another one'), 'error');
+		}
+		
+		$this->frontController->addMessage(__('Edition of the username success'), 'correct');
+		$this->frontController->doRedirectWithNonce('displayProfile','Profile', 'display', array('userId' => $userId));
+	}
 	
 	/**
 	 * @Nonce(displayEditEmailForm)
 	 * @GetAttributes(userId)
 	 */
 	public function displayEditEmailFormAction() {
-
+		$form = new ProfileEditEmailForm($this->frontController);
+		
 	}
 	
 	/**
@@ -160,6 +225,7 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function editEmailAction() {
+		$form = new ProfileEditEmailForm($this->frontController);
 
 	}
 	
@@ -168,6 +234,7 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function displayEditPasswordFormAction() {
+		$form = new ProfileEditPasswordForm($this->frontController);
 
 	}
 	
@@ -177,23 +244,7 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function editPasswordAction() {
-
-	}
-	
-	/**
-	 * @Nonce(displayEditUsernameForm)
-	 * @GetAttributes(userId)
-	 */
-	public function displayEditUsernameFormAction() {
-
-	}
-	
-	/**
-	 * @Method(POST)
-	 * @Nonce(editUsername)
-	 * @GetAttributes(userId)
-	 */
-	public function editUsernameAction() {
+		$form = new ProfileEditPasswordForm($this->frontController);
 
 	}
 	
@@ -263,7 +314,16 @@ class Profile extends AbstractController {
 			// we can't redirect to the profile, no correct user id
 			$this->frontController->doRedirect( 'Home' );
 		}
-		
+		{// deletion of previous avatar image
+			if(1 == $user->getAvatarType()){
+				$fileToDelete = $user->getAvatarKey();
+				$pathToDelete = Config::$instance->AVATAR_DIR . $fileToDelete . '.jpg';
+				if(file_exists($pathToDelete)){
+					@unlink( $pathToDelete );
+				}
+			}
+		}
+			
 		$user->setAvatarType( $type );
 		$user->setAvatarKey( $avatarKey );
 		$this->em->persist( $user );
@@ -286,6 +346,15 @@ class Profile extends AbstractController {
 	public function displayCropImageAction() {
 		$get = $this->frontController->getRequest()->query;
 		$userId = $get->get( 'userId' );
+		
+		if( !isset( $_FILES['avatar_file'] ) ){
+//			$referrer = $this->frontController->getRequest()->getReferrer();
+//			$this->frontController->doRedirectUrl($referrer);
+//			$this->frontController->addMessage(__('Please upload an image' ), 'error');
+//			$this->frontController->doRedirectToReferrer();
+			$this->frontController->doRedirectToReferrer(__('Please upload an image' ), 'error');
+			return false;	
+		}
 
 		$viewHelper = $this->frontController->getViewHelper();
 		$viewHelper->addJavascriptFile('jquery.js');
@@ -298,7 +367,6 @@ class Profile extends AbstractController {
 		$viewHelper->addJavascriptVar('avatarCropMinWidth', Config::$instance->AVATAR_CROP_MIN_WIDTH);
 		$viewHelper->addJavascriptVar('avatarCropMinHeight', Config::$instance->AVATAR_CROP_MIN_HEIGHT);
 		$viewHelper->addCssFile('profile_avatar_crop.css');
-		
 		$filename = $this->saveImage($_FILES['avatar_file']);
 		$imageLink = Config::$instance->TEMP_DIR . $filename;
 		$tempKey = $filename;
@@ -327,15 +395,15 @@ class Profile extends AbstractController {
 	 */
 	private function saveImage($file){
 		if(!$this->verifyFile($file)){
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl($referrer);
-			return false;
+//			$referrer = $this->frontController->getRequest()->getReferrer();
+//			$this->frontController->doRedirectTo($referrer);
+			$this->frontController->doRedirectToReferrer();
 		}
 		$filename = $this->createRandomFilename(Config::$instance->TEMP_DIR, 6);
 		if(false === $filename){
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl($referrer);
-			return false;
+//			$referrer = $this->frontController->getRequest()->getReferrer();
+//			$this->frontController->doRedirectUrl($referrer);
+			$this->frontController->doRedirectToReferrer();
 		}
 		
 		// without extension
@@ -347,9 +415,7 @@ class Profile extends AbstractController {
 				if( is_array( $destWithExt ) ){
 					Logger::getInstance()->log_var('Error during writeToFilename', $destWithExt);
 				}
-				$this->frontController->addMessage(__('The uploaded file is not valid' ), 'error');
-				$referrer = $this->frontController->getRequest()->getReferrer();
-				$this->frontController->doRedirectUrl($referrer);
+				$this->frontController->doRedirectToReferrer(__('The uploaded file is not valid' ), 'error');
 				return false;	
 			}
 		}
@@ -370,7 +436,6 @@ class Profile extends AbstractController {
 			7 => __( 'Failed to write file to disk.' ),
 			8 => __( 'File upload stopped by extension.' )
 		);
-		
 		if ( $file['error'] ){
 			$this->frontController->addMessage( __( 'Your upload failed, please try again. Error was: %error%' , array('%error%' => $uploadErrors[$file['error']]) ) , 'error' );
 			return false;
@@ -390,8 +455,27 @@ class Profile extends AbstractController {
 		if ( ( !empty( $file['type'] ) &&
 				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ) ||
 				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['name'] ) ) ){
-			$this->frontController->addMessage( __( 'Please upload only JPG, GIF or PNG photos.' ), 'error' );
-			return false;
+			
+			// attempt to save the encoded files that comes from a proxy
+			$wasEncoded = false;	
+			$size = @getimagesize( $file['tmp_name'] );
+			if ( $size ){
+				list(,, $orig_type) = $size;
+				$file['type'] = image_type_to_mime_type($orig_type);
+				if(preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ){
+					// the encoded file could pass verification
+					Logger::getInstance()->debug("The file uploaded was encoded but real mime type was retrieved: {$file['type']}");
+					$wasEncoded = true;
+				}
+			}else{
+				$orig_type = -1;
+			}
+			
+			if(!$wasEncoded){
+				Logger::getInstance()->log("The file uploaded was type=[{$file['type']}] and name=[{$file['name']}] and sectype=[$orig_type]");
+				$this->frontController->addMessage( __( 'Please upload only JPG, GIF or PNG photos.' ), 'error' );
+				return false;
+			}
 		}
 		return true;
 
@@ -435,7 +519,7 @@ class Profile extends AbstractController {
 		
 		// Move the file to the uploads dir
 		if ( false === @move_uploaded_file( $file['tmp_name'], $destfilename ) ){
-			return array('problem during move_uploader_file');
+			return array('problem during move_uploader_file', $file['tmp_name'], $destfilename);
 //			return $upload_error_handler( $file, sprintf( __('The uploaded file could not be moved to %s.' ), $uploads['path'] ) );
 		}
 	
@@ -462,11 +546,13 @@ class Profile extends AbstractController {
 			
 			/* Check for thumbnail creation errors */
 			if(is_array($thumb)){
-				$this->frontController->addMessage(__('An error occurred during creation of thumbnail of the uploaded image'), 'error');
 				Logger::getInstance()->log_var('Error in thumbnail creation', $thumb);
 
-				$referrer = $this->frontController->getRequest()->getReferrer();
-				$this->frontController->doRedirectUrl($referrer);
+//				$referrer = $this->frontController->getRequest()->getReferrer();
+//				$this->frontController->doRedirectUrl($referrer);
+//				$this->frontController->addMessage(__('An error occurred during creation of thumbnail of the uploaded image'), 'error');
+//				$this->frontController->doRedirectToReferrer();
+				$this->frontController->doRedirectToReferrer(__('An error occurred during creation of thumbnail of the uploaded image'), 'error');
 				return false;
 			}
 			
@@ -529,12 +615,14 @@ class Profile extends AbstractController {
 	
 		if ( IMAGETYPE_GIF == $orig_type ) {
 			$destfilename = "{$destination}.gif";
-			if ( !imagegif( $newimage, $destfilename ) )
+			if ( !imagegif( $newimage, $destfilename ) ){
 				return array('resize_path_invalid', __( 'Resize path invalid' ));
+			}
 		} elseif ( IMAGETYPE_PNG == $orig_type ) {
 			$destfilename = "{$destination}.png";
-			if ( !imagepng( $newimage, $destfilename ) )
+			if ( !imagepng( $newimage, $destfilename ) ){
 				return array('resize_path_invalid', __( 'Resize path invalid' ));
+			}
 		} else {
 			// all other formats are converted to jpg
 			$destfilename = "{$destination}.jpg";

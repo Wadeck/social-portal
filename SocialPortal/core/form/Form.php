@@ -240,7 +240,7 @@ class Form implements iInsertable {
 	/**
 	 * If the form is invalid, it redirects automatically (except if we passe as parameter false
 	 * Enable the use of the children method like ForumForm#getForumName()
-	 * @return array $fieldName => $fieldValue if valid, false otherwise and we assume that the controller will doReferrerAction
+	 * @return array $fieldName => $fieldValue if valid, never return if invalid but dispatchUrl(referrer)
 	 */
 	public function checkAndPrepareContent() {
 		$errors = $this->validate();
@@ -265,7 +265,7 @@ class Form implements iInsertable {
 	}
 	
 	/** @return array $fieldName => $error */
-	private function validate() {
+	protected function validate() {
 		$errors = array();
 		foreach( $this->fields as $field ) {
 			$error = $field->containsError();

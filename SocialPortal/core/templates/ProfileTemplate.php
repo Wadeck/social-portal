@@ -107,7 +107,7 @@ class ProfileTemplate implements iInsertable {
 			$this->front->getViewHelper()->insertHrefWithNonce('displayEditAvatarForm', 'Profile', 'displayEditAvatarForm', array('userId'=>$this->userId))?>"><?php
 			echo $changeAvatar; ?></a>
 		<!-- edit username -->
-		<a class="unimplemented" title="<?php echo $editUsername; ?>" href="<?php 
+		<a class="" title="<?php echo $editUsername; ?>" href="<?php 
 			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
 			echo $editUsername; ?></a>
 		<!-- edit password -->
@@ -137,42 +137,6 @@ class ProfileTemplate implements iInsertable {
 	
 	private function insertToolVisitor(){
 		return;
-		
-		
-		
-		
-		$editProfile = __('Edit profile');
-		$createProfile = __('Create profile');
-		$editUsername = __('Edit username');
-		$editPassword = __('Edit password');
-		$editEmail = __('Edit email');
-		?><div class="tool_links"><?php
-		if(null !== $this->profile):
-		?>
-			<!-- edition of the profile -->
-
-			<a title="<?php echo $editProfile; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $editProfile; ?></a>
-		<?php else: ?>
-			<!-- creation of the profile -->
-			<a title="<?php echo $createProfile; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $createProfile; ?></a>
-		<?php endif; ?>
-		<!-- edit username -->
-		<a class="unimplemented" title="<?php echo $editUsername; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsername', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
-			echo $editUsername; ?></a>
-		<!-- edit password -->
-		<a class="unimplemented" title="<?php echo $editPassword; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditPassword', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
-			echo $editPassword; ?></a>
-		<!-- edit email -->
-		<a class="unimplemented" title="<?php echo $editEmail; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmail', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
-			echo $editEmail; ?></a>
-		
-		</div>
-	<?php
 	}
 	
 	private function insertCorrectContent(){
@@ -193,7 +157,7 @@ class ProfileTemplate implements iInsertable {
 			<h1><?php echo $username; ?></h1>
 		</div>
 	<?php
-		$this->insertEmail();
+		$this->insertBasicInformation(true);
 		if(null !== $this->profile){
 			$this->insertInformation();
 		}else{
@@ -211,11 +175,14 @@ class ProfileTemplate implements iInsertable {
 	
 	private function insertContentVisitor(){
 		$username = $this->user->getUsername();
+		
 		?>
 		<div class="profile-field" id="username">
 			<h2><?php echo $username; ?></h2>
 		</div>
+		
 	<?php
+		$this->insertBasicInformation();
 		if(null !== $this->profile){
 			$this->insertInformation();
 		}else{
@@ -233,7 +200,7 @@ class ProfileTemplate implements iInsertable {
 			<h2><?php echo $username; ?></h2>
 		</div>
 	<?php
-		$this->insertEmail();
+		$this->insertBasicInformation(true);
 		if(null !== $this->profile){
 			$this->insertInformation();
 		}else{
@@ -244,16 +211,36 @@ class ProfileTemplate implements iInsertable {
 		}	
 	}
 	
-	private function insertEmail(){
-		$email = $this->user->getEmail();
+	/**
+	 * Insert the email / registration date
+	 * @param boolean withEmail true if we want to insert the email 
+	 */
+	private function insertBasicInformation($withEmail=false){
+		if($withEmail){
+			$email = $this->user->getEmail();
+			$emailLabel = __('Email:');
+			$emailInformation = __('(Email is not visible to other)');
+		}
+		
+		$registrationDate = $this->user->getRegistered();
+		$registrationDate = Utils::getDataSince($registrationDate->getTimestamp());
+		// date format
+		// $registrationDate = date('H:i a F d Y', $registrationDate->getTimestamp());
+		$registrationDateLabel = __('Registration:');
 		?>
 		<table>
-			<tr class="profile-field" id="email">
-				<td><span class="label"><?php echo __('Email:'); ?></span></td>
-				<td>
-					<span><?php echo $email; ?></span>
-					<em class="discrete"><?php echo __('(Email is not visible to other)'); ?></em>
-				</td>
+			<?php if($withEmail): ?>
+				<tr class="profile-field" id="email">
+					<td><span class="label"><?php echo $emailLabel; ?></span></td>
+					<td>
+						<span><?php echo $email; ?></span>
+						<em class="discrete"><?php echo $emailInformation; ?></em>
+					</td>
+				</tr>
+			<?php endif; ?>
+			<tr class="profile-field" id="registration">
+				<td class="label"><?php echo $registrationDateLabel; ?></td>
+				<td><?php echo $registrationDate; ?></td>
 			</tr>
 		</table>
 	<?php
@@ -315,9 +302,11 @@ class ProfileTemplate implements iInsertable {
 		if(null !== $country){
 			$country = $this->front->getEntityManager()->find('UserProfileCountry', $country);
 			$country = utf8_decode($country->getCountryName());
+			$countryLabel = __('Country:');
 			if(null !== $state){
 				$state = $this->front->getEntityManager()->find('UserProfileState', $state);
 				$state = utf8_decode($state->getStateName());
+				$stateLabel = __('State:');
 			}	
 		}	
 		
@@ -339,12 +328,12 @@ class ProfileTemplate implements iInsertable {
 		
 		<?php if(null !== $country):?>
 			<tr class="profile-field" id="country">
-				<td class="label"><?php echo __('Country'); ?></td>
+				<td class="label"><?php echo $countryLabel; ?></td>
 				<td><?php echo $country; ?></td>
 			</tr>
 			<?php if(null !== $state):?>
 				<tr class="profile-field" id="state">
-					<td class="label"><?php echo __('State'); ?></td>
+					<td class="label"><?php echo $stateLabel; ?></td>
 					<td><?php echo $state; ?></td>
 				</tr>
 			<?php endif; ?>

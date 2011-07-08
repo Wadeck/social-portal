@@ -50,4 +50,9 @@ class Config{
 	// request referrer form
 	public $REFERRER_FIELD_NAME = '_http_referrer';
 	
+	// mail
+	public $SMTP = 'smtp.edificom.ch';
+//	public $SMTP = 'mail.netunion.com';
+	public $SEND_MAIL_FROM = 'systemadmin@salut-ed.org';
+	
 }
