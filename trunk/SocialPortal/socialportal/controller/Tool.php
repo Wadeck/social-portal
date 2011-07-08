@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\tools\Mail;
+
 use socialportal\model\UserProfileState;
 
 use socialportal\model\UserProfileCountry;
@@ -374,5 +376,29 @@ class Tool extends AbstractController {
 		$countries = $this->em->getRepository('UserProfileCountry')->findAll();
 		$states = $this->em->getRepository('UserProfileState')->findAll();
 		$this->frontController->doDisplay('tool', 'displayCountriesTest', array('countries' => $countries, 'states'=>$states));
+	}
+	
+	public function sendFakeEmailAction(){
+		$currentTime = $this->frontController->getRequest()->getRequestTime();
+		$currentTime = date('H:i A', $currentTime);
+		
+//		$to      = 'w.follonier@netunion.com';
+		$to      = 'wadeck.follonier@gmail.com';
+		$subject = 'Autre sujet @ ' .$currentTime +" "+rand(0, 10000);
+		$message = 'Test ! @ ' .$currentTime;
+		$headers = array(
+//		'From: webmaster@example.com' . "\r\n" .
+//			'Reply-To: webmaster@example.com' . "\r\n" .
+			'X-Mailer' => 'PHP/' . phpversion()
+		);
+	
+		$result = Mail::send($to, $subject, $message, $headers);
+		if($result){
+			$this->frontController->addMessage('Mail sent successfully', 'correct');
+		}else{
+			$this->frontController->addMessage('Failure during mail shipment', 'error');
+		}
+		
+		$this->frontController->doRedirect('Tool');
 	}
 }

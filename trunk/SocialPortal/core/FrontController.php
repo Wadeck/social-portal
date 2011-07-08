@@ -138,10 +138,21 @@ class FrontController {
 	public function dispatch() {
 		list( $module, $action ) = $this->request->parseDefaultUrl();
 		
-		Logger::getInstance()->log_var( 'GET', $_GET );
-		Logger::getInstance()->log_var( 'POST', $_POST );
-		Logger::getInstance()->log_var( 'COOKIE', $_COOKIE );
-		Logger::getInstance()->log_var( 'SESSION', $_SESSION );
+		if($_GET){
+			Logger::getInstance()->debug_var( '$_GET', $_GET );
+		}
+		if($_POST){
+			Logger::getInstance()->debug_var( '$_POST', $_POST );
+		}
+		if($_COOKIE){
+			Logger::getInstance()->debug_var( '$_COOKIE', $_COOKIE );
+		}
+		if($_SESSION){
+			Logger::getInstance()->debug_var( '$_SESSION', $_SESSION );
+		}
+		if($_FILES){
+			Logger::getInstance()->debug_var( '$_FILES', $_FILES );
+		}
 		
 		// [Authentification] check who is the current user
 		// could lead to exit ? / redirect ? Not for the moment
@@ -203,13 +214,6 @@ class FrontController {
 				$this->generateException( new NoSuchActionException( $className, $methodName ) );
 			}
 			
-			//TODO clean after debug
-			//			if( $getAttributes ) {
-			//				$tempGets = $this->request->query->all();
-			//				$this->request->query->replace( $getAttributes );
-			//			}
-			
-
 			// [Authorization] check if the user has the right to access this action
 			// could lead to exit
 			$this->firewall->checkAuthorization( $controller, $methodName );
@@ -217,15 +221,9 @@ class FrontController {
 			$this->alreadyIncludedController[$name] = true;
 			
 			$controller->actionBefore( $action );
-			//			$controller->$methodName( $parameters );
 			$controller->$methodName();
 			$controller->actionAfter( $action );
 		
-		//			if( $getAttributes ) {
-		//				$this->request->query->replace( $tempGets );
-		//			}
-		
-
 		} catch ( Exception $e ) {
 			if( $e instanceof ThrowableException ) {
 				// in the case the exception thrown used a Throwable wrapper we can retrieve it
@@ -258,6 +256,19 @@ class FrontController {
 	}
 	
 	/**
+	 * Short method to redirect to the referrer, this save one lines of code
+	 * @param string $message Shortcut to addMessage
+	 * @param string $type error|info|correct
+	 * @param boolean $noLoopControl To check if the redirection is looping
+	 * @exit
+	 */
+	public function doRedirectToReferrer($message=false, $type='info', $noLoopControl = false){
+		$this->addMessage($message, $type);
+		$url = $this->getRequest()->getReferrer();
+		$this->doRedirectUrl($url, $noLoopControl = false);
+	}
+	
+	/**
 	 * When we want to make a redirection to the given module/action/...
 	 * @param string $nonceAction Not hashed
 	 * @param string $module
@@ -282,7 +293,6 @@ class FrontController {
 		}
 		$this->request->getSession()->setFlash( 'redirectFrom', $prevUrl );
 		
-		// TODO need to manage infinite redirection loop because it generate errors
 		$this->response = new http\RedirectResponse( $url );
 		//		$this->response->redirect($url);
 		$this->response->setCookies( $this->request->cookies->all() );
@@ -297,7 +307,6 @@ class FrontController {
 	 * @param string $action The subdirectory of the view (could be null
 	 * @param string $parameters Associative array passed to the view
 	 */
-	//TODO reflechir encore si on garde le tableau de parametre ou si on passe plutot par la response vars
 	public function doDisplay($module, $action = null, array $addVars = array()) {
 		$module = strtolower( $module );
 		$fileName = Config::$instance->VIEW_DIR . $module;

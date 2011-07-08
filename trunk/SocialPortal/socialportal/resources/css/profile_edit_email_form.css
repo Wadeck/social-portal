@@ -1,0 +1,55 @@
+@CHARSET "ISO-8859-1";
+
+form.profile-edit-email-form label{
+	width: 200px;
+}
+form.profile-edit-email-form input[type=submit] {
+	margin-left: 205px;
+}
+
+form.profile-edit-email-form {
+	padding: 8px;
+}
+
+form.profile-edit-email-form .label_error {
+	display: block;
+}
+
+form.profile-edit-email-form .field_container {
+	
+}
+/*
+form.profile-edit-email-form input[type=submit] {
+	margin-left: 105px;
+}*/
+
+form.profile-edit-email-form label { /*font-weight: none;
+	margin: 15px 0 5px 0;
+	text-align: left;
+	width: 100px;
+	display: inline;*/
+	
+}
+
+form.profile-edit-email-form input[type="text"],form.profile-edit-email-form input[type="password"]
+	{ /*width: 75%;*/
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+/*
+form.profile-edit-email-form textarea {
+	width: 75%;
+	height: 120px;
+}
+*/
+form.profile-edit-email-form .field_container {
+	margin-bottom: 6px;
+}
+
+form.profile-edit-email-form span.error_message.active {
+	/*display: inline-block;*/
+	margin: 0;
+	margin-left: 105px;
+	padding: 4px;
+}
