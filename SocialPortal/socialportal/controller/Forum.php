@@ -186,7 +186,7 @@ class Forum extends AbstractController {
 		
 		if( false !== $timeTarget ) {
 			// we want to go to a specific topic given by date
-			$timeTarget = new DateTime( "@$timeTarget" );
+			$timeTarget = new DateTime( "@$timeTarget", $this->frontController->getDateTimeZone() );
 			$page_num = $forumRepo->getTopicPageByDate( $forumId, $timeTarget, $num_per_page, $withDeleted );
 		} else if( false !== $lastPage ) {
 			// we want to go to the last page

@@ -27,6 +27,8 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	/** @var string Url to the topic, page 1, default number of post per page */
 	protected $permalink;
 	
+	protected $supportVote = true;
+	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
 	}
@@ -49,6 +51,9 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		}
 		$base = $this->topic->getTopicbase();
 		$topicId = $base->getId();
+		// will not load the forum, but only forumProxy, with id
+		$forum = $base->getForum();
+		$forumId = $forum->getId();
 		$numPosts = $base->getNumPosts();
 		$title = $base->getTitle();
 		$author = $base->getPoster();
@@ -74,6 +79,13 @@ abstract class AbstractTopicTemplate implements iInsertable {
 						
 						<!-- cell of title / date / tags -->
 						<td id="topic-meta-box">
+							<?php if($this->supportVote): ?>
+								<div id="vote_box">
+									<a class="button"
+										href="<?php $this->front->getViewHelper()->insertHrefWithNonce('voteTopic', 'Vote', 'voteTopic', array('topicId'=>$topicId, 'forumId' => $forumId) );?>"
+										><?php echo __('I like'); ?></a>
+								</div>
+							<?php endif; ?>
 							<div id="topic-title">
 								<h3><?php echo "$title ($numPosts)"; ?></h3>
 							</div>

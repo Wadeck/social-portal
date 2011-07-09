@@ -56,6 +56,7 @@ class DatePickerField extends Field {
 	}
 	
 	public function insertField() {
+//		$timezone = $this->form->getfront->getDateTimeZone();
 		$timestamp = $this->value;
 		$startYear = 1900;
 		if( !$timestamp ) {

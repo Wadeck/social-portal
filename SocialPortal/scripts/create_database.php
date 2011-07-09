@@ -12,8 +12,17 @@ use Doctrine\ORM\EntityManager;
 
 ini_set( "display_errors", "On" );
 
+if(isset($_SERVER['argv']) && isset($_SERVER['argv'][0])){
+	// in cli mode
+}else{
+	// in webcall
+	$_SERVER['argv'][] = __FILE__;
+}
 //used only to debug directly in eclipse (argument passing is not working)
-$_SERVER['argv'][] = 'orm:schema-tool:create';
+$_SERVER['argv'][] = 'orm:schema-tool:update';
+//$_SERVER['argv'][] = '--dump-sql';
+$_SERVER['argv'][] = '--force';
+//$_SERVER['argv'][] = 'orm:schema-tool:create';
 
 $entityManager = EntityManager::create( $connectionOptions, $config );
 

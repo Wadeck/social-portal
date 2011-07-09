@@ -1,19 +1,67 @@
 <?php
 
 namespace core;
+use core\debug\Logger;
+
 use Exception;
-class Config{
+final class Config{
 	/** @var Config */
-	public static $instance = null;
-	
-	public function __construct(){
-		if(self::$instance){
-			throw new Exception('Configuration already loaded');
+	private static $instance = null;
+	/** @var associative array */
+	private $data;
+
+	public final static function create($filename){
+		if(null === self::$instance){
+			self::$instance = new Config($filename);
 		}
-		self::$instance = $this;
-		$this->init();
 	}
 	
+	private final function __construct($filename){
+		$this->load($filename);
+	}
+	
+	private final function load($filename){
+		if(!file_exists($filename)){
+			trigger_error('Configuration file does not exists', E_USER_WARNING);
+			throw new Exception('Configuration file does not exists');
+		}
+		if(!is_readable($filename)){
+			trigger_error('Configuration file exists but is not readable', E_USER_WARNING);
+			throw new Exception('Configuration file exists but is not readable');
+		}
+		$this->data = parse_ini_file($filename);
+		if(false === $this->data){
+			trigger_error('Configuration file is empty', E_USER_WARNING);
+			$this->data = array();
+		}
+	}
+
+	public final static function getOrDie($key){
+		return self::$instance->retrieveOrDie($key);
+	}
+	
+	public final function retrieveOrDie($key){
+		if(isset($this->data[$key])){
+			return $this->data[$key];
+		}else{
+			Logger::getInstance()->log("Config::getOrDie($key) fails");
+			throw new Exception("Config::getOrDie($key) fails");
+		}
+	}
+	
+	public final static function get($key, $defaultValue=false){
+		return self::$instance->retrieve($key, $defaultValue);
+	}
+	
+	public final function retrieve($key, $defaultValue = false){
+		if(isset($this->data[$key])){
+			return $this->data[$key];
+		}else{
+			return $defaultValue;
+		}
+	}
+	
+	/** @depreciated */
 	private function init(){
 		$this->CONTROLLER_DIR = 'socialportal' . '\\' . 'controller' . '\\';
 		$this->VIEW_DIR = 'socialportal' . '\\' . 'view' . '\\';
@@ -25,6 +73,8 @@ class Config{
 		$this->TEMP_DIR = $this->IMG_DIR . 'temp/';
 		$this->CSS_DIR = 'socialportal/resources/css/';
 	}
+	
+	
 	
 	// front controller variable
 	public $JS_DIR = null;

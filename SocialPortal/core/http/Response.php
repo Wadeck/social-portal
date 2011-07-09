@@ -69,7 +69,7 @@ class Response {
 		$http = Utils::isSSL() ? 'https://' : 'http://';
 		
 //		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$JS_DIR . $jsFile;
-		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::$instance->SITE_NAME . '/' . Config::$instance->JS_DIR . $jsFile;
+		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('js_dir') . $jsFile;
 		if( !in_array( $jsFile, $this->desiredJs ) ) {
 			$this->desiredJs[] = $jsFile;
 		}
@@ -90,7 +90,7 @@ class Response {
 		$http = Utils::isSSL() ? 'https://' : 'http://';
 		
 //		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$CSS_DIR . $cssFile;
-		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::$instance->SITE_NAME . '/' . Config::$instance->CSS_DIR . $cssFile;
+		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('css_dir') . $cssFile;
 		if( !in_array( $cssFile, $this->desiredCss ) ) {
 			$this->desiredCss[] = $cssFile;
 		}

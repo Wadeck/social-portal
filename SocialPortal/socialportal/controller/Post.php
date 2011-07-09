@@ -121,19 +121,19 @@ class Post extends AbstractController {
 		
 		$topic = $this->em->find( 'TopicBase', $topicId );
 		
+		$now = $this->frontController->getRequest()->getRequestDateTime();
+
 		$base = new PostEntity();
 		$base->setCustomType( $typeId );
 		$base->setTopic( $topic );
 		$base->setIsDeleted( 0 );
 		$base->setPoster( $this->frontController->getCurrentUser() );
 		$base->setPosterIp( $this->frontController->getRequest()->getClientIp() );
-		$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
 		$base->setTime( $now );
 		$position = $this->em->getRepository( 'PostBase' )->getLastPosition( $topicId );
 		$base->setPosition( $position );
 		
 		// update of the topic
-		$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
 		$topic->setTime( $now );
 		$topic->setLastPoster( $this->frontController->getCurrentUser() );
 		

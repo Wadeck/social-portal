@@ -84,7 +84,7 @@ class User{
     private $roles;
 
     /**
-     * @var boolean $avatarType
+     * @var smallint $avatarType
      *
      * @Column(name="avatar_type", type="smallint", nullable=false)
      * @Comment("0: gravatar geometric type, 1: custom image")
@@ -151,10 +151,10 @@ class User{
     /** Get roles @return integer $roles */
     public function getRoles(){ return $this->roles; }
 
-    /** Set avatarType @param boolean $avatarType */
+    /** Set avatarType @param smallint $avatarType */
     public function setAvatarType($avatarType){ $this->avatarType = $avatarType; }
 
-    /** Get avatarType @return boolean $avatarType */
+    /** Get avatarType @return smallint $avatarType */
     public function getAvatarType(){ return $this->avatarType; }
 
     /** Set avatarKey @param string $avatarKey */
