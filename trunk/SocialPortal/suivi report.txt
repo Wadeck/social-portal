@@ -382,10 +382,14 @@ jeudi 7 juillet
 - correction d'un bug dans les topics strategy
 - listes d'items pour les strategies
 
+[PAS OUBLIER DE RAJOUTER LES TRUCS FAIT VENDREDI 8 JUILLET]
 
-
-
-
+samedi 9 juillet
+- ajout du "non-support" des images bmp, on peut rien faire avec en php, les browsers ont l'air de transformer les grosses images jpg en w-ms-bmp quand ils les envoient
+- configuration file works, passing most constantes to _config/config.ini
+- ajout du model VoteTopic
+- log avec date courantes, en mettant le timezone apres la date pour eviter de creer un objet a chaque log ou de setter le default timezone global
+- implementations des votes
 
 
 

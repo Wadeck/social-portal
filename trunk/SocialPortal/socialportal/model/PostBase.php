@@ -7,8 +7,8 @@ namespace socialportal\model;
  * @Table(
  *	name="post__base", 
  *	indexes={
- *		@Index(name="idx_a8a02955bb66c05", columns={"poster_id"}),
- *		@Index(name="idx_a8a02951f55203d", columns={"topic_id"})
+ *		@Index(name="idx_a8a02951f55203d", columns={"topic_id"}),
+ *		@Index(name="idx_a8a02955bb66c05", columns={"poster_id"})
  *	}
  * )
  * @Entity(repositoryClass="PostBaseRepository")

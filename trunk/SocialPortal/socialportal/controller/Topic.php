@@ -127,7 +127,7 @@ class Topic extends AbstractController {
 			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $positionTarget, $num_per_page, $withDeleted );
 		} else if( false !== $timeTarget ) {
 			// we want to go to a specific topic
-			$timeTarget = new DateTime( "@$timeTarget" );
+			$timeTarget = new DateTime( "@$timeTarget", $this->frontController->getDateTimeZone() );
 			$page_num = $topicBaseRepo->getPostPagePerTime( $topicId, $typeId, $timeTarget, $num_per_page, $withDeleted );
 		} else if( false !== $lastPage ) {
 			// we want to go to the last page
@@ -291,7 +291,9 @@ class Topic extends AbstractController {
 		} else {
 			$base->setPoster( $this->frontController->getCurrentUser() );
 		}
-		$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
+		
+		$now = $this->frontController->getRequest()->getRequestDateTime();
+		
 		$base->setStartTime( $now );
 		$base->setTime( $now );
 		$base->setTagCount( 0 );

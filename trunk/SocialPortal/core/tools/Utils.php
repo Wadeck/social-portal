@@ -77,7 +77,7 @@ class Utils {
 	 * eg: 4 weeks and 6 days
 	 *
 	 * @package BuddyPress Core
-	 * @param $older_date int Unix timestamp of date you want to calculate the time since for
+	 * @param $older_date int|DateTime Unix timestamp of date you want to calculate the time since for
 	 * @param $newer_date int Unix timestamp of date to compare older date to. Default false (current time).
 	 * @return str The time since.
 	 */
@@ -98,7 +98,9 @@ class Utils {
 		$newer_date = $newer_date ? $newer_date : FrontController::getInstance()->getRequest()->getRequestTime();
 		/* Difference in seconds */
 		$since = $newer_date - $older_date;
-		
+
+		$testDate1 = date(DATE_RFC822, $newer_date);
+		$testDate2 = date(DATE_RFC822, $older_date);
 		/* Something went wrong with date calculation and we ended up with a negative date. */
 		if( 0 > $since ) {
 			return __( 'sometime' );

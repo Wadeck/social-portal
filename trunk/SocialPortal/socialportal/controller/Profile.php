@@ -107,9 +107,11 @@ class Profile extends AbstractController {
 		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
+		$now =  $this->frontController->getRequest()->getRequestDateTime();
+
 		$profile = $form->createProfile();
 		$profile->setUserId( $userId );
-		$profile->setLastModified( new DateTime( '@' . $this->frontController->getRequest()->getRequestTime() ) );
+		$profile->setLastModified( $now );
 		
 		$this->em->persist( $profile );
 		if( !$this->em->flushSafe() ) {
@@ -142,7 +144,8 @@ class Profile extends AbstractController {
 		$form->checkAndPrepareContent();
 		
 		$profile = $form->createProfile( $existingProfile );
-		$profile->setLastModified( new DateTime( '@' . $this->frontController->getRequest()->getRequestTime() ) );
+		$now = $this->frontController->getRequest()->getRequestDateTime();
+		$profile->setLastModified( $now );
 		
 		$this->em->persist( $profile );
 		if( !$this->em->flushSafe() ) {
@@ -263,7 +266,6 @@ class Profile extends AbstractController {
 		$userHelper->setCurrentUser( $user );
 		
 		$keys = $links = array();
-		//TODO put in configuration file
 		$rows = 6;
 		$cols = 8;
 		$avatarSize = 50;
@@ -278,7 +280,7 @@ class Profile extends AbstractController {
 		$linkWithPlaceholder = $this->frontController->getViewHelper()->createHrefWithNonce( 'editAvatar', 'Profile', 'editAvatar', array( 'userId' => $userId, 'type' => 0, 'avatarKey' => '%avatarKey%' ) );
 		
 		$referrer = $this->frontController->getRequest()->getRequestedUrl();
-		$referrerField =  '<input type="hidden" name="' . Config::$instance->REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+		$referrerField =  '<input type="hidden" name="' . Config::get('referrer_field_name', '_http_referrer') . '" value="' . $referrer . '">';
 		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'userId', $userId );
@@ -317,7 +319,7 @@ class Profile extends AbstractController {
 		{// deletion of previous avatar image
 			if(1 == $user->getAvatarType()){
 				$fileToDelete = $user->getAvatarKey();
-				$pathToDelete = Config::$instance->AVATAR_DIR . $fileToDelete . '.jpg';
+				$pathToDelete = Config::getOrDie('avatar_dir') . $fileToDelete . '.jpg';
 				if(file_exists($pathToDelete)){
 					@unlink( $pathToDelete );
 				}
@@ -348,10 +350,6 @@ class Profile extends AbstractController {
 		$userId = $get->get( 'userId' );
 		
 		if( !isset( $_FILES['avatar_file'] ) ){
-//			$referrer = $this->frontController->getRequest()->getReferrer();
-//			$this->frontController->doRedirectUrl($referrer);
-//			$this->frontController->addMessage(__('Please upload an image' ), 'error');
-//			$this->frontController->doRedirectToReferrer();
 			$this->frontController->doRedirectToReferrer(__('Please upload an image' ), 'error');
 			return false;	
 		}
@@ -360,20 +358,20 @@ class Profile extends AbstractController {
 		$viewHelper->addJavascriptFile('jquery.js');
 		$viewHelper->addJavascriptFile('jcrop.js');
 		$viewHelper->addJavascriptFile('crop_interaction.js');
-		$viewHelper->addJavascriptVar('avatarImageMaxWidth', Config::$instance->AVATAR_ORIGINAL_MAX_WIDTH);
-		$viewHelper->addJavascriptVar('avatarImageMaxHeight', Config::$instance->AVATAR_ORIGINAL_MAX_HEIGHT);
-		$viewHelper->addJavascriptVar('avatarCropMaxWidth', Config::$instance->AVATAR_CROP_MAX_WIDTH);
-		$viewHelper->addJavascriptVar('avatarCropMaxHeight', Config::$instance->AVATAR_CROP_MAX_HEIGHT);
-		$viewHelper->addJavascriptVar('avatarCropMinWidth', Config::$instance->AVATAR_CROP_MIN_WIDTH);
-		$viewHelper->addJavascriptVar('avatarCropMinHeight', Config::$instance->AVATAR_CROP_MIN_HEIGHT);
+		$viewHelper->addJavascriptVar('avatarImageMaxWidth', Config::get('avatar_original_max_width', 650));
+		$viewHelper->addJavascriptVar('avatarImageMaxHeight', Config::get('avatar_original_max_height', 650));
+		$viewHelper->addJavascriptVar('avatarCropMaxWidth', Config::get('avatar_crop_max_width', 200));
+		$viewHelper->addJavascriptVar('avatarCropMaxHeight', Config::get('avatar_crop_max_height', 200));
+		$viewHelper->addJavascriptVar('avatarCropMinWidth', Config::get('avatar_crop_min_width', 15));
+		$viewHelper->addJavascriptVar('avatarCropMinHeight', Config::get('avatar_crop_min_height', 15));
 		$viewHelper->addCssFile('profile_avatar_crop.css');
 		$filename = $this->saveImage($_FILES['avatar_file']);
-		$imageLink = Config::$instance->TEMP_DIR . $filename;
+		$imageLink = Config::getOrDie('temp_dir') . $filename;
 		$tempKey = $filename;
 		$imageSrcLink = $imageLink;
 		
 		$http = Utils::isSSL() ? 'https://' : 'http://';
-		$imageLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::$instance->SITE_NAME . '/' . $imageLink;
+		$imageLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . $imageLink;
 		
 		$actionLink = $viewHelper->createHrefWithNonce('cropAvatar', 'Profile', 'cropImage', array('userId' => $userId, 'key' => $tempKey));
 		
@@ -387,6 +385,11 @@ class Profile extends AbstractController {
 		$response->setVar('userId', $userId);
 		$this->frontController->doDisplay('profile', 'displayCropImage', array('avatarKey' => $tempKey, 'userId' => $userId));
 	}
+	
+// #######################################################
+// #### All code below was inspired by jCrop examples ####
+// #### and wordpress techniques                      ####
+// #######################################################
 	// part to display the cropping image
 	
 	/**
@@ -395,19 +398,17 @@ class Profile extends AbstractController {
 	 */
 	private function saveImage($file){
 		if(!$this->verifyFile($file)){
-//			$referrer = $this->frontController->getRequest()->getReferrer();
-//			$this->frontController->doRedirectTo($referrer);
 			$this->frontController->doRedirectToReferrer();
 		}
-		$filename = $this->createRandomFilename(Config::$instance->TEMP_DIR, 6);
+		
+		$tempDir = Config::getOrDie('temp_dir');
+		$filename = $this->createRandomFilename($tempDir, 6);
 		if(false === $filename){
-//			$referrer = $this->frontController->getRequest()->getReferrer();
-//			$this->frontController->doRedirectUrl($referrer);
 			$this->frontController->doRedirectToReferrer();
 		}
 		
 		// without extension
-		$destination = Config::$instance->TEMP_DIR . $filename ;
+		$destination = $tempDir . $filename ;
 		$destWithExt = $this->createThumbIfNecessary($file['tmp_name'], $destination );
 		if(false === $destWithExt ){
 			$destWithExt = $this->writeToFilename($file, $destination );
@@ -424,12 +425,14 @@ class Profile extends AbstractController {
 	}
 	
 	private function verifyFile($file){
+		$maxAvatarFileSize = Config::get('max_avatar_file_size', 2560000);
+		$minAvatarFileSize = Config::get('min_avatar_file_size', 10);
 		$uploadErrors = array(
 			0 => __( 'There is no error, the file uploaded with success' ),
 			// max size is from php.ini
-			1 => __( 'Your image was bigger than the maximum allowed file size of: %size%' , array('%size%' => Utils::getNiceSize(Config::$instance->MAX_AVATAR_FILE_SIZE) ) ),
+			1 => __( 'Your image was bigger than the maximum allowed file size of: %size%' , array('%size%' => Utils::getNiceSize( $maxAvatarFileSize ) ) ),
 			// max size is from html form
-			2 => __( 'Your image was bigger than the maximum allowed file size of: %size%' , array('%size%' => Utils::getNiceSize(Config::$instance->MAX_AVATAR_FILE_SIZE) ) ),
+			2 => __( 'Your image was bigger than the maximum allowed file size of: %size%' , array('%size%' => Utils::getNiceSize( $maxAvatarFileSize ) ) ),
 			3 => __( 'The uploaded file was only partially uploaded' ),
 			4 => __( 'No file was uploaded' ),
 			6 => __( 'Missing a temporary folder' ),
@@ -440,44 +443,64 @@ class Profile extends AbstractController {
 			$this->frontController->addMessage( __( 'Your upload failed, please try again. Error was: %error%' , array('%error%' => $uploadErrors[$file['error']]) ) , 'error' );
 			return false;
 		}
-		if ( $file['size'] > Config::$instance->MAX_AVATAR_FILE_SIZE ){
-			$this->frontController->addMessage( __( 'The file you uploaded is too big. Please upload a file under %size%', array('%size%' => Utils::getNiceSize(Config::$instance->MAX_AVATAR_FILE_SIZE) ) ), 'error' );
+		if ( $file['size'] > $maxAvatarFileSize ){
+			$this->frontController->addMessage( __( 'The file you uploaded is too big. Please upload a file under %size%', array('%size%' => Utils::getNiceSize( $maxAvatarFileSize ) ) ), 'error' );
 			return false;
 		}
-		if ( $file['size'] <= Config::$instance->MIN_AVATAR_FILE_SIZE ){
-			$this->frontController->addMessage( __( 'The file you uploaded is too small. Please upload a file bigger than %size%', array('%size%' => Utils::getNiceSize(Config::$instance->MIN_AVATAR_FILE_SIZE) ) ), 'error' );
+		if ( $file['size'] <= $minAvatarFileSize ){
+			$this->frontController->addMessage( __( 'The file you uploaded is too small. Please upload a file bigger than %size%', array('%size%' => Utils::getNiceSize( $minAvatarFileSize ) ) ), 'error' );
 			return false;
 		}
 		if( !@is_uploaded_file( $file['tmp_name'] ) ){
 			$this->frontController->addMessage( __( 'Specified file failed upload test.' ), 'error' );
 			return false;
 		}
-		if ( ( !empty( $file['type'] ) &&
-				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ) ||
-				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['name'] ) ) ){
-			
-			// attempt to save the encoded files that comes from a proxy
-			$wasEncoded = false;	
-			$size = @getimagesize( $file['tmp_name'] );
-			if ( $size ){
-				list(,, $orig_type) = $size;
-				$file['type'] = image_type_to_mime_type($orig_type);
-				if(preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ){
-					// the encoded file could pass verification
-					Logger::getInstance()->debug("The file uploaded was encoded but real mime type was retrieved: {$file['type']}");
-					$wasEncoded = true;
-				}
+		
+		$size = @getimagesize( $file['tmp_name'] );
+		if ( $size ){
+			$realType = $size['mime'];
+			if(preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower( $realType ) ) ){
+				return true;
+			}
+			if(preg_match( '/(bmp)$/', strtolower( $realType ) ) ){
+				$this->frontController->addMessage( __( 'Your image is in BMP format (even if the extension was something else), we do not support BMP'), 'error' );
 			}else{
-				$orig_type = -1;
-			}
-			
-			if(!$wasEncoded){
-				Logger::getInstance()->log("The file uploaded was type=[{$file['type']}] and name=[{$file['name']}] and sectype=[$orig_type]");
 				$this->frontController->addMessage( __( 'Please upload only JPG, GIF or PNG photos.' ), 'error' );
-				return false;
 			}
+		}else{
+			$this->frontController->addMessage( __( 'Please upload an image ! (If the file you uploaded was an image, it was not recognized as such)' ), 'error' );
+			$realType = 'NotAnImage';
 		}
-		return true;
+		
+		Logger::getInstance()->log("The file uploaded was type=[{$file['type']}] and name=[{$file['name']}] and sectype=[$realType]");
+		return false;
+		
+//		if ( ( !empty( $file['type'] ) &&
+//				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ) ||
+//				!preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['name'] ) ) ){
+//			
+//			// attempt to save the encoded files that comes from a proxy
+//			$wasEncoded = false;	
+//			$size = @getimagesize( $file['tmp_name'] );
+//			if ( $size ){
+//				list(,, $orig_type) = $size;
+//				$file['type'] = image_type_to_mime_type($orig_type);
+//				if(preg_match( '/(jpe?g|gif|png|pjpe?g)$/', strtolower($file['type'] ) ) ){
+//					// the encoded file could pass verification
+//					Logger::getInstance()->debug("The file uploaded was encoded but real mime type was retrieved: {$file['type']}");
+//					$wasEncoded = true;
+//				}
+//			}else{
+//				$orig_type = -1;
+//			}
+//			
+//			if(!$wasEncoded){
+//				Logger::getInstance()->log("The file uploaded was type=[{$file['type']}] and name=[{$file['name']}] and sectype=[$orig_type]");
+//				$this->frontController->addMessage( __( 'Please upload only JPG, GIF or PNG photos.' ), 'error' );
+//				return false;
+//			}
+//		}
+//		return true;
 
 	}
 	
@@ -520,7 +543,6 @@ class Profile extends AbstractController {
 		// Move the file to the uploads dir
 		if ( false === @move_uploaded_file( $file['tmp_name'], $destfilename ) ){
 			return array('problem during move_uploader_file', $file['tmp_name'], $destfilename);
-//			return $upload_error_handler( $file, sprintf( __('The uploaded file could not be moved to %s.' ), $uploads['path'] ) );
 		}
 	
 		// Set correct file permissions
@@ -533,25 +555,19 @@ class Profile extends AbstractController {
 	}
 	
 	private function createThumbIfNecessary( $filepath, $destination ) {
-//		//	array( 'file' => $new_file, 'url' => $url, 'type' => $type )
-//		$bp->avatar_admin->original = $this->wp_handle_upload( $file['file'] );
-	
 		/* Get image size */
 		$size = @getimagesize( $filepath );
 	
+		$maxWidth = Config::get('avatar_original_max_width', 650);
+		$maxHeight = Config::get('avatar_original_max_height', 650);
+		
 		/* Check image size and shrink if too large */
-		if ( $size[0] > Config::$instance->AVATAR_ORIGINAL_MAX_WIDTH ) {
-//			$thumb = wp_create_thumbnail( $bp->avatar_admin->original['file'], BP_AVATAR_ORIGINAL_MAX_WIDTH );
-			$thumb = $this->createResizedImage( $filepath, Config::$instance->AVATAR_ORIGINAL_MAX_WIDTH, Config::$instance->AVATAR_ORIGINAL_MAX_WIDTH, $destination );
+		if ( $size[0] > $maxWidth || $size[1] > $maxHeight ) {
+			$thumb = $this->createResizedImage( $filepath, $maxWidth, $maxHeight, $destination );
 			
 			/* Check for thumbnail creation errors */
 			if(is_array($thumb)){
 				Logger::getInstance()->log_var('Error in thumbnail creation', $thumb);
-
-//				$referrer = $this->frontController->getRequest()->getReferrer();
-//				$this->frontController->doRedirectUrl($referrer);
-//				$this->frontController->addMessage(__('An error occurred during creation of thumbnail of the uploaded image'), 'error');
-//				$this->frontController->doRedirectToReferrer();
 				$this->frontController->doRedirectToReferrer(__('An error occurred during creation of thumbnail of the uploaded image'), 'error');
 				return false;
 			}
@@ -559,6 +575,7 @@ class Profile extends AbstractController {
 			@unlink($filepath);
 			return $thumb;
 		}
+		
 		return false;
 	}
 	
@@ -616,18 +633,18 @@ class Profile extends AbstractController {
 		if ( IMAGETYPE_GIF == $orig_type ) {
 			$destfilename = "{$destination}.gif";
 			if ( !imagegif( $newimage, $destfilename ) ){
-				return array('resize_path_invalid', __( 'Resize path invalid' ));
+				return array('resize_path_invalid', 'gif',  __( 'Resize path invalid' ));
 			}
 		} elseif ( IMAGETYPE_PNG == $orig_type ) {
 			$destfilename = "{$destination}.png";
 			if ( !imagepng( $newimage, $destfilename ) ){
-				return array('resize_path_invalid', __( 'Resize path invalid' ));
+				return array('resize_path_invalid', 'png', __( 'Resize path invalid' ));
 			}
 		} else {
 			// all other formats are converted to jpg
 			$destfilename = "{$destination}.jpg";
 			if ( !imagejpeg( $newimage, $destfilename, $jpeg_quality ) ){
-				return array('resize_path_invalid', __( 'Resize path invalid' ));
+				return array('resize_path_invalid', 'jpg',__( 'Resize path invalid' ));
 			}
 		}
 	
@@ -663,7 +680,7 @@ class Profile extends AbstractController {
 		$image = imagecreatefromstring( file_get_contents( $file ) );
 	
 		if ( !is_resource( $image ) )
-			return array('File &#8220;%s&#8221; is not an image.', $file);
+			return array('File is not an image.', $file);
 	
 		return $image;
 	}
@@ -811,13 +828,17 @@ class Profile extends AbstractController {
 		$userId = $get->get( 'userId' );
 		$tempKey = $get->get( 'key' );
 		
-		$temporaryFile = Config::$instance->TEMP_DIR . $tempKey;
-		$randomName = $this->createRandomFilename(Config::$instance->AVATAR_DIR, 12);
-		$destinationFile = Config::$instance->AVATAR_DIR . $randomName . '.jpg';
+		if (!extension_loaded('gd') && !extension_loaded('gd2') ){
+			trigger_error("GD is not loaded", E_USER_WARNING);
+	        return false;
+	    }
 		
+		$temporaryFile = Config::getOrDie('temp_dir') . $tempKey;
 		
+		$avatarDir = Config::getOrDie('avatar_dir');
+		$randomName = $this->createRandomFilename($avatarDir, 12);
+		$destinationFile = $avatarDir . $randomName . '.jpg';
 		
- // Code from jCrop example
 		$targ_w = $targ_h = 150;
 		$jpeg_quality = 90;
 	
@@ -828,7 +849,11 @@ class Profile extends AbstractController {
 				$img_r = imagecreatefrompng($src);
 				break;
 			case 'jpg': case 'jpeg':
+				try{
 				$img_r = imagecreatefromjpeg($src);
+				}catch(\Exception $e){
+					$e;
+				}
 				break;
 			case 'gif':
 				$img_r = imagecreatefromgif($src);
@@ -841,11 +866,16 @@ class Profile extends AbstractController {
 		}
 		$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
 
-		if($_POST['w'] < Config::$instance->AVATAR_CROP_MIN_WIDTH || $_POST['h'] < Config::$instance->AVATAR_CROP_MIN_HEIGHT){
+		$avatarCropMinWidth = Config::get('avatar_crop_min_width', 15);
+		$avatarCropMinHeigth = Config::get('avatar_crop_min_height', 15);
+		if($_POST['w'] < $avatarCropMinWidth || $_POST['h'] < $avatarCropMinHeigth){
 			$this->frontController->addMessage(__('The selection was too small'), 'error');
 			$this->frontController->doRedirectWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$userId) );
 		}
-		if($_POST['w'] > Config::$instance->AVATAR_CROP_MAX_WIDTH || $_POST['h'] > Config::$instance->AVATAR_CROP_MAX_HEIGHT){
+		
+		$avatarCropMaxWidth = Config::get('avatar_crop_max_width', 200);
+		$avatarCropMaxHeigth = Config::get('avatar_crop_max_height', 200);
+		if($_POST['w'] > $avatarCropMaxWidth || $_POST['h'] > $avatarCropMaxHeigth){
 			$this->frontController->addMessage(__('The selection was too big'), 'error');
 			$this->frontController->doRedirectWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$userId) );
 		}
@@ -859,10 +889,9 @@ class Profile extends AbstractController {
 		if($result){
 			$userRepo = $this->em->getRepository('User');
 			$user = $userRepo->find($userId);
-			//TODO remove previous one
 			if(1 == $user->getAvatarType()){
 				$fileToDelete = $user->getAvatarKey();
-				$pathToDelete = Config::$instance->AVATAR_DIR . $fileToDelete . '.jpg';
+				$pathToDelete = $avatarDir . $fileToDelete . '.jpg';
 				if(file_exists($pathToDelete)){
 					@unlink( $pathToDelete );
 				}

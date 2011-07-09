@@ -1,5 +1,6 @@
 <?php
 namespace core;
+require_once 'i18n/language.php';
 
 use core\http\Request;
 
@@ -52,20 +53,8 @@ use Doctrine\Common;
 
 use Exception;
 
-require_once 'i18n/language.php';
-
+use DateTimeZone;
 class FrontController {
-//	private static $INIT = false;
-//	public static $JS_DIR = null;
-//	public static $IMG_DIR = null;
-//	public static $TEMP_DIR = null;
-//	public static $AVATAR_DIR = null;
-//	public static $CSS_DIR = null;
-//	public static $CONTROLLER_DIR = null;
-//	public static $VIEW_DIR = null;
-//	//TODO must be loaded by configuration
-//	public static $SITE_NAME = 'SocialPortal';
-	
 	/** @var core\FrontController */
 	private static $instance = null;
 	
@@ -103,16 +92,26 @@ class FrontController {
 	/** @var bool Determine if the display function was called for the first time or not */
 	private $firstCallDisplay;
 	
+	/** @var DateTimeZone */
+	private $dateTimeZone;
+	
 	private function __construct() {
-		if(null === Config::$instance){
-			new Config();
-		}
+		Config::create('_config' . DIRECTORY_SEPARATOR . 'config.ini');
 		
 		$this->em = DoctrineLink::getEntityManager();
-		$this->request = Request::createFromGlobals();
+		
+		$defaultTimeZone = "Europe/Zurich";
+		$timezone = Config::get('timezone', $defaultTimeZone);
+//		if(!date_default_timezone_set( $timezone )){
+//			Logger::getInstance()->log("The timezone passed as argument is not valid [$timezone]");	
+//			$this->dateTimeZone = new DateTimeZone($defaultTimeZone);
+//		}else{
+			$this->dateTimeZone = new DateTimeZone($timezone);
+//		}
+
+		$this->request = Request::createFromGlobals($this->dateTimeZone);
 		
 		$this->request->setSession( new Session( new NativeSessionStorage( array( 'lifetime' => 0 ) ) ) );
-//		$this->request->setSession( new Session( new NativeSessionStorage( array( 'lifetime' => 3600 ) ) ) );
 		$this->request->getSession()->start();
 		
 		$this->response = new Response();
@@ -120,7 +119,6 @@ class FrontController {
 		$this->userManager = new UserManager( $this->request, new UserEntityProvider( $this->em ) );
 		$this->firewall = new Firewall( $this, $this->userManager );
 		$this->firstCallDisplay = true;
-	
 	}
 	
 	public static function getInstance() {
@@ -153,11 +151,9 @@ class FrontController {
 		if($_FILES){
 			Logger::getInstance()->debug_var( '$_FILES', $_FILES );
 		}
-		
 		// [Authentification] check who is the current user
 		// could lead to exit ? / redirect ? Not for the moment
 		$this->user = $this->firewall->getAuthentificatedUser();
-		
 		$this->doAction( $module, $action );
 		exit();
 	}
@@ -186,7 +182,7 @@ class FrontController {
 	public function doAction($module, $action = '') {
 		$action = $action ? $action : 'index';
 		$name = ucfirst( $module );
-		$className = Config::$instance->CONTROLLER_DIR . $name;
+		$className = Config::getOrDie('controller_dir') . $name;
 		try {
 			if( !isset( $this->alreadyIncludedController[$name] ) ) {
 				// find the corresponding controller
@@ -263,7 +259,9 @@ class FrontController {
 	 * @exit
 	 */
 	public function doRedirectToReferrer($message=false, $type='info', $noLoopControl = false){
-		$this->addMessage($message, $type);
+		if(false !== $message){
+			$this->addMessage($message, $type);
+		}
 		$url = $this->getRequest()->getReferrer();
 		$this->doRedirectUrl($url, $noLoopControl = false);
 	}
@@ -309,7 +307,8 @@ class FrontController {
 	 */
 	public function doDisplay($module, $action = null, array $addVars = array()) {
 		$module = strtolower( $module );
-		$fileName = Config::$instance->VIEW_DIR . $module;
+		$viewDir = Config::getOrDie('view_dir');
+		$fileName = $viewDir . $module;
 		if( $action ) {
 			$fileName .= DIRECTORY_SEPARATOR . $action;
 		}
@@ -336,13 +335,13 @@ class FrontController {
 			// header_footer.css is used for the common part like header / footer
 			$this->getResponse()->addCssFile( 'header_footer.css' );
 			
-			$headerFileName = Config::$instance->VIEW_DIR . 'header';
+			$headerFileName = $viewDir . 'header';
 			$headerFileName = $this->loader->getFileName( $headerFileName, '.phtml' );
 			if( false === $headerFileName ) {
 				$this->generateException( new PageNotFoundException( $headerFileName ) );
 			}
 			
-			$footerFileName = Config::$instance->VIEW_DIR . 'footer';
+			$footerFileName = $viewDir . 'footer';
 			$footerFileName = $this->loader->getFileName( $footerFileName, '.phtml' );
 			if( false === $footerFileName ) {
 				$this->generateException( new PageNotFoundException( $footerFileName ) );
@@ -490,6 +489,11 @@ class FrontController {
 	/** @return EntityManager */
 	public function getEntityManager(){
 		return $this->em;
+	}
+	
+	/** @return DateTimeZone */
+	public function getDateTimeZone(){
+		return $this->dateTimeZone;	
 	}
 	
 	/**

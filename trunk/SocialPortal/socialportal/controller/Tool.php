@@ -55,6 +55,9 @@ class Tool extends AbstractController {
 			if( in_array( $name, $parentMethods ) ) {
 				continue;
 			}
+			if( false === strpos($name, 'Action')){
+				continue;
+			}
 			$name = str_replace( 'Action', '', $name );
 			$url = $this->frontController->getViewHelper()->createHref( $currentClass, $name );
 			$links[$name] = $url;
@@ -159,7 +162,7 @@ class Tool extends AbstractController {
 	public function createBaseUserAction() {
 		$anonUser = UserManager::getAnonymousUser();
 		$nullUser = UserManager::getNullUser();
-		$admin = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, 0 );
+		$admin = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, time() );
 		$this->em->persist( $nullUser );
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
@@ -167,6 +170,17 @@ class Tool extends AbstractController {
 			$this->frontController->addMessage( __( 'Creation of the default users complete' ), 'correct' );
 		} else {
 			$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
+		}
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
+	public function updateDatabaseAction(){
+		include './scripts/create_database.php';
+		$result = 1;
+		if( $result ) {
+			$this->frontController->addMessage( __( 'Creation of database complete' ), 'correct' );
+		} else {
+			$this->frontController->addMessage( __( 'Creation of database failed' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
@@ -195,7 +209,8 @@ class Tool extends AbstractController {
 			} else {
 				$base->setPoster( $this->frontController->getCurrentUser() );
 			}
-			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i) );
+			
+			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i), $this->frontController->getDateTimeZone() );
 			$base->setStartTime( $now );
 			$base->setTime( $now );
 			$base->setTagCount( 0 );
@@ -240,7 +255,7 @@ class Tool extends AbstractController {
 				$baseTopic->setPoster( $this->frontController->getCurrentUser() );
 				$baseTopic->setLastposter( $this->frontController->getCurrentUser() );
 			}
-			$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime() );
+			$now = new \DateTime( '@' . $this->frontController->getRequest()->getRequestTime(), $this->frontController->getDateTimeZone() );
 			$baseTopic->setStartTime( $now );
 			$baseTopic->setTime( $now );
 			$baseTopic->setTagCount( 0 );
@@ -265,7 +280,7 @@ class Tool extends AbstractController {
 			} else {
 				$basePost->setPoster( $this->frontController->getCurrentUser() );
 			}
-			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i) );
+			$now = new \DateTime( '@' . ($this->frontController->getRequest()->getRequestTime()+$i), $this->frontController->getDateTimeZone() );
 			$basePost->setTime( $now );
 			
 			$post->setPostbase( $basePost );

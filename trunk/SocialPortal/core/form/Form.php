@@ -105,8 +105,7 @@ class Form implements iInsertable {
 	/** @return string Url */
 	public function getCurrentReferrerUrl() {
 		if( !$this->currentReferrerUrl ) {
-//			$this->currentReferrerUrl = $_REQUEST[self::$REFERRER_FIELD_NAME];
-			$this->currentReferrerUrl = $_REQUEST[Config::$instance->REFERRER_FIELD_NAME];
+			$this->currentReferrerUrl = $_REQUEST[Config::get('referrer_field_name', '_http_referrer')];
 		}
 		return $this->currentReferrerUrl;
 	}
@@ -136,8 +135,7 @@ class Form implements iInsertable {
 	public function _insertReferrerField() {
 		$referrer = $this->getFutureReferrerUrl();
 		// add this variable into an hidden field
-//		echo '<input type="hidden" name="' . self::$REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
-		echo '<input type="hidden" name="' . Config::$instance->REFERRER_FIELD_NAME . '" value="' . $referrer . '">';
+		echo '<input type="hidden" name="' . Config::get('referrer_field_name', '_http_referrer') . '" value="' . $referrer . '">';
 	}
 	
 	public function insertNonceField() {

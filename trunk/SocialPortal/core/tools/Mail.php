@@ -6,8 +6,8 @@ use core\Config;
 
 class Mail {
 	public static function send($to, $subject, $message, array $headers = array()) {
-		@ini_set( 'SMTP', Config::$instance->SMTP );
-		@ini_set( 'sendmail_from', Config::$instance->SEND_MAIL_FROM );
+		@ini_set( 'SMTP', Config::getOrDie('mail_smtp') );
+		@ini_set( 'sendmail_from', Config::getOrDie('mail_from') );
 		
 		$headersClean = implode( '\r\n', array_map( function ($key, $value) {
 			return "$key:$value";

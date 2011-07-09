@@ -21,6 +21,9 @@ use core\http\bags\FileBag;
 use core\http\bags\ServerBag;
 use core\http\bags\HeaderBag;
 
+use DateTime;
+use DateTimeZone;
+
 class Request {
 	/** @var core\http\bags\ParameterBag */
 	public $attributes;
@@ -64,6 +67,9 @@ class Request {
 	/** @var integer unix timestamp at the arrival of that request */
 	private $requestTime;
 	
+	/** @var DateTime */
+	private $requestDateTime;
+	
 	/**
 	 * Constructor.
 	 *
@@ -74,25 +80,7 @@ class Request {
 	 * @param array  $files      The FILES parameters
 	 * @param array  $server     The SERVER parameters
 	 */
-	public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array()) {
-		//		$this->initialize($query, $request, $attributes, $cookies, $files, $server, $content);
-		//	}
-		//
-		//	/**
-		//	 * Sets the parameters for this request.
-		//	 *
-		//	 * This method also re-initializes all properties.
-		//	 *
-		//	 * @param array  $query      The GET parameters
-		//	 * @param array  $request    The POST parameters
-		//	 * @param array  $attributes The request attributes (parameters parsed from the PATH_INFO, ...)
-		//	 * @param array  $cookies    The COOKIE parameters
-		//	 * @param array  $files      The FILES parameters
-		//	 * @param array  $server     The SERVER parameters
-		//	 */
-		//	public function initialize(array $query = array(), 
-		//		array $request = array(), array $attributes = array(), array $cookies = array(),
-		// array $files = array(), array $server = array(), $content = null){
+	public function __construct(array $query = array(), array $request = array(), array $attributes = array(), array $cookies = array(), array $files = array(), array $server = array(), DateTimeZone $timezone) {
 		$this->query = new ParameterBag( $query );
 		$this->request = new ParameterBag( $request );
 		$this->attributes = new ParameterBag( $attributes );
@@ -100,9 +88,16 @@ class Request {
 //		$this->files = new FileBag( $files );
 		$this->server = new ServerBag( $server );
 		$this->headers = new HeaderBag( $this->server->getHeaders() );
-		$this->requestTime = time();
-	
-		//		$this->session = new Session( new NativeSessionStorage( array( 'lifetime' => 3600 ) ) );
+		
+//		$test01 = new DateTime('@0');
+//		$timezon2 = date_default_timezone_get();
+		$this->requestTime = isset($server['REQUEST_TIME']) ? $server['REQUEST_TIME'] : time();
+		$this->requestDateTime = new DateTime('@'.$this->requestTime, $timezone);
+//		$test1 = new DateTime('@'.time());
+//		$tt = $test1->format( DATE_RFC822);
+//		$test12 = new DateTime('@'.time(), $timezone);
+//		$tt2 = $test12->format( DATE_RFC822);
+//		$test2 = new DateTime('@'.$this->requestTime, new DateTimeZone('europe/zurich'));
 	}
 	
 	/**
@@ -110,13 +105,17 @@ class Request {
 	 *
 	 * @return Request A new request
 	 */
-	public static function createFromGlobals() {
-		return new static( $_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER );
+	public static function createFromGlobals(DateTimeZone $timezone) {
+		return new static( $_GET, $_POST, array(), $_COOKIE, $_FILES, $_SERVER, $timezone);
 	}
 	
 	/** @return unix time at the arrival of the request */
 	public function getRequestTime() {
 		return $this->requestTime;
+	}
+	/** @return unix time at the arrival of the request */
+	public function getRequestDateTime() {
+		return $this->requestDateTime;
 	}
 	
 	/** @return the requested url */
@@ -194,8 +193,8 @@ class Request {
 		}
 
 		// +1 for the / at the end
-//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
-		$requestPath = substr( $path, strpos( $path, Config::$instance->SITE_NAME ) + strlen( Config::$instance->SITE_NAME ) + 1 );
+		$siteName = Config::getOrDie('site_name');
+		$requestPath = substr( $path, strpos( $path, $siteName) + strlen( $siteName ) + 1 );
 		
 		if( $requestPath ) {
 			$tokens = explode( '/', $requestPath );
@@ -210,7 +209,6 @@ class Request {
 		
 		// same format as the url builder in frontController
 		$this->requestedUrl = $requestUrl;
-//		$this->requestedUrl = '/' . FrontController::$SITE_NAME . '/' . $requestUrl;
 		
 		// debug mode in eclipse
 		if( 'index.php' == $this->module ) {
@@ -242,8 +240,8 @@ class Request {
 		}
 		
 		// +1 for the / at the end
-//		$requestPath = substr( $path, strpos( $path, FrontController::$SITE_NAME ) + strlen( FrontController::$SITE_NAME ) + 1 );
-		$requestPath = substr( $path, strpos( $path, Config::$instance->SITE_NAME ) + strlen( Config::$instance->SITE_NAME ) + 1 );
+		$siteName = Config::getOrDie('site_name');
+		$requestPath = substr( $path, strpos( $path, $siteName) + strlen( $siteName ) + 1 );
 		if( $requestPath ) {
 			$tokens = explode( '/', $requestPath );
 			$this->module = array_shift( $tokens );
@@ -265,10 +263,6 @@ class Request {
 		if( '' == $this->action ) {
 			$this->action = 'index';
 		}
-		//TODO remove after debug, we need to setup $gets!!!
-		if($this->parameters){
-			Logger::getInstance()->debug_var('There are some get attributes in the url !', $this->parameters);
-		}
 		Logger::getInstance()->log( "Request path: {$this->module} :: {$this->action} :: " . ($this->parameters ? print_r( $this->parameters, true ) : '') );
 		
 		return array( $this->module, $this->action);
@@ -289,7 +283,7 @@ class Request {
 	
 	/** @return string The url that was asked, false if not specified */
 	public function getReferrer() {
-		$refFieldName = Config::$instance->REFERRER_FIELD_NAME;
+		$refFieldName = Config::get('_referrer_field_name', '_http_referrer');
 		$ref = $this->request->get( $refFieldName, null );
 		$ref = $ref ? $ref : $this->query->get( $refFieldName, null );
 		return $ref;

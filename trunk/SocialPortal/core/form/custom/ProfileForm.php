@@ -121,7 +121,7 @@ class ProfileForm extends Form {
 		}
 		$birth = $this->data['profile_birth'];
 		if( $birth ) {
-			$birthDate = new DateTime( '@' . $birth );
+			$birthDate = new DateTime( '@' . $birth, $this->frontController->getDateTimeZone() );
 			$profile->setBirth( $birthDate );
 			
 			$dateDisplay = $this->data['profile_date_display'];

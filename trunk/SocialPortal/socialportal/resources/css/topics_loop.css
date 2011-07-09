@@ -1,5 +1,11 @@
 @CHARSET "ISO-8859-1";
 
+#vote_box{
+	margin-top: -15px;
+	position: relative;
+	text-align: right;
+}
+
 ul#forums-header {
 	padding: 10px;
 	/*margin: 0 auto;*/

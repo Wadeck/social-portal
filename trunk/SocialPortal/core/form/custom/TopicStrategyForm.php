@@ -93,8 +93,7 @@ class TopicStrategyForm extends AbstractTopicForm {
 			$list[$value->getPosition()] = $value;
 		}
 		
-		$now = $this->frontController->getRequest()->getRequestTime();
-		$now = new DateTime('@'.$now);
+		$now = $this->frontController->getRequest()->getRequestDateTime();
 		
 		$addList = $this->data['topic_list'];
 		$addList = array_map(function($val){return Utils::getCleanText($val);}, $addList);
