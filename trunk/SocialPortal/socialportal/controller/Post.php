@@ -1,9 +1,9 @@
 <?php
 
 namespace socialportal\controller;
-use core\user\UserHelper;
+use socialportal\common\topic\TypeCenter;
 
-use core\form\custom\PostFormFactory;
+use core\user\UserHelper;
 
 use core\templates\MessageInsertTemplate;
 
@@ -14,8 +14,6 @@ use core\tools\Paginator;
 use socialportal\repository\ForumMetaRepository;
 
 use core\user\UserManager;
-
-use core\tools\TopicType;
 
 use core\debug\Logger;
 
@@ -41,16 +39,18 @@ class Post extends AbstractController {
 	 */
 	public function displayFormAction() {
 		$get = $this->frontController->getRequest()->query;
-		$topicType = $get->get( 'typeId' );
+		$typeId = $get->get( 'typeId' );
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
 		$postId = $get->get( 'postId', false );
 		
 		// retrieve information and then pass to the form
 		// if existing information, we put as action "edit" instead of create
-		$form = PostFormFactory::createForm( $topicType, $this->frontController );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$form = $typeManager->getPostForm($this->frontController);
+		
 		if( !$form ) {
-			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $typeId ) ), 'error' );
 			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 		}
 		
@@ -58,7 +58,7 @@ class Post extends AbstractController {
 		$nameAction = '';
 		$response = $this->frontController->getResponse();
 		
-		$getArgs = array( 'typeId' => $topicType, 'forumId' => $forumId, 'topicId' => $topicId );
+		$getArgs = array( 'typeId' => $typeId, 'forumId' => $forumId, 'topicId' => $topicId );
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $postId ) {
 			// we edit a post, cause we receive a post id
@@ -66,8 +66,8 @@ class Post extends AbstractController {
 			$currentPost = $postRepo->findFullPost( $postId );
 			
 			// check if the class correspond to what is attempted !
-			$customClass = TopicType::translateTypeIdToPostName( $topicType );
-			if( !$currentPost instanceof $customClass ) {
+			$customPostClass = $typeManager->getPostClassName();
+			if( !$currentPost instanceof $customPostClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 				$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 			}
@@ -115,7 +115,9 @@ class Post extends AbstractController {
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
 		
-		$form = PostFormFactory::createForm( $typeId, $this->frontController );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$form = $typeManager->getPostForm($this->frontController);
+
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
@@ -167,7 +169,9 @@ class Post extends AbstractController {
 		$forumId = $get->get( 'forumId' );
 		$topicId = $get->get( 'topicId' );
 		
-		$form = PostFormFactory::createForm( $typeId, $this->frontController );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$form = $typeManager->getPostForm($this->frontController);
+
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
@@ -180,8 +184,8 @@ class Post extends AbstractController {
 		}
 		
 		// check if the forum accept the custom type proposed 
-		$customClass = TopicType::translateTypeIdToPostName( $typeId );
-		if( !$existing instanceof $customClass ) {
+		$customPostClass = $typeManager->getPostClassName();
+		if( !$existing instanceof $customPostClass ) {
 			// TODO redirection
 			$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 			$this->frontController->doRedirect( 'home' );
@@ -204,7 +208,6 @@ class Post extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( __( 'The edition of the topic was a success' ), 'correct' );
-		// TODO redirect to the edited post !
 		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId, 'positionTarget' => $position ), "post-$postId" );
 	}
 	

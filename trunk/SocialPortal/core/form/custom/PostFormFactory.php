@@ -16,6 +16,12 @@ use core\FrontController;
 
 use core\form\Form;
 
+/**
+ * 
+ * Enter description here ...
+ * @author Wadeck
+ * @deprecated
+ */
 class PostFormFactory {
 	/** @return iTopicForm corresponding to the topic type passed as argument */
 	public static function createForm($typeId, FrontController $frontController) {

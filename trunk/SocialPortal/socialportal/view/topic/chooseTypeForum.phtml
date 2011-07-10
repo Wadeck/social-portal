@@ -6,23 +6,26 @@ $forum = $vars['forum'];
 $acceptedTopics = $vars['acceptedTopics'];
 ?>
 <div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forum->getId() ));
+$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId' => $forum->getId() ));
 ?>"><?php echo __('Discussions'); ?></a></div>
 
 <h3>Choose the type of topic</h3>
 <div class="rounded-box padded margined">
 <h4><?php echo $forum->getName(); ?></h4>
-<?php foreach( $acceptedTopics as $topicType ) : ?>
+<?php foreach( $acceptedTopics as $typeManager ) :
+	$topicName = $typeManager->getSimpleName();
+	?>
 	<a href="<?php
-	$vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array( 'typeId' => $topicType->getId(), 'forumId' => $forum->getId() ) );
-	?>"
-class="button"
-title="<?php
-	echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
-	?>"><?php
-	echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
-	?></a>
-<?php endforeach ?>
+		$vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array( 'typeId' => $typeManager->getTypeId(), 'forumId' => $forum->getId() ) ); ?>"
+		class="button"
+		title="<?php
+//			echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() )  );
+			echo $topicName;
+			?>"><?php
+//			echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
+			echo $topicName;
+			?></a>
+	<?php endforeach ?>
 </div>
 <div id="links"><a class="button" href="<?php
 $vars['helper']->insertHref( 'Topic', 'chooseType' );

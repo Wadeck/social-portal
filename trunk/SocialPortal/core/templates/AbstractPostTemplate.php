@@ -29,7 +29,9 @@ abstract class AbstractPostTemplate implements iInsertable{
 	public function setEntityManager(EntityManager $em){
 		$this->em = $em;
 	}
-	
+	/**
+	 * @param array of CustomPost $posts
+	 */
 	public function setPosts(array $posts){
 		$this->posts = $posts;
 	}

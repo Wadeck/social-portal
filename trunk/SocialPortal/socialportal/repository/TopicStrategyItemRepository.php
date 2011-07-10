@@ -2,8 +2,6 @@
 namespace socialportal\repository;
 use socialportal\model\TopicStrategyItem;
 
-use core\tools\TopicType;
-
 use socialportal\model\TopicBase;
 
 use core\user\UserManager;

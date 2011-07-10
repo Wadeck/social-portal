@@ -1,9 +1,10 @@
 <?php
 
 namespace socialportal\controller;
-use core\templates\ModuleInsertTemplate;
 
-use core\form\custom\PostFormFactory;
+use socialportal\common\topic\TypeCenter;
+
+use core\templates\ModuleInsertTemplate;
 
 use core\templates\MessageInsertTemplate;
 
@@ -14,10 +15,6 @@ use core\tools\Paginator;
 use socialportal\repository\ForumMetaRepository;
 
 use core\user\UserManager;
-
-use core\form\custom\TopicFormFactory;
-
-use core\tools\TopicType;
 
 use core\debug\Logger;
 
@@ -51,8 +48,9 @@ class Topic extends AbstractController {
 			foreach( $forums as $f ) {
 				$acceptedTopics = $metaRepo->getAcceptableTopics( $f->getId() );
 				array_walk( $acceptedTopics, function (&$item, $key) {
-					$item = TopicType::createById( $item );
+					$item = TypeCenter::getTypeManager( $item );
 				} );
+				
 				$topicsFor[$f->getId()] = $acceptedTopics;
 			}
 		}
@@ -82,7 +80,7 @@ class Topic extends AbstractController {
 		$metaRepo = $this->em->getRepository( 'ForumMeta' );
 		$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
 		array_walk( $acceptedTopics, function (&$item, $key) {
-			$item = TopicType::createById( $item );
+			$item = TypeCenter::getTypeManager( $item );
 		} );
 		
 		$this->frontController->getResponse()->setVar( 'forum', $forum );
@@ -160,14 +158,16 @@ class Topic extends AbstractController {
 		$getArgs['p'] = $page_num;
 		$permalinkPost = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		
+		$typeManager = TypeCenter::getTypeManager( $typeId );
+		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'commentForm', $commentForm );
 		$response->setVar( 'pagination', $pagination );
 		$response->setVar( 'posts', $posts );
 		$response->setVar( 'topic', $topic );
 		$response->setVar( 'forumId', $forumId );
-		$response->setVar( 'topicTemplate', TopicType::getTopicTemplate( $typeId, $this->frontController, $this->em, $topic, $permalinkTopic ) );
-		$response->setVar( 'postsTemplate', TopicType::getPostTemplate( $typeId, $this->frontController, $this->em, $posts, $permalinkPost ) );
+		$response->setVar( 'topicTemplate', $typeManager->getTopicTemplate($this->frontController, $this->em, $topic, $permalinkTopic ) );
+		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $posts, $permalinkPost ) );
 		
 		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
 			// optimization if we use permalink before
@@ -202,27 +202,28 @@ class Topic extends AbstractController {
 	 */
 	public function displayFormAction() {
 		$get = $this->frontController->getRequest()->query;
-		$topicType = $get->get( 'typeId' );
+		$typeId = $get->get( 'typeId' );
 		$forumId = $get->get( 'forumId' );
 		$topicId = $get->get( 'topicId', false );
 		
 		// check if the forum accept the custom type proposed 
 		$forumMeta = $this->em->getRepository( 'ForumMeta' );
-		if( !$forumMeta->isAcceptedBy( $forumId, $topicType ) ) {
+		if( !$forumMeta->isAcceptedBy( $forumId, $typeId ) ) {
 			$this->frontController->addMessage( __( 'This forum does not accept the type of topic you passed' ), 'error' );
 			$this->frontController->doRedirect( 'home' );
 		}
 		
 		// retrieve information and then pass to the form
 		// if existing information, we put as action "edit" instead of create
-		$form = TopicFormFactory::createForm( $topicType, $this->frontController );
-		if( !$form ) {
-			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $topicType ) ), 'error' );
+		$typeManager = TypeCenter::getTypeManager( $typeId );
+		if( null === $typeManager ) {
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $typeId ) ), 'error' );
 			$this->frontController->doRedirect( 'Topic', 'chooseType' );
 		}
+		$form = $typeManager->getTopicForm( $this->frontController );
 		$module = '';
 		
-		$getArgs = array( 'typeId' => $topicType, 'forumId' => $forumId );
+		$getArgs = array( 'typeId' => $typeId, 'forumId' => $forumId );
 		
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $topicId ) {
@@ -230,8 +231,8 @@ class Topic extends AbstractController {
 			$currentTopic = $topicRepo->findFullTopic( $topicId );
 			
 			// check if the class correspond to what is attempted !
-			$customClass = TopicType::translateTypeIdToName( $topicType );
-			if( !$currentTopic instanceof $customClass ) {
+			$customTopicClass = $typeManager->getTopicClassName();
+			if( !$currentTopic instanceof $customTopicClass ) {
 				$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 				$this->frontController->doRedirect( 'forum', 'viewAll' );
 			}
@@ -274,7 +275,12 @@ class Topic extends AbstractController {
 			$this->frontController->doRedirectUrl( 'home' );
 		}
 		
-		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		if( null === $typeManager ) {
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $typeId ) ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'chooseType' );
+		}
+		$form = $typeManager->getTopicForm( $this->frontController );
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
@@ -318,7 +324,6 @@ class Topic extends AbstractController {
 		// increment the number of topic in the forum parent
 		$this->em->getRepository( 'Forum' )->incrementTopicCount( $forumId );
 		
-		//TODO redirection vers le topic en question
 		$this->frontController->addMessage( __( 'The creation of the topic was a success' ), 'correct' );
 		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
@@ -334,7 +339,12 @@ class Topic extends AbstractController {
 		$topicId = $get->get( 'topicId' );
 		$forumId = $get->get( 'forumId' );
 		
-		$form = TopicFormFactory::createForm( $typeId, $this->frontController );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		if( null === $typeManager ) {
+			$this->frontController->addMessage( __( 'Invalid type of topic, (%type%) is unknown', array( '%type%' => $typeId ) ), 'error' );
+			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topidId' => $topicId, 'forumId' => $forumId ) );
+		}
+		$form = $typeManager->getTopicForm( $this->frontController );
 		$form->setupWithArray( true );
 		$form->checkAndPrepareContent();
 		
@@ -346,8 +356,8 @@ class Topic extends AbstractController {
 		}
 		
 		// check if the forum accept the custom type proposed 
-		$customClass = TopicType::translateTypeIdToName( $typeId );
-		if( !$existing instanceof $customClass ) {
+		$customTopicClass = $typeManager->getTopicClassName();
+		if( !$existing instanceof $customTopicClass ) {
 			$this->frontController->addMessage( __( 'The given id does not correspond to the correct topic type' ), 'error' );
 			$this->frontController->doRedirect( 'topic', 'displayForm' );
 		}

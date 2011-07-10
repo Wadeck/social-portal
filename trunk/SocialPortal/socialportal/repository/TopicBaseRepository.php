@@ -1,7 +1,7 @@
 <?php
 namespace socialportal\repository;
 
-use core\tools\TopicType;
+use socialportal\common\topic\TypeCenter;
 
 use socialportal\model\TopicBase;
 
@@ -25,9 +25,6 @@ class TopicBaseRepository extends EntityRepository {
 		$dql = $this->_em->createQuery( 'SELECT t FROM TopicBase t WHERE t.id = :id' );
 		$dql->setMaxResults( 1 )->setParameter( 'id', $topicId );
 		$result = $dql->getSingleResult();
-		//		$qb = $this->_em->createQueryBuilder();
-		//		$qb->select( 't' )->from( 'socialportal\model\TopicBase', 't' )->where( 't.id = :id' )->setParameter( 'id', $topicId )->setMaxResults( 1 );
-		//		$results = $qb->getQuery()->getResult();
 		if( $result ) {
 			return $result;
 		} else {
@@ -75,16 +72,14 @@ class TopicBaseRepository extends EntityRepository {
 		if( !$topicBase ) {
 			return false;
 		}
-		$customType = $topicBase->getCustomType();
-		$customType = TopicType::translateTypeIdToName( $customType );
+		$typeId = $topicBase->getCustomType();
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customTopicClass = $typeManager->getTopicClassName();
 		
-		$dql = $this->_em->createQuery( "SELECT ct FROM $customType ct WHERE ct.topicbase = :id" );
+		$dql = $this->_em->createQuery( "SELECT ct FROM $customTopicClass ct WHERE ct.topicbase = :id" );
 		$dql->setParameter( 'id', $topicId )->setMaxResults( 1 );
 		$result = $dql->getSingleResult();
 		
-		//		$qb = $this->_em->createQueryBuilder();
-		//		$qb->select( 'ct' )->from( $customType, 'ct' )->where( 'ct.topicbase = :id' )->setParameter( 'id', $topicId )->setMaxResults( 1 );
-		//		$results = $qb->getQuery()->getResult();
 		if( $result ) {
 			$fullTopic = $result;
 			$fullTopic->setTopicbase( $topicBase );
@@ -97,6 +92,7 @@ class TopicBaseRepository extends EntityRepository {
 	/** Warning, after this call the topic entity must be reloaded to have the correct value */
 	public function incrementPostCount($topicId, $num = 1) {
 		$qb = $this->_em->createQueryBuilder();
+		//TODO transform into createQuery directly
 		$qb->update( 'socialportal\model\TopicBase', 't' )->set( 't.numPosts', 't.numPosts+?1' )->where( 't.id = ?2' )->setParameter( 1, $num )->setParameter( 2, $topicId );
 		$q = $qb->getQuery();
 		$p = $q->execute();
@@ -105,20 +101,21 @@ class TopicBaseRepository extends EntityRepository {
 	/**
 	 * Used to retrieve the page number where the post will be displayed, given the num_per_page parameters
 	 * @param int $topicId
-	 * @param int $topicTypeId
-	 * @param int $topicPosition
+	 * @param int $typeId
+	 * @param int $postPosition
 	 * @param int $num_per_page
 	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 */
-	public function getPostPagePerPosition($topicId, $topicTypeId, $topicPosition, $num_per_page, $withDeleted = false) {
-		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
+	public function getPostPagePerPosition($topicId, $typeId, $postPosition, $num_per_page, $withDeleted = false) {
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customPostClass = $typeManager->getPostClassName();
 		if($withDeleted){
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.position < :pos" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id AND p.position < :pos" );
 		}else{
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.position < :pos" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.position < :pos" );
 		}
 		$dql->setParameter( 'id', $topicId );
-		$dql->setParameter( 'pos', $topicPosition );
+		$dql->setParameter( 'pos', $postPosition );
 		$totalBefore = $dql->getSingleScalarResult();
 		// to count the given posts
 		$totalBefore += 1;
@@ -128,17 +125,18 @@ class TopicBaseRepository extends EntityRepository {
 	/**
 	 * Used to retrieve the page number where the post will be displayed, given the num_per_page parameters
 	 * @param int $topicId
-	 * @param int $topicTypeId
+	 * @param int $typeId
 	 * @param DateTime $topicTime 
 	 * @param int $num_per_page
 	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 */
-	public function getPostPagePerTime($topicId, $topicTypeId, $topicTime, $num_per_page, $withDeleted = false) {
-		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
+	public function getPostPagePerTime($topicId, $typeId, $topicTime, $num_per_page, $withDeleted = false) {
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customPostClass = $typeManager->getPostClassName();
 		if($withDeleted){
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.time < :time" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id AND p.time < :time" );
 		}else{
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.time < :time" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id AND p.isDeleted = 0 AND p.time < :time" );
 		}
 		$dql->setParameter( 'id', $topicId );
 		$dql->setParameter( 'time', $topicTime, \Doctrine\DBAL\Types\Type::DATETIME );
@@ -152,17 +150,18 @@ class TopicBaseRepository extends EntityRepository {
 	/**
 	 * Used to retrieve the last page number
 	 * @param int $topicId
-	 * @param int $topicTypeId
+	 * @param int $typeId
 	 * @param int $num_per_page
 	 * @param boolean $withDeleted If we want to remove the deleted topics or not
 	 * @deprecated Use Topic#getNumPosts instead
 	 */
-	public function getLastPage($topicId, $topicTypeId, $num_per_page, $withDeleted = false) {
-		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
+	public function getLastPage($topicId, $typeId, $num_per_page, $withDeleted = false) {
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customPostClass = $typeManager->getPostClassName();
 		if($withDeleted){
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id" );
 		}else{
-			$dql = $this->_em->createQuery( "SELECT COUNT(ct.id) FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0" );
+			$dql = $this->_em->createQuery( "SELECT COUNT(cp.id) FROM $customPostClass cp JOIN cp.postbase p WHERE p.topic = :id AND p.isDeleted = 0" );
 		}
 		$dql->setParameter( 'id', $topicId );
 		$total = $dql->getSingleScalarResult();
