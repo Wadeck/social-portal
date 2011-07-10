@@ -22,6 +22,10 @@ use core\templates\FreetextTopicTemplate;
 
 use core\templates\ActivityTopicTemplate;
 
+/**
+ * @author Wadeck
+ * @deprecated
+ */
 class TopicType {
 	public static $typeActivity = 1;
 	public static $typeFreetext = 2;
@@ -56,7 +60,7 @@ class TopicType {
 	
 	public static function createByName($name) {
 		$result = new TopicType();
-		$result->name = $$name;
+		$result->name = $name;
 		$result->id = self::translateNameToTypeId( $name );
 		$result->simpleName = self::translateTypeIdToSimpleName( $result->id );
 		return $result;

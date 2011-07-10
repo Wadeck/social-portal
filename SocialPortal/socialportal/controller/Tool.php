@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\common\topic\TypeCenter;
+
 use core\tools\Mail;
 
 use socialportal\model\UserProfileState;
@@ -20,8 +22,6 @@ use socialportal\model\TopicFreetext;
 use socialportal\model\TopicBase;
 
 use core\user\UserRoles;
-
-use core\tools\TopicType;
 
 use core\user\UserManager;
 
@@ -143,11 +143,11 @@ class Tool extends AbstractController {
 		if( $this->em->flushSafe() ) {
 			$metaRep = $this->em->getRepository( 'ForumMeta' );
 			$result = true;
-			$result &= $metaRep->setAcceptableTopics( $forumDiscussion->getId(), array( TopicType::$typeFreetext ) );
-			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( TopicType::$typeStory ) );
-			$result &= $metaRep->setAcceptableTopics( $forumStrategies->getId(), array( TopicType::$typeStrategy ) );
-			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TopicType::$typeActivity ) );
-			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TopicType::$typeFreetext ) );
+			$result &= $metaRep->setAcceptableTopics( $forumDiscussion->getId(), array( TypeCenter::$freetextType ) );
+			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( TypeCenter::$simpleStoryType ) );
+			$result &= $metaRep->setAcceptableTopics( $forumStrategies->getId(), array( TypeCenter::$strategyType ) );
+			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TypeCenter::$activityType ) );
+			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TypeCenter::$freetextType ) );
 			if( $result ) {
 				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ), 'correct' );
 			} else {

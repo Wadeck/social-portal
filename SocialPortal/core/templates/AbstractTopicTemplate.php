@@ -37,6 +37,9 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$this->em = $em;
 	}
 	
+	/**
+	 * @param CustomTopic $topic
+	 */
 	public function setTopic($topic){
 		$this->topic = $topic;
 	}

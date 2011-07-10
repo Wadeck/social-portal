@@ -391,6 +391,9 @@ samedi 9 juillet
 - log avec date courantes, en mettant le timezone apres la date pour eviter de creer un objet a chaque log ou de setter le default timezone global
 - implementations des votes
 
+dimanche 10 juillet
+- topic souple FAIT, enorme boulot pour refactoriser tout le code afin que ca devienne generique, au possible en passant par TypeCenter qui lie les topics, et c'est le seul endroit qui le fait à partir de maintenant
+
 
 
 bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous

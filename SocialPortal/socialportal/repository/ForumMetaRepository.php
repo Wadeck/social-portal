@@ -3,8 +3,6 @@ namespace socialportal\repository;
 
 use socialportal\model\ForumMeta;
 
-use core\tools\TopicType;
-
 use socialportal\model\TopicBase;
 
 use core\user\UserManager;
@@ -44,12 +42,12 @@ class ForumMetaRepository extends EntityRepository {
 	/**
 	 * Determine if the given forum accepts the given topic type id
 	 * @param int $forumId
-	 * @param int $topicTypeId
+	 * @param int $typeId
 	 * @return true only if the id is in the array of accepted topic types
 	 */
-	public function isAcceptedBy($forumId, $topicTypeId) {
+	public function isAcceptedBy($forumId, $typeId) {
 		$acceptArray = $this->getAcceptableTopics( $forumId );
-		return in_array( $topicTypeId, $acceptArray );
+		return in_array( $typeId, $acceptArray );
 	}
 	
 	/**

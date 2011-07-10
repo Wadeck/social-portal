@@ -2,7 +2,7 @@
 
 namespace socialportal\repository;
 
-use core\tools\TopicType;
+use socialportal\common\topic\TypeCenter;
 
 use core\security\Crypto;
 
@@ -25,14 +25,15 @@ class PostBaseRepository extends EntityRepository {
 		}
 	}
 
-	public function findAllFullPosts($topicId, $topicTypeId, $page_num, $num_per_page, $withDeleted=false) {
+	public function findAllFullPosts($topicId, $typeId, $page_num, $num_per_page, $withDeleted=false) {
 		$offset = ($page_num - 1) * $num_per_page;
-		$customType = TopicType::translateTypeIdToPostName( $topicTypeId );
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customPostClass = $typeManager->getPostClassName();
 		// special join to fetch the customtype and the postbase information
 		if($withDeleted){
-			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id ORDER BY p.position ASC" );
+			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customPostClass ct JOIN ct.postbase p WHERE p.topic = :id ORDER BY p.position ASC" );
 		}else{
-			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customType ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 ORDER BY p.position ASC" );
+			$dql = $this->_em->createQuery( "SELECT ct, p FROM $customPostClass ct JOIN ct.postbase p WHERE p.topic = :id AND p.isDeleted = 0 ORDER BY p.position ASC" );
 		}
 		$dql->setParameter( 'id', $topicId )->setFirstResult( $offset )->setMaxResults( $num_per_page );
 		$fullPosts = $dql->getResult();
@@ -47,10 +48,12 @@ class PostBaseRepository extends EntityRepository {
 		if( !$postBase ) {
 			return false;
 		}
-		$customType = $postBase->getCustomType();
-		$customType = TopicType::translateTypeIdToPostName( $customType );
 		
-		$dql = $this->_em->createQuery( "SELECT ct FROM $customType ct WHERE ct.postbase = :id" );
+		$typeId = $postBase->getCustomType();
+		$typeManager = TypeCenter::getTypeManager($typeId);
+		$customPostClass = $typeManager->getPostClassName();
+		
+		$dql = $this->_em->createQuery( "SELECT ct FROM $customPostClass ct WHERE ct.postbase = :id" );
 		$dql->setParameter( 'id', $postId )->setMaxResults( 1 );
 		$result = $dql->getSingleResult();
 		

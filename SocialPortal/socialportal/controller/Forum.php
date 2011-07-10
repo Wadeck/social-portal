@@ -1,9 +1,9 @@
 <?php
 
 namespace socialportal\controller;
-use core\user\UserRoles;
+use socialportal\common\topic\TypeCenter;
 
-use core\tools\TopicType;
+use core\user\UserRoles;
 
 use core\templates\ForumHeader;
 
@@ -206,11 +206,12 @@ class Forum extends AbstractController {
 		$response = $this->frontController->getResponse();
 		
 		$metaRepo = $this->em->getRepository( 'ForumMeta' );
+		
+		//TODO perhaps no more necessary
 		$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
 		array_walk( $acceptedTopics, function (&$item, $key) {
-			$item = TopicType::createById( $item );
+			$item = TypeCenter::getTypeManager($item);
 		} );
-		$response->setVar( 'acceptedTopics', $acceptedTopics );
 		
 		$getArgs = array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
 		if( $withDeleted ) {
@@ -220,14 +221,8 @@ class Forum extends AbstractController {
 		
 		$pagination = new Paginator();
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ) );
-		$response->setVar( 'pagination', $pagination );
-		
-		$response->setVar( 'forum', $forum );
-		$response->setVar( 'topics', $topics );
-		$response->setVar( 'stickyTopics', $stickyTopics );
 		
 		$userHelper = new UserHelper( $this->frontController );
-		$response->setVar( 'userHelper', $userHelper );
 		
 		$forumHeader = new ForumHeader();
 		$forums = $this->em->getRepository( 'Forum' )->findAll();
@@ -239,8 +234,6 @@ class Forum extends AbstractController {
 		} );
 		$indexSelected = array_search( $forum, $forums );
 		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );
-		
-		$response->setVar( 'forumHeader', $forumHeader );
 		
 		if($this->frontController->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
 			$getArgs = array( 'n' => $num_per_page, 'p'=>$page_num, 'forumId' => $forumId);
@@ -255,6 +248,13 @@ class Forum extends AbstractController {
 			$displayDeletedLink = false;
 		}
 		$response->setVar( 'displayDeletedLink', $displayDeletedLink );
+		$response->setVar( 'acceptedTopics', $acceptedTopics );
+		$response->setVar( 'pagination', $pagination );
+		$response->setVar( 'forum', $forum );
+		$response->setVar( 'topics', $topics );
+		$response->setVar( 'stickyTopics', $stickyTopics );
+		$response->setVar( 'userHelper', $userHelper );
+		$response->setVar( 'forumHeader', $forumHeader );
 		
 		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}
