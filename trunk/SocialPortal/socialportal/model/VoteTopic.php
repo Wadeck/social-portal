@@ -2,7 +2,7 @@
 namespace socialportal\model;
 
 /**
- * Votetopic
+ * VoteTopic
  *
  * @Table(
  *	name="vote_topic"
