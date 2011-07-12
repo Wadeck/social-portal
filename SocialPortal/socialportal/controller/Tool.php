@@ -1,6 +1,10 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\repository\InstructionRepository;
+
+use socialportal\model\Instruction;
+
 use socialportal\common\topic\TypeCenter;
 
 use core\tools\Mail;
@@ -101,40 +105,40 @@ class Tool extends AbstractController {
 	 */
 	public function createBaseForumAction() {
 		$forumDiscussion = new Forum();
-		$forumDiscussion->setName( 'Discussion' );
-		$forumDiscussion->setDescription( 'Place where people can speak with others freely' );
+		$forumDiscussion->setName(  __('Discussion') );
+		$forumDiscussion->setDescription(  __('Place where people can speak with others freely') );
 		$forumDiscussion->setPosition( 1 );
 		$forumDiscussion->setNumPosts( 0 );
 		$forumDiscussion->setNumTopics( 0 );
 		$this->em->persist( $forumDiscussion );
 		
 		$forumStories = new Forum();
-		$forumStories->setName( 'Stories' );
-		$forumStories->setDescription( 'Place where people narrate stories and explain their thoughts' );
+		$forumStories->setName(  __('Stories') );
+		$forumStories->setDescription(  __('Place where people narrate stories and explain their thoughts') );
 		$forumStories->setPosition( 2 );
 		$forumStories->setNumPosts( 0 );
 		$forumStories->setNumTopics( 0 );
 		$this->em->persist( $forumStories );
 		
 		$forumStrategies = new Forum();
-		$forumStrategies->setName( 'Strategies' );
-		$forumStrategies->setDescription( 'Place where people exchange strategies under list format' );
+		$forumStrategies->setName(  __('Strategies') );
+		$forumStrategies->setDescription(  __('Place where people exchange strategies under list format') );
 		$forumStrategies->setPosition( 3 );
 		$forumStrategies->setNumPosts( 0 );
 		$forumStrategies->setNumTopics( 0 );
 		$this->em->persist( $forumStrategies );
 		
 		$forumActivities = new Forum();
-		$forumActivities->setName( 'Activities' );
-		$forumActivities->setDescription( 'Place where people exchange activities and can gather some ideas' );
+		$forumActivities->setName( __('Activities') );
+		$forumActivities->setDescription(  __('Place where people exchange activities and can gather some ideas') );
 		$forumActivities->setPosition( 4 );
 		$forumActivities->setNumPosts( 0 );
 		$forumActivities->setNumTopics( 0 );
 		$this->em->persist( $forumActivities );
 		
 		$forumSupport = new Forum();
-		$forumSupport->setName( 'Support' );
-		$forumSupport->setDescription( 'Place where people can ask for help from others' );
+		$forumSupport->setName(  __('Support') );
+		$forumSupport->setDescription(  __('Place where people can ask for help from others') );
 		$forumSupport->setPosition( 10 );
 		$forumSupport->setNumPosts( 0 );
 		$forumSupport->setNumTopics( 0 );
@@ -167,9 +171,116 @@ class Tool extends AbstractController {
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Creation of the default users complete' ), 'correct' );
+			$this->frontController->addMessage( __( 'Creation of the default users completed' ), 'correct' );
 		} else {
 			$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
+		}
+		$this->frontController->doRedirect( 'tool', 'index' );
+	}
+	
+	public function createBaseInstructionsAction(){
+		$instrRepo = $this->em->getRepository('Instruction');
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'activity', __( 'The activity topics will be used to share activities with other' ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'freetext', __( 'The freetext topics will be used to discuss with other' ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'story', __( 'The story topics will be used to describe special situation' ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 'The strategy topics display a list of different strategies used to fight against a problem' ));
+		
+		// [new_username]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_change', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You have requested a change of username.\n".
+			"New username: %new_username%\n\n".
+			"This username is used to connect to our site. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [new_username, reset_link]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_change_to_old', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You have requested a change of username.\n".
+			"New username: %new_username%\n\n".
+			"If it was not you that ask the change or you wanted to undo this modification, please click on the following link to reset the username to the previous one.\n".
+			"Link to reset username: %reset_link%\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [username]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_lost', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You asked to receive your username. (if it is not the case, just ignore this email)\n".
+			"Username: %username%\n\n".
+			"This username is used to connect to our site. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [change_password_link]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_lost', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You asked to change your password. (if it is not the case, just ignore this email)\n".
+			"To be able to change your password, you will be asked to repeat the new two times.\n".
+			"Link: %change_password_link%\n".
+			"This password is used to connect to our site. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [username, password_hint]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_change', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You have changed your account information (if it is not the case, just ignore this email)\n".
+			"Username: %username%\n".
+			"Password hint: %password_hint% \n".
+			"This information is used to connect to our site. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [validation_link]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_validation', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"To complete your profile setup, you need to validate your email. (if you have not create/edit a profile on our site, just ignore this email)\n".
+			"Please click on the following link\n".
+			"Validation link: %validation_link%\n".
+			"When you are done, you could connect with your account. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_information', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"Your email is updated (if you have not modify your email on our site, just ignore this email)\n".
+			"Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// [new_email, reset_link]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_reset', __(
+			"** This is an automated message -- please do not reply. **\n".
+			"Hi,\n".
+			"You have requested a change of email.\n".
+			"New email: %new_email%\n\n".
+			"If it was not you that ask the change or you wanted to undo this modification, please click on the following link to reset the email to this one.\n".
+			"Link to reset username: %reset_link%\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		
+		if( $this->em->flushSafe() ){
+			$this->frontController->addMessage( __( 'Creation of the default instructions completed' ), 'correct' );
+		} else {
+			$this->frontController->addMessage( __( 'Creation of the default instructions failed !' ), 'error' );
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
@@ -399,7 +510,7 @@ class Tool extends AbstractController {
 		
 //		$to      = 'w.follonier@netunion.com';
 		$to      = 'wadeck.follonier@gmail.com';
-		$subject = 'Autre sujet @ ' .$currentTime +" "+rand(0, 10000);
+		$subject = 'Autre sujet @ ' .$currentTime ." ".rand(0, 10000);
 		$message = 'Test ! @ ' .$currentTime;
 		$headers = array(
 //		'From: webmaster@example.com' . "\r\n" .

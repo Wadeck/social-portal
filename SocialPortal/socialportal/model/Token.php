@@ -7,8 +7,10 @@ namespace socialportal\model;
  * @Table(
  *	name="token", 
  *	indexes={
- *		@Index(name="token_index", columns={"token"}),
- *		@Index(name="validation_key_index", columns={"validation_key"})
+ *		@Index(name="token_index", columns={"token"})
+ *	}, 
+ *	uniqueConstraints={
+ *		@UniqueConstraint(name="validation_key_unique", columns={"validation_key"})
  *	}
  * )
  * @Entity
@@ -34,14 +36,15 @@ class Token{
     /**
      * @var string $token
      *
-     * @Column(name="token", type="string", length=255, nullable=false, index=true)
+     * @Column(name="token", type="string", length=50, nullable=false, index=true)
      */
     private $token;
 
     /**
      * @var string $validationKey
      *
-     * @Column(name="validation_key", type="string", length=8, nullable=false, index=true)
+     * @Column(name="validation_key", type="string", length=24, nullable=false, unique=true)
+     * @Comment("This constraint could generate exception be care about that")
      */
     private $validationKey;
 

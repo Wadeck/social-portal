@@ -256,6 +256,8 @@ class Forum extends AbstractController {
 		$response->setVar( 'userHelper', $userHelper );
 		$response->setVar( 'forumHeader', $forumHeader );
 		
+		$this->frontController->getViewHelper()->setTitle( $forum->getName() );
+
 		$this->frontController->doDisplay( 'forum', 'displaySingleForum' );
 	}
 

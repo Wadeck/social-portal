@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\tools\Mail;
+
 use core\security\Crypto;
 
 use core\form\custom\ProfileEditEmailForm;
@@ -185,7 +187,6 @@ class Profile extends AbstractController {
 		$get = $this->frontController->getRequest()->query;
 		$userId = $get->get( 'userId' );
 		
-		
 		$form = new ProfileEditUsernameForm($this->frontController);
 		$form->setupWithArray(true);
 		$form->checkAndPrepareContent();
@@ -196,21 +197,25 @@ class Profile extends AbstractController {
 		$user = $this->frontController->getUserManager()->getUser($oldUsername, $password);
 		
 		if(null === $user){
-//			$this->frontController->addMessage(__('The username / password are not related to a user'), 'error');
-//			$this->frontController->doRedirectToReferrer();
-			$this->frontController->doRedirectToReferrer(__('The username / password are not related to a user'), 'error');
+			$this->frontController->doRedirectToReferrer( __( 'The username / password are not related to a user' ), 'error' );
 		}
 		
 		$user->setUsername($newUsername);
 		$this->em->persist($user);
 		if( !$this->em->flushSafe() ){
-//			$this->frontController->addMessage(__('Problem during the update of the username'), 'error');
-//			$this->frontController->doRedirectToReferrer();
-			$this->frontController->doRedirectToReferrer(__('This username is already taken, please choose another one'), 'error');
+			$this->frontController->doRedirectToReferrer( __( 'This username is already taken, please choose another one' ), 'error' );
 		}
 		
-		$this->frontController->addMessage(__('Edition of the username success'), 'correct');
-		$this->frontController->doRedirectWithNonce('displayProfile','Profile', 'display', array('userId' => $userId));
+		$instrRepo = $this->em->getRepository('Instruction');
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'username_change');
+		$mailContent = $instruction->getInstructions();
+		$mailContent = strtr($mailContent, array( '%new_username%' => $newUsername ) );
+		
+		$userMail = $user->getEmail();
+		Mail::send($userMail, Config::getOrDie('site_display_name'). ': username edition', $mailContent);
+		
+		$this->frontController->addMessage( __( 'Edition of the username success' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
 	}
 	
 	/**
