@@ -125,33 +125,6 @@ class ViewHelper {
 		$this->frontController->getRequest()->query->replace( $tempGet );
 		$this->frontController->getResponse()->setVars( $tempVars );
 	}
-	//	/** Could be used for login/pass/avatar template */
-	//	public function insertModule($module, $action = '', array $gets = array(), $nonceAction = false) {
-	//		$tempVars = $this->frontController->getResponse()->removeAllVars();
-	//		// like a stack
-	//		$tempGet = $this->frontController->getRequest()->query->all();
-	//		$this->frontController->getRequest()->query->replace( $gets );
-	//		
-	//		// store the nonce to avoid giving bad nonce to the createHref method
-	//		if( $nonceAction ) {
-	//			$tempNonce = $this->frontController->getCurrentNonce();
-	//			$nonce = $this->frontController->getNonceManager()->createNonce( $nonceAction );
-	//			$this->frontController->setNonce( $nonce );
-	//			// call the module with the temporary nonce
-	//			
-	//			$this->frontController->doAction( $module, $action );
-	//			
-	//			// come back to the previous value of nonce
-	//			$this->frontController->setNonce( $tempNonce );
-	//		} else {
-	//			// call the module without care of the nonce
-	//			$this->frontController->doAction( $module, $action );
-	//		}
-	//		// reset the previously set GET values
-	//		$this->frontController->getRequest()->query->replace( $tempGet );
-	//		$this->frontController->getResponse()->setVars( $tempVars );
-	//	}
-	
 
 	/**
 	 * Generate a specific url for the site
