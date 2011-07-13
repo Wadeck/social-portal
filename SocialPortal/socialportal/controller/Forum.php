@@ -207,11 +207,31 @@ class Forum extends AbstractController {
 		
 		$metaRepo = $this->em->getRepository( 'ForumMeta' );
 		
-		//TODO perhaps no more necessary
-		$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
-		array_walk( $acceptedTopics, function (&$item, $key) {
-			$item = TypeCenter::getTypeManager($item);
-		} );
+		if($this->frontController->getViewHelper()->currentUserIs(UserRoles::$anonymous_role)){
+			// anonymous users cannot create topics
+			$newTopicLink = false;
+		}else{
+			$title = __('Click here to create a new topic');
+			$content = __('New');
+			// in case the user has the right, we check how much topic we can create
+			$acceptedTopics = $metaRepo->getAcceptableTopics( $forumId );
+			array_walk( $acceptedTopics, function (&$item, $key) {
+				$item = TypeCenter::getTypeManager($item);
+			} );
+			$count = count($acceptedTopics);
+			if($count >= 2){
+				// link to the chooseType
+				$newTopicLink = '<a class="button" href="' .
+					$this->frontController->getViewHelper()->createHref('Topic', 'chooseTypeForum', array('forumId' => $forumId)) .
+					'" title="' . $title . '">' . $content . '</a>';
+			}else{
+				// link to the topic
+				$newTopicLink = '<a class="button" href="' .
+					$this->frontController->getViewHelper()->createHrefWithNonce('displayForm', 'Topic', 'displayForm',
+						array('forumId' => $forumId, 'typeId' => $acceptedTopics[0]->getTypeId())) .
+					'" title="' . $title . '">' . $content . '</a>';
+			}
+		}
 		
 		$getArgs = array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
 		if( $withDeleted ) {
@@ -255,6 +275,7 @@ class Forum extends AbstractController {
 		$response->setVar( 'stickyTopics', $stickyTopics );
 		$response->setVar( 'userHelper', $userHelper );
 		$response->setVar( 'forumHeader', $forumHeader );
+		$response->setVar( 'newTopicLink', $newTopicLink );
 		
 		$this->frontController->getViewHelper()->setTitle( $forum->getName() );
 

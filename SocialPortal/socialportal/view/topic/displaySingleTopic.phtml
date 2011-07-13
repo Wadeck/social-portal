@@ -14,6 +14,7 @@ $posts = $vars['posts'];
 $commentForm = $vars['commentForm'];
 
 $vars['helper']->setTitle(__('Topic'));
+$displayDeletedLink = $vars['displayDeletedLink'];
 ?>
 
 <div id="link-back">
@@ -29,9 +30,8 @@ $vars['helper']->setTitle(__('Topic'));
 <h4> 
 <?php echo __('Topic'); ?></h4>
 
-<?php $displayDeletedLink = $vars['displayDeletedLink'];
-	if($displayDeletedLink):?>
-	<div id="display-deleted">
+<?php if($displayDeletedLink):?>
+	<div id="link-back-right">
 		<?php if($vars['isDisplayDeleted']): ?>
 			<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
 		<?php else: ?>
