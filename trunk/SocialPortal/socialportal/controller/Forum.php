@@ -50,13 +50,13 @@ class Forum extends AbstractController {
 				$form->setupWithForum( $forum );
 				// then add the value retrieve from POST
 				// they could erase the data but actually it's what we want
-				$form->setupWithArray( true );
+				$form->setupWithArray();
 				$form->setNonceAction( 'editForum' );
 			}
 		}
 		if( !$actionUrl ) {
 			$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'create' );
-			$form->setupWithArray( true );
+			$form->setupWithArray();
 			$form->setNonceAction( 'createForum' );
 		}
 		//		$form->setCss($cssClass)
@@ -72,7 +72,7 @@ class Forum extends AbstractController {
 	 */
 	public function createAction() {
 		$form = new ForumForm( $this->frontController );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$forum = new ForumEntity();
@@ -103,7 +103,7 @@ class Forum extends AbstractController {
 		$forumId = $get->get( 'forumId' );
 		
 		$form = new ForumForm( $this->frontController );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$forum = $this->em->find( 'Forum', $forumId );

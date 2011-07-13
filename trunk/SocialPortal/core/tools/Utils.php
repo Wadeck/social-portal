@@ -2,6 +2,8 @@
 
 namespace core\tools;
 
+use core\Config;
+
 use core\FrontController;
 
 class Utils {
@@ -261,5 +263,34 @@ class Utils {
 				return  ( $bytes / $mag ) . ' ' . $unit;
 
 		return false;
+	}
+	
+	/** @var string cache for absolute url base name*/
+	private static $cache_absolute = false;
+	
+	/**
+	 * Used to send jss / css / img
+	 * @return string the base url address with / at end => http://[ip / hostname]/[site_name]/
+	 */
+	public static function getBaseUrl(){
+		if( false === self::$cache_absolute){
+			$http = Utils::isSSL() ? 'https://' : 'http://';
+			self::$cache_absolute = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/';
+		}
+		return self::$cache_absolute;
+	}
+	
+	/** @var string cache for absolute url base name*/
+	private static $cache_absolute_without = false;
+	
+	/**
+	 * @return string the base url address without /[site_name], just http://[ip / hostname]
+	 */
+	public static function getBaseUrlWithoutName(){
+		if( false === self::$cache_absolute_without){
+			$http = Utils::isSSL() ? 'https://' : 'http://';
+			self::$cache_absolute_without = $http . $_SERVER['HTTP_HOST'] ;
+		}
+		return self::$cache_absolute_without;
 	}
 }

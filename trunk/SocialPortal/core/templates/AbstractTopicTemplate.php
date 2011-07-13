@@ -157,7 +157,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$forumId = $base->getForum()->getId();
 		$viewHelper = $this->front->getViewHelper();
 		?>
-		<a href="<?php $viewHelper->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array('typeId'=>$customTypeId, 'forumId'=>$forumId,'topicId'=> $topicId)); ?>"
+		<a href="<?php $viewHelper->insertHrefWithNonce('displayForm', 'Topic', 'displayForm', array('typeId'=>$customTypeId, 'forumId'=>$forumId,'topicId'=> $topicId)); ?>"
 			title="<?php echo __( 'Modify the topic content or title' ); ?>"><?php echo __('Edit'); ?></a>
 		&nbsp;|&nbsp;
 	<?php

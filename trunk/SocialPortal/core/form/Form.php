@@ -277,7 +277,7 @@ class Form implements iInsertable {
 	/**
 	 * After this call, we can use either validate / display
 	 */
-	public function setupWithArray($withErrors = true, $forceEmptyForm = false) {
+	public function setupWithArray($forceEmptyForm = false) {
 		if( $forceEmptyForm ) {
 			$args = array();
 		} else {

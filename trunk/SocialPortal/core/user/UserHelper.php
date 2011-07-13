@@ -73,9 +73,11 @@ class UserHelper {
 				break;
 			case 1:
 				// custom
-				$http = Utils::isSSL() ? 'https://' : 'http://';
 				$imgLink = Config::getOrDie('avatar_dir') . $key .'.jpg';
-				$imgLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . $imgLink;
+				$imgLink = Utils::getBaseUrl() . $imgLink;
+//				$http = Utils::isSSL() ? 'https://' : 'http://';
+//				$imgLink = Config::getOrDie('avatar_dir') . $key .'.jpg';
+//				$imgLink = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . $imgLink;
 		
 				break;
 		}

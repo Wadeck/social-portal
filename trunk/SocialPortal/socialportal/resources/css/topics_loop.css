@@ -332,12 +332,12 @@ a.comment-author-name,a.topic-author-name {
 	border-bottom: none;
 	margin: 0px;
 	padding: 0 5px;
-	/*padding-top: 2px;*/
-	/*clear: both;*/
+	/* padding-top: 2px;*/
+	/* clear: both;*/
 }
 
 .comment-meta .comment-date,#topic-bottom #topic-date {
-	/*float: right; */
+	/* float: right; */
 	padding-left: 5px;
 }
 
@@ -345,6 +345,11 @@ a.comment-author-name,a.topic-author-name {
 	float: right;
 	padding-right: 5px;
 }
+
+.commentlist #topic-bottom{
+	line-height: 27.2px;	
+}
+	
 
 .comment-meta a,#topic-bottom a {
 	text-decoration: none;
