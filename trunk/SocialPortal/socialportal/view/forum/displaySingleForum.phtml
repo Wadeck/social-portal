@@ -13,27 +13,28 @@ $vars['helper']->addCssFile('forum_loop.css');
 $vars['helper']->setContainerClass('');
 
 $displayDeletedLink = $vars['displayDeletedLink'];
+$newTopicLink = $vars['newTopicLink'];
 ?>
 
-<!-- floating left -->
-<div id="display_link_back_floating">
+<div id="link-back">
 	<a class="button" 
 		href="<?php echo $vars['helper']->createHref('Home')?>">
 			<?php echo __('Home'); ?>
 	</a>
-</div>
-
-
-<?php if($displayDeletedLink):?>
-	<!-- floating right -->	
-	<div id="display-deleted">
-		<?php if($vars['isDisplayDeleted']): ?>
-			<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
-		<?php else: ?>
-			<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
+	<div id="link-back-right">
+		<?php if($displayDeletedLink):?>
+			<?php if($vars['isDisplayDeleted']): ?>
+				<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Display deleted items'); ?></a>
+			<?php else: ?>
+				<a class="button" href="<?php echo $displayDeletedLink ?>"><?php echo __('Hide deleted items'); ?></a>
+			<?php endif; ?>
+			<?php ?>
 		<?php endif; ?>
+		<?php if( false !== $newTopicLink ):
+			echo $newTopicLink;
+		endif; ?>
 	</div>
-<?php endif; ?>
+</div>
 
 <?php $forumHeader->insert(); // the different link to other forums ?>
 <?php if($topics): // forum loop ?>
@@ -50,7 +51,7 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 				</tr>
 			</thead>
 			<tbody>
-			<?php if(null !== $stickyTopics): 
+			<?php if( $stickyTopics ): 
 						$size = count($stickyTopics);
 						for($i = 0 ; $i < $size ; $i++):
 							$topic = $stickyTopics[$i];
@@ -94,7 +95,7 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 						</tr>
 					<?php endfor ?>
 				<tr>
-				<td class="tcat background_primary" colspan="99" style="height:5px"><!-- --></td>
+					<td class="tcat background_primary" colspan="99" style="height:5px"><!-- --></td>
 				</tr>
 			<?php endif; ?>
 				<?php
@@ -154,26 +155,7 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 
 
 <div id="bottom-button">
-<?php 
-//TODO could be replace with single button
-$acceptedTopics = $vars['acceptedTopics'];
-$size = count($acceptedTopics);
-if($size > 4){
-	$size = 4;
-	$needMore = true;
-}else{
-	$needMore = false;
-}
-for($i = 0 ; $i< $size ; $i++):
-$typeManager = $acceptedTopics[$i];
-// TODO necessité d'avoir un module pour gerer les traductions de la base de donnée
-// sans passer par la base, id=>name, un array contenant les noms de la base,
-// peut etre melangé avec le topic "souple"
-	?><a href="<?php $vars['helper']->insertHrefWithNonce('displayForm', 'Topic', 'displayForm', array('typeId'=>$typeManager->getTypeId(),'forumId'=>$forumId)); ?>" title="<?php echo $typeManager->getSimpleName(); ?>"><?php 
-		echo 'New '.$typeManager->getSimpleName(); ?></a><?php 
-endfor; if($needMore): ?><a
-	href="<?php $vars['helper']->insertHref('Topic', 'chooseTypeForum', array('forumId'=>$forumId)); ?>"
-	title="<?php echo __('Click here to have more custom type of topics'); ?>"><?php
-	echo __('More types...'); ?></a><?php 
+<?php if( false !== $newTopicLink ):
+	echo $newTopicLink;
 endif; ?>
 </div>
