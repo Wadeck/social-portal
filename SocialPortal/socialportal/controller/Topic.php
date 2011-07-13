@@ -90,7 +90,7 @@ class Topic extends AbstractController {
 	
 	/**
 	 * @GetAttributes({topicId, forumId})
-	 * [p, n, positionTarget(int), timeTarget(timestamp int), lastPage(boolean), withDeleted(boolean)]
+	 * [p, n, positionTarget(int), timeTarget(timestamp int), postIdTarget(int), lastPage(boolean), withDeleted(boolean)]
 	 */
 	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -100,6 +100,7 @@ class Topic extends AbstractController {
 		$num_per_page = $get->get( 'n', 10 ); 
 		$positionTarget = $get->get( 'positionTarget', false );
 		$timeTarget = $get->get( 'timeTarget', false );
+		$postIdTarget = $get->get( 'postIdTarget', false );
 		$lastPage = $get->get( 'lastPage', false );
 		$withDeleted = $get->get( 'withDeleted', false );
 		
@@ -131,6 +132,14 @@ class Topic extends AbstractController {
 			// we want to go to the last page
 			//			$page_num = $topicBaseRepo->getLastPage( $topicId, $typeId, $num_per_page );
 			$page_num = max( 1, $max_pages );
+		} else if( false !== $postIdTarget ) {
+			$post = $this->em->find('PostBase', $postIdTarget);
+			if(!$post){
+				$position = -1;
+			}else{
+				$position = $post->getPosition();
+			}
+			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $position, $num_per_page, $withDeleted );
 		}
 		
 		$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page, $withDeleted );
@@ -196,7 +205,7 @@ class Topic extends AbstractController {
 	}
 	
 	/**
-	 * @Nonce(displayTopicForm)
+	 * @Nonce(displayForm)
 	 * @GetAttributes({typeId, forumId})
 	 * [topic_id(opt, only for edit)]
 	 */
@@ -248,7 +257,7 @@ class Topic extends AbstractController {
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->setTargetUrl( $actionUrl );
 		
 		$response = $this->frontController->getResponse();
@@ -281,7 +290,7 @@ class Topic extends AbstractController {
 			$this->frontController->doRedirect( 'Topic', 'chooseType' );
 		}
 		$form = $typeManager->getTopicForm( $this->frontController );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$base = new TopicEntity();
@@ -345,7 +354,7 @@ class Topic extends AbstractController {
 			$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topidId' => $topicId, 'forumId' => $forumId ) );
 		}
 		$form = $typeManager->getTopicForm( $this->frontController );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$topicRepo = $this->em->getRepository( 'TopicBase' );

@@ -97,7 +97,7 @@ class HomeBlockTemplate implements iInsertable{
 	protected function insertTool(){
 		$seeAll = __('see all');
 		$new = __('new');
-		$linkToCreate = $this->front->getViewHelper()->createHrefWithNonce('displayTopicForm', 'Topic', 'displayForm',  array('typeId' => $this->typeId, 'forumId' => $this->forumId ));
+		$linkToCreate = $this->front->getViewHelper()->createHrefWithNonce('displayForm', 'Topic', 'displayForm',  array('typeId' => $this->typeId, 'forumId' => $this->forumId ));
 
 		$links = array();
 		if($this->rightToCreateNew){

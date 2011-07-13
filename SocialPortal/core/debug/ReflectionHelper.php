@@ -34,7 +34,7 @@ class ReflectionHelper {
 		try {
 			$constructor = $refl->getConstructor();
 			$instance = $refl->newInstance();
-		} catch ( Exception $e ) {
+		} catch ( \Exception $e ) {
 			if( $refl->hasMethod( 'newInstance' ) ) {
 				$method = $refl->getMethod( 'newInstance' );
 				$method->setAccessible( true );

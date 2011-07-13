@@ -382,7 +382,27 @@ jeudi 7 juillet
 - correction d'un bug dans les topics strategy
 - listes d'items pour les strategies
 
-[PAS OUBLIER DE RAJOUTER LES TRUCS FAIT VENDREDI 8 JUILLET]
+vendredi 8 juillet
+- protocole de reset des informations du compte
+- mail
+
+##########################################
+## changement au php.ini pour les mails ##
+##########################################
+[mail function]
+; For Win32 only.
+; http://php.net/smtp
+SMTP = smtp.edificom.ch
+; http://php.net/smtp-port
+smtp_port = 25
+
+
+; For Win32 only.
+; http://php.net/sendmail-from
+sendmail_from = noreply@netunion.com
+##########################################
+this could be done by ini_set
+=======
 
 samedi 9 juillet
 - ajout du "non-support" des images bmp, on peut rien faire avec en php, les browsers ont l'air de transformer les grosses images jpg en w-ms-bmp quand ils les envoient
@@ -394,11 +414,36 @@ samedi 9 juillet
 dimanche 10 juillet
 - topic souple FAIT, enorme boulot pour refactoriser tout le code afin que ca devienne generique, au possible en passant par TypeCenter qui lie les topics, et c'est le seul endroit qui le fait à partir de maintenant
 
+=======
+
+mardi 12 juillet
+- instructions entity
+- token modification
+- email a l'air de fonctionner
+- username change
+
+mercredi 13 juillet
+- refactor response => utils pour les url base
+- modification des send de mail, possible de mettre du html dedans
+- email address modification
+- email address reset
+- correction d'un bug avec le nom du module
+- modification du password possible avec notif par email
+- ajout d'une condition de recherche de post: postIdTarget
+--
+
+
+
+
+
+
 
 
 bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
+todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée
+todo - les emails partent correctement si une adresse locale se situe dans le header
 todo - profile tools link (good link but nothing behind)
-todo - topic plus souple, tout passe par l'orienté objet
 todo - description des dates en format normal, hover
 todo - maintenance
+todo - args_nonce, hash sur controller/action/getargs, ajouté au getargs et retrieved by annotation, peut etre tres utile pour les suppressions de posts/topic, modification profile etc

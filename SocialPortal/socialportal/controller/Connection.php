@@ -44,7 +44,7 @@ class Connection extends AbstractController {
 	public function displayLoginFormAction() {
 		$form = new LoginForm( $this->frontController );
 		$form->setNonceAction( 'login' );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Connection', 'login' );
 		$form->setTargetUrl( $actionUrl );
 		
@@ -92,7 +92,7 @@ class Connection extends AbstractController {
 	public function displayRegisterFormAction() {
 		$form = new RegisterForm( $this->frontController );
 		$form->setNonceAction( 'register' );
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Connection', 'register' );
 		$form->setTargetUrl( $actionUrl );
 		

@@ -66,10 +66,11 @@ class Response {
 		if( false === strpos( $jsFile, '.js' ) ) {
 			$jsFile .= '.js';
 		}
-		$http = Utils::isSSL() ? 'https://' : 'http://';
-		
-//		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$JS_DIR . $jsFile;
-		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('js_dir') . $jsFile;
+//		$http = Utils::isSSL() ? 'https://' : 'http://';
+//		
+////		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$JS_DIR . $jsFile;
+//		$jsFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('js_dir') . $jsFile;
+		$jsFile = Utils::getBaseUrl() . Config::getOrDie('js_dir') . $jsFile;
 		if( !in_array( $jsFile, $this->desiredJs ) ) {
 			$this->desiredJs[] = $jsFile;
 		}
@@ -87,10 +88,11 @@ class Response {
 		if( false === strpos( $cssFile, '.css' ) ) {
 			$cssFile .= '.css';
 		}
-		$http = Utils::isSSL() ? 'https://' : 'http://';
+//		$http = Utils::isSSL() ? 'https://' : 'http://';
 		
 //		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . FrontController::$SITE_NAME . '/' . FrontController::$CSS_DIR . $cssFile;
-		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('css_dir') . $cssFile;
+//		$cssFile = $http . $_SERVER['HTTP_HOST'] . '/' . Config::getOrDie('site_name') . '/' . Config::getOrDie('css_dir') . $cssFile;
+		$cssFile = Utils::getBaseUrl() . Config::getOrDie('css_dir') . $cssFile;
 		if( !in_array( $cssFile, $this->desiredCss ) ) {
 			$this->desiredCss[] = $cssFile;
 		}

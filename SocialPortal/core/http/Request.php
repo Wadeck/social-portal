@@ -17,7 +17,6 @@ use core\http\storage\NativeSessionStorage;
 use core\http\Session;
 
 use core\http\bags\ParameterBag;
-use core\http\bags\FileBag;
 use core\http\bags\ServerBag;
 use core\http\bags\HeaderBag;
 
@@ -85,7 +84,6 @@ class Request {
 		$this->request = new ParameterBag( $request );
 		$this->attributes = new ParameterBag( $attributes );
 		$this->cookies = new ParameterBag( $cookies );
-//		$this->files = new FileBag( $files );
 		$this->server = new ServerBag( $server );
 		$this->headers = new HeaderBag( $this->server->getHeaders() );
 		

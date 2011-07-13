@@ -169,7 +169,7 @@ $typeManager = $acceptedTopics[$i];
 // TODO necessité d'avoir un module pour gerer les traductions de la base de donnée
 // sans passer par la base, id=>name, un array contenant les noms de la base,
 // peut etre melangé avec le topic "souple"
-	?><a href="<?php $vars['helper']->insertHrefWithNonce('displayTopicForm', 'Topic', 'displayForm', array('typeId'=>$typeManager->getTypeId(),'forumId'=>$forumId)); ?>" title="<?php echo $typeManager->getSimpleName(); ?>"><?php 
+	?><a href="<?php $vars['helper']->insertHrefWithNonce('displayForm', 'Topic', 'displayForm', array('typeId'=>$typeManager->getTypeId(),'forumId'=>$forumId)); ?>" title="<?php echo $typeManager->getSimpleName(); ?>"><?php 
 		echo 'New '.$typeManager->getSimpleName(); ?></a><?php 
 endfor; if($needMore): ?><a
 	href="<?php $vars['helper']->insertHref('Topic', 'chooseTypeForum', array('forumId'=>$forumId)); ?>"

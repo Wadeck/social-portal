@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\model\Token;
+
 use core\tools\Mail;
 
 use core\security\Crypto;
@@ -88,7 +90,7 @@ class Profile extends AbstractController {
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Profile', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->setTargetUrl( $actionUrl );
 		
 		$this->frontController->getResponse()->setVar( 'userId', $userId );
@@ -168,6 +170,7 @@ class Profile extends AbstractController {
 		$userId = $get->get( 'userId' );
 		
 		$form = new ProfileEditUsernameForm($this->frontController);
+		$form->setupWithArray();
 		$form->setNonceAction( 'editUsername' );
 		
 		$targetUrl = $this->frontController->getViewHelper()->createHref( 'Profile', 'editUsername', array('userId' => $userId) );
@@ -188,7 +191,7 @@ class Profile extends AbstractController {
 		$userId = $get->get( 'userId' );
 		
 		$form = new ProfileEditUsernameForm($this->frontController);
-		$form->setupWithArray(true);
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$oldUsername = $form->getOldUsername();
@@ -196,8 +199,8 @@ class Profile extends AbstractController {
 		$password = $form->getPassword();
 		$user = $this->frontController->getUserManager()->getUser($oldUsername, $password);
 		
-		if(null === $user){
-			$this->frontController->doRedirectToReferrer( __( 'The username / password are not related to a user' ), 'error' );
+		if(null === $user || $user->getId() !== $userId ){
+			$this->frontController->doRedirectToReferrer( __( 'The username / password are not related to the user' ), 'error' );
 		}
 		
 		$user->setUsername($newUsername);
@@ -223,18 +226,181 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function displayEditEmailFormAction() {
-		$form = new ProfileEditEmailForm($this->frontController);
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
 		
+		$form = new ProfileEditEmailForm($this->frontController);
+		$form->setupWithArray();
+		$form->setNonceAction( 'editEmail' );
+		
+		$targetUrl = $this->frontController->getViewHelper()->createHref( 'Profile', 'editEmail', array('userId' => $userId) );
+		
+		$form->setTargetUrl($targetUrl);
+		$this->frontController->getResponse()->setVar('userId', $userId);
+		$this->frontController->getResponse()->setVar('form', $form);
+		$this->frontController->doDisplay('profile', 'displayEditEmailForm');
 	}
 	
 	/**
 	 * @Method(POST)
 	 * @Nonce(editEmail)
 	 * @GetAttributes(userId)
+	 * Receive the edit email form, retrieve the information and send email to validate
 	 */
 	public function editEmailAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
 		$form = new ProfileEditEmailForm($this->frontController);
-
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$username = $form->getUsername();
+		$password = $form->getPassword();
+		$newEmail = $form->getEmail();
+		$user = $this->frontController->getUserManager()->getUser($username, $password);
+		
+		if(null === $user || $user->getId() !== $userId ){
+			$this->frontController->doRedirectToReferrer( __( 'The username / password are not related to the user' ), 'error' );
+		}
+		
+		// we create a token that contains old_email, new_email, user_id
+		$oldEmail = $user->getEmail();
+		if($oldEmail === $newEmail){
+			$this->frontController->doRedirectToReferrer( __( 'You cannot change the email to the same one' ), 'error' );
+		}
+		
+		$expiration = Config::get('email_change_validation_expiration_time', 48 * 60 * 60);
+		$meta = array('oldEmail' => $oldEmail, 'newEmail' => $newEmail, 'userId' => $userId);
+		$token = $this->em->getRepository('Token')->createValidToken($meta, $expiration);
+		
+		if( null ===$token ){
+			Logger::getInstance()->log('Problem during creation of token in email change, number of possible attempts reach');
+			$this->frontController->addMessage( __( 'Internal error, please retry in a moment' ), 'correct' );
+			$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$validationLink = $this->frontController->getViewHelper()->createHref('Profile', 'validateEmailChange', array( 'token' => $token->getToken() ));
+		$validationLink = Utils::getBaseUrlWithoutName() . $validationLink;
+		$validationLink = '<a href="' . $validationLink . '" title="' . __('Validation link') . '">'. __('Click here to validate your email') .'</a>';
+		
+		$instrRepo = $this->em->getRepository('Instruction');
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'email_validation');
+		$mailContent = $instruction->getInstructions();
+		$mailContent = strtr($mailContent, array( '%validation_link%' => $validationLink ) );
+		
+		$mailContent = nl2br($mailContent);
+		Mail::sendHtml($newEmail, Config::getOrDie('site_display_name'). ': email validation', $mailContent);
+		
+		$this->frontController->addMessage( __( 'Email sent, the email will not be changed until the validation was completed' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+	}
+	
+	/**
+	 * @GetAttributes(token)
+	 * The link comes from email sent at the first step of email change to validate that email and also change it
+	 * Will send two emails, one for information to the new email and one to the old one to be able to reset
+	 */
+	public function validateEmailChangeAction() {
+		$get = $this->frontController->getRequest()->query;
+		$token = $get->get( 'token' );
+		
+		// use old_email, new_email and user_id to send both mails
+		$tokenRepo = $this->em->getRepository('Token');
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token);
+		if( false === $tokenMeta){
+			// expiration or never exist
+			Logger::getInstance()->log("Request expired: [$token]");
+			$this->frontController->addMessage( __( 'Your request has expired' ), 'error' );
+			$this->frontController->doRedirect( 'Home' );
+		}
+		$userId = $tokenMeta['userId'];
+		$oldEmail = $tokenMeta['oldEmail'];
+		$newEmail = $tokenMeta['newEmail'];
+		
+		$user = $this->em->find('User', $userId);
+		if( false === $user ){
+			Logger::getInstance()->log("Request about user that does not exist: userId=[$userId]");
+			$this->frontController->addMessage( __( 'The request you made was about a user that does not exist anymore' ), 'error' );
+			$this->frontController->doRedirect( 'Home' );
+		}
+		
+		// update user email
+		$user->setEmail($newEmail);
+		$this->em->persist($user);
+		if(!$this->em->flushSafe()){
+			Logger::getInstance()->log("Email reset failed for: userId=[$userId] email=[$newEmail]");
+			$this->frontController->addMessage( __( 'The email modification fails' ), 'error' );
+			$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$instrRepo = $this->em->getRepository('Instruction');
+		
+		// send mail to new: inform new email that is validated
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'email_information');
+		$mailContent = $instruction->getInstructions();
+		
+		$mailContent = nl2br($mailContent);
+		Mail::sendHtml($newEmail, Config::getOrDie('site_display_name'). ': email confirmed', $mailContent);
+		
+		// send mail to old: possibility to reset email
+		$expiration = Config::get('email_change_validation_expiration_time', 48 * 60 * 60);
+		$meta = array('oldEmail' => $oldEmail, 'userId' => $userId);
+		$token = $tokenRepo->createValidToken($meta, $expiration);
+		
+		$resetLink = $this->frontController->getViewHelper()->createHref('Profile', 'resetEmail', array( 'token' => $token->getToken() ));
+		$resetLink = Utils::getBaseUrlWithoutName() . $resetLink;
+		$resetLink = '<a href="' . $resetLink . '" title="' . __('Reset link') . '">'. __('Click here to reset the email address of your profile to the one that receive this email') .'</a>';
+		
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'email_reset');
+		$mailContent = $instruction->getInstructions();
+		$mailContent = strtr($mailContent, array( '%new_email%' => $newEmail, '%reset_link%' => $resetLink ) );
+		
+		$mailContent = nl2br($mailContent);
+		Mail::sendHtml($oldEmail, Config::getOrDie('site_display_name'). ': email changed', $mailContent);
+		
+		//redirect to profile home
+		$this->frontController->addMessage( __( 'The email modification completes' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+	}
+	/**
+	 * @GetAttributes(token)
+	 * The link comes from email sent at the same time as information in second step of email change
+	 */
+	public function resetEmailAction() {
+		$get = $this->frontController->getRequest()->query;
+		$token = $get->get( 'token' );
+		
+		$tokenRepo = $this->em->getRepository('Token');
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token);
+		if( false === $tokenMeta){
+			// expiration or never exist
+			Logger::getInstance()->log("Request expired: [$token]");
+			$this->frontController->addMessage( __( 'Your request has expired' ), 'error' );
+			$this->frontController->doRedirect( 'Home' );
+		}
+		$userId = $tokenMeta['userId'];
+		$oldEmail = $tokenMeta['oldEmail'];
+		
+		$user = $this->em->find('User', $userId);
+		if( false === $user ){
+			Logger::getInstance()->log("Request about user that does not exist: userId=[$userId]");
+			$this->frontController->addMessage( __( 'The request you made was about a user that does not exist anymore' ), 'error' );
+			$this->frontController->doRedirect( 'Home' );
+		}
+		
+		// update user email
+		$user->setEmail($oldEmail);
+		$this->em->persist($user);
+		if(!$this->em->flushSafe()){
+			Logger::getInstance()->log("Email reset failed for: userId=[$userId] email=[$oldEmail]");
+			$this->frontController->addMessage( __( 'The email reset fails' ), 'error' );
+			$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		//redirect to profile home
+		$this->frontController->addMessage( __( 'The email reset completes' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
 	}
 	
 	/**
@@ -242,8 +408,19 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function displayEditPasswordFormAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
 		$form = new ProfileEditPasswordForm($this->frontController);
-
+		$form->setupWithArray();
+		$form->setNonceAction( 'editPassword' );
+		
+		$targetUrl = $this->frontController->getViewHelper()->createHref( 'Profile', 'editPassword', array('userId' => $userId) );
+		
+		$form->setTargetUrl($targetUrl);
+		$this->frontController->getResponse()->setVar('userId', $userId);
+		$this->frontController->getResponse()->setVar('form', $form);
+		$this->frontController->doDisplay('profile', 'displayEditPasswordForm');
 	}
 	
 	/**
@@ -252,8 +429,53 @@ class Profile extends AbstractController {
 	 * @GetAttributes(userId)
 	 */
 	public function editPasswordAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
 		$form = new ProfileEditPasswordForm($this->frontController);
-
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$username = $form->getUsername();
+		$oldPassword = $form->getOldPassword();
+		$newPassword = $form->getNewPassword();
+		$user = $this->frontController->getUserManager()->getUser($username, $oldPassword);
+		
+		if(null === $user || $user->getId() !== $userId ){
+			$this->frontController->doRedirectToReferrer( __( 'The username / password are not related to the user' ), 'error' );
+		}
+		
+		// we create a token that contains old_email, new_email, user_id
+		if($oldPassword === $newPassword){
+			$this->frontController->doRedirectToReferrer( __( 'You cannot change the password to the same one' ), 'error' );
+		}
+		
+		$passLength = strlen($newPassword);
+		$passFirst = $newPassword[0];
+		$passLast = $newPassword[$passLength-1];
+		$hintPassword = $passFirst . str_repeat('?', $passLength-2) . $passLast;
+		
+		$newPassword = Crypto::encodeDBPassword($user->getRandomKey(), $newPassword);
+		
+		$user->setPassword($newPassword);
+		$this->em->persist($user);
+		if( !$this->em->flushSafe() ){
+			$this->frontController->addMessage( __( 'The password change failed' ), 'correct' );
+			$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$instrRepo = $this->em->getRepository('Instruction');
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'password_change');
+		$mailContent = $instruction->getInstructions();
+		// [username, password_hint]
+		$mailContent = strtr($mailContent, array( '%username%' => $user->getUsername(), '%password_hint%' => $hintPassword ) );
+		
+		$mailContent = nl2br($mailContent);
+		Mail::sendHtml($user->getEmail(), Config::getOrDie('site_display_name'). ': password change', $mailContent);
+		
+		$this->frontController->addMessage( __( 'The password is changed' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile','Profile', 'display', array( 'userId' => $userId ) );
+	
 	}
 	
 	/**

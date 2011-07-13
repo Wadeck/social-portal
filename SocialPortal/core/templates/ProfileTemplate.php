@@ -111,11 +111,11 @@ class ProfileTemplate implements iInsertable {
 			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
 			echo $editUsername; ?></a>
 		<!-- edit password -->
-		<a class="unimplemented" title="<?php echo $editPassword; ?>" href="<?php 
+		<a class="" title="<?php echo $editPassword; ?>" href="<?php 
 			$this->front->getViewHelper()->insertHrefWithNonce('displayEditPasswordForm', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
 			echo $editPassword; ?></a>
 		<!-- edit email -->
-		<a class="unimplemented" title="<?php echo $editEmail; ?>" href="<?php 
+		<a class="" title="<?php echo $editEmail; ?>" href="<?php 
 			$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
 			echo $editEmail; ?></a>
 		

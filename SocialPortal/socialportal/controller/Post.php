@@ -95,7 +95,7 @@ class Post extends AbstractController {
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Post', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->setTargetUrl( $actionUrl );
 		
 		$response->setVar( 'form', $form );
@@ -118,7 +118,7 @@ class Post extends AbstractController {
 		$typeManager = TypeCenter::getTypeManager($typeId);
 		$form = $typeManager->getPostForm($this->frontController);
 
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$topic = $this->em->find( 'TopicBase', $topicId );
@@ -172,7 +172,7 @@ class Post extends AbstractController {
 		$typeManager = TypeCenter::getTypeManager($typeId);
 		$form = $typeManager->getPostForm($this->frontController);
 
-		$form->setupWithArray( true );
+		$form->setupWithArray();
 		$form->checkAndPrepareContent();
 		
 		$postRepo = $this->em->getRepository( 'PostBase' );

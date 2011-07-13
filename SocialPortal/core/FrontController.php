@@ -1,5 +1,7 @@
 <?php
 namespace core;
+use core\tools\Utils;
+
 require_once 'i18n/language.php';
 
 use core\http\Request;
@@ -181,7 +183,7 @@ class FrontController {
 	//	public function doAction($module, $action = '', array $getAttributes = array()) {
 	public function doAction($module, $action = '') {
 		$action = $action ? $action : 'index';
-		$name = ucfirst( $module );
+		$name = ucfirst( strtolower( $module ) );
 		$className = Config::getOrDie('controller_dir') . $name;
 		try {
 			if( !isset( $this->alreadyIncludedController[$name] ) ) {
