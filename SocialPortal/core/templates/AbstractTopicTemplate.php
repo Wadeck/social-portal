@@ -2,6 +2,8 @@
 
 namespace core\templates;
 
+use socialportal\model\ForumMeta;
+
 use core\tools\Utils;
 
 use core\user\UserRoles;
@@ -65,10 +67,10 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$tagRepo = $this->em->getRepository('TermRelation');
 		$tags = $tagRepo->getAllTags($topicId);
 		
-		$isAdmin = $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role);
-		$isModo = $this->front->getViewHelper()->currentUserIs(UserRoles::$moderator_role);
+//		$isAdmin = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
+		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
 		$currentUserId = $this->front->getCurrentUser()->getId();
-		
+		$isFullUser = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
 		?>
 		<!-- Topic initial post -->
 			<div class="rounded-box" id="topic">
@@ -123,12 +125,15 @@ abstract class AbstractTopicTemplate implements iInsertable {
 							<span id="topic-tools">
 							<?php 
 							//TODO change this when capabilities will be implemented
-							if( $author->getId() === $currentUserId || $isAdmin || $isModo ){
+							if( $author->getId() === $currentUserId || $isModo ){
 								// only for author / admin/moderator
 								$this->insertEditTool($this->topic);
 							}
-							if( $isAdmin || $isModo ){
-								$this->insertAdminTools($this->topic);
+							if( $isModo ){
+								$this->insertModeratorTools($this->topic);
+							}
+							if( $isFullUser ){
+								$this->insertFullUserTools($this->topic);	
 							}
 							// for everybody 
 							$this->insertUserTools($this->topic);
@@ -168,13 +173,19 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	 * Insert all the administrative stuff
 	 * edit / stick / close / delete
 	 */
-	protected function insertAdminTools($topic){
+	protected function insertModeratorTools($topic){
 		$base = $topic->getTopicbase();
 		$customTypeId = $base->getCustomType();
 		$topicId = $base->getId();
 		$forumId = $base->getForum()->getId();
 		$viewHelper = $this->front->getViewHelper();
+		$typeId = $base->getCustomType();
+		$link = $viewHelper->createHrefWithNonce('move', 'Topic', 'move', array( 'forumIdFrom' => $forumId, 'topicId' => $topicId, 'forumIdTo' => '%forumIdTo%' ));
+		// we retrieve all the forums that could receive that topic, except the current one, if nothing found, we'll display a message instead of combobox
+		$this->insertMoveTool($link, $typeId, $forumId);
 		?>
+		
+		&nbsp;|&nbsp;
 		<?php if($base->getIsSticky()): ?>
 			<a href="<?php $viewHelper->insertHrefWithNonce('unstickTopic', 'Topic', 'unstick', array('forumId'=>$forumId, 'topicId'=>$topicId)); ?>"
 				title="<?php echo __( 'Unstick the topic, it will be shown like other topics by order of last modification' ); ?>"><?php echo __('Unstick'); ?></a>
@@ -205,12 +216,81 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	<?php
 	}
 	
+	protected function insertMoveTool($link, $typeId, $currentForumId){
+		$this->front->getViewHelper()->addJavascriptFile( 'jquery.js' );
+		$this->front->getViewHelper()->addJavascriptFile( 'move_topic.js' );
+		
+		// retrieve all forums
+		$potentialForums = $this->em->getRepository('ForumMeta')->findAllForumAcceptableTopics();
+		// filter all that cannot receive the topic
+		$potentialForums = array_filter($potentialForums, function( ForumMeta $meta ) use ($typeId, $currentForumId){
+			if( $currentForumId === $meta->getForumId() ){
+				// no double
+				return false;
+			}
+			$metas = unserialize( $meta->getMetaValue() );
+			if(in_array($typeId, $metas)){
+				return true;
+			}else{
+				return false;
+			}
+		});
+		
+		$count = count($potentialForums);
+		if($count){
+			$em = $this->em;
+			array_walk($potentialForums, function( ForumMeta &$item, $var ) use ($link, $em) {
+				$forumId = $item->getForumId();
+				$info['forumId'] = $forumId;
+				$info['link'] = strtr($link, array('%forumIdTo%' => $forumId) );
+				$forum = $em->find('Forum', $forumId);
+				if($forum){
+					$info['title'] = $forum->getName();
+				}else{
+					$info['title'] = "Not found ($forumId)";
+				}
+				
+				$item = $info;
+			});
+		}
+		$targetId = 'hiddenMove';
+		if( 0 === $count ) {
+			// only a message
+			?>
+			<span style="display: none;" id="<?php echo $targetId; ?>" class="move_message">
+				<?php echo __('No compatible forum found'); ?>
+			</span> 
+			<?php
+		}else if( 1 === $count ){
+			// only a link
+			$info = array_shift($potentialForums);
+			?>
+			<a style="display: none;" id="<?php echo $targetId; ?>" href="<?php echo $info['link']; ?>" title="<?php echo $info['title'] ; ?>"><?php echo __('Move to %forum_name%', array('%forum_name%' => $info['title'] )) ; ?></a>
+			<?php
+		}else{
+			// a combo box
+			$this->insertComboBoxMove($potentialForums, $targetId);
+		}
+		
+		?>
+		<a href="#" title="<?php echo __('Move'); ?>" onClick="hideMe(this); displayIt('<?php echo $targetId; ?>'); return false;"><?php echo __('Move'); ?></a>
+	<?php
+	}
+	
+	private function insertComboBoxMove( array $potentialForums, $targetId){
+		echo '<select style="display: none;" id="' . $targetId . '" onChange="onChange(this)">';
+		echo '<option value="0">' . __( 'Select the forum' ) . '</OPTION>';
+		foreach($potentialForums as $info){
+			echo '<option value="' . $info['link']. '">' . $info['title'] . '</OPTION>';
+		}
+		echo '</select>';
+	}
+	
 	/**
-	 * For everybody
-	 * Insert all the administrative stuff
+	 * For full user
 	 * report / -quote- / permalink 
 	 */
-	protected function insertUserTools($topic){
+	protected function insertFullUserTools($topic){
 		?>
 		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array('topicId'=>$topic->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
@@ -222,5 +302,12 @@ abstract class AbstractTopicTemplate implements iInsertable {
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
 								
 	<?php
+	}	
+	
+	/**
+	 * For everybody (included anonymous)
+	 */
+	protected function insertUserTools($topic){
+		return;
 	}	
 }

@@ -203,6 +203,17 @@ class ViewHelper {
 		return ($this->cacheRoles & $role) == $role;
 	}
 	
+	/**
+	 * Used to know if a user has the right to access function by its role
+	 * @param int $role UserRoles static attributes
+	 */
+	public function currentUserIsAtLeast($role){
+		if( !$this->cacheRoles ) {
+			$this->cacheRoles = $this->frontController->getCurrentUser()->getRoles();
+		}
+		return ($this->cacheRoles >= $role);
+	}
+	
 	/** @var array of capabilities, cache version */
 	private $cacheCapabilities;
 	public function currentUserCan($capability) {

@@ -26,6 +26,17 @@ class ForumMetaRepository extends EntityRepository {
 		}
 	}
 	
+	public function findAllForumAcceptableTopics(){
+		$dql = $this->_em->createQuery('SELECT fm FROM ForumMeta fm WHERE fm.metaKey = :key');
+		$dql->setParameter('key', '_acceptTopics');
+		$results = $dql->getResult();
+		if( $results ) {
+			return $results;
+		} else {
+			return array();
+		}
+	}
+	
 	/** 
 	 * @param int $forumId
 	 * @return array of topic type id

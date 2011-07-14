@@ -4,7 +4,6 @@
 var jq = jQuery;
 function radio_reset(obj){
 	jqThis = jq(obj);
-	jqThis.parentsUntil();
 	var parent = jqThis.parentsUntil('.radio_field');
 	if(!parent.length){
 		parent = jqThis;

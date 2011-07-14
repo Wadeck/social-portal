@@ -207,10 +207,7 @@ class Forum extends AbstractController {
 		
 		$metaRepo = $this->em->getRepository( 'ForumMeta' );
 		
-		if($this->frontController->getViewHelper()->currentUserIs(UserRoles::$anonymous_role)){
-			// anonymous users cannot create topics
-			$newTopicLink = false;
-		}else{
+		if( $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role) ){
 			$title = __('Click here to create a new topic');
 			$content = __('New');
 			// in case the user has the right, we check how much topic we can create
@@ -231,6 +228,9 @@ class Forum extends AbstractController {
 						array('forumId' => $forumId, 'typeId' => $acceptedTopics[0]->getTypeId())) .
 					'" title="' . $title . '">' . $content . '</a>';
 			}
+		}else{
+			// anonymous users cannot create topics
+			$newTopicLink = false;
 		}
 		
 		$getArgs = array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
@@ -255,7 +255,7 @@ class Forum extends AbstractController {
 		$indexSelected = array_search( $forum, $forums );
 		$forumHeader->createHeaders( $this->frontController, $forums, $indexSelected );
 		
-		if($this->frontController->getViewHelper()->currentUserIs(UserRoles::$admin_role)){
+		if($this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role)){
 			$getArgs = array( 'n' => $num_per_page, 'p'=>$page_num, 'forumId' => $forumId);
 			if(!$withDeleted){
 				$getArgs['withDeleted'] = true;
@@ -265,6 +265,7 @@ class Forum extends AbstractController {
 			}
 			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Forum', 'displaySingleForum', $getArgs );
 		}else{
+			// only moderator+ can display deleted topics
 			$displayDeletedLink = false;
 		}
 		$response->setVar( 'displayDeletedLink', $displayDeletedLink );

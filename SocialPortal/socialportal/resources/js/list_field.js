@@ -1,8 +1,4 @@
-/**
- * 
- */
 var jq = jQuery;
-
 
 jq(document).ready(function() {
 	jq('.list_field').each(function() {

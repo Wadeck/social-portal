@@ -57,7 +57,7 @@ class HomeBlockTemplate implements iInsertable{
 		$this->linkDisplayForum = $linkDisplayForum;
 		
 		//TODO replace with capabilities
-		$this->rightToSeeForum = !$this->front->getViewHelper()->currentUserIs(UserRoles::$anonymous_role);
+		$this->rightToSeeForum = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
 		$this->rightToCreateNew = $this->rightToSeeForum;
 	}
 	
