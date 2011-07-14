@@ -2,6 +2,10 @@
 
 namespace socialportal\controller;
 
+use socialportal\repository\InstructionRepository;
+
+use core\templates\InstructionTemplate;
+
 use socialportal\common\topic\TypeCenter;
 
 use core\templates\ModuleInsertTemplate;
@@ -153,9 +157,9 @@ class Topic extends AbstractController {
 		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
 		
 		// condition to satisfy to be able to write a comment
-		if(!$base->getIsOpen()){
+		if( !$base->getIsOpen() ){
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'The topic is closed, no more comment accepted' ) );
-		}else if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$anonymous_role ) ) {
+		}else if( !$this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$full_user_role ) ) {
 			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
 		} else {
 			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
@@ -178,7 +182,7 @@ class Topic extends AbstractController {
 		$response->setVar( 'topicTemplate', $typeManager->getTopicTemplate($this->frontController, $this->em, $topic, $permalinkTopic ) );
 		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $posts, $permalinkPost ) );
 		
-		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
+		if( $this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$moderator_role ) ) {
 			// optimization if we use permalink before
 			if(!$withDeleted){
 				$getArgs['withDeleted'] = true;
@@ -189,13 +193,6 @@ class Topic extends AbstractController {
 				// already computed
 				$displayDeletedLink = $permalinkPost;
 			}
-//			if(!$withDeleted){
-//				$getArgs['withDeleted'] = true;
-//				$response->setVar('isDisplayDeleted', true);
-//			}else{
-//				$response->setVar('isDisplayDeleted', false);
-//			}
-//			$displayDeletedLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		} else {
 			$displayDeletedLink = false;
 		}
@@ -260,10 +257,25 @@ class Topic extends AbstractController {
 		$form->setupWithArray();
 		$form->setTargetUrl( $actionUrl );
 		
+		$instrRepo = $this->em->getRepository('Instruction');
+		$name = $typeManager->getSimpleName();
+		$name = strtolower($name);
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixTopicType, $name);
+		$cookies = $this->frontController->getRequest()->cookies;
+		$cookieName = 'instruction_' . $name;
+		$visible = $cookies->get($cookieName, 'true');
+		if( 'true' === $visible ){
+			$visible = true;
+		}else{
+			$visible = false;
+		}
+		$template = new InstructionTemplate($this->frontController, $instruction, $visible, $cookieName);
+		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'topicId', $topicId );
 		$response->setVar( 'forumId', $forumId );
 		$response->setVar( 'form', $form );
+		$response->setVar( 'instruction', $template );
 		$this->frontController->doDisplay( 'topic', 'displayForm' );
 	}
 	
@@ -588,6 +600,7 @@ class Topic extends AbstractController {
 		$this->frontController->addMessage( __( 'Close operation success' ), 'correct' );
 		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
+	
 	/**
 	 * @Nonce(openTopic)
 	 * @GetAttributes({topicId, forumId})
@@ -621,12 +634,59 @@ class Topic extends AbstractController {
 		$this->frontController->addMessage( __( 'Open operation success' ), 'correct' );
 		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumId, 'timeTarget' => $time ) );
 	}
-
-	//	public function viewAllAction($parameters) {
-//		$forums = $this->em->getRepository( 'Forum' )->findAll();
-//		$this->frontController->getResponse()->setVar( 'forums', $forums );
-//		$this->frontController->doDisplay( 'Forum', 'viewAll' );
-//	}
-
+	
+	/**
+	 * @Nonce(move)
+	 * @GetAttributes({topicId, forumIdFrom, forumIdTo})
+	 * @RoleAtLeast(moderator)
+	 */
+	public function moveAction() {
+		$get = $this->frontController->getRequest()->query;
+		$topicId = $get->get( 'topicId' );
+		$forumIdFrom = $get->get( 'forumIdFrom' );
+		$forumIdTo = $get->get( 'forumIdTo' );
+		
+		if( $forumIdTo === $forumIdFrom ){
+			$this->frontController->addMessage( __( 'You cannot move a topic to the same forum' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumIdFrom ) );
+		}
+		
+		$topicRepo = $this->em->getRepository( 'TopicBase' );
+		$topic = $topicRepo->find( $topicId );
+		$typeId = $topic->getCustomType();
+		
+		$forumMetaRepo = $this->em->getRepository( 'ForumMeta' );
+		$forumToAcceptables = $forumMetaRepo->getAcceptableTopics($forumIdTo);
+		
+		if( !in_array($typeId, $forumToAcceptables) ){
+			Logger::getInstance()->log_var('Attempt to move a topic to a forum that does not accept it', array('topic' => $topic, 'forumAcceptables' => $forumToAcceptables));
+			$this->frontController->addMessage( __( 'Move operation failed' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumIdFrom ) );
+		}
+		
+		// move the topic to the other forum
+		$topic->setForum($this->em->getReference('Forum', $forumIdTo) );
+		$this->em->persist($topic);
+		if( !$this->em->flushSafe() ){
+			$this->frontController->addMessage( __( 'Error in persisting the entity' ), 'error' );
+			$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumIdFrom ) );
+		}
+		
+		// if success decrease the number of topic of forumFrom, increase of ForumTo
+		if( !$topic->getIsDeleted() ){
+			$numPost = $topic->getNumPosts();
+			
+			$forumRepo = $this->em->getRepository( 'Forum' );
+			$forumRepo->incrementTopicCount( $forumIdFrom, -1 );
+			$forumRepo->incrementPostCount( $forumIdFrom, -$numPost );
+			$forumRepo->incrementTopicCount( $forumIdTo, 1 );
+			$forumRepo->incrementPostCount( $forumIdTo, $numPost );
+		}
+		
+		$time = $topic->getTime()->getTimestamp();
+		
+		$this->frontController->addMessage( __( 'Move operation success' ), 'correct' );
+		$this->frontController->doRedirect( 'Forum', 'displaySingleForum', array( 'forumId' => $forumIdTo, 'timeTarget' => $time ) );
+	}
 
 }

@@ -105,7 +105,7 @@ class Tool extends AbstractController {
 	 */
 	public function createBaseForumAction() {
 		$forumDiscussion = new Forum();
-		$forumDiscussion->setName(  __('Discussion') );
+		$forumDiscussion->setName(  __('Discussions') );
 		$forumDiscussion->setDescription(  __('Place where people can speak with others freely') );
 		$forumDiscussion->setPosition( 1 );
 		$forumDiscussion->setNumPosts( 0 );
@@ -284,6 +284,42 @@ class Tool extends AbstractController {
 		}
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
+
+	public function createBaseCountriesAndStatesAction(){
+		$file = '_config/countries_states.txt';
+		$reader = new CountryReader();
+		$reader->setFile($file);
+		
+		//where country = [countryCode, countryName, phoneCode, states]
+		//	where states = [state]
+		//		where state = [countryCode, shortName, stateName]
+		$countries = $reader->getAllCountries();
+		$entity = null;
+		foreach ($countries as $country){
+			$entity = new UserProfileCountry();
+			$entity->setCountryCode($country['countryCode']);
+			$entity->setCountryName(utf8_encode($country['countryName']));
+			$entity->setPhoneCode($country['phoneCode']);
+			$this->em->persist($entity);
+			if(!$this->em->flushSafe()){
+				$this->frontController->addMessage('Problem during creation of countries for country '.$country['countryName'], 'error');
+				$this->frontController->doRedirect('Tool');
+			}
+			foreach($country['states'] as $state){
+				$stateEntity = new UserProfileState();
+				$stateEntity->setCountryId($entity->getId());
+				$stateEntity->setShortName($state['shortName']);
+				$stateEntity->setStateName(utf8_encode($state['stateName']));
+				$this->em->persist($stateEntity);
+			}
+			if(!$this->em->flushSafe()){
+				$this->frontController->addMessage('Problem during creation of states for country '.$country['countryName'], 'error');
+				$this->frontController->doRedirect('Tool');
+			}
+		}
+		$this->frontController->addMessage('Creation of the countries done.', 'correct');
+		$this->frontController->doRedirect('Tool');
+	}
 	
 	public function updateDatabaseAction(){
 		include './scripts/create_database.php';
@@ -460,42 +496,6 @@ class Tool extends AbstractController {
 		$filename = 'log.txt';
 		$log = file_get_contents($filename);
 		$this->frontController->doDisplay('tool', 'displayLog', array('log' => $log));
-	}
-	
-	public function createBaseCountriesAndStatesAction(){
-		$file = '_config/countries_states.txt';
-		$reader = new CountryReader();
-		$reader->setFile($file);
-		
-		//where country = [countryCode, countryName, phoneCode, states]
-		//	where states = [state]
-		//		where state = [countryCode, shortName, stateName]
-		$countries = $reader->getAllCountries();
-		$entity = null;
-		foreach ($countries as $country){
-			$entity = new UserProfileCountry();
-			$entity->setCountryCode($country['countryCode']);
-			$entity->setCountryName(utf8_encode($country['countryName']));
-			$entity->setPhoneCode($country['phoneCode']);
-			$this->em->persist($entity);
-			if(!$this->em->flushSafe()){
-				$this->frontController->addMessage('Problem during creation of countries for country '.$country['countryName'], 'error');
-				$this->frontController->doRedirect('Tool');
-			}
-			foreach($country['states'] as $state){
-				$stateEntity = new UserProfileState();
-				$stateEntity->setCountryId($entity->getId());
-				$stateEntity->setShortName($state['shortName']);
-				$stateEntity->setStateName(utf8_encode($state['stateName']));
-				$this->em->persist($stateEntity);
-			}
-			if(!$this->em->flushSafe()){
-				$this->frontController->addMessage('Problem during creation of states for country '.$country['countryName'], 'error');
-				$this->frontController->doRedirect('Tool');
-			}
-		}
-		$this->frontController->addMessage('Creation of the countries done.', 'correct');
-		$this->frontController->doRedirect('Tool');
 	}
 	
 	public function displayAllCountryAction(){

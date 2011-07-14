@@ -58,8 +58,8 @@ abstract class AbstractPostTemplate implements iInsertable{
 		}
 		$userHelper = new UserHelper($this->front);
 		
-		$isAdmin = $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role);
-		$isModo = $this->front->getViewHelper()->currentUserIs(UserRoles::$moderator_role);
+//		$isAdmin = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
+		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
 		$currentUserId = $this->front->getCurrentUser()->getId();
 		
 		?>
@@ -92,12 +92,12 @@ abstract class AbstractPostTemplate implements iInsertable{
 							<span id="topic-tools">
 							<?php
 							//TODO change this when capabilities will be implemented
-							if($postAuthor->getId() === $currentUserId || $isAdmin || $isModo){
+							if( $postAuthor->getId() === $currentUserId || $isModo ){
 								$this->insertEditTool($post);
 							}
 							
-							if($isAdmin || $isModo){
-								$this->insertAdminTools($post);
+							if( $isModo ){
+								$this->insertModeratorTools($post);
 							}
 							
 							$this->insertUserTools($post);
@@ -143,7 +143,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 * Insert all the administrative stuff
 	 * edit / stick / close / delete
 	 */
-	protected function insertAdminTools($post){
+	protected function insertModeratorTools($post){
 		$base = $post->getPostbase();
 		$customTypeId = $base->getCustomType();
 		$postId = $base->getId();

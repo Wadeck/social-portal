@@ -430,7 +430,12 @@ mercredi 13 juillet
 - correction d'un bug avec le nom du module
 - modification du password possible avec notif par email
 - ajout d'une condition de recherche de post: postIdTarget
---
+
+jeudi 14 juillet
+- clean des roles avec "atLeast" dans le viewHelper
+- instruction display, avec hide/show et click sur la box
+- move action receiver fait
+- move link
 
 
 

@@ -1,0 +1,44 @@
+@CHARSET "ISO-8859-1";
+
+#instruction-box{
+	width: 60%;
+	margin: 0px auto 15px;
+	padding: 6px;
+	background-color: #fbfbfb;
+	border: 1px dashed #ccc;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	cursor: pointer;
+}
+
+#instruction-display{
+	/*float: right;*/
+	/*text-align: right;*/
+	line-height: 1;
+	font-size: 90%;
+	float: right;
+}
+
+#instruction-box #instruction-main{
+}
+
+#instruction-box #instruction-main #instruction-content{
+	clear: both;	
+	margin: 0 0 10px ;
+}
+
+#instruction-box #instruction-main #instruction-meta{
+	clear: both;
+	font-size: 70%;
+	line-height: 1;
+	color: #ccc;
+}
+
+#instruction-box #instruction-main #instruction-meta #instruction-last-modified{
+	
+}
+#instruction-box #instruction-main #instruction-meta #instruction-instruction{
+	text-align: right;
+	float: right;
+}

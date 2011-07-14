@@ -26,7 +26,7 @@ class ProfileTemplate implements iInsertable {
 	/** @var User */
 	private $currentUser;
 	/** @var boolean */
-	private $isAdmin;
+	private $isModo;
 	/** @var boolean */
 	private $isSelf;
 	/** @var UserHelper */
@@ -39,7 +39,7 @@ class ProfileTemplate implements iInsertable {
 		$this->user = $user;
 		$this->profile = $profile;
 		$this->currentUser = $this->front->getCurrentUser();
-		$this->isAdmin = $this->front->getViewHelper()->currentUserIs(UserRoles::$admin_role);
+		$this->isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
 		$this->isSelf = ($this->user->getId() === $this->currentUser->getId());
 		$this->userHelper = new UserHelper($this->front);
 		$this->userHelper->setCurrentUser($this->user);
@@ -72,16 +72,16 @@ class ProfileTemplate implements iInsertable {
 		?><div id="avatar"><?php $this->userHelper->insertAvatar(75); ?></div>
 	<?php
 	}
+	
 	private function insertCorrectTools(){
 		if($this->isSelf){
 			$this->insertToolSelf();
-		}else if($this->isAdmin){
-			$this->insertToolAdmin();
+		}else if($this->isModo){
+			$this->insertToolModerator();
 		}else{
 			$this->insertToolVisitor();
 		}
 	}
-	
 	
 	private function insertToolSelf(){
 		$editProfile = __('Edit profile');
@@ -122,7 +122,7 @@ class ProfileTemplate implements iInsertable {
 		</div>
 	<?php
 	}
-	private function insertToolAdmin(){
+	private function insertToolModerator(){
 		$resetPassword = __('Reset password');
 		$username = $this->user->getUsername();
 		?>
@@ -142,7 +142,7 @@ class ProfileTemplate implements iInsertable {
 	private function insertCorrectContent(){
 		if($this->isSelf){
 			$this->insertContentSelf();
-		}else if($this->isAdmin){
+		}else if($this->isModo){
 			$this->insertContentAdmin();
 		}else{
 			$this->insertContentVisitor();
@@ -384,64 +384,4 @@ class ProfileTemplate implements iInsertable {
 		
 		<?php
 	}
-	private function insertInformation2(){
-		$birth = $this->profile->getBirth();
-		$gender = $this->profile->getGender();
-		
-		if(null === $gender){
-			$gender = null;
-		}elseif(!$gender){
-			$gender = __('Male');
-		}else{
-			$gender = __('Female');
-		}
-			
-		$description = $this->profile->getDescription();
-		$objectives = $this->profile->getObjectives();
-		$quote = $this->profile->getQuote();
-		if($birth){
-			$age = Utils::getAgeFromBirthday($birth->getTimestamp());
-			$age = __('%age% years old', array('%age%'=>$age));
-		}else{
-			$age = null;
-		}
-		$lastModificationDate = $this->profile->getLastModified();
-		$lastModificationDate = Utils::getDataSince($lastModificationDate, false);
-		?>
-		
-		<?php if(null !== $gender):?>
-			<div class="profile-field" id="gender">
-				<span class="label"><?php echo __('Gender:'); ?></span>
-				<span><?php echo $gender; ?></span>
-			</div>
-		<?php endif; ?>
-		<?php if(null !== $age):?>
-			<div class="profile-field" id="age">
-				<span class="label"><?php echo __('Age:'); ?></span>
-				<span><?php echo $age; ?></span>
-			</div>
-		<?php endif; ?>
-		<?php if($description):?>
-		<div class="profile-field" id="description">
-			<span class="label"><?php echo __('Description:'); ?></span>
-			<span><?php echo $description; ?></span>
-		</div>
-		<?php endif; ?>
-		<?php if($objectives):?>
-		<div class="profile-field" id="objectives">
-			<span class="label"><?php echo __('Objectives:'); ?></span>
-			<span><?php echo $objectives; ?></span>
-		</div>
-		<?php endif; ?>
-		<div class="profile-field" id="quote">
-			<span class="start_quote"> </span>
-			<span><?php echo $quote; ?></span>
-			<span class="end_quote"> </span>
-		</div>
-		<div class="profile-field" id="last_modification">
-			<span><?php echo __('Last modification: %date%', array('%date%'=>$lastModificationDate)); ?></span>
-		</div>
-		<?php
-	}
-
 }

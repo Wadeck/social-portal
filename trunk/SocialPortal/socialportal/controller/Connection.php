@@ -33,7 +33,7 @@ class Connection extends AbstractController {
 		$this->frontController->getResponse()->setVar( 'userHelper', $userHelper );
 		
 		//TODO remove when the capabilities will be done
-		if( $this->frontController->getViewHelper()->currentUserIs( UserRoles::$admin_role ) ) {
+		if( $this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$admin_role ) ) {
 			$toolLink = $this->frontController->getViewHelper()->createHref( 'Tool', 'index' );
 			$this->frontController->getResponse()->setVar( 'toolLink', $toolLink );
 		}
@@ -86,7 +86,7 @@ class Connection extends AbstractController {
 	public function logoutAction() {
 		// logout => remove session / cookie
 		$this->frontController->getUserManager()->disconnect();
-		$this->frontController->doRedirect( 'home', 'index' );
+		$this->frontController->doRedirect( 'Home' );
 	}
 	
 	public function displayRegisterFormAction() {

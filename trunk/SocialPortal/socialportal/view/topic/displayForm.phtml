@@ -5,6 +5,7 @@ $forumId = $vars['forumId'];
 $topicId = isset($vars['topicId']) ? $vars['topicId'] : false;
 
 $vars['helper']->setTitle(__('Topic edition'));
+$instruction = $vars['instruction'];
 ?>
 
 <div id="link-back">
@@ -24,8 +25,12 @@ $vars['helper']->setTitle(__('Topic edition'));
 <?php endif; ?>
 &nbsp;
 <h4> <?php echo __('Topic edition'); ?></h4>
+
+<?php $instruction->insertButton();?>
+
 </div>
 
+<?php $instruction->insert();?>
 <?php
 if($vars['form']){
 	echo '<div class="rounded-box">';
