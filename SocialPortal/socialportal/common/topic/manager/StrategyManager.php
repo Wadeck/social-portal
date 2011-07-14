@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
 
-use core\form\custom\PostStrategyForm;
+use socialportal\common\form\custom\PostStrategyForm;
 
-use core\form\custom\TopicStrategyForm;
+use socialportal\common\form\custom\TopicStrategyForm;
 
-use core\templates\StrategyPostTemplate;
+use socialportal\common\templates\StrategyPostTemplate;
 
-use core\templates\StrategyTopicTemplate;
+use socialportal\common\templates\StrategyTopicTemplate;
 
 use socialportal\common\topic\AbstractTypeManager;
 

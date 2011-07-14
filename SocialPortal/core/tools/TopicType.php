@@ -2,25 +2,25 @@
 
 namespace core\tools;
 
-use core\templates\StrategyPostTemplate;
+use socialportal\common\templates\StrategyPostTemplate;
 
-use core\templates\StoryPostTemplate;
+use socialportal\common\templates\StoryPostTemplate;
 
-use core\templates\FreetextPostTemplate;
+use socialportal\common\templates\FreetextPostTemplate;
 
-use core\templates\ActivityPostTemplate;
+use socialportal\common\templates\ActivityPostTemplate;
 
 use core\FrontController;
 
 use Doctrine\ORM\EntityManager;
 
-use core\templates\StrategyTopicTemplate;
+use socialportal\common\templates\StrategyTopicTemplate;
 
-use core\templates\StoryTopicTemplate;
+use socialportal\common\templates\StoryTopicTemplate;
 
-use core\templates\FreetextTopicTemplate;
+use socialportal\common\templates\FreetextTopicTemplate;
 
-use core\templates\ActivityTopicTemplate;
+use socialportal\common\templates\ActivityTopicTemplate;
 
 /**
  * @author Wadeck

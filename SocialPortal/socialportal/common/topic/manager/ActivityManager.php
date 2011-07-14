@@ -4,15 +4,15 @@ namespace socialportal\common\topic\manager;
 
 use Doctrine\ORM\EntityManager;
 
-use core\form\custom\TopicActivityForm;
+use socialportal\common\form\custom\TopicActivityForm;
+use socialportal\common\form\custom\PostActivityForm;
 
 use core\FrontController;
 
-use core\form\custom\PostActivityForm;
 
-use core\templates\ActivityPostTemplate;
+use socialportal\common\templates\ActivityPostTemplate;
 
-use core\templates\ActivityTopicTemplate;
+use socialportal\common\templates\ActivityTopicTemplate;
 
 use socialportal\common\topic\AbstractTypeManager;
 

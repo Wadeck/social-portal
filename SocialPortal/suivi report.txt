@@ -437,9 +437,10 @@ jeudi 14 juillet
 - move action receiver fait
 - move link
 
-
-
-
+jeudi 14 juillet soir
+- refactor des templates pour les placer dans le bon package
+- refactor des forms dans un package application
+- clean / refactor du profile (les images...)
 
 
 
@@ -448,7 +449,6 @@ bug css - les border des topics tagé couvrent celle du dessus et sont couverte p
 
 todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée
 todo - les emails partent correctement si une adresse locale se situe dans le header
-todo - profile tools link (good link but nothing behind)
 todo - description des dates en format normal, hover
 todo - maintenance
 todo - args_nonce, hash sur controller/action/getargs, ajouté au getargs et retrieved by annotation, peut etre tres utile pour les suppressions de posts/topic, modification profile etc

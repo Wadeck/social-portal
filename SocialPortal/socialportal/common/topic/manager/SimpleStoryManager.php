@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
 
-use core\form\custom\PostStoryForm;
+use socialportal\common\form\custom\PostStoryForm;
 
-use core\form\custom\TopicStoryForm;
+use socialportal\common\form\custom\TopicStoryForm;
 
-use core\templates\StoryPostTemplate;
+use socialportal\common\templates\StoryPostTemplate;
 
-use core\templates\StoryTopicTemplate;
+use socialportal\common\templates\StoryTopicTemplate;
 
 use socialportal\common\topic\AbstractTypeManager;
 

@@ -9,7 +9,7 @@ use socialportal\repository\TopicBaseRepository;
 
 use socialportal\repository\ForumRepository;
 
-use core\templates\HomeBlockTemplate;
+use socialportal\common\templates\HomeBlockTemplate;
 
 use core;
 
