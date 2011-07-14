@@ -4,7 +4,7 @@ namespace core\form;
 
 use core\Config;
 
-use core\templates\iInsertable;
+use socialportal\common\templates\iInsertable;
 
 use core\debug\Logger;
 

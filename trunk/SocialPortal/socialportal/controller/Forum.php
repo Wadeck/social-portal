@@ -5,7 +5,7 @@ use socialportal\common\topic\TypeCenter;
 
 use core\user\UserRoles;
 
-use core\templates\ForumHeader;
+use socialportal\common\templates\ForumHeader;
 
 use core\user\UserHelper;
 
@@ -15,7 +15,7 @@ use core\debug\Logger;
 
 use socialportal\model\Forum as ForumEntity;
 
-use core\form\custom\ForumForm;
+use socialportal\common\form\custom\ForumForm;
 
 use core\form\Form;
 

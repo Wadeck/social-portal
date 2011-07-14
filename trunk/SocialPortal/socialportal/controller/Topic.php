@@ -4,13 +4,13 @@ namespace socialportal\controller;
 
 use socialportal\repository\InstructionRepository;
 
-use core\templates\InstructionTemplate;
+use socialportal\common\templates\InstructionTemplate;
 
 use socialportal\common\topic\TypeCenter;
 
-use core\templates\ModuleInsertTemplate;
+use socialportal\common\templates\ModuleInsertTemplate;
 
-use core\templates\MessageInsertTemplate;
+use socialportal\common\templates\MessageInsertTemplate;
 
 use core\user\UserRoles;
 
@@ -24,7 +24,7 @@ use core\debug\Logger;
 
 use socialportal\model\TopicBase as TopicEntity;
 
-use core\form\custom\ForumForm;
+use socialportal\common\form\custom\ForumForm;
 
 use core\form\Form;
 

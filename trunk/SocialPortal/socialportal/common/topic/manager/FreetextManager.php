@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
 
-use core\form\custom\PostFreetextForm;
+use socialportal\common\form\custom\PostFreetextForm;
 
-use core\form\custom\TopicFreetextForm;
+use socialportal\common\form\custom\TopicFreetextForm;
 
-use core\templates\FreetextPostTemplate;
+use socialportal\common\templates\FreetextPostTemplate;
 
-use core\templates\FreetextTopicTemplate;
+use socialportal\common\templates\FreetextTopicTemplate;
 
 use socialportal\common\topic\AbstractTypeManager;
 

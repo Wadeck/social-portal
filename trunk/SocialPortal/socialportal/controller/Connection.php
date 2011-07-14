@@ -1,11 +1,11 @@
 <?php
 
 namespace socialportal\controller;
-use core\form\custom\RegisterForm;
+use socialportal\common\form\custom\RegisterForm;
 
 use core\user\UserHelper;
 
-use core\form\custom\LoginForm;
+use socialportal\common\form\custom\LoginForm;
 
 use core\FrontController;
 

@@ -5,7 +5,7 @@ use socialportal\common\topic\TypeCenter;
 
 use core\user\UserHelper;
 
-use core\templates\MessageInsertTemplate;
+use socialportal\common\templates\MessageInsertTemplate;
 
 use core\user\UserRoles;
 
@@ -18,8 +18,6 @@ use core\user\UserManager;
 use core\debug\Logger;
 
 use socialportal\model\PostBase as PostEntity;
-
-use core\form\custom\ForumForm;
 
 use core\form\Form;
 
