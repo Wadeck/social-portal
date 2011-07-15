@@ -44,6 +44,9 @@ use core\AbstractController;
  *
  */
 class Tool extends AbstractController {
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function indexAction() {
 		$refl = new \ReflectionClass( $this );
 		$currentClass = $refl->getShortName();
@@ -71,20 +74,32 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayAllTools' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function generateErrorMessageAction() {
 		$this->frontController->addMessage( 'Test error', 'error' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
+	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function generateCorrectMessageAction() {
 		$this->frontController->addMessage( 'Test correct', 'correct' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
+	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function generateInfoMessageAction() {
 		$this->frontController->addMessage( 'Test info' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 * @_GetAttributes({key, password})
 	 */
 	public function directCreatePasswordAction() {
@@ -101,6 +116,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 * Could be long as we want, cause it is called only once per installation
 	 */
 	public function createBaseForumAction() {
@@ -163,6 +179,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createBaseUserAction() {
 		$anonUser = UserManager::getAnonymousUser();
 		$nullUser = UserManager::getNullUser();
@@ -178,6 +197,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createBaseInstructionsAction(){
 		$instrRepo = $this->em->getRepository('Instruction');
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'activity', __( 'The activity topics will be used to share activities with other' ));
@@ -285,6 +307,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createBaseCountriesAndStatesAction(){
 		$file = '_config/countries_states.txt';
 		$reader = new CountryReader();
@@ -321,6 +346,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect('Tool');
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function updateDatabaseAction(){
 		include './scripts/create_database.php';
 		$result = 1;
@@ -332,6 +360,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createFloodFirstForumAction() {
 		$get = $this->frontController->getRequest()->query;
 		$numFlood = $get->get( 'num', 10 );
@@ -378,6 +409,10 @@ class Tool extends AbstractController {
 		$this->frontController->addMessage( "Forum flood success: $numFlood topics created", 'correct' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
+	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createFloodFirstTopicAction() {
 		$get = $this->frontController->getRequest()->query;
 		$numFlood = $get->get( 'num', 1000 );
@@ -449,6 +484,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function recountAllTopicsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
 		$forums = $forumRep->findAll();
@@ -468,6 +506,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function recountAllPostsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
 		$forums = $forumRep->findAll();
@@ -492,18 +533,27 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function displayLogAction(){
 		$filename = 'log.txt';
 		$log = file_get_contents($filename);
 		$this->frontController->doDisplay('tool', 'displayLog', array('log' => $log));
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function displayAllCountryAction(){
 		$countries = $this->em->getRepository('UserProfileCountry')->findAll();
 		$states = $this->em->getRepository('UserProfileState')->findAll();
 		$this->frontController->doDisplay('tool', 'displayCountriesTest', array('countries' => $countries, 'states'=>$states));
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function sendFakeEmailAction(){
 		$currentTime = $this->frontController->getRequest()->getRequestTime();
 		$currentTime = date('H:i A', $currentTime);
@@ -527,4 +577,18 @@ class Tool extends AbstractController {
 		
 		$this->frontController->doRedirect('Tool');
 	}
+	
+//	/**
+//	 * @RoleAtLeast(administrator)
+//	 */
+//	public function doMaintenanceAction(){
+//		$curr = getcwd();
+//		$filename = '.htaccess';
+//		$exist = file_exists($filename);
+//		$readable = is_readable($filename);
+//		$modifiable = is_writable($filename);
+//		$content = file_get_contents($filename);
+//		$content = str_replace('/SocialPortal/index.php', '/SocialPortal/index2.php', $content);
+//		file_put_contents($filename, $content);
+//	}
 }

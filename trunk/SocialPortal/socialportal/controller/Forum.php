@@ -31,120 +31,7 @@ use DateTime;
 
 class Forum extends AbstractController {
 	/**
-	 * [forumId(opt for edit)]
-	 */
-	public function displayFormAction() {
-		$get = $this->frontController->getRequest()->query;
-		$forumId = $get->get( 'forumId', false );
-		
-		// retrieve information and then pass to the form
-		// if existing information, we put as action "edit" instead of create
-		$form = new ForumForm( $this->frontController );
-		
-		$actionUrl = null;
-		if( false !== $forumId ) {
-			$forum = $this->em->find( 'Forum', $forumId );
-			if( $forum ) {
-				$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'edit', array( 'forumId' => $forumId ) );
-				// fill the form with the forum current values 
-				$form->setupWithForum( $forum );
-				// then add the value retrieve from POST
-				// they could erase the data but actually it's what we want
-				$form->setupWithArray();
-				$form->setNonceAction( 'editForum' );
-			}
-		}
-		if( !$actionUrl ) {
-			$actionUrl = $this->frontController->getViewHelper()->createHref( 'Forum', 'create' );
-			$form->setupWithArray();
-			$form->setNonceAction( 'createForum' );
-		}
-		//		$form->setCss($cssClass)
-		$form->setTargetUrl( $actionUrl );
-		
-		$this->frontController->getResponse()->setVar( 'form', $form );
-		$this->frontController->doDisplay( 'forum', 'displayForm' );
-	}
-	
-	/**
-	 * @Method(POST)
-	 * @Nonce(createForum)
-	 */
-	public function createAction() {
-		$form = new ForumForm( $this->frontController );
-		$form->setupWithArray();
-		$form->checkAndPrepareContent();
-		
-		$forum = new ForumEntity();
-		$forum->setName( $form->getForumName() );
-		$forum->setDescription( $form->getForumDescription() );
-		$forum->setNumPosts( 0 );
-		$forum->setNumTopics( 0 );
-		
-		$this->em->persist( $forum );
-		if( !$this->em->flushSafe( $forum ) ) {
-			$this->frontController->addMessage( __( 'There is already a forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl( $referrer );
-		}
-		
-		$this->frontController->addMessage( __( 'The creation of forum called %name% was a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
-		// TODO redirect to the created forum !
-		$this->frontController->doRedirect( 'forum', 'viewAll' );
-	}
-	
-	/**
-	 * @Method(POST)
-	 * @Nonce(editForum)
-	 * @GetAttributes(forumId)
-	 */
-	public function editAction() {
-		$get = $this->frontController->getRequest()->query;
-		$forumId = $get->get( 'forumId' );
-		
-		$form = new ForumForm( $this->frontController );
-		$form->setupWithArray();
-		$form->checkAndPrepareContent();
-		
-		$forum = $this->em->find( 'Forum', $forumId );
-		$forum->setName( $form->getForumName() );
-		$forum->setDescription( $form->getForumDescription() );
-		
-		$this->em->persist( $forum );
-		if( !$this->em->flushSafe( $forum ) ) {
-			$this->frontController->addMessage( __( 'A problem occurred during the edition of forum called %name%', array( '%name%' => $form->getForumName() ) ), 'error' );
-			$referrer = $this->frontController->getRequest()->getReferrer();
-			$this->frontController->doRedirectUrl( $referrer );
-		}
-		
-		$this->frontController->addMessage( __( 'All the modification for the forum called %name% were a success', array( '%name%' => $form->getForumName() ) ), 'correct' );
-		
-		// TODO redirect to the edited forum !
-		$this->frontController->doRedirect( 'forum', 'viewAll' );
-	}
-	
-	/**
-	 * @Nonce(deleteForum)
-	 */
-	public function deleteAction() {}
-	
-	/**
-	 * @Nonce(moveForum)
-	 */
-	public function moveAction() {
-
-	}
-	
-	/**
-	 * @deprecated
-	 */
-	public function viewAllAction() {
-		$forums = $this->em->getRepository( 'Forum' )->findAll();
-		$this->frontController->getResponse()->setVar( 'forums', $forums );
-		$this->frontController->doDisplay( 'Forum', 'viewAll' );
-	}
-	
-	/**
+	 * @RoleAtLeast(fulluser)
 	 * @GetAttributes(forumId)
 	 * [p, n, timeTarget(timestamp int), lastPage(boolean), withDeleted(boolean)]
 	 */
@@ -229,8 +116,10 @@ class Forum extends AbstractController {
 					'" title="' . $title . '">' . $content . '</a>';
 			}
 		}else{
-			// anonymous users cannot create topics
+			// anonymous/limited users cannot create topics
+			// actually the anonymous have not the right to access this page
 			$newTopicLink = false;
+			$acceptedTopics = array();
 		}
 		
 		$getArgs = array( 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );

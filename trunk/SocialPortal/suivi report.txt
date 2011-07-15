@@ -442,11 +442,14 @@ jeudi 14 juillet soir
 - refactor des forms dans un package application
 - clean / refactor du profile (les images...)
 
+vendredi 15 juillet
+- bug resolu pour les borders des topics tagé
+- correction d'un bug avec les accepted topics par forum
 
 
 
-bug css - les border des topics tagé couvrent celle du dessus et sont couverte par celles d'en dessous
 
+todo - faire le menage dans les liens de retour au sommet des pages, les mettre dans une class avec des object à passer avec controle des accès
 todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée
 todo - les emails partent correctement si une adresse locale se situe dans le header
 todo - description des dates en format normal, hover
