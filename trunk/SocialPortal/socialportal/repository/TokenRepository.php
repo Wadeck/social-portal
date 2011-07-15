@@ -24,10 +24,14 @@ class TokenRepository extends EntityRepository {
 	 * @param string $tokenValue The random key we search for
 	 * @return Token|false if the token is not found
 	 */
-	public function findValidToken($tokenValue) {
+	public function findValidToken($tokenValue, $tokenType) {
 		$datetime = new \DateTime('now');
-		
-		$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND t.expirationDate >= :time' );
+		if(false === $tokenType){
+			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time) OR (t.expirationDate IS NULL)' );
+		}else{
+			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND t.expirationDate >= :time AND t.type = :type' );
+			$dql->setParameter( 'type', $tokenType );
+		}
 		$dql->setParameter( 'token', $tokenValue );
 		$dql->setParameter('time', $datetime, \Doctrine\DBAL\Types\Type::DATETIME);
 		$dql->setMaxResults( 1 );
@@ -43,16 +47,10 @@ class TokenRepository extends EntityRepository {
 	 * @return array Metadata that were stored in the token | false if the token is not found
 	 * @warning check false === and not false == because the meta can be an empty array
 	 */
-	public function findValidTokenMeta($tokenValue) {
-		$datetime = new \DateTime('now');
-		
-		$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND t.expirationDate >= :time' );
-		$dql->setParameter( 'token', $tokenValue );
-		$dql->setParameter('time', $datetime, \Doctrine\DBAL\Types\Type::DATETIME);
-		$dql->setMaxResults( 1 );
-		$result = $dql->getResult();
-		if( $result ) {
-			return unserialize($result[0]->getMeta() );
+	public function findValidTokenMeta($tokenValue, $tokenType) {
+		$result = $this->findValidToken($tokenValue, $tokenType);
+		if( false !== $result ) {
+			return unserialize($result->getMeta() );
 		} else {
 			return false;
 		}
@@ -60,12 +58,12 @@ class TokenRepository extends EntityRepository {
 
 	/**
 	 * 
-	 * @param int $expirationTime Time in second in which the token will be expired
+	 * @param int $expirationTime Time in second in which the token will be expired, null|negative will lead to infinite lifetime
 	 * @param array $meta Metadata that will be stored with the token
 	 * @return Valid token already flushed | null if there was a problem in expiration time
 	 * @flush
 	 */
-	public function createValidToken(array $meta = array(), $expirationTime = false){
+	public function createValidToken(array $meta, $tokenType, $expirationTime = false){
 		if(false === $expirationTime || $expirationTime < 0){
 			// no expiration date
 			$expirationDate = null;
@@ -80,6 +78,7 @@ class TokenRepository extends EntityRepository {
 		$token = new Token();
 		$token->setExpirationDate($expirationDate);
 		$token->setMeta($meta);
+		$token->setType($tokenType);
 		$this->_em->persist($token);
 		
 		$max = Config::get('max_attempts', 5);

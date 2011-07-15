@@ -44,6 +44,13 @@ class UserHelper {
 		return true;
 	}
 	
+	/**
+	 * @return true if the current user is not null
+	 */
+	public function setCurrentUserAnonymous() {
+		$this->currentUser = UserManager::getAnonymousUser();
+	}
+	
 	public function getId() {
 		return $this->currentUser->getId();
 	}
@@ -84,17 +91,23 @@ class UserHelper {
 		if(false === $link){
 			$link = $this->getUrlToProfile();
 		}
-		?><a rel="nofollow" class="avatar" href="<?php
-		echo $link;
-		?>"><img src="<?php
-		echo $imgLink;
-		?>" alt="Avatar Image" class="avatar user-11-avatar"
-	width="<?php
-		echo $size;
-		?>" height="<?php
-		echo $size;
-		?>"></a>
-<?php
+		if($this->currentUser->getId()): ?>
+		<a rel="nofollow"
+			class="avatar"
+			href="<?php echo $link; ?>">
+			<img src="<?php echo $imgLink; ?>"
+				alt="Avatar Image"
+				class="avatar"
+				width="<?php echo $size; ?>"
+				height="<?php echo $size; ?>">
+			</a>
+		<?php else: ?>
+			<img src="<?php echo $imgLink; ?>"
+				alt="Avatar Image"
+				class="avatar"
+				width="<?php echo $size; ?>"
+				height="<?php echo $size; ?>">
+		<?php endif;
 	}
 	
 	/**
@@ -126,7 +139,11 @@ class UserHelper {
 	
 	/** @return a link to the user profile */
 	public function getLinkToProfile() {
-		$link = '<a class="profile" rel="nofollow" href="' . $this->getUrlToProfile() . '" title="' . $this->getUsername() . '">' . $this->getUsername() . '</a>';
+		if($this->currentUser->getId()){
+			$link = '<a class="profile" rel="nofollow" href="' . $this->getUrlToProfile() . '" title="' . $this->getUsername() . '">' . $this->getUsername() . '</a>';
+		}else{
+			$link = $this->getUsername() ;
+		}
 		return $link;
 	}
 	

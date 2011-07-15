@@ -167,6 +167,10 @@ class Form implements iInsertable {
 		echo '<form class="' . $cssClass . '" action="' . $actionUrl . '" method="POST">';
 	}
 	
+	public function insertFormBodyEnd(){
+		echo '</form>';
+	}
+	
 	public function insertFields() {
 		echo '<div class="form_content">';
 		foreach( $this->fields as $key => $field ) {
@@ -210,7 +214,7 @@ class Form implements iInsertable {
 		}
 		$this->frontController->getViewHelper()->addJavascriptVar( '_error_messages', Field::getErrorMessages() );
 		
-		echo '</form>';
+		$this->insertFormBodyEnd();
 	}
 	
 	public function setTarget($module, $action) {

@@ -126,9 +126,10 @@ class UserProviderMock implements UserProviderInterface {
 	 */
 	public function addNewUser(User $user) {
 		// TODO Auto-generated method stub
-	
-
 	}
 
+	public function getUserByActivationKey($key){
+		return $this->user;
+	}
 }
 

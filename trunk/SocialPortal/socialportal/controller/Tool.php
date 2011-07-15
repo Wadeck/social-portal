@@ -44,9 +44,6 @@ use core\AbstractController;
  *
  */
 class Tool extends AbstractController {
-	/**
-	 * @RoleAtLeast(administrator)
-	 */
 	public function indexAction() {
 		$refl = new \ReflectionClass( $this );
 		$currentClass = $refl->getShortName();
@@ -75,7 +72,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function generateErrorMessageAction() {
 		$this->frontController->addMessage( 'Test error', 'error' );
@@ -83,7 +79,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function generateCorrectMessageAction() {
 		$this->frontController->addMessage( 'Test correct', 'correct' );
@@ -91,7 +86,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function generateInfoMessageAction() {
 		$this->frontController->addMessage( 'Test info' );
@@ -99,7 +93,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 * @_GetAttributes({key, password})
 	 */
 	public function directCreatePasswordAction() {
@@ -116,7 +109,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 * Could be long as we want, cause it is called only once per installation
 	 */
 	public function createBaseForumAction() {
@@ -180,7 +172,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseUserAction() {
 		$anonUser = UserManager::getAnonymousUser();
@@ -198,7 +189,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseInstructionsAction(){
 		$instrRepo = $this->em->getRepository('Instruction');
@@ -207,78 +197,99 @@ class Tool extends AbstractController {
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'story', __( 'The story topics will be used to describe special situation' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 'The strategy topics display a list of different strategies used to fight against a problem' ));
 		
+		// Notice this is important to keep "..." between the sentences, to enable the \n special char to be transformed into <br />
+		// Never put a nonce in an email, to avoid problem of connected user
+		
+		// Used by Profile::editUsernameAction
 		// [new_username]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_change', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"You have requested a change of username.\n".
-			"New username: %new_username%\n\n".
+			"\n".
+			"New username: <b>%new_username%</b>\n".
+			"\n".
 			"This username is used to connect to our site. Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
-		// [new_username, reset_link]
-		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_change_to_old', __(
-			"** This is an automated message -- please do not reply. **\n".
-			"Hi,\n".
-			"You have requested a change of username.\n".
-			"New username: %new_username%\n\n".
-			"If it was not you that ask the change or you wanted to undo this modification, please click on the following link to reset the username to the previous one.\n".
-			"Link to reset username: %reset_link%\n".
-			"Best regards,\n\n".
-			"Support Team"
-		));
-		
+		// Used by Connection::lostUsernameAction
 		// [username]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'username_lost', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"You asked to receive your username. (if it is not the case, just ignore this email)\n".
-			"Username: %username%\n\n".
+			"\n".
+			"Username: <b>%username%</b>\n".
+			"\n".
 			"This username is used to connect to our site. Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
+		// Used by Connection::lostPasswordAction
 		// [change_password_link]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_lost', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"You asked to change your password. (if it is not the case, just ignore this email)\n".
-			"To be able to change your password, you will be asked to repeat the new two times.\n".
-			"Link: %change_password_link%\n".
+			"\n".
+			"Link: <b>%change_password_link%</b>\n".
+			"\n".
 			"This password is used to connect to our site. Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
+		// Used by Connection::lostChangePasswordAction
 		// [username, password_hint]
-		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_change', __(
-			"** This is an automated message -- please do not reply. **\n".
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_lost_reset', __(
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"You have changed your account information (if it is not the case, just ignore this email)\n".
-			"Username: %username%\n".
-			"Password hint: %password_hint% \n".
+			"\n".
+			"Username: <b>%username%</b>\n".
+			"Password hint: <b>%password_hint%</b> \n".
+			"\n".
 			"This information is used to connect to our site. Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
+		// Used by Profile::editPasswordAction
+		// [username, password_hint]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'password_change', __(
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
+			"Hi,\n".
+			"You have changed your account information (if it is not the case, just ignore this email)\n".
+			"\n".
+			"Username: <b>%username%</b>\n".
+			"Password hint: <b>%password_hint%</b> \n".
+			"\n".
+			"This information is used to connect to our site. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// Used by Profile::editEmailAction
 		// [validation_link]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_validation', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"To complete your profile setup, you need to validate your email. (if you have not create/edit a profile on our site, just ignore this email)\n".
 			"Please click on the following link\n".
-			"Validation link: %validation_link%\n".
+			"\n".
+			"Validation link: <b>%validation_link%</b>\n".
+			"\n".
 			"When you are done, you could connect with your account. Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
+		// Used by Profile::validateEmailChangeAction
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_information', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"Your email is updated (if you have not modify your email on our site, just ignore this email)\n".
 			"Thank you for using our service.\n".
@@ -286,18 +297,35 @@ class Tool extends AbstractController {
 			"Support Team"
 		));
 		
+		// Used by Profile::validateEmailChangeAction
 		// [new_email, reset_link]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'email_reset', __(
-			"** This is an automated message -- please do not reply. **\n".
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
 			"Hi,\n".
 			"You have requested a change of email.\n".
-			"New email: %new_email%\n\n".
+			"\n".
+			"New email: <b>%new_email%</b>\n".
+			"\n".
 			"If it was not you that ask the change or you wanted to undo this modification, please click on the following link to reset the email to this one.\n".
 			"Link to reset username: %reset_link%\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
 		
+		// Used by Profile::registerAction
+		// [validation_link]
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'validation_account', __(
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
+			"Hi,\n".
+			"To complete your profile setup, you need to validate your email. (if you have not create/edit a profile on our site, just ignore this email)\n".
+			"Please click on the following link\n".
+			"\n".
+			"Validation link: <b>%validation_link%</b>\n".
+			"\n".
+			"When you are done, you could connect with your account. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
 		
 		if( $this->em->flushSafe() ){
 			$this->frontController->addMessage( __( 'Creation of the default instructions completed' ), 'correct' );
@@ -308,7 +336,6 @@ class Tool extends AbstractController {
 	}
 
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseCountriesAndStatesAction(){
 		$file = '_config/countries_states.txt';
@@ -347,7 +374,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function updateDatabaseAction(){
 		include './scripts/create_database.php';
@@ -361,7 +387,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createFloodFirstForumAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -411,7 +436,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createFloodFirstTopicAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -485,7 +509,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function recountAllTopicsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
@@ -507,7 +530,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function recountAllPostsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
@@ -534,7 +556,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function displayLogAction(){
 		$filename = 'log.txt';
@@ -543,7 +564,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function displayAllCountryAction(){
 		$countries = $this->em->getRepository('UserProfileCountry')->findAll();
@@ -552,7 +572,6 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function sendFakeEmailAction(){
 		$currentTime = $this->frontController->getRequest()->getRequestTime();

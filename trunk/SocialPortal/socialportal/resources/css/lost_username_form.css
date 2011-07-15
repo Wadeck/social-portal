@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+form.lost-username-form {
+	padding: 8px;
+}
+
+form.lost-username-form .label_error {
+	display: block;
+}
+
+form.lost-username-form .field_container {
+	
+}
+
+form.lost-username-form input[type=submit] {
+	margin-left: 105px;
+}
+
+form.lost-username-form label { /*font-weight: none;
+	margin: 15px 0 5px 0;
+	text-align: left;
+	width: 100px;
+	display: inline;*/
+	
+}
+
+form.lost-username-form input[type="text"],form.lost-username-form input[type="password"]
+	{ /*width: 75%;*/
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+/*
+form.lost-username-form textarea {
+	width: 75%;
+	height: 120px;
+}
+*/
+form.lost-username-form .field_container {
+	margin-bottom: 6px;
+}
+
+form.lost-username-form span.error_message.active {
+	/*display: inline-block;*/
+	margin: 0;
+	margin-left: 105px;
+	padding: 4px;
+}

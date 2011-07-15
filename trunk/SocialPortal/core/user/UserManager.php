@@ -155,6 +155,17 @@ class UserManager {
 		}
 	}
 	
+	public function isKeyAlreadyUsed($activationKey){
+		$user = $this->userProvider->getUserByActivationKey( $activationKey );
+		if( !$user ) {
+			return false;
+		} 
+		if( $user->getId() <= 1 ) {
+			return false;
+		}
+		return true;
+	}
+	
 	public function disconnect() {
 		Logger::getInstance()->log( "Disconnection of " . var_export( $this->user, true ) );
 		$this->removeSession();
@@ -169,7 +180,10 @@ class UserManager {
 		$this->request->cookies->set( self::$COOKIE_NAME, null );
 	}
 	
-	public function registerNewUser($username, $password, $email, $withActivation) {
+	/**
+	 * @return User|false if there is already a user with this username
+	 */
+	public function registerNewUser($username, $password, $email, $withActivation, $role, $activationKey) {
 		$result = $this->userProvider->getUserByUsername( $username );
 		if( $result ) {
 			return false;
@@ -177,7 +191,7 @@ class UserManager {
 		
 		$status = $withActivation ? 0 : 1;
 		$time = $this->request->getRequestTime();
-		$user = self::createUser( $username, $password, $email, UserRoles::$full_user_role, $time, $status );
+		$user = self::createUser( $username, $password, $email, $role, $time, $status, $activationKey );
 		
 		return $this->userProvider->addNewUser( $user );
 	}

@@ -293,4 +293,12 @@ class Utils {
 		}
 		return self::$cache_absolute_without;
 	}
+	
+	public static function getPasswordHint($clearPassword){
+		$passLength = strlen($clearPassword);
+		$passFirst = $clearPassword[0];
+		$passLast = $clearPassword[$passLength-1];
+		$hintPassword = $passFirst . str_repeat('?', $passLength-2) . $passLast;
+		return $hintPassword;
+	}
 }

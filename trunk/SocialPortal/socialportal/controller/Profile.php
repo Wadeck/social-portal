@@ -272,9 +272,9 @@ class Profile extends AbstractController {
 			$this->frontController->doRedirectToReferrer( __( 'You cannot change the email to the same one' ), 'error' );
 		}
 		
-		$expiration = Config::get('email_change_validation_expiration_time', 48 * 60 * 60);
+		$expiration = Config::get('email_validation_expiration_time', 48 * 60 * 60);
 		$meta = array('oldEmail' => $oldEmail, 'newEmail' => $newEmail, 'userId' => $userId);
-		$token = $this->em->getRepository('Token')->createValidToken($meta, $expiration);
+		$token = $this->em->getRepository('Token')->createValidToken($meta, 'edit_email', $expiration);
 		
 		if( null ===$token ){
 			Logger::getInstance()->log('Problem during creation of token in email change, number of possible attempts reach');
@@ -309,7 +309,7 @@ class Profile extends AbstractController {
 		
 		// use old_email, new_email and user_id to send both mails
 		$tokenRepo = $this->em->getRepository('Token');
-		$tokenMeta = $tokenRepo->findValidTokenMeta($token);
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token, 'edit_email');
 		if( false === $tokenMeta){
 			// expiration or never exist
 			Logger::getInstance()->log("Request expired: [$token]");
@@ -346,9 +346,9 @@ class Profile extends AbstractController {
 		Mail::sendHtml($newEmail, Config::getOrDie('site_display_name'). ': email confirmed', $mailContent);
 		
 		// send mail to old: possibility to reset email
-		$expiration = Config::get('email_change_validation_expiration_time', 48 * 60 * 60);
+		$expiration = Config::get('email_reset_expiration_time', 48 * 60 * 60);
 		$meta = array('oldEmail' => $oldEmail, 'userId' => $userId);
-		$token = $tokenRepo->createValidToken($meta, $expiration);
+		$token = $tokenRepo->createValidToken($meta, 'validate_email', $expiration);
 		
 		$resetLink = $this->frontController->getViewHelper()->createHref('Profile', 'resetEmail', array( 'token' => $token->getToken() ));
 		$resetLink = Utils::getBaseUrlWithoutName() . $resetLink;
@@ -374,7 +374,7 @@ class Profile extends AbstractController {
 		$token = $get->get( 'token' );
 		
 		$tokenRepo = $this->em->getRepository('Token');
-		$tokenMeta = $tokenRepo->findValidTokenMeta($token);
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token, 'validate_email');
 		if( false === $tokenMeta){
 			// expiration or never exist
 			Logger::getInstance()->log("Request expired: [$token]");
@@ -452,10 +452,7 @@ class Profile extends AbstractController {
 			$this->frontController->doRedirectToReferrer( __( 'You cannot change the password to the same one' ), 'error' );
 		}
 		
-		$passLength = strlen($newPassword);
-		$passFirst = $newPassword[0];
-		$passLast = $newPassword[$passLength-1];
-		$hintPassword = $passFirst . str_repeat('?', $passLength-2) . $passLast;
+		$passwordHint = Utils::getPasswordHint($newPassword);
 		
 		$newPassword = Crypto::encodeDBPassword($user->getRandomKey(), $newPassword);
 		
@@ -470,7 +467,7 @@ class Profile extends AbstractController {
 		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'password_change');
 		$mailContent = $instruction->getInstructions();
 		// [username, password_hint]
-		$mailContent = strtr($mailContent, array( '%username%' => $user->getUsername(), '%password_hint%' => $hintPassword ) );
+		$mailContent = strtr($mailContent, array( '%username%' => $user->getUsername(), '%password_hint%' => $passwordHint ) );
 		
 		$mailContent = nl2br($mailContent);
 		Mail::sendHtml($user->getEmail(), Config::getOrDie('site_display_name'). ': password change', $mailContent);

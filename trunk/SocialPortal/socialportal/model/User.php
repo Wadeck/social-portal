@@ -79,7 +79,6 @@ class User{
      * @var integer $roles
      *
      * @Column(name="roles", type="integer", nullable=false)
-     * @_Comment("Integer containing different roles, use OR operator to determine if the user has a given role. This will be used in conjunction with capabilities")
      * @Comment("1: admin, 2:moderator, 4:full_user, 8:anonymous, see UserRoles static attributes")
      */
     private $roles;

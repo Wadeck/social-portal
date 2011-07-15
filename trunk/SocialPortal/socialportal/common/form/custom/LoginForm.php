@@ -34,20 +34,50 @@ class LoginForm extends Form {
 		$field->setMode( $this->globalMode );
 	}
 	
-	/**
-	 * @param string $name
-	 * @param string $description Should be translater
-	 */
-	public function insertSubmitButton($name, $description) {
-		parent::insertSubmitButton( $name, $description );
+	public function insertFormBody( $actionUrl, $cssClass ){
+		echo '<div class="login-form-container">';
 		?>
-<a class="sign-in"
-	href="<?php
-		$this->frontController->getViewHelper()->insertHref( 'Connection', 'displayRegisterForm' )?>"><?php
-		echo __( 'Sign in' );
-		?></a>
-<?php
+		<table>
+			<tr>
+				<td><a class="visitor"
+					title="<?php echo __( 'Enter as visitor' ); ?>"
+					href="<?php $this->frontController->getViewHelper()->insertHref( 'Connection', 'logAsVisitor' )?>">
+					<?php echo __( 'Enter as visitor' ); ?></a></td>
+				<td><a class="sign-in"
+					href="<?php $this->frontController->getViewHelper()->insertHref( 'Connection', 'displayRegisterForm' )?>">
+					<?php echo __( 'Create an account' ); ?></a></td>
+			</tr>
+		</table>
+
+	<?php
+		parent::insertFormBody($actionUrl, $cssClass);
 	}
+	
+	public function insertFormBodyEnd(){
+		parent::insertFormBodyEnd();
+		?>
+		<table>
+			<tr>
+				<td><a class="lost-username"
+			href="<?php $this->frontController->getViewHelper()->insertHrefWithNonce( 'displayLostUsernameForm', 'Connection', 'displayLostUsernameForm' )?>">
+			<?php echo __( 'Lost username' ); ?></a></td>
+				<td><a class="lost-password"
+			href="<?php $this->frontController->getViewHelper()->insertHrefWithNonce( 'displayLostPasswordForm', 'Connection', 'displayLostPasswordForm' )?>">
+			<?php echo __( 'Lost password' ); ?></a></td>
+			</tr>
+		</table>
+		<?php
+		echo '</div>';
+	}
+		
+//	
+//	/**
+//	 * @param string $name
+//	 * @param string $description Should be translater
+//	 */
+//	public function insertSubmitButton($name, $description) {
+//		parent::insertSubmitButton( $name, $description );
+//	}
 	
 	public function getUsername() {
 		return $this->ready ? $this->data['login_username'] : null;
