@@ -1,22 +1,55 @@
 @CHARSET "ISO-8859-1";
 
+div#container.connection-container {
+    width: 269px;
+	margin: 0 auto;	
+}
+
+.login-form-container a {
+	/*font-size: 11px;*/
+	font-size: 80%;
+	text-align: left;
+	display: inline-block;
+	font-weigth: bold;
+}
+
+.login-form-container table {
+	width: 100%;
+}
+.login-form-container table tr td{
+	width: 50%;
+	text-align: center;
+}
+
+.login-form-container #bottom-links{
+	text-align: center;
+	line-height: 120%;
+}
+.login-form-container #top-links{
+	text-align: center;
+	line-height: 120%;
+}
+
 form.login-form { /*background-color: blue;*/
 	/*position: absolute;
 		right: 15px;
 		bottom: 0px;*/
-	float: right;
-	margin: 5px;
+	/*float: right;*/
+	margin: 0 5px;
 	padding: 5px;
+	height: 100%;
 }
 
-form.login-form a {
-	font-size: 11px;
-	text-align: right;
-	display: inline-block;
+form.login-form a.visitor {
 }
 
 form.login-form a.sign-in {
-	vertical-align: text-top;
+	margin-left: 8px;
+	vertical-align: baseline;
+}
+
+form.login-form input.button{
+	vertical-align: baseline;
 }
 
 form.login-form #login_error {
@@ -33,6 +66,11 @@ form.login-form {
 form.login-form .label_error {
 	display: block;
 }
+/** to be visible even with small lines */
+form.login-form span.error_message.active {
+	margin: 0;
+	padding: 4px;
+}
 
 form.login-form .field_container {
 	margin-bottom: 4px;
@@ -46,6 +84,18 @@ form.login-form label { /*font-weight: bold;*/
 	display: inline;
 }
 
+form.login-form input[type="submit"] {
+	vertical-align: middle;
+}
+
+form.login-form input[type="checkbox"] {
+	vertical-align: middle;
+}
+
+form.login-form textarea,form.login-form input[type=text],form .login-form select,form.login-form input[type=password]{
+	font-size: 130%;
+}
+/*
 form.login-form textarea,form.login-form input[type=text],form .login-form select,form.login-form input[type=password]
 	{
 	border: 1px solid #ccc;
@@ -57,11 +107,4 @@ form.login-form textarea,form.login-form input[type=text],form .login-form selec
 	font-size: 14px;
 	color: #777;
 	margin: 2px 0px;
-}
-
-/** to be visible even with small lines */
-form.login-form span.error_message.active {
-	margin: 0;
-	padding: 4px;
-	display: inline-block;
-}
+}*/

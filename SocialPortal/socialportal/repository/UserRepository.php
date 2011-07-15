@@ -46,4 +46,50 @@ class UserRepository extends EntityRepository {
 	public function getUserPassword($username) {
 		return $this->findByUsername( $username )->getPassword();
 	}
+	
+	/**
+	 * @param string $email
+	 * @return User|null
+	 */
+	public function findUserByEmail($email){
+		$dql = $this->_em->createQuery('SELECT u FROM User u WHERE u.email = :email');
+		$dql->setParameter( 'email', $email );
+		$result = $dql->getResult();
+		if($result){
+			return $result[0];
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $email
+	 * @return User|null
+	 */
+	public function findUserByActivationKey($key){
+		$dql = $this->_em->createQuery('SELECT u FROM User u WHERE u.activationKey = :key');
+		$dql->setParameter( 'key', $key );
+		$result = $dql->getResult();
+		if($result){
+			return $result[0];
+		}else{
+			return null;
+		}
+	}
+	
+	/**
+	 * @param string $email
+	 * @return User|null
+	 */
+	public function findUserByUsernameAndEmail($username, $email){
+		$dql = $this->_em->createQuery('SELECT u FROM User u WHERE u.username = :username AND u.email = :email');
+		$dql->setParameter( 'username', $username );
+		$dql->setParameter( 'email', $email );
+		$result = $dql->getResult();
+		if($result){
+			return $result[0];
+		}else{
+			return null;
+		}
+	}
 }

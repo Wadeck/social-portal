@@ -445,10 +445,15 @@ jeudi 14 juillet soir
 vendredi 15 juillet
 - bug resolu pour les borders des topics tagé
 - correction d'un bug avec les accepted topics par forum
+- connection username retrieval
+- connection password change
+current - creation compte
+todo - apres le lien de l'email
+todo - supprimer les tokens après utilisation
+todo - supprimer tous les tokens utilisé (apres password reset etc) pas que creation account
 
 
-
-
+todo - manager le cas ou un user perd l'email de validation du compte et du coup perd la clef qui y est liée
 todo - faire le menage dans les liens de retour au sommet des pages, les mettre dans une class avec des object à passer avec controle des accès
 todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée
 todo - les emails partent correctement si une adresse locale se situe dans le header

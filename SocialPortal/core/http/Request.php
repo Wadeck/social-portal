@@ -87,15 +87,8 @@ class Request {
 		$this->server = new ServerBag( $server );
 		$this->headers = new HeaderBag( $this->server->getHeaders() );
 		
-//		$test01 = new DateTime('@0');
-//		$timezon2 = date_default_timezone_get();
 		$this->requestTime = isset($server['REQUEST_TIME']) ? $server['REQUEST_TIME'] : time();
 		$this->requestDateTime = new DateTime('@'.$this->requestTime, $timezone);
-//		$test1 = new DateTime('@'.time());
-//		$tt = $test1->format( DATE_RFC822);
-//		$test12 = new DateTime('@'.time(), $timezone);
-//		$tt2 = $test12->format( DATE_RFC822);
-//		$test2 = new DateTime('@'.$this->requestTime, new DateTimeZone('europe/zurich'));
 	}
 	
 	/**
@@ -246,7 +239,7 @@ class Request {
 			$this->action = array_shift( $tokens );
 			$this->parameters = $tokens;
 		} else {
-			$this->module = 'home';
+			$this->module = 'Connection';
 			$this->action = 'index';
 			$this->parameters = array();
 		}

@@ -20,14 +20,17 @@ class UserEntityProvider implements UserProviderInterface {
 	public function getUserByUsername($username) {
 		return $this->em->getRepository( 'User' )->findByUsername( $username );
 	}
+	public function getUserByActivationKey($key){
+		return $this->em->getRepository( 'User' )->findUserByActivationKey( $key );
+	}
 	
 	public function addNewUser(User $user) {
-		try {
-			$this->em->persist( $user );
-			$this->em->flush();
+		$this->em->persist( $user );
+		if($this->em->flushSafe()){
 			return $user;
-		} catch (\Exception $e ) {
+		}else{
 			return false;
 		}
 	}
+	
 }

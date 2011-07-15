@@ -9,6 +9,11 @@ interface UserProviderInterface {
 	public function getUserById($id);
 	/** @return User */
 	public function getUserByUsername($username);
-	/** @param User the user we want to create in the system */
+	/** @return User */
+	public function getUserByActivationKey($key);
+	
+	/**
+	 * @return User|false if there is already a user with this username
+	 */
 	public function addNewUser(User $user);
 }

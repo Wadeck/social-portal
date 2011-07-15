@@ -45,9 +45,17 @@ class Token{
      * @var text $meta
      *
      * @Column(name="meta", type="text", nullable=false)
-     * @Comment("Could be used to stored information like role or array serialized")
+     * @Comment("Used to stored information like role or array serialized")
      */
     private $meta;
+
+    /**
+     * @var string $type
+     *
+     * @Column(name="type", type="string", length=255, nullable=false)
+     * @Comment("Used to indicate the type of token")
+     */
+    private $type;
 
 
     /** Get id @return bigint $id */
@@ -70,4 +78,10 @@ class Token{
 
     /** Get meta @return text $meta */
     public function getMeta(){ return $this->meta; }
+
+    /** Set type @param string $type */
+    public function setType($type){ $this->type = $type; }
+
+    /** Get type @return string $type */
+    public function getType(){ return $this->type; }
 }

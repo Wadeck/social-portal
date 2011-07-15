@@ -1,0 +1,33 @@
+<?php
+$user = $vars['user'];
+$userHelper = $vars['userHelper'];
+$connectMessage = __( 'Log out' );
+if( isset( $vars['toolLink'] ) ) {
+	$toolLink = $vars['toolLink'];
+	$toolName = __( 'Tool' );
+} else {
+	$toolLink = false;
+}
+$usernameLink = $userHelper->getLinkToProfile();
+?>
+<div id="connected-panel">
+	<div class="user-info">
+		<p>
+			<?php echo __( 'Welcome %username%', array( '%username%' => $usernameLink ) ); ?>
+		</p>
+		<p>
+			<a title="<?php echo $connectMessage; ?>"
+				href="<?php $vars['helper']->insertHref( 'Connected', 'logout' ); ?>">
+				<?php echo $connectMessage; ?></a>
+			<?php if( $toolLink ) : ?>
+				<a title="<?php echo $toolName; ?>"
+					href="<?php echo $toolLink; ?>">
+					<?php echo $toolName; ?></a>
+			<?php endif ?>
+			</p>
+	</div>
+	<div class="avatar-box">
+		<?php $userHelper->insertAvatar( 35 ); ?>
+	</div>
+</div>
+
