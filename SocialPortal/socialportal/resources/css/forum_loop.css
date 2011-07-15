@@ -62,7 +62,7 @@ li.forums-tab.selected a{
    	border: 1px solid #999;
     color: #555555;
     font-weight: bold;
-	padding: 7px 9px;
+	padding: 9px 11px;
 }
 
 li.forums-tab.selected a:hover {
@@ -148,14 +148,12 @@ table.forum-loop tr.alt { /* managed by background secondary */
 */
 table.forum-loop tr.sticky{
 	background: #FFF9DB;
-	border-top: 1px solid #FFE8C4;
-	border-bottom: 1px solid #FFE8C4;
 }
 table.forum-loop tr.deleted{
 	background: #FDD;
-	border-top: 1px solid #F99;
-	border-bottom: 1px solid #F99;
 }
+
+
 /*
 .deleted {
 	background-color: #F99;	
