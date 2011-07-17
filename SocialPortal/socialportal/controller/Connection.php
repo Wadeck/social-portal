@@ -120,7 +120,6 @@ class Connection extends AbstractController {
 		$password = $form->getPassword();
 		$rememberMe = $form->getIsRememberMe();
 		
-		
 		// pass to the user manager, connect
 		$user = $this->frontController->getUserManager()->connectUser( $username, $password, $rememberMe );
 		if( !$user ) {
@@ -129,8 +128,7 @@ class Connection extends AbstractController {
 			if( !$referrer ) {
 				$referrer = '';
 			}
-			$message = __( 'The username and the password are not in the database' );
-			$this->frontController->addMessage( $message, 'error' );
+			$this->frontController->addMessage( __( 'The username and the password are not in the database' ), 'error' );
 			$this->frontController->doRedirectUrl( $referrer );
 		}
 		
@@ -361,14 +359,8 @@ class Connection extends AbstractController {
 		$password = $form->getPassword();
 		$email = $form->getEmail();
 		$activationKey = $form->getActivationKey();
-
-		if( $this->frontController->getUserManager()->isKeyAlreadyUsed($activationKey) ){
-			$this->frontController->addMessage( __( 'Your key is already used' ), 'error' );
-			$this->frontController->doRedirect( 'Connection' );
-		}
 		
 		// test if the token is correct
-		// use old_email, new_email and user_id to send both mails
 		$tokenRepo = $this->em->getRepository('Token');
 		$tokenMeta = $tokenRepo->findValidTokenMeta($activationKey, 'register');
 		if( false === $tokenMeta){
@@ -377,6 +369,16 @@ class Connection extends AbstractController {
 			$this->frontController->addMessage( __( 'Your key has expired' ), 'error' );
 			$this->frontController->doRedirect( 'Connection' );
 		}
+		
+		// we check if the key is already used AFTER we check it is usable, because the keys are removed only when
+		// the account is validated, so there is a certain time during which the key is still in database but not 
+		// really used
+		if( $this->frontController->getUserManager()->isKeyAlreadyUsed($activationKey) ){
+			// the key is already used to activate an account
+			$this->frontController->addMessage( __( 'Your key is already used' ), 'error' );
+			$this->frontController->doRedirect( 'Connection' );
+		}
+		
 		// if yes, we check the role that is gained by the user
 		$role = $tokenMeta['role'];
 		// role must be either UserRoles::$moderator_role or UserRoles::$full_user_role
@@ -423,14 +425,65 @@ class Connection extends AbstractController {
 		$this->frontController->doRedirect( 'Connection' );
 	}
 	
-	//TODO implement me
 	/**
 	 * @RoleEquals(anonymous)
+	 * @GetAttributes(token)
+	 * Token contains userId and key
 	 * When the registration is success, it explains to the user the fact that he will receive an email with validation link
 	 */
 	public function validRegisterAction() {
+		$get = $this->frontController->getRequest()->query;
+		$token = $get->get( 'token' );
+		
+		$tokenRepo = $this->em->getRepository('Token');
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token, 'lost_password');
+		if( false === $tokenMeta){
+			// expiration or never exist
+			Logger::getInstance()->log("Request expired: [$token]");
+			$this->frontController->addMessage( __( 'Your request has expired' ), 'error' );
+			$this->frontController->doRedirect( 'Connection' );
+		}
+		
+		$userId = $tokenMeta['userId'];
+		$activationKey = $tokenMeta['key'];
+		
 		// set user status to 0;
-		// 'account_validation'
-		// supprimer le token lié [key] et celui ci
+		$user = $this->em->find('User', $userId);
+		if( 0 === $user->getStatus() ){
+			$this->frontController->addMessage( __( 'The account was already activated !' ), 'error' );
+			$this->frontController->doRedirect( 'Connection' );
+		}
+		$user->setStatus(0);
+		$this->em->persist($user);
+		if( !$this->em->flushSafe() ){
+			$this->frontController->addMessage( __( 'There was a problem during activation of the account' ), 'error' );
+			$this->frontController->doRedirect( 'Connection' );
+		}
+		
+		// here the account is activated, so we can remove the both token used
+		$activationToken = $tokenRepo->findValidToken($activationKey);
+		$emailToken = $tokenRepo->findValidToken($token);
+		$this->em->remove($activationToken);
+		$this->em->remove($emailToken);
+		if( !$this->em->flushSafe() ){
+			Logger::getInstance()->log('At least one token (activation or email) was not correctly deleted, normally it cannot be already deleted automatically, but perhaps manually, please check the database');
+			Logger::getInstance()->log_var('activation token', $activationToken);
+			Logger::getInstance()->log_var('email token', $emailToken);
+		}
+		
+		// send mail to inform the client that is account is activated
+		$email = $user->getEmail();
+		$instrRepo = $this->em->getRepository('Instruction');
+		$instruction = $instrRepo->getInstruction($instrRepo::$prefixEmail, 'account_validated');
+		$mailContent = $instruction->getInstructions();
+//		$mailContent = strtr($mailContent, array( '%validation_link%' => $validationLink ) );
+		
+		$mailContent = nl2br($mailContent);
+		Mail::sendHtml($email, Config::getOrDie('site_display_name'). ': account validated', $mailContent);	
+		
+		$this->frontController->getUserManager()->connectUserByUserId($userId);
+		
+		$this->frontController->addMessage( __( 'Congratulations, you are connected to the site for the first time !' ), 'correct' );
+		$this->frontController->doRedirect( 'Connection' );
 	}
 }

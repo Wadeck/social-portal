@@ -1,5 +1,20 @@
 @CHARSET "ISO-8859-1";
 
+form.register-form label{
+	width: 140px;
+}
+	
+form.register-form input[type=submit] {
+	margin-left: 145px;
+}
+
+form.register-form span.error_message.active {
+	/*display: inline-block;*/
+	margin: 0;
+	margin-left: 145px;
+	padding: 4px;
+}
+
 form.register-form {
 	padding: 8px;
 }
@@ -12,10 +27,6 @@ form.register-form .field_container {
 	
 }
 
-form.register-form input[type=submit] {
-	margin-left: 105px;
-}
-
 form.register-form label { /*font-weight: none;
 	margin: 15px 0 5px 0;
 	text-align: left;
@@ -24,8 +35,8 @@ form.register-form label { /*font-weight: none;
 	
 }
 
-form.register-form input[type="text"],form.register-form input[type="password"]
-	{ /*width: 75%;*/
+form.register-form input[type="text"],form.register-form input[type="password"]{
+	width: 225px;
 	margin-left: 5px;
 	vertical-align: middle;
 }
@@ -38,11 +49,4 @@ form.register-form textarea {
 */
 form.register-form .field_container {
 	margin-bottom: 6px;
-}
-
-form.register-form span.error_message.active {
-	/*display: inline-block;*/
-	margin: 0;
-	margin-left: 105px;
-	padding: 4px;
 }

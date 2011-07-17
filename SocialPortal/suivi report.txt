@@ -452,6 +452,9 @@ todo - apres le lien de l'email
 todo - supprimer les tokens après utilisation
 todo - supprimer tous les tokens utilisé (apres password reset etc) pas que creation account
 
+dimanche 17 juillet
+- plus de securité : empeche dorénavent les users qui sont pas encore activé de se connecter
+- 
 
 todo - manager le cas ou un user perd l'email de validation du compte et du coup perd la clef qui y est liée
 todo - faire le menage dans les liens de retour au sommet des pages, les mettre dans une class avec des object à passer avec controle des accès
