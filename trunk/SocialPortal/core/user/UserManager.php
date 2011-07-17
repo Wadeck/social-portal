@@ -125,10 +125,35 @@ class UserManager {
 	public function connectUser($username, $password, $rememberMe = false) {
 		$user = $this->getUser($username, $password);
 		if( null !== $user ) {
+			if( 0 !== $user->getStatus() ){
+				Logger::getInstance()->log("Attempt to connect with account [$username : $password] but the status is not 0 but [{$user->getStatus()}]");
+				return false;
+			}
+			
 			$this->user = $user;
 			if( $rememberMe ) {
 				$this->populateCookie();
 			}
+			$this->populateSession();
+			return $user;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Should only be used when the user account is just validated
+	 * @param int $userId
+	 */
+	public function connectUserByUserId($userId){
+		$user = $this->getUserById($userId);
+		if( null !== $user ) {
+			if( 0 !== $user->getStatus() ){
+				Logger::getInstance()->log("Attempt to connect with account [$userId] but the status is not 0 but [{$user->getStatus()}]");
+				return false;
+			}
+			
+			$this->user = $user;
 			$this->populateSession();
 			return $user;
 		} else {
@@ -153,6 +178,21 @@ class UserManager {
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * @return User|null
+	 */
+	public function getUserById($userId){
+		if( $userId <= 1 ) {
+			// nullUser not allowed to be connected
+			return null;
+		}
+		$user = $this->userProvider->getUserById( $userId );
+		if( !$user ) {
+			return null;
+		}
+		return $user;
 	}
 	
 	public function isKeyAlreadyUsed($activationKey){

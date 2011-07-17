@@ -42,6 +42,7 @@ class TokenRepository extends EntityRepository {
 			return false;
 		}
 	}
+	
 	/**
 	 * @param string $tokenValue The random key we search for
 	 * @return array Metadata that were stored in the token | false if the token is not found

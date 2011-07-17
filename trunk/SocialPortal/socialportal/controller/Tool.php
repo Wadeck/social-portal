@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\Config;
+
 use socialportal\repository\InstructionRepository;
 
 use socialportal\model\Instruction;
@@ -176,7 +178,8 @@ class Tool extends AbstractController {
 	public function createBaseUserAction() {
 		$anonUser = UserManager::getAnonymousUser();
 		$nullUser = UserManager::getNullUser();
-		$admin = UserManager::createUser( 'admin', 'admin', 'w.follonier@netunion.com', UserRoles::$admin_role, time() );
+		$email = Config::getOrDie('initial_admin_email');
+		$admin = UserManager::createUser( 'admin', 'admin', $email, UserRoles::$admin_role, time() );
 		$this->em->persist( $nullUser );
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
@@ -312,7 +315,7 @@ class Tool extends AbstractController {
 			"Support Team"
 		));
 		
-		// Used by Profile::registerAction
+		// Used by Connection::registerAction
 		// [validation_link]
 		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'validation_account', __(
 			"<i>** This is an automated message -- please do not reply. **</i>\n".
@@ -323,6 +326,16 @@ class Tool extends AbstractController {
 			"Validation link: <b>%validation_link%</b>\n".
 			"\n".
 			"When you are done, you could connect with your account. Thank you for using our service.\n".
+			"Best regards,\n\n".
+			"Support Team"
+		));
+		
+		// Used by Connection::validRegisterAction
+		$instrRepo->createInstruction($instrRepo::$prefixEmail, 'account_validated', __(
+			"<i>** This is an automated message -- please do not reply. **</i>\n".
+			"Hi,\n".
+			"Congratulations ! Your account is activated, you can now use our service. (if you have not modify your email on our site, just ignore this email)\n".
+			"Thank you for using our service.\n".
 			"Best regards,\n\n".
 			"Support Team"
 		));
@@ -595,6 +608,22 @@ class Tool extends AbstractController {
 		}
 		
 		$this->frontController->doRedirect('Tool');
+	}
+	
+	public function createActivationKeyForUserAction(){
+		$expiration = Config::get('activation_key_expiration_time', 12 * 31 * 24 * 60 * 60);
+		$meta = array( 'role' => UserRoles::$full_user_role);
+		$token = $this->em->getRepository('Token')->createValidToken($meta, 'register', $expiration);
+		
+		$this->frontController->doDisplay('tool', 'displayKeyUser', array('key' => $token->getToken()));
+	}
+	
+	public function createActivationKeyForModeratorAction(){
+		$expiration = Config::get('activation_key_expiration_time', 12 * 31 * 24 * 60 * 60);
+		$meta = array( 'role' => UserRoles::$moderator_role);
+		$token = $this->em->getRepository('Token')->createValidToken($meta, 'register', $expiration);
+		
+		$this->frontController->doDisplay('tool', 'displayKeyModerator', array('key' => $token->getToken()));
 	}
 	
 //	/**
