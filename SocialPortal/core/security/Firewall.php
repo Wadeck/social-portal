@@ -60,19 +60,4 @@ class Firewall {
 			}
 		}
 	}
-	
-	/**
-	 * Determine if the user has the necessary rights
-	 * @param User $user
-	 * @param array $caps of string
-	 * @return true iff the user has all capabilities
-	 */
-	//TODO remove the null of User $user = null
-	private function hasUserAuthorization(User $user = null, array $caps = array()) {
-		if( empty( $caps ) ) {
-			return true;
-		}
-		
-		return true;
-	}
 }

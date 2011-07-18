@@ -35,7 +35,7 @@ class AnnotationRetriever {
 	public function __construct(ClassLoader $classLoader, $defaultAnnotationNamespace = '', Cache $cache = null) {
 		$namespace = ($defaultAnnotationNamespace != '') ?  : (__NAMESPACE__ . '\\');
 		$this->parser = new AnnotationParser( $classLoader, $namespace );
-		$this->cache = $cache ?  : new \Doctrine\Common\Cache\ArrayCache();
+		$this->cache = $cache ? $cache : new \Doctrine\Common\Cache\ArrayCache();
 	}
 	
 	/**

@@ -454,8 +454,26 @@ todo - supprimer tous les tokens utilisé (apres password reset etc) pas que crea
 
 dimanche 17 juillet
 - plus de securité : empeche dorénavent les users qui sont pas encore activé de se connecter
-- 
 
+lundi 18 juillet
+- enable maintenance page par le biais du controller "Tool"
+- disable maintenance par le biais d'un script
+- subset topics table created
+- home page subset display
+- fill the subset topics (in tool for the moment)
+- gather all createBase in one function
+- limit access of tool functions to admin/moderator
+- tool first access is ok, just log as visitor
+- modification du systeme de vote, pour avoir le total des votes pour un topic dans une table TopicVoteStats
+- value weighted random choice : done !!!!
+
+
+
+
+
+todo - controle des topics et profile lors d'un anon, par le biais du subset
+todo - security : les scripts sont accessible depuis l'exterieur, il faut renforcer la securité en changeant le chmod du dossier scripts,
+	qu'il ne soit executable que depuis le local
 todo - manager le cas ou un user perd l'email de validation du compte et du coup perd la clef qui y est liée
 todo - faire le menage dans les liens de retour au sommet des pages, les mettre dans une class avec des object à passer avec controle des accès
 todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée

@@ -29,7 +29,7 @@ class TokenRepository extends EntityRepository {
 		if(false === $tokenType){
 			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time) OR (t.expirationDate IS NULL)' );
 		}else{
-			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND t.expirationDate >= :time AND t.type = :type' );
+			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time OR t.expirationDate IS NULL) AND t.type = :type' );
 			$dql->setParameter( 'type', $tokenType );
 		}
 		$dql->setParameter( 'token', $tokenValue );

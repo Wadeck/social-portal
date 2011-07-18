@@ -141,7 +141,7 @@ class Connection extends AbstractController {
 	 */
 	public function logAsVisitorAction(){
 		// nothing special
-		$this->frontController->doAction('Home');
+		$this->frontController->doRedirect('Home');
 	}
 	
 	/**

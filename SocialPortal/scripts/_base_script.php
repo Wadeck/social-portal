@@ -19,7 +19,6 @@ $config->setProxyDir( __DIR__ .DIRECTORY_SEPARATOR.'socialportal'.DIRECTORY_SEPA
 $config->setProxyNamespace( 'Proxy' );
 $config->setAutoGenerateProxyClasses( true );
 
-//TODO refactor this with create_entities.php
 $connectionOptions = array( 'driver' => 'pdo_mysql', 'user' => 'doctrine_user', 'password' => 'doctrine_s3cr3t', 'dbname' => 'social_portal', 'host' => 'localhost', 'collation' => 'utf8_general_ci' );
 
 $output = new EclipseOutput();

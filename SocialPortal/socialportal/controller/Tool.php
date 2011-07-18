@@ -1,6 +1,18 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\model\SubsetTopic;
+
+use core\ClassLoader;
+
+use core\annotations\RoleEquals;
+
+use core\annotations\RoleAtLeast;
+
+use core\annotations\ValidableInterface;
+
+use core\annotations\AnnotationRetriever;
+
 use core\Config;
 
 use socialportal\repository\InstructionRepository;
@@ -47,6 +59,17 @@ use core\AbstractController;
  */
 class Tool extends AbstractController {
 	public function indexAction() {
+		$noDatabase = $this->frontController->getRequest()->getSession()->getFlash('no_database', false);
+		$isModo = $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
+		$isAdmin = $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
+		if($noDatabase || $isModo){
+			// the user has the right to come here
+		}else{
+			$user = $this->frontController->getCurrentUser();
+			Logger::getInstance()->log('The user [$user] has tried to reach /Tool without permission');
+			$this->frontController->doRedirect('Connection');
+		}
+		
 		$refl = new \ReflectionClass( $this );
 		$currentClass = $refl->getShortName();
 		$parentClass = $refl->getParentClass();
@@ -56,6 +79,10 @@ class Tool extends AbstractController {
 		array_walk( $parentMethods, function (&$item, $key) {
 			$item = $item->getName();
 		} );
+		
+		// retriever used to parse the annotation in the methods of this class
+		// to enable the display only of method that are potentially usable by the current user
+		$annotationRetriever = new AnnotationRetriever( ClassLoader::getInstance() );
 		foreach( $methods as $m ) {
 			$name = $m->getName();
 			if( in_array( $name, $parentMethods ) ) {
@@ -63,6 +90,22 @@ class Tool extends AbstractController {
 			}
 			if( false === strpos($name, 'Action')){
 				continue;
+			}
+			if(!$noDatabase){
+				$annots = $annotationRetriever->getAnnotationForMethod( get_class($this), $name );
+				$isValid = true;
+				foreach( $annots as $key => $annot ) {
+					if( $annot instanceof RoleAtLeast || $annot instanceof RoleEquals ) {
+						if( $annot->isValid() ) {
+							continue;
+						} else {
+							$isValid = false ;
+						}
+					}
+				}
+				if( !$isValid ){
+					continue;
+				}
 			}
 			$name = str_replace( 'Action', '', $name );
 			$url = $this->frontController->getViewHelper()->createHref( $currentClass, $name );
@@ -74,6 +117,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * 
 	 */
 	public function generateErrorMessageAction() {
 		$this->frontController->addMessage( 'Test error', 'error' );
@@ -81,6 +125,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * 
 	 */
 	public function generateCorrectMessageAction() {
 		$this->frontController->addMessage( 'Test correct', 'correct' );
@@ -88,6 +133,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * 
 	 */
 	public function generateInfoMessageAction() {
 		$this->frontController->addMessage( 'Test info' );
@@ -96,6 +142,7 @@ class Tool extends AbstractController {
 	
 	/**
 	 * @_GetAttributes({key, password})
+	 * @RoleAtLeast(administrator)
 	 */
 	public function directCreatePasswordAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -110,10 +157,82 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayPassword' );
 	}
 	
+
+	public function createBaseTotalAction(){
+		$result = $this->createBaseForum();
+		switch($result){
+			case 0:
+				break;
+			case 1:
+				$this->frontController->addMessage( __( 'The metadata were not added/modified' ), 'info' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 2:
+				$this->frontController->addMessage( __( 'Creation of the base forum failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+		
+		$result = $this->createBaseUser();
+		switch($result){
+			case 0:
+				break;
+			case 1: default:
+				$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+		
+		$result = $this->createBaseInstructions();
+		switch($result){
+			case 0:
+				break;
+			case 1: default:
+				$this->frontController->addMessage( __( 'Creation of the default instructions failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+		
+		$result = $this->createBaseCountriesAndStates();
+		switch($result){
+			case 0:
+				break;
+			case 1: default:
+				$this->frontController->addMessage('Problem during creation of states and country', 'error');
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+		
+		$this->frontController->addMessage( 'Every action was a success' , 'correct');
+		$this->frontController->doRedirect( 'Tool' );
+	}
+	
 	/**
 	 * Could be long as we want, cause it is called only once per installation
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseForumAction() {
+		$result = $this->createBaseForum();
+		switch($result){
+			case 0:
+				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ), 'correct' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 1:
+				$this->frontController->addMessage( __( 'The metadata were not added/modified' ), 'info' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 2:
+				$this->frontController->addMessage( __( 'Creation of the base forum failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+	}
+	
+	/**
+	 * @return 0: success, 1: metadata fail, 2: creation fail
+	 */
+	private function createBaseForum(){
 		$forumDiscussion = new Forum();
 		$forumDiscussion->setName(  __('Discussions') );
 		$forumDiscussion->setDescription(  __('Place where people can speak with others freely') );
@@ -163,19 +282,39 @@ class Tool extends AbstractController {
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TypeCenter::$activityType ) );
 			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TypeCenter::$freetextType ) );
 			if( $result ) {
-				$this->frontController->addMessage( __( 'Creation of the base forum complete with metadata' ), 'correct' );
+				// Creation of the base forum complete with metadata / correct
+				return 0;
 			} else {
-				$this->frontController->addMessage( __( 'The metadata were not added/modified' ), 'info' );
+				// The metadata were not added/modified / info
+				return 1;
 			}
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the base forum failed !' ), 'error' );
+			 // Creation of the base forum failed ! / error
+			return 2;
 		}
-		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseUserAction() {
+		$result = $this->createBaseUser();
+		switch($result){
+			case 0:
+				$this->frontController->addMessage( __( 'Creation of the default users completed' ), 'correct' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 1: default:
+				$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+	}
+	
+	/**
+	 * @return 0: success, 1: fail
+	 */
+	private function createBaseUser(){
 		$anonUser = UserManager::getAnonymousUser();
 		$nullUser = UserManager::getNullUser();
 		$email = Config::getOrDie('initial_admin_email');
@@ -184,23 +323,42 @@ class Tool extends AbstractController {
 		$this->em->persist( $anonUser );
 		$this->em->persist( $admin );
 		if( $this->em->flushSafe() ) {
-			$this->frontController->addMessage( __( 'Creation of the default users completed' ), 'correct' );
+			// Creation of the default users completed / correct
+			return 0;
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the default users failed !' ), 'error' );
+			// 'Creation of the default users failed ! / error
+			return 1;
 		}
-		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseInstructionsAction(){
+		$result = $this->createBaseInstructions();
+		switch($result){
+			case 0:
+				$this->frontController->addMessage( __( 'Creation of the default instructions completed' ), 'correct' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 1: default:
+				$this->frontController->addMessage( __( 'Creation of the default instructions failed !' ), 'error' );
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+	}
+	
+	/**
+	 * @return 0: success, 1: fail
+	 */
+	private function createBaseInstructions(){
 		$instrRepo = $this->em->getRepository('Instruction');
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'activity', __( 'The activity topics will be used to share activities with other' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'freetext', __( 'The freetext topics will be used to discuss with other' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'story', __( 'The story topics will be used to describe special situation' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 'The strategy topics display a list of different strategies used to fight against a problem' ));
 		
-		// Notice this is important to keep "..." between the sentences, to enable the \n special char to be transformed into <br />
+		// Notice this is important to keep < " > between the sentences, to enable the \n special char to be transformed into <br />
 		// Never put a nonce in an email, to avoid problem of connected user
 		
 		// Used by Profile::editUsernameAction
@@ -341,16 +499,35 @@ class Tool extends AbstractController {
 		));
 		
 		if( $this->em->flushSafe() ){
-			$this->frontController->addMessage( __( 'Creation of the default instructions completed' ), 'correct' );
+			// Creation of the default instructions completed / correct
+			return 0;
 		} else {
-			$this->frontController->addMessage( __( 'Creation of the default instructions failed !' ), 'error' );
+			// Creation of the default instructions failed ! / error
+			return 1;
 		}
-		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseCountriesAndStatesAction(){
+		$result = $this->createBaseCountriesAndStates();
+		switch($result){
+			case 0:
+				$this->frontController->addMessage('Creation of the countries done.', 'correct');
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+			case 1: default:
+				$this->frontController->addMessage('Problem during creation of states and country', 'error');
+				$this->frontController->doRedirect( 'Tool' );
+				break;
+		}
+	}
+	
+	/**
+	 * @return 0: success, 1:fail
+	 */
+	private function createBaseCountriesAndStates(){
 		$file = '_config/countries_states.txt';
 		$reader = new CountryReader();
 		$reader->setFile($file);
@@ -377,16 +554,16 @@ class Tool extends AbstractController {
 				$stateEntity->setStateName(utf8_encode($state['stateName']));
 				$this->em->persist($stateEntity);
 			}
-			if(!$this->em->flushSafe()){
-				$this->frontController->addMessage('Problem during creation of states for country '.$country['countryName'], 'error');
-				$this->frontController->doRedirect('Tool');
+			if( !$this->em->flushSafe() ){
+				Logger::getInstance()->log('Problem during creation of states for country '.$country['countryName']);
+				return 1;
 			}
 		}
-		$this->frontController->addMessage('Creation of the countries done.', 'correct');
-		$this->frontController->doRedirect('Tool');
+		return 0;
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function updateDatabaseAction(){
 		include './scripts/create_database.php';
@@ -400,6 +577,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createFloodFirstForumAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -449,6 +627,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(administrator)
 	 */
 	public function createFloodFirstTopicAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -522,6 +701,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(moderator)
 	 */
 	public function recountAllTopicsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
@@ -543,6 +723,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(moderator)
 	 */
 	public function recountAllPostsAction() {
 		$forumRep = $this->em->getRepository( 'Forum' );
@@ -569,6 +750,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(moderator)
 	 */
 	public function displayLogAction(){
 		$filename = 'log.txt';
@@ -577,6 +759,7 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(moderator)
 	 */
 	public function displayAllCountryAction(){
 		$countries = $this->em->getRepository('UserProfileCountry')->findAll();
@@ -585,6 +768,8 @@ class Tool extends AbstractController {
 	}
 	
 	/**
+	 * @RoleAtLeast(moderator)
+	 * TODO need to be removed after test
 	 */
 	public function sendFakeEmailAction(){
 		$currentTime = $this->frontController->getRequest()->getRequestTime();
@@ -610,6 +795,9 @@ class Tool extends AbstractController {
 		$this->frontController->doRedirect('Tool');
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createActivationKeyForUserAction(){
 		$expiration = Config::get('activation_key_expiration_time', 12 * 31 * 24 * 60 * 60);
 		$meta = array( 'role' => UserRoles::$full_user_role);
@@ -618,6 +806,9 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay('tool', 'displayKeyUser', array('key' => $token->getToken()));
 	}
 	
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createActivationKeyForModeratorAction(){
 		$expiration = Config::get('activation_key_expiration_time', 12 * 31 * 24 * 60 * 60);
 		$meta = array( 'role' => UserRoles::$moderator_role);
@@ -626,17 +817,132 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay('tool', 'displayKeyModerator', array('key' => $token->getToken()));
 	}
 	
-//	/**
-//	 * @RoleAtLeast(administrator)
-//	 */
-//	public function doMaintenanceAction(){
-//		$curr = getcwd();
-//		$filename = '.htaccess';
-//		$exist = file_exists($filename);
-//		$readable = is_readable($filename);
-//		$modifiable = is_writable($filename);
-//		$content = file_get_contents($filename);
-//		$content = str_replace('/SocialPortal/index.php', '/SocialPortal/index2.php', $content);
-//		file_put_contents($filename, $content);
-//	}
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
+	public function doMaintenanceAction(){
+		$filename = 'index.php';
+		$exist = file_exists($filename);
+		$readable = is_readable($filename);
+		$modifiable = is_writable($filename);
+		$content = file_get_contents($filename);
+		$content = strtr($content, array('/*%s%*/false/*%e%*/' => '/*%s%*/true/*%e%*/'));
+		file_put_contents($filename, $content);
+		$this->frontController->doRedirect('Tool');
+	}
+
+	public function simulateWeeklyVoteReductionAction(){
+		$result = $this->em->getRepository('TopicVoteStats')->relativeReductionAll();
+		if($result){
+			$this->frontController->addMessage('Reduction was a success', 'correct');
+		}else{
+			$this->frontController->addMessage('Reduction fails', 'error');
+		}
+		$this->frontController->doRedirect('Tool');
+	}
+	
+	public function simulateSubsetRegenerationAction(){
+		//TODO for debug
+		$now = new \DateTime('now');
+		$subsetRepo = $this->em->getRepository( 'SubsetTopic' );
+		$forumRep = $this->em->getRepository( 'Forum' );
+		$forums = $forumRep->findAll();
+		foreach($forums as $f){
+			list($total, $topics) = $this->simulateVoteForForum( $f->getId() );
+			$selectedTopics = $this->chooseRandomly($topics, $total, 5);
+			
+			$previouslySelected = $subsetRepo->findTopicFromForum( $f->getId() );
+			foreach($previouslySelected as $ps){
+				$this->em->remove($ps);
+			}
+			foreach($selectedTopics as $st){
+				$subset = new SubsetTopic();
+				$subset->setTopicId($st->getId());
+				$subset->setForumId($f->getId());
+				$subset->setExpirationDate($now);
+				$this->em->persist($subset);
+			}
+		}
+		$result = $this->em->flushSafe();
+		if($result){
+			$this->frontController->addMessage('Subset regeneration was a success', 'correct');
+		}else{
+			$this->frontController->addMessage('Subset regeneration fails', 'error');
+		}
+		$this->frontController->doRedirect('Tool');
+	}
+	
+	/**
+	 * @return array [weight, item]
+	 */
+	private function simulateVoteForForum($forumId){
+		$allTopics = $this->em->getRepository('TopicBase')->findTopicsFromForum($forumId);
+		$voteRepo = $this->em->getRepository('TopicVoteStats');
+		
+		$total = 0;
+		// array of [voteRelative, $topic]
+		$topics = array();
+		
+		foreach($allTopics as $topic){
+			$voteRelative = $voteRepo->getRelativeVote($topic->getId());
+			$total += $voteRelative;
+			$topics[] = array('weight' => $voteRelative, 'item' => $topic);
+		}
+
+		return array($total, $topics);
+	}
+	
+	/**
+	 * Choose randomly the topics in function of their weight
+	 * @param array of topics $topics
+	 * @param int $total
+	 * @param int $numResult
+	 * @long processing time
+	 */
+	private function chooseRandomly(array $topics, $total, $numResult = 5){
+		if( $numResult <= 0 || empty($topics) ){
+			return array();
+		}
+		$size = count($topics);
+		if( $size <= $numResult ){
+			$results = array_map(function($val){
+				return $val['item'];
+			}, $topics);
+			return $results;
+		}
+		// here is the real algorithm
+		$result = array();
+		$count = 0;
+		$variableTotal = $total;
+		for($i = 0 ; $i < $numResult ; $i++){
+			$value = mt_rand(1, $variableTotal);
+			$index = $this->retrieveWeightedItem($topics, $value);
+			$current = $topics[$index];
+			$variableTotal -= $current['weight'];
+			$result[] = $current['item'];
+			array_splice($topics, $index, 1);
+		}
+		
+		return $result;
+	}
+	/**
+	 * Determine in function of the weights which element is selected
+	 * if we have [3, item1], [2, item2], the total is 5, the range is [1, 5]
+	 * The mapping: item1 = [1,2,3], item2 = [4, 5]
+	 * 
+	 * @param array $topics
+	 * @param int $value
+	 * @return int $index of the element in the array
+	 */
+	private function retrieveWeightedItem(array $topics, $value){
+		$currentValue = $value;
+		for ($i = 0, $size = count($topics) ; $i < $size ; $i++){
+			$topic = $topics[$i];
+			$currentValue -= $topic['weight'];
+			if( $currentValue <= 0 ){
+				return $i;
+			}
+		}
+		throw new \Exception('Problem in value weighted random choice');
+	}
 }
