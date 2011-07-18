@@ -6,7 +6,7 @@ if( $realWD !== $currentWD ) {
 	chdir( $currentWD );
 }
 
-require_once 'base_script.php';
+require_once '_base_script.php';
 
 use Doctrine\ORM\EntityManager;
 

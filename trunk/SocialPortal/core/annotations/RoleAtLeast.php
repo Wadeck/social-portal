@@ -39,7 +39,7 @@ class RoleAtLeast extends Annotation implements ValidableInterface {
 		if( $viewHelper->currentUserIsAtLeast($this->role) ){
 			return true;
 		}else{
-			Logger::getInstance()->debug_var( "The user has not the sufficiant role to access this method, role required [{$this->role}]" );
+			Logger::getInstance()->debug( "The user has not the sufficiant role to access this method, role required [{$this->role}]" );
 			return false;
 		}
 	}

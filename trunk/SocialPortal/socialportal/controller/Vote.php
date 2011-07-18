@@ -2,6 +2,8 @@
 
 namespace socialportal\controller;
 
+use socialportal\model\TopicVoteStats;
+
 use socialportal\model\VotePost;
 
 use core\FrontController;
@@ -28,10 +30,11 @@ class Vote extends AbstractController {
 		$this->em->persist($vote);
 		if( !$this->em->flushSafe($vote) ){
 			$this->frontController->addMessage(__('There was a problem during the vote process'), 'error');
-		}else{
-			$this->frontController->addMessage(__('Your vote was taking into account, thank you'), 'correct');
 		}
+
+		$this->em->getRepository('TopicVoteStats')->incrementVote($topicId, 1);
 		
+		$this->frontController->addMessage(__('Your vote was taking into account, thank you'), 'correct');
 		$this->frontController->doRedirect('Topic', 'displaySingleTopic', array('topicId' => $topicId, 'forumId' => $forumId));
 	}
 	
@@ -39,7 +42,7 @@ class Vote extends AbstractController {
 	 * @Nonce(votePost)
 	 * @GetAttributes({postId, topicId, forumId})
 	 */
-	public function votePostcAction() {
+	public function votePostAction() {
 		$get = $this->frontController->getRequest()->query;
 		$postId = $get->get('postId');
 		$topicId = $get->get('topicId');
