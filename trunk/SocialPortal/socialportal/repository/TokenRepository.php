@@ -24,16 +24,16 @@ class TokenRepository extends EntityRepository {
 	 * @param string $tokenValue The random key we search for
 	 * @return Token|false if the token is not found
 	 */
-	public function findValidToken($tokenValue, $tokenType) {
+	public function findValidToken($tokenValue, $tokenType=false) {
 		$datetime = new \DateTime('now');
 		if(false === $tokenType){
-			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time) OR (t.expirationDate IS NULL)' );
+			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time OR t.expirationDate IS NULL)' );
 		}else{
 			$dql = $this->_em->createQuery( 'SELECT t FROM Token t WHERE t.token = :token AND (t.expirationDate >= :time OR t.expirationDate IS NULL) AND t.type = :type' );
 			$dql->setParameter( 'type', $tokenType );
 		}
 		$dql->setParameter( 'token', $tokenValue );
-		$dql->setParameter('time', $datetime, \Doctrine\DBAL\Types\Type::DATETIME);
+		$dql->setParameter( 'time' , $datetime, \Doctrine\DBAL\Types\Type::DATETIME);
 		$dql->setMaxResults( 1 );
 		$result = $dql->getResult();
 		if( $result ) {
@@ -48,7 +48,7 @@ class TokenRepository extends EntityRepository {
 	 * @return array Metadata that were stored in the token | false if the token is not found
 	 * @warning check false === and not false == because the meta can be an empty array
 	 */
-	public function findValidTokenMeta($tokenValue, $tokenType) {
+	public function findValidTokenMeta($tokenValue, $tokenType=false) {
 		$result = $this->findValidToken($tokenValue, $tokenType);
 		if( false !== $result ) {
 			return unserialize($result->getMeta() );

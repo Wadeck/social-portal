@@ -468,9 +468,7 @@ lundi 18 juillet
 - value weighted random choice : done !!!!
 
 
-
-
-
+todo - pour les subsets of topics, il faut rajouter les isDeleted = 0
 todo - controle des topics et profile lors d'un anon, par le biais du subset
 todo - security : les scripts sont accessible depuis l'exterieur, il faut renforcer la securité en changeant le chmod du dossier scripts,
 	qu'il ne soit executable que depuis le local
@@ -481,3 +479,13 @@ todo - les emails partent correctement si une adresse locale se situe dans le he
 todo - description des dates en format normal, hover
 todo - maintenance
 todo - args_nonce, hash sur controller/action/getargs, ajouté au getargs et retrieved by annotation, peut etre tres utile pour les suppressions de posts/topic, modification profile etc
+
+
+TODO CRON:
+- every midnight: subset determination
+- every week: vote reduction
+- every week: check of expiration date for the tokens
+- every week: deletion of temporary avatars
+
+
+
