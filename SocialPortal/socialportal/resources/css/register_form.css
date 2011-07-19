@@ -1,11 +1,11 @@
 @CHARSET "ISO-8859-1";
 
 form.register-form label{
-	width: 140px;
+	width: 130px;
 }
 	
 form.register-form input[type=submit] {
-	margin-left: 145px;
+	margin-left: 135px;
 }
 
 form.register-form span.error_message.active {
@@ -36,7 +36,7 @@ form.register-form label { /*font-weight: none;
 }
 
 form.register-form input[type="text"],form.register-form input[type="password"]{
-	width: 225px;
+	width: 215px;
 	margin-left: 5px;
 	vertical-align: middle;
 }

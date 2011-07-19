@@ -421,7 +421,7 @@ class Connection extends AbstractController {
 		$mailContent = nl2br($mailContent);
 		Mail::sendHtml($email, Config::getOrDie('site_display_name'). ': account validation', $mailContent);	
 			
-		$this->frontController->addMessage( __('An email to validate your address was sent, when you will click on the link inside it, the accout will be activated'), 'correct');
+		$this->frontController->addMessage( __('An email to validate your address was sent, when you will click on the link inside it, the account will be activated'), 'correct');
 		$this->frontController->doRedirect( 'Connection' );
 	}
 	
@@ -436,7 +436,7 @@ class Connection extends AbstractController {
 		$token = $get->get( 'token' );
 		
 		$tokenRepo = $this->em->getRepository('Token');
-		$tokenMeta = $tokenRepo->findValidTokenMeta($token, 'lost_password');
+		$tokenMeta = $tokenRepo->findValidTokenMeta($token, 'account_validation');
 		if( false === $tokenMeta){
 			// expiration or never exist
 			Logger::getInstance()->log("Request expired: [$token]");

@@ -229,7 +229,7 @@ class UserManager {
 			return false;
 		}
 		
-		$status = $withActivation ? 0 : 1;
+		$status = $withActivation ? 1 : 0;
 		$time = $this->request->getRequestTime();
 		$user = self::createUser( $username, $password, $email, $role, $time, $status, $activationKey );
 		
