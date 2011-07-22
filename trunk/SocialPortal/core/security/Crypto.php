@@ -4,7 +4,13 @@ namespace core\security;
 
 class Crypto {
 	/**  @var array different salts used to hash password in db or cookie */
-	private static $SALTS = array( 'cookie' => array( '62b1d5u|e3_04', '^t:,46ru7ç+', 'c245ho4{s€' ), 'db' => array( 'le$gA5_ds*', 'm0-!%4Dr€', '#@^2s_5gA~' ), 'nonce' => array( '5ks*à-+', 'gZs-/9D', '6èvF9d/' ) );
+	private static $SALTS = array( 
+		// 13 + 11 + 10 = 34 => 272bits
+		'cookie' => array( '62b1d5u|e3_04', '^t:,46ru7ç+', 'c245ho4{s€' ),
+		// 10 + 9 + 10 = 29 => 232bits
+		'db' => array( 'le$gA5_ds*', 'm0-!%4Dr€', '#@^2s_5gA~' ),
+		// 7 + 7 + 7 = 21 => 168bits
+		'nonce' => array( '5ks*à-+', 'gZs-/9D', '6èvF9d/' ) );
 	
 	/** Database usage @return string the encrypted pwd */
 	public static function encodeDBPassword($login, $pwd) {
