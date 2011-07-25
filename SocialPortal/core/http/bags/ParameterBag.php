@@ -11,12 +11,14 @@
 
 namespace core\http\bags;
 
+use core\http\GetSettable;
+
 /**
  * ParameterBag is a container for key/value pairs.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterBag {
+class ParameterBag implements GetSettable{
 	protected $parameters;
 	
 	/**

@@ -9,7 +9,7 @@ use socialportal\common\templates\ForumHeader;
 
 use core\user\UserHelper;
 
-use core\tools\Paginator;
+use socialportal\common\templates\Paginator;
 
 use core\debug\Logger;
 

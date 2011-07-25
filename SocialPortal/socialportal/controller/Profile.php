@@ -52,6 +52,13 @@ class Profile extends AbstractController {
 		$get = $this->frontController->getRequest()->query;
 		$userId = $get->get( 'userId' );
 		
+		$subsetRepo = $this->em->getRepository('SubsetTopic');
+		$accessible = $subsetRepo->isProfileLinkedWithSubset($userId);
+		if( false === $accessible ){
+			$this->frontController->addMessage( __('This profile is not accessible today') , 'error');
+			$this->frontController->doRedirect( 'Home' );
+		}
+		
 		$profileRepo = $this->em->getRepository( 'UserProfile' );
 		$profile = $profileRepo->findByUserId( $userId );
 		$userRepo = $this->em->getRepository( 'User' );

@@ -51,7 +51,7 @@ form span.error_message {
 	color: #FFA200;
 	/*display: inline-block;*/
 	font-weight: normal;
-	text-decoration: none;
+	/*text-decoration: none;*/
 	margin-left: 6px;
 	display: none;
 }

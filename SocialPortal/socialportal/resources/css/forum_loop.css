@@ -15,7 +15,9 @@ ul#forums-header {
 li.forums-tab {
 	display: inline;
 }
-
+ul#forums-header li.forums-tab a{
+	text-decoration: none;
+}
 li.forums-tab a {
 	display: inline;
 	/*border: 1px solid #ccc;*/

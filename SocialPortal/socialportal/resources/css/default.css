@@ -15,6 +15,60 @@
 	cursor: pointer;
 }
 
+.button:hover {
+	background: url( ../img/white-grad.png ) top left repeat-x;
+	border: 1px solid #aaa;
+	padding: 3px 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #333;
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+.button:focus {
+	background: url( ../img/white-grad.png ) bottom left repeat-x;
+	border: 1px solid #666;
+	padding: 3px 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #111;
+	font-size: 12px;
+	font-weight: normal;
+	vertical-align: bottom;
+	cursor: pointer;
+}
+
+a { /* default color for each link */
+	color: #1FB3DD;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus {
+	color: blue;
+	text-weight: bold;
+}
+
+a:hover img{
+	border: 1px dotted grey;
+	margin: -1px;
+}
+
+a:focus img{
+	border: 2px solid blue;
+	margin: -2px;
+}
+
 .rounded-box {
 	border: 1px solid #CCC;
 	-moz-border-radius: 10px;
@@ -100,11 +154,6 @@ h6 {
 
 .no-margin {
 	margin: 0 0 0 0;
-}
-
-a { /* default color for each link */
-	color: #1FB3DD;
-	text-decoration: none;
 }
 
 div#link-back {

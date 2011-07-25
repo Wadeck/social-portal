@@ -2,6 +2,8 @@
 
 namespace socialportal\common\templates;
 
+use socialportal\model\TopicBase;
+
 use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
@@ -22,6 +24,11 @@ abstract class AbstractPostTemplate implements iInsertable{
 	/** @var string url to the given post with p/n parameters to avoid relativity */
 	protected $permalink;
 	
+	protected $topicBase ;
+	protected $topicId ;
+	protected $forumId ;
+	protected $supportVote = true;
+	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
 	}
@@ -29,6 +36,13 @@ abstract class AbstractPostTemplate implements iInsertable{
 	public function setEntityManager(EntityManager $em){
 		$this->em = $em;
 	}
+	
+	public function setTopicBase(TopicBase $topic){
+		$this->topicBase = $topic;
+		$this->topicId = $topic->getId();
+		$this->forumId = $topic->getForum()->getId();
+	}
+	
 	/**
 	 * @param array of CustomPost $posts
 	 */
@@ -84,6 +98,14 @@ abstract class AbstractPostTemplate implements iInsertable{
 
 			    		<!-- Content of the comment -->
 			    		<td class="comment-right-part">
+			    			<?php if($this->supportVote): ?>
+								<div id="vote-box">
+									<a class="button"
+										href="<?php $this->front->getViewHelper()->insertHrefWithNonce('votePost', 'Vote', 'votePost', 
+											array('postId' => $postId, 'topicId' => $this->topicId, 'forumId' => $this->forumId) );?>"
+										><?php echo __('I like'); ?></a>
+								</div>
+							<?php endif; ?>
 							<?php $this->insertPostContent($post); ?>
 			    		</td>
 					</tr>

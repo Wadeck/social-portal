@@ -5,11 +5,7 @@ use socialportal\common\topic\TypeCenter;
 
 use core\user\UserHelper;
 
-use socialportal\common\templates\MessageInsertTemplate;
-
 use core\user\UserRoles;
-
-use core\tools\Paginator;
 
 use socialportal\repository\ForumMetaRepository;
 

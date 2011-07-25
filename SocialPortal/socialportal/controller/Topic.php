@@ -2,6 +2,10 @@
 
 namespace socialportal\controller;
 
+use socialportal\common\templates\NoFilterLinkTemplate;
+
+use core\Config;
+
 use socialportal\repository\InstructionRepository;
 
 use socialportal\common\templates\InstructionTemplate;
@@ -14,7 +18,7 @@ use socialportal\common\templates\MessageInsertTemplate;
 
 use core\user\UserRoles;
 
-use core\tools\Paginator;
+use socialportal\common\templates\Paginator;
 
 use socialportal\repository\ForumMetaRepository;
 
@@ -94,7 +98,7 @@ class Topic extends AbstractController {
 	
 	/**
 	 * @GetAttributes({topicId, forumId})
-	 * [p, n, positionTarget(int), timeTarget(timestamp int), postIdTarget(int), lastPage(boolean), withDeleted(boolean)]
+	 * [p, n, positionTarget(int), timeTarget(timestamp int), postIdTarget(int), lastPage(boolean), withDeleted(boolean), nofilter(boolean)]
 	 */
 	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -107,20 +111,25 @@ class Topic extends AbstractController {
 		$postIdTarget = $get->get( 'postIdTarget', false );
 		$lastPage = $get->get( 'lastPage', false );
 		$withDeleted = $get->get( 'withDeleted', false );
+		$nofilter = $get->get( 'nofilter', false );
 		
 		$postBaseRepo = $this->em->getRepository( 'PostBase' );
 		$topicBaseRepo = $this->em->getRepository( 'TopicBase' );
 		
 		$topic = $topicBaseRepo->findFullTopic( $topicId );
-		$base = $topic->getTopicbase();
-		$typeId = $base->getCustomType();
+		if(false === $topic){
+			$this->frontController->addMessage( __('No topic related to your request') , 'error' );
+			$this->frontController->doRedirect( 'Home' );
+		}
+		$baseTopic = $topic->getTopicbase();
+		$typeId = $baseTopic->getCustomType();
 		
 		if( $withDeleted ) {
-			$max_pages = $topicBaseRepo->getCountWithDeleted( $topicId );
+			$num_posts = $topicBaseRepo->getCountWithDeleted( $topicId );
 		} else {
-			$max_pages = $base->getNumPosts();
+			$num_posts = $baseTopic->getNumPosts();
 		}
-		$max_pages = ceil( $max_pages / $num_per_page );
+		$max_pages = ceil( $num_posts / $num_per_page );
 		if( !$max_pages ) {
 			$max_pages = 0;
 		}
@@ -146,21 +155,39 @@ class Topic extends AbstractController {
 			$page_num = $topicBaseRepo->getPostPagePerPosition( $topicId, $typeId, $position, $num_per_page, $withDeleted );
 		}
 		
-		$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page, $withDeleted );
-		$getArgs = array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%" );
+		$limit = Config::get('num_posts_limit_filter', 200);
+		if( !$nofilter && -1 !== $limit && !$withDeleted && $page_num === 1 && $num_posts >= $limit ){
+			$numPostFilter = Config::get('num_posts_limit_display', 10);
+			$postVoteStatsRepo = $this->em->getRepository('PostVoteStats');
+			$posts = $postVoteStatsRepo->findBestPosts($topicId, $typeId, $numPostFilter);
+			$withVoteFilter = true;
+		}else{
+			$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page, $withDeleted );
+			$withVoteFilter = false;
+		}
+		
+		$getArgs = array( 'topicId' => $topicId, 'forumId' => $forumId, 'p' => "%#p%", 'n' => "%#n%", 'nofilter' => true );
 		if( $withDeleted ) {
 			$getArgs['withDeleted'] = true;
 		}
-		$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
 		
-		$pagination = new Paginator();
-		$pagination->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
+		if( !$withVoteFilter ){
+			// with placeholders for p/n
+			$link = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', $getArgs );
+			// only when we don't use filter, we create the paginator
+			$navigation = new Paginator();
+			$navigation->paginate( $this->frontController, $page_num, $max_pages, $num_per_page, $link, __( 'First' ), __( 'Last' ), __( 'Previous' ), __( 'Next' ), false, false );
+		}else{
+			// in case of filtering, we don't use paginator but a link to this function without filtering
+			$noFilterLink = $this->frontController->getViewHelper()->createHref( 'Topic', 'displaySingleTopic', array('forumId' => $forumId, 'topicId' => $topicId, 'nofilter' => true ) );
+			$navigation = new NoFilterLinkTemplate( $this->frontController, $noFilterLink );
+		}
 		
 		// condition to satisfy to be able to write a comment
-		if( !$base->getIsOpen() ){
-			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'The topic is closed, no more comment accepted' ) );
+		if( !$baseTopic->getIsOpen() ){
+			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'The topic is closed, no more comment accepted' ), array('topic-no-respond'), array('rounded-box', 'pagged') );
 		}else if( !$this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$full_user_role ) ) {
-			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ) );
+			$commentForm = new MessageInsertTemplate( $this->frontController, __( 'You do not have the right to add comment' ), array('topic-no-respond'), array('rounded-box', 'pagged') );
 		} else {
 			$commentForm = new ModuleInsertTemplate( $this->frontController, 'Post', 'displayForm', array( 'typeId' => $typeId, 'topicId' => $topicId, 'forumId' => $forumId ), 'displayPostForm' );
 		}
@@ -175,12 +202,12 @@ class Topic extends AbstractController {
 		
 		$response = $this->frontController->getResponse();
 		$response->setVar( 'commentForm', $commentForm );
-		$response->setVar( 'pagination', $pagination );
+		$response->setVar( 'pagination', $navigation );
 		$response->setVar( 'posts', $posts );
 		$response->setVar( 'topic', $topic );
 		$response->setVar( 'forumId', $forumId );
 		$response->setVar( 'topicTemplate', $typeManager->getTopicTemplate($this->frontController, $this->em, $topic, $permalinkTopic ) );
-		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $posts, $permalinkPost ) );
+		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $baseTopic, $posts, $permalinkPost ) );
 		
 		if( $this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$moderator_role ) ) {
 			// optimization if we use permalink before

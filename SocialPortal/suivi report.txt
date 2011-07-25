@@ -467,6 +467,30 @@ lundi 18 juillet
 - modification du systeme de vote, pour avoir le total des votes pour un topic dans une table TopicVoteStats
 - value weighted random choice : done !!!!
 
+[ecriture du rapport]
+
+dimanche 24 juillet
+- ajout des models: 
+	PostVoteStats (pour compter les votes totaux des posts, sans modification relative aux temps
+		comme pour les topics car ils ne dependent pas du temps)
+	
+- ajout des repository:
+	PostVoteStats
+- ajout des vote pour les posts dans le template de base
+- amelioration de css pour les topics
+- support du "tab" pour naviguer, pour les personnes avec peu de visibilité
+
+lundi 25 juillet
+- refactoring du paginator
+- ajout d'un template: NoFilterLinkTemplate qui remplace la pagination en cas de filter
+- les filters de posts marchent bien (testé et approuvé)
+- test profiles accessible que par subset (le chemin de navigation des guests), ok ca marche
+- validation par cookie / session pour les votes multiples
+
+
+
+
+
 
 todo - pour les subsets of topics, il faut rajouter les isDeleted = 0
 todo - controle des topics et profile lors d'un anon, par le biais du subset
