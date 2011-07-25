@@ -203,6 +203,8 @@ class Response {
 				header( $name . ': ' . $value );
 			}
 		}
+		$headers = $this->headers;
+		$coo = $this->cookies;
 		// cookies
 		foreach( $this->headers->getCookies() as $cookie ) {
 			setcookie( $cookie->getName(), $cookie->getValue(), $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly() );

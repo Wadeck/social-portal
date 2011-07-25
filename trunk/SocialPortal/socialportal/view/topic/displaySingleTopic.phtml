@@ -1,4 +1,6 @@
 <?php
+//TODO remove that, refactor into Topic controller, or main refactor to the link back
+use core\user\UserRoles;
 $vars['helper']->insertMessage();
 
 $vars['helper']->addCssFile('topics_loop.css');
@@ -22,10 +24,12 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 	href="<?php echo $vars['helper']->createHref('Home')?>">
 		<?php echo __('Home'); ?>
 </a>
+<?php if($vars['helper']->currentUserIsAtLeast(UserRoles::$full_user_role)): ?>
 <a class="button" 
 	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId'=>$forumId )); ?>">
 		<?php echo __('Discussions'); ?>
 </a>
+<?php endif;?>
 &nbsp;
 <h4> 
 <?php echo __('Topic'); ?></h4>
@@ -41,23 +45,14 @@ $displayDeletedLink = $vars['displayDeletedLink'];
 <?php endif; ?>
 </div>
 
-<?php if($topic): // forum loop ?>
-<!--	<div class="rounded-box">-->
-		<!-- Link to the parent forum -->
-		<!-- title / content -->
-		<?php $topicTemplate->insert(); ?>
-		<!-- 1st pagination -->
-		<?php $pagination->insert(); ?>
-		<!-- posts -->
-		<?php $postsTemplate->insert(); ?>
-		<!-- 2nd pagination -->
-		<?php $pagination->insert(); ?>
-		<!-- form to comment -->
-		<?php $commentForm->insert(); ?>
-<!--	</div>-->
-<?php else: // no topics in this forum ?>
-	<?php $vars['helper']->addCssFile('messages.css'); ?>
-	<div class="rounded-box pagged">
-	<div class="message info centered"><?php echo __('No topic in this forum');?></div>
-	</div>
-<?php endif; ?>
+<!-- Link to the parent forum -->
+<!-- title / content -->
+<?php $topicTemplate->insert(); ?>
+<!-- 1st pagination -->
+<?php $pagination->insert(); ?>
+<!-- posts -->
+<?php $postsTemplate->insert(); ?>
+<!-- 2nd pagination -->
+<?php $pagination->insert(); ?>
+<!-- form to comment -->
+<?php $commentForm->insert(); ?>

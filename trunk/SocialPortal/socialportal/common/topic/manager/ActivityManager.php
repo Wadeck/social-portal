@@ -2,6 +2,8 @@
 
 namespace socialportal\common\topic\manager;
 
+use socialportal\model\TopicBase;
+
 use Doctrine\ORM\EntityManager;
 
 use socialportal\common\form\custom\TopicActivityForm;
@@ -27,11 +29,12 @@ class ActivityManager extends AbstractTypeManager{
 	}
 	
 	/** @return AbstractPostTemplate */
-	public function getPostTemplate(FrontController $frontController, EntityManager $em, array $posts, $permalink){
+	public function getPostTemplate(FrontController $frontController, EntityManager $em, TopicBase $topicBase, array $posts, $permalink){
 		$template = new ActivityPostTemplate();
 		$template->setFrontController($frontController);
 		$template->setEntityManager($em);
 		$template->setPosts($posts);
+		$template->setTopicBase($topicBase);
 		return $template;
 	}
 

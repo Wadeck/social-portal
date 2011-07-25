@@ -17,10 +17,13 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-namespace core\tools;
+namespace socialportal\common\templates;
+
+use socialportal\common\templates\iInsertable;
 
 use core\FrontController;
-class Paginator {
+
+class Paginator implements iInsertable{
 	/**
 	 * Represents the link format
 	 * @var string

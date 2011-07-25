@@ -29,7 +29,9 @@
 #header h1 a {
 	color: #fff;
 	font-size: 26px;
-	text-decoration: none;
+}
+#header h1 a:focus {
+	color: blue;
 }
 
 #header #search-bar {

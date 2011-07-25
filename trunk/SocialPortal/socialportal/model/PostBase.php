@@ -7,8 +7,8 @@ namespace socialportal\model;
  * @Table(
  *	name="post__base", 
  *	indexes={
- *		@Index(name="idx_a8a02955bb66c05", columns={"poster_id"}),
- *		@Index(name="idx_a8a02951f55203d", columns={"topic_id"})
+ *		@Index(name="idx_a8a02951f55203d", columns={"topic_id"}),
+ *		@Index(name="idx_a8a02955bb66c05", columns={"poster_id"})
  *	}
  * )
  * @Entity(repositoryClass="PostBaseRepository")
@@ -62,16 +62,6 @@ class PostBase{
     private $position;
 
     /**
-     * @var socialportal\model\TopicBase
-     *
-     * @ManyToOne(targetEntity="socialportal\model\TopicBase")
-     * @JoinColumns({
-     *   @JoinColumn(name="topic_id", referencedColumnName="id")
-     * })
-     */
-    private $topic;
-
-    /**
      * @var socialportal\model\User
      *
      * @ManyToOne(targetEntity="socialportal\model\User")
@@ -80,6 +70,16 @@ class PostBase{
      * })
      */
     private $poster;
+
+    /**
+     * @var socialportal\model\TopicBase
+     *
+     * @ManyToOne(targetEntity="socialportal\model\TopicBase")
+     * @JoinColumns({
+     *   @JoinColumn(name="topic_id", referencedColumnName="id")
+     * })
+     */
+    private $topic;
 
 
     /** Get id @return bigint $id */
@@ -115,15 +115,15 @@ class PostBase{
     /** Get position @return bigint $position */
     public function getPosition(){ return $this->position; }
 
-    /** Set topic @param socialportal\model\TopicBase $topic */
-    public function setTopic(\socialportal\model\TopicBase $topic){ $this->topic = $topic; }
-
-    /** Get topic @return socialportal\model\TopicBase $topic */
-    public function getTopic(){ return $this->topic; }
-
     /** Set poster @param socialportal\model\User $poster */
     public function setPoster(\socialportal\model\User $poster){ $this->poster = $poster; }
 
     /** Get poster @return socialportal\model\User $poster */
     public function getPoster(){ return $this->poster; }
+
+    /** Set topic @param socialportal\model\TopicBase $topic */
+    public function setTopic(\socialportal\model\TopicBase $topic){ $this->topic = $topic; }
+
+    /** Get topic @return socialportal\model\TopicBase $topic */
+    public function getTopic(){ return $this->topic; }
 }

@@ -1,9 +1,40 @@
 @CHARSET "ISO-8859-1";
 
-#vote_box{
-	margin-top: -15px;
-	position: relative;
-	text-align: right;
+#topic {
+	margin-bottom: 15px;
+}
+#topic-respond {
+	margin-top: 15px;
+}
+#topic-no-respond{
+	margin-top: 15px;
+}
+
+span#topic-title{   
+	display: inline-block;
+    font-size: 190%;
+    line-height: 1;
+    margin: 8px;
+}
+span#topic-tags{
+	
+}
+span#topic-content{
+	
+}
+/*#topic-content {
+	border-top: 1px solid #eee;
+}*/
+
+#vote-box{
+	margin: 3px;
+	float: right;
+	line-height: 20px;
+}
+
+#topic #vote-box{
+}
+#topic-post-list #vote-box{
 }
 
 ul#forums-header {
@@ -90,20 +121,19 @@ div#sidebar table {
 	width: 117%;
 }
 
-table tr th {
-	padding: 8px;
-	vertical-align: middle;
-}
-
 table tr td {
 	padding: 15px 8px;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
 
 table tr td.label {
 	border-right: 1px solid #eaeaea;
 	font-weight: bold;
 	width: 25%;
+}
+
+#topic-meta-box{
+	padding: 7px;
 }
 
 table tr td.thread-info p {
@@ -230,18 +260,18 @@ table.forum-loop td.author .author-name,table.forum-loop td.latest-poster .lastp
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
 }*/
+
 ol.commentlist li{
 	margin: 10px 0 10px 0;
 }
-/*
+
 ol.commentlist li:first-child {
-	margin: 0 0 20px 0;
+	margin-top: 0px;
 }
 
 ol.commentlist li:last-child {
-	margin: 10px 0 0 0;
+	margin-bottom: 0px;
 }
-*/
 
 div.rounded-box-topic.padded {
 	padding: 8px;
@@ -284,14 +314,8 @@ td.avatar-box { /*	background: #f0f0f0; */
 	/*font-size: 12px;*/
 	font-weight: bold;
 	border-right: 1px solid #eee;
-	/*	text-align: center; */
 	width: 80px;
-	vertical-align: text-top;
-	/* TODO to remove 
-		-moz-border-radius: 10px;
-		-webkit-border-radius: 10px;
-		border-radius: inherit;
-		*/
+	vertical-align: top;
 }
 
 td.avatar-box img {
@@ -300,7 +324,7 @@ td.avatar-box img {
 
 td.avatar-box a {
 	font-family: georgia, times, serif;
-	text-decoration: none;
+	/*text-decoration: none;*/
 }
 
 td.avatar-box a.profile {
@@ -346,15 +370,14 @@ a.comment-author-name,a.topic-author-name {
 	padding-right: 5px;
 }
 
+#topic #topic-bottom{
+	line-height: 27px;	
+}
+
 .commentlist #topic-bottom{
-	line-height: 27.2px;	
+	line-height: 27px;	
 }
 	
-
-.comment-meta a,#topic-bottom a {
-	text-decoration: none;
-}
-
 .comment-meta,#topic-bottom {
 	font-size: 80%;
 }
@@ -367,9 +390,6 @@ span.comment-upper-part {
 	
 }
 
-#topic-content {
-	border-top: 1px solid #eee;
-}
 
 /*
 #edit-topic, #edit-post{

@@ -20,7 +20,7 @@ use core\http\storage\SessionStorageInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Session implements \Serializable {
+class Session implements \Serializable, GetSettable{
 	protected static $sessName = '_socialportal';
 	protected $storage;
 	protected $attributes;

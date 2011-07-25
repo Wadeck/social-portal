@@ -2,6 +2,8 @@
 
 namespace socialportal\common\topic;
 
+use socialportal\model\TopicBase;
+
 use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
@@ -10,7 +12,7 @@ interface TypeManagerInterface{
 	/** @return AbstractTopicTemplate */
 	function getTopicTemplate(FrontController $front, EntityManager $em, $topic, $permalink);
 	/** @return AbstractPostTemplate */
-	function getPostTemplate(FrontController $front, EntityManager $em, array $posts, $permalink);
+	function getPostTemplate(FrontController $front, EntityManager $em, TopicBase $topic, array $posts, $permalink);
 	
 	/** @return the name with namespace of the post model related to that type */
 	function getPostClassName();

@@ -35,14 +35,18 @@
 	text-decoration: none;
 }
 
-.paginate a:hover,.paginate a:active {
+.paginate a:hover {
 	background: #EAEAEA;
 	color: #111;
 	border: 1px solid #aaa;
 }
 
+.paginate a:focus {
+	color: blue;
+	border: 1px solid blue;
+}
+
 .paginate span {
-	text-decoration: none;
 	font-weight: bold;
 	padding: 2px 3px;
 	margin-right: 2px;
@@ -74,12 +78,11 @@
 .paginate .next {
 	margin-left: 10px;
 }
-
+/*
 .paginate .last,.paginate .first {
 	
 }
 
-/* style overrides for comments pagination */
 .paginate-comments {
 	
 }
@@ -115,3 +118,4 @@
 .paginate-comments .prev,.paginate-comments .next {
 	
 }
+*/

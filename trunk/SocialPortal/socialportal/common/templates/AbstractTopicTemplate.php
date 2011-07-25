@@ -64,8 +64,11 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$author = $base->getPoster();
 		$userHelper = new UserHelper($this->front);
 		$userHelper->setCurrentUser($author);
-		$tagRepo = $this->em->getRepository('TermRelation');
-		$tags = $tagRepo->getAllTags($topicId);
+		
+		//TODO implement that in the future
+//		$tagRepo = $this->em->getRepository('TermRelation');
+//		$tags = $tagRepo->getAllTags($topicId);
+		$tags = array();
 		
 //		$isAdmin = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
 		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
@@ -85,18 +88,18 @@ abstract class AbstractTopicTemplate implements iInsertable {
 						<!-- cell of title / date / tags -->
 						<td id="topic-meta-box">
 							<?php if($this->supportVote): ?>
-								<div id="vote_box">
+								<div id="vote-box">
 									<a class="button"
 										href="<?php $this->front->getViewHelper()->insertHrefWithNonce('voteTopic', 'Vote', 'voteTopic', array('topicId'=>$topicId, 'forumId' => $forumId) );?>"
 										><?php echo __('I like'); ?></a>
 								</div>
 							<?php endif; ?>
-							<div id="topic-title">
-								<h3><?php echo "$title ($numPosts)"; ?></h3>
-							</div>
+							<span id="topic-title">
+								<?php /*echo "$title ($numPosts)";*/ echo "$title"; ?>
+							</span>
 
 							<?php if( $tags ): ?>
-								<div id="topic-tags">
+								<span id="topic-tags">
 									<?php echo __( 'Tags: '); ?>
 									<?php foreach($tags as $tag):
 									// TODO implement search
@@ -110,14 +113,11 @@ abstract class AbstractTopicTemplate implements iInsertable {
 											<?php echo $tagName ; ?>
 										</a> &nbsp;
 									<?php endforeach; ?>
-								</div>
+								</span>
 							<?php endif; ?>
-						</td>
-					</tr>
-					<tr><!-- row of content -->
-						<td colspan="2" id="topic-content">
-							<!-- insert content here -->
-							<?php $this->insertTopicBody($this->topic); ?>
+							<span id="topic-content">
+								<?php $this->insertTopicBody($this->topic); ?>
+							</span>
 						</td>
 					</tr>
 					<tr><!-- row of admin tool -->
