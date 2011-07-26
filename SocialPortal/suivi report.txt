@@ -487,7 +487,8 @@ lundi 25 juillet
 - test profiles accessible que par subset (le chemin de navigation des guests), ok ca marche
 - validation par cookie / session pour les votes multiples
 
-
+mardi 26 juillet
+- si pas de topic voté mais plus de 'limit' topic, on affiche les topics normaux
 
 
 
