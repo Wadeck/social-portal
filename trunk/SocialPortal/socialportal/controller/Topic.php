@@ -162,6 +162,10 @@ class Topic extends AbstractController {
 			$posts = $postVoteStatsRepo->findBestPosts($topicId, $typeId, $numPostFilter);
 			$withVoteFilter = true;
 		}else{
+			$posts = array();
+		}
+		// if the posts are not retrieve for some reason, like an error or no posts were voted
+		if( empty($posts) ){
 			$posts = $postBaseRepo->findAllFullPosts( $topicId, $typeId, $page_num, $num_per_page, $withDeleted );
 			$withVoteFilter = false;
 		}
