@@ -56,3 +56,8 @@ table{
 #avatar-upload{
 	text-align: center;
 }
+
+#avatar-site-list{
+	list-style: circle inside none;
+    margin-left: 15px;
+}

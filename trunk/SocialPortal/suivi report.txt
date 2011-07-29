@@ -447,10 +447,10 @@ vendredi 15 juillet
 - correction d'un bug avec les accepted topics par forum
 - connection username retrieval
 - connection password change
-current - creation compte
-todo - apres le lien de l'email
-todo - supprimer les tokens après utilisation
-todo - supprimer tous les tokens utilisé (apres password reset etc) pas que creation account
+- creation compte
+- apres le lien de l'email
+- supprimer les tokens après utilisation
+- supprimer tous les tokens utilisé (apres password reset etc) pas que creation account
 
 dimanche 17 juillet
 - plus de securité : empeche dorénavent les users qui sont pas encore activé de se connecter
@@ -489,20 +489,37 @@ lundi 25 juillet
 
 mardi 26 juillet
 - si pas de topic voté mais plus de 'limit' topic, on affiche les topics normaux
+- pour les subsets of topics, il faut rajouter les isDeleted = 0
+- controle des acces au profile pour les anon avec subsetrepository
+- refactor profile pour passer toutes les fonctions d'images vers une classe séparée
+
+mercredi 27 juillet
+- add some link to create avatar using online editor
+
+
+
+IMPORTANT for report:
+TODO - activity on profile
+TODO - FAQ
+TODO - coach forum
+TODO - mood/bmi evolution chart, using open chart flash / json
+TODO - quote system (javascript
+TODO - vote system limit to 1 day, cookie / session / database, will not be too large table in this case
+TODO - confidentiality par strasse, empecher l'acces au profile d'un modo par un user
+	ca ne va pas marcher du tout => remplacer par le system comme sur hotmail avec une barre a choix
 
 
 
 
-todo - pour les subsets of topics, il faut rajouter les isDeleted = 0
-todo - controle des topics et profile lors d'un anon, par le biais du subset
+
+
+todo - controle des topics lors d'un anon, par le biais du subset
 todo - security : les scripts sont accessible depuis l'exterieur, il faut renforcer la securité en changeant le chmod du dossier scripts,
 	qu'il ne soit executable que depuis le local
 todo - manager le cas ou un user perd l'email de validation du compte et du coup perd la clef qui y est liée
 todo - faire le menage dans les liens de retour au sommet des pages, les mettre dans une class avec des object à passer avec controle des accès
-todo - refactor profile pour passer toutes les fonctions d'images vers une classe séparée
 todo - les emails partent correctement si une adresse locale se situe dans le header
 todo - description des dates en format normal, hover
-todo - maintenance
 todo - args_nonce, hash sur controller/action/getargs, ajouté au getargs et retrieved by annotation, peut etre tres utile pour les suppressions de posts/topic, modification profile etc
 
 
