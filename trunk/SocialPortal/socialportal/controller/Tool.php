@@ -356,7 +356,15 @@ class Tool extends AbstractController {
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'activity', __( 'The activity topics will be used to share activities with other' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'freetext', __( 'The freetext topics will be used to discuss with other' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'story', __( 'The story topics will be used to describe special situation' ));
-		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 'The strategy topics display a list of different strategies used to fight against a problem' ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 
+//			'The strategy topics display a list of different strategies used to fight against a problem'
+			'At first explain the situation you think that will be a problem. '.
+			'Then try to find different things you can do to avoid that problem. '.
+			'The best alternatives to binge eating are things that give you Pleasure. '.
+			'If you were to choose between eating, and doing something you hate, '.
+			'you would choose eating. So think about what you enjoy doing rather than your eating problems. '.
+			'Think about the simple things that you often want to do.'
+			 ));
 		
 		// Notice this is important to keep < " > between the sentences, to enable the \n special char to be transformed into <br />
 		// Never put a nonce in an email, to avoid problem of connected user
