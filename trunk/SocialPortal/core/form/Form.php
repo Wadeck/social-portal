@@ -69,6 +69,8 @@ class Form implements iInsertable {
 	protected $cssFile;
 	/** @var array of string containing the names of the javascript file we want to add at the insert time */
 	protected $jsFiles;
+	/** @var array name => string containing javascript values */
+	protected $javascriptVars;
 	
 	/** @var array containing $fieldName => $fieldValue used in the children to exhibit attributes */
 	protected $data;
@@ -91,6 +93,7 @@ class Form implements iInsertable {
 		$this->submitButtonName = $submitName ? $submitName : 'submit';
 		$this->submitButtonDescription = $submitDescription ? $submitDescription : __( 'Submit' );
 		$this->jsFiles = array( 'jquery.js', 'form_validator.js' );
+		$this->javascriptVars = array();
 	}
 	
 	//#################### dependant of the context ############################
@@ -194,11 +197,6 @@ class Form implements iInsertable {
 		}
 		$cssClass = $this->cssClass ? $this->cssClass : 'generic_form';
 		
-		$this->frontController->getViewHelper()->addCssFile( 'form.css' );
-		if( $this->cssFile ) {
-			$this->frontController->getViewHelper()->addCssFile( $this->cssFile );
-		}
-		
 		$this->insertFormBody( $this->targetUrl, $cssClass );
 		$this->insertFields();
 		
@@ -211,6 +209,17 @@ class Form implements iInsertable {
 		$jss = array_unique( $this->jsFiles );
 		foreach( $jss as $js ) {
 			$this->frontController->getViewHelper()->addJavascriptFile( $js );
+		}
+		
+		$jsVars = $this->javascriptVars;
+		foreach( $jsVars as $jsKey => $jsVar ){
+			$this->frontController->getViewHelper()->addJavascriptVar( $jsKey, $jsVar );
+		}
+		
+		$this->frontController->getViewHelper()->addCssFile( 'form.css' );
+		$csss = array_unique( $this->cssFiles );
+		foreach( $csss as $cssFile ){
+			$this->frontController->getViewHelper()->addCssFile( $cssFile );
 		}
 		$this->frontController->getViewHelper()->addJavascriptVar( '_error_messages', Field::getErrorMessages() );
 		
@@ -230,12 +239,21 @@ class Form implements iInsertable {
 	 */
 	public function setCss($cssClass, $cssFile = '') {
 		$this->cssClass = $cssClass;
-		$this->cssFile = $cssFile;
+		$this->cssFiles[] = $cssFile;
+	}
+	
+	public function addCssFile($cssFile){
+		$this->cssFiles[] = $cssFile;
 	}
 	
 	public function addJavascriptFile($jsFile) {
 		$this->jsFiles[] = $jsFile;
 	}
+	
+	public function addJavascriptVariable($name, $var){
+		$this->javascriptVars[$name] = $var;
+	}
+		
 	//###################### validation part #####################
 	
 

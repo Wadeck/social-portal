@@ -83,40 +83,45 @@ class ProfileTemplate implements iInsertable {
 	
 	private function insertToolSelf(){
 		$editProfile = __('Edit profile');
+		$editPrivacy = __('Edit privacy');
 		$createProfile = __('Create profile');
 		$editUsername = __('Edit username');
 		$editPassword = __('Edit password');
 		$editEmail = __('Edit email');
 		$changeAvatar = __('Change avatar');
-		?><div class="tool_links"><?php
-		if(null !== $this->profile):
 		?>
-			<!-- edition of the profile -->
-
-			<a title="<?php echo $editProfile; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $editProfile; ?></a>
-		<?php else: ?>
-			<!-- creation of the profile -->
-			<a title="<?php echo $createProfile; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $createProfile; ?></a>
-		<?php endif; ?>
-		<!-- change avatar -->
-		<a title="<?php echo $changeAvatar; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditAvatarForm', 'Profile', 'displayEditAvatarForm', array('userId'=>$this->userId))?>"><?php
-			echo $changeAvatar; ?></a>
-		<!-- edit username -->
-		<a class="" title="<?php echo $editUsername; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
-			echo $editUsername; ?></a>
-		<!-- edit password -->
-		<a class="" title="<?php echo $editPassword; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditPasswordForm', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
-			echo $editPassword; ?></a>
-		<!-- edit email -->
-		<a class="" title="<?php echo $editEmail; ?>" href="<?php 
-			$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
-			echo $editEmail; ?></a>
 		
+		<div class="tool_links">
+			<?php if(null !== $this->profile): ?>
+				<!-- edition of the profile -->
+				<a title="<?php echo $editProfile; ?>" href="<?php 
+					$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $editProfile; ?></a>
+				<!-- edition of the privacy -->
+				<a title="<?php echo $editPrivacy; ?>" href="<?php 
+					$this->front->getViewHelper()->insertHrefWithNonce('displayEditPrivacyForm', 'Profile', 'displayEditPrivacyForm', array('userId'=>$this->userId))?>"><?php echo $editPrivacy; ?></a>
+			<?php else: ?>
+				<!-- creation of the profile -->
+				<a title="<?php echo $createProfile; ?>" href="<?php 
+					$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $createProfile; ?></a>
+			<?php endif; ?>
+			
+			<!-- change avatar -->
+			<a title="<?php echo $changeAvatar; ?>" href="<?php 
+				$this->front->getViewHelper()->insertHrefWithNonce('displayEditAvatarForm', 'Profile', 'displayEditAvatarForm', array('userId'=>$this->userId))?>"><?php
+				echo $changeAvatar; ?></a>
+			<!-- edit username -->
+			<a class="" title="<?php echo $editUsername; ?>" href="<?php 
+				$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
+				echo $editUsername; ?></a>
+			<!-- edit password -->
+			<a class="" title="<?php echo $editPassword; ?>" href="<?php 
+				$this->front->getViewHelper()->insertHrefWithNonce('displayEditPasswordForm', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
+				echo $editPassword; ?></a>
+			<!-- edit email -->
+			<a class="" title="<?php echo $editEmail; ?>" href="<?php 
+				$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
+				echo $editEmail; ?></a>
+			
 		</div>
 	<?php
 	}
@@ -245,6 +250,10 @@ class ProfileTemplate implements iInsertable {
 	}
 	
 	private function insertInformation(){
+		$isMine = $this->profile->getUserId() === $this->currentUser->getId();
+		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
+		$isUser = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
+		
 		$country = $this->profile->getCountry();
 		$state = $this->profile->getState();
 		
@@ -310,26 +319,26 @@ class ProfileTemplate implements iInsertable {
 		
 		?>
 		<table class="profile_information">
-		<?php if(null !== $gender):?>
+		<?php if(null !== $gender && $this->hasRight($this->profile->getGenderPrivacy(), $isUser, $isModo, $isMine) ):?>
 			<tr class="profile-field" id="gender">
 				<td class="label"><?php echo __('Gender:'); ?></td>
 				<td><?php echo $gender; ?></td>
 			</tr>
 		<?php endif; ?>
 		
-		<?php if(null !== $date):?>
+		<?php if(null !== $date && $this->hasRight($this->profile->getBirthPrivacy(), $isUser, $isModo, $isMine)):?>
 			<tr class="profile-field" id="age">
 				<td class="label"><?php echo $dateLabel; ?></td>
 				<td><?php echo $date; ?></td>
 			</tr>
 		<?php endif; ?>
 		
-		<?php if(null !== $country):?>
+		<?php if(null !== $country && $this->hasRight($this->profile->getCountryPrivacy(), $isUser, $isModo, $isMine)):?>
 			<tr class="profile-field" id="country">
 				<td class="label"><?php echo $countryLabel; ?></td>
 				<td><?php echo $country; ?></td>
 			</tr>
-			<?php if(null !== $state):?>
+			<?php if(null !== $state && $this->hasRight($this->profile->getStatePrivacy(), $isUser, $isModo, $isMine)):?>
 				<tr class="profile-field" id="state">
 					<td class="label"><?php echo $stateLabel; ?></td>
 					<td><?php echo $state; ?></td>
@@ -337,20 +346,20 @@ class ProfileTemplate implements iInsertable {
 			<?php endif; ?>
 		<?php endif; ?>
 		
-		<?php if($description):?>
+		<?php if($description && $this->hasRight($this->profile->getDescriptionPrivacy(), $isUser, $isModo, $isMine)):?>
 			<tr class="profile-field" id="description">
 				<td class="label"><?php echo __('Description:'); ?></td>
 				<td><?php echo $description; ?></td>
 			</tr>
 		<?php endif; ?>
 		
-		<?php if($objectives):?>
+		<?php if($objectives && $this->hasRight($this->profile->getObjectivesPrivacy(), $isUser, $isModo, $isMine)):?>
 			<tr class="profile-field" id="objectives">
 				<td class="label"><?php echo __('Objectives:'); ?></td>
 				<td><?php echo $objectives; ?></td>
 			</tr>
 		<?php endif; ?>
-		<?php if($hobbies):?>
+		<?php if($hobbies && $this->hasRight($this->profile->getHobbiesPrivacy(), $isUser, $isModo, $isMine)):?>
 			<tr class="profile-field" id="hobbies">
 				<td class="label"><?php echo __('Hobbies:'); ?></td>
 				<td>
@@ -366,7 +375,7 @@ class ProfileTemplate implements iInsertable {
 		<?php endif; ?>
 		</table>
 		
-			<?php if($quote): ?>
+			<?php if($quote && $this->hasRight($this->profile->getQuotePrivacy(), $isUser, $isModo, $isMine)): ?>
 			<div class="profile-field" id="quote">
 				<div>
 					<div class="center">
@@ -381,5 +390,16 @@ class ProfileTemplate implements iInsertable {
 		</div>
 		
 		<?php
+	}
+	
+	private function hasRight($level, $isUser, $isModo, $isMine){
+		if($isModo || $isMine){
+			return true;
+		}else if( 1 === $level ){
+			return true;
+		}else if( 2 === $level && $isUser ){
+			return true;
+		}
+		return false;
 	}
 }

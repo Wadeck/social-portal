@@ -33,7 +33,7 @@ table.profile-container #last_modification {
 	margin-top: 25px;
 }
 
-table.profile_information #description .label, table.profile_information #objectives .label{
+table.profile_information #description .label, table.profile_information #objectives .label, table.profile_information #hobbies .label{
 	margin: 20px 0 0 0;
 }
 

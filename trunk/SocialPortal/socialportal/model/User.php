@@ -68,9 +68,9 @@ class User{
     private $activationKey;
 
     /**
-     * @var integer $status
+     * @var smallint $status
      *
-     * @Column(name="status", type="integer", nullable=false)
+     * @Column(name="status", type="smallint", nullable=false)
      * @Comment("0: normal status, 1: pending email activation, 2: banned")
      */
     private $status;
@@ -139,10 +139,10 @@ class User{
     /** Get activationKey @return string $activationKey */
     public function getActivationKey(){ return $this->activationKey; }
 
-    /** Set status @param integer $status */
+    /** Set status @param smallint $status */
     public function setStatus($status){ $this->status = $status; }
 
-    /** Get status @return integer $status */
+    /** Get status @return smallint $status */
     public function getStatus(){ return $this->status; }
 
     /** Set roles @param integer $roles */

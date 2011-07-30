@@ -101,7 +101,109 @@ class UserProfile{
      */
     private $state;
 
+    /**
+     * @var smallint $genderPrivacy
+     *
+     * @Column(name="gender_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $genderPrivacy;
 
+    /**
+     * @var smallint $birthPrivacy
+     *
+     * @Column(name="birth_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $birthPrivacy;
+
+    /**
+     * @var smallint $descriptionPrivacy
+     *
+     * @Column(name="description_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $descriptionPrivacy;
+
+    /**
+     * @var smallint $objectivesPrivacy
+     *
+     * @Column(name="objectives_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $objectivesPrivacy;
+
+    /**
+     * @var smallint $quotePrivacy
+     *
+     * @Column(name="quote_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $quotePrivacy;
+
+    /**
+     * @var smallint $hobbiesPrivacy
+     *
+     * @Column(name="hobbies_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $hobbiesPrivacy;
+
+    /**
+     * @var smallint $countryPrivacy
+     *
+     * @Column(name="country_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $countryPrivacy;
+
+    /**
+     * @var smallint $statePrivacy
+     *
+     * @Column(name="state_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $statePrivacy;
+
+    /**
+     * @var smallint $activityPrivacy
+     *
+     * @Column(name="activity_privacy", type="smallint", nullable=false, default="1")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $activityPrivacy;
+
+    /**
+     * @var smallint $bmiPrivacy
+     *
+     * @Column(name="bmi_privacy", type="smallint", nullable=false, default="3")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $bmiPrivacy;
+
+    /**
+     * @var smallint $moodPrivacy
+     *
+     * @Column(name="mood_privacy", type="smallint", nullable=false, default="3")
+     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     */
+    private $moodPrivacy;
+
+    public function __construct(){
+        $this->genderPrivacy = '1';
+        $this->birthPrivacy = '1';
+        $this->descriptionPrivacy = '1';
+        $this->objectivesPrivacy = '1';
+        $this->quotePrivacy = '1';
+        $this->hobbiesPrivacy = '1';
+        $this->countryPrivacy = '1';
+        $this->statePrivacy = '1';
+        $this->activityPrivacy = '1';
+        $this->bmiPrivacy = '5';
+        $this->moodPrivacy = '5';
+        
+    }
+    
     /** Get id @return bigint $id */
     public function getId(){ return $this->id; }
 
@@ -170,4 +272,70 @@ class UserProfile{
 
     /** Get state @return bigint $state */
     public function getState(){ return $this->state; }
+
+    /** Set genderPrivacy @param smallint $genderPrivacy */
+    public function setGenderPrivacy($genderPrivacy){ $this->genderPrivacy = $genderPrivacy; }
+
+    /** Get genderPrivacy @return smallint $genderPrivacy */
+    public function getGenderPrivacy(){ return $this->genderPrivacy; }
+
+    /** Set birthPrivacy @param smallint $birthPrivacy */
+    public function setBirthPrivacy($birthPrivacy){ $this->birthPrivacy = $birthPrivacy; }
+
+    /** Get birthPrivacy @return smallint $birthPrivacy */
+    public function getBirthPrivacy(){ return $this->birthPrivacy; }
+
+    /** Set descriptionPrivacy @param smallint $descriptionPrivacy */
+    public function setDescriptionPrivacy($descriptionPrivacy){ $this->descriptionPrivacy = $descriptionPrivacy; }
+
+    /** Get descriptionPrivacy @return smallint $descriptionPrivacy */
+    public function getDescriptionPrivacy(){ return $this->descriptionPrivacy; }
+
+    /** Set objectivesPrivacy @param smallint $objectivesPrivacy */
+    public function setObjectivesPrivacy($objectivesPrivacy){ $this->objectivesPrivacy = $objectivesPrivacy; }
+
+    /** Get objectivesPrivacy @return smallint $objectivesPrivacy */
+    public function getObjectivesPrivacy(){ return $this->objectivesPrivacy; }
+
+    /** Set quotePrivacy @param smallint $quotePrivacy */
+    public function setQuotePrivacy($quotePrivacy){ $this->quotePrivacy = $quotePrivacy; }
+
+    /** Get quotePrivacy @return smallint $quotePrivacy */
+    public function getQuotePrivacy(){ return $this->quotePrivacy; }
+
+    /** Set hobbiesPrivacy @param smallint $hobbiesPrivacy */
+    public function setHobbiesPrivacy($hobbiesPrivacy){ $this->hobbiesPrivacy = $hobbiesPrivacy; }
+
+    /** Get hobbiesPrivacy @return smallint $hobbiesPrivacy */
+    public function getHobbiesPrivacy(){ return $this->hobbiesPrivacy; }
+
+    /** Set countryPrivacy @param smallint $countryPrivacy */
+    public function setCountryPrivacy($countryPrivacy){ $this->countryPrivacy = $countryPrivacy; }
+
+    /** Get countryPrivacy @return smallint $countryPrivacy */
+    public function getCountryPrivacy(){ return $this->countryPrivacy; }
+
+    /** Set statePrivacy @param smallint $statePrivacy */
+    public function setStatePrivacy($statePrivacy){ $this->statePrivacy = $statePrivacy; }
+
+    /** Get statePrivacy @return smallint $statePrivacy */
+    public function getStatePrivacy(){ return $this->statePrivacy; }
+
+    /** Set activityPrivacy @param smallint $activityPrivacy */
+    public function setActivityPrivacy($activityPrivacy){ $this->activityPrivacy = $activityPrivacy; }
+
+    /** Get activityPrivacy @return smallint $activityPrivacy */
+    public function getActivityPrivacy(){ return $this->activityPrivacy; }
+
+    /** Set bmiPrivacy @param smallint $bmiPrivacy */
+    public function setBmiPrivacy($bmiPrivacy){ $this->bmiPrivacy = $bmiPrivacy; }
+
+    /** Get bmiPrivacy @return smallint $bmiPrivacy */
+    public function getBmiPrivacy(){ return $this->bmiPrivacy; }
+
+    /** Set moodPrivacy @param smallint $moodPrivacy */
+    public function setMoodPrivacy($moodPrivacy){ $this->moodPrivacy = $moodPrivacy; }
+
+    /** Get moodPrivacy @return smallint $moodPrivacy */
+    public function getMoodPrivacy(){ return $this->moodPrivacy; }
 }
