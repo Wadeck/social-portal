@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\common\form\custom\ProfilePrivacyForm;
+
 use core\tools\ImageUtils;
 
 use socialportal\model\Token;
@@ -52,13 +54,15 @@ class Profile extends AbstractController {
 		$get = $this->frontController->getRequest()->query;
 		$userId = $get->get( 'userId' );
 		
-		$subsetRepo = $this->em->getRepository('SubsetTopic');
-		$accessible = $subsetRepo->isProfileLinkedWithSubset($userId);
-		if( false === $accessible ){
-			$this->frontController->addMessage( __('This profile is not accessible today') , 'error');
-			$this->frontController->doRedirect( 'Home' );
+		$isFullUser = $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
+		if( !$isFullUser ){
+			$subsetRepo = $this->em->getRepository('SubsetTopic');
+			$accessible = $subsetRepo->isProfileLinkedWithSubset($userId);
+			if( false === $accessible ){
+				$this->frontController->addMessage( __('This profile is not accessible today') , 'error');
+				$this->frontController->doRedirect( 'Home' );
+			}
 		}
-		
 		$profileRepo = $this->em->getRepository( 'UserProfile' );
 		$profile = $profileRepo->findByUserId( $userId );
 		$userRepo = $this->em->getRepository( 'User' );
@@ -170,6 +174,69 @@ class Profile extends AbstractController {
 		$this->frontController->doRedirectWithNonce( 'displayProfile', 'Profile', 'display', array( 'userId' => $userId ) );
 	}
 
+	/**
+	 * @Nonce(displayEditPrivacyForm)
+	 * @GetAttributes(userId)
+	 */
+	public function displayEditPrivacyFormAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
+		$profileRepo = $this->em->getRepository( 'UserProfile' );
+		$profile = $profileRepo->findByUserId( $userId );
+		if( null === $profile ){
+			$this->frontController->addMessage( __( 'You cannot modify the privacy of your profile if you do not have one' ), 'error' );
+			$this->frontController->doRedirect( 'Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$form = new ProfilePrivacyForm( $this->frontController );
+		
+		$getArgs = array( 'userId' => $userId );
+		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Profile', 'editPrivacy', $getArgs );
+		
+		// fill the form with the posted field and errors
+		$form->setupWithProfile( $profile );
+		$form->setupWithArray();
+		$form->setNonceAction( 'editPrivacy' );
+		$form->setTargetUrl( $actionUrl );
+		
+		$this->frontController->getResponse()->setVar( 'userId', $userId );
+		$this->frontController->getResponse()->setVar( 'form', $form );
+		$this->frontController->doDisplay( 'profile', 'displayPrivacyForm' );
+	}
+	
+	/**
+	 * @Method(POST)
+	 * @Nonce(editPrivacy)
+	 * @GetAttributes(userId)
+	 */
+	public function editPrivacyAction() {
+		$get = $this->frontController->getRequest()->query;
+		$userId = $get->get( 'userId' );
+		
+		$profileRepo = $this->em->getRepository( 'UserProfile' );
+		$existingProfile = $profileRepo->findByUserId( $userId );
+		if( null === $existingProfile ) {
+			$this->frontController->addMessage( __( 'There was an internal error, this is not an edition but a creation' ), 'error' );
+			$this->frontController->doRedirect( 'Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$form = new ProfilePrivacyForm( $this->frontController );
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$profile = $form->updateProfilePrivacy( $existingProfile );
+		
+		$this->em->persist( $profile );
+		if( !$this->em->flushSafe() ) {
+			$this->frontController->addMessage( __( 'Privacy edition fail, please try again in a moment' ), 'error' );
+			$this->frontController->doRedirect( 'Profile', 'display', array( 'userId' => $userId ) );
+		}
+		
+		$this->frontController->addMessage( __( 'Privacy edition success' ), 'correct' );
+		$this->frontController->doRedirectWithNonce( 'displayProfile', 'Profile', 'display', array( 'userId' => $userId ) );
+	}
+	
 	/**
 	 * @Nonce(displayEditUsernameForm)
 	 * @GetAttributes(userId)

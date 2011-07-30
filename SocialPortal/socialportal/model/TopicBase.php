@@ -7,9 +7,9 @@ namespace socialportal\model;
  * @Table(
  *	name="topic__base", 
  *	indexes={
+ *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"}),
  *		@Index(name="idx_26a222185bb66c05", columns={"poster_id"}),
- *		@Index(name="idx_26a2221829ccbad0", columns={"forum_id"}),
- *		@Index(name="idx_26a22218d176cfb", columns={"lastposter_id"})
+ *		@Index(name="idx_26a2221829ccbad0", columns={"forum_id"})
  *	}
  * )
  * @Entity(repositoryClass="TopicBaseRepository")

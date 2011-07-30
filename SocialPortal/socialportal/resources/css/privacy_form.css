@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+
+form.privacy-form {
+	padding: 8px;
+}
+form.privacy-form .sliderInput .slider {
+	font-size: 10px;
+	display: inline-block;
+	margin-left: 50px;
+	width: 100px;
+}
+form.privacy-form .sliderInput .slider_description {
+	display: inline-block;
+	padding-left: 20px;
+	font-size: 90%;
+	font-style: italic;
+}
+
+form.privacy-form .label_error {
+	display: inline-block;
+	min-width: 200px;
+}
+
+form.privacy-form .field_container {
+	margin-bottom: 30px;
+}
+
+form.privacy-form label {
+	font-weight: bold;
+	margin: 15px 0 5px 0;
+	text-align: left;
+	width: 100%;
+	display: inline;
+}
+
+form.privacy-form input[type="text"] {
+	width: 75%;
+}
+
+form.privacy-form textarea {
+	width: 75%;
+	height: 120px;
+}
+
+/** perhaps could be available for every form */
+form.privacy-form input[type="submit"]{
+	margin-top: 5px;
+}

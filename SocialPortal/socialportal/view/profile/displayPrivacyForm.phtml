@@ -1,0 +1,29 @@
+<?php
+$vars['helper']->setContainerClass('');
+$vars['helper']->insertMessage();
+$userId = $vars['userId'];
+
+$vars['helper']->setTitle(__('Privacy edition'));
+?>
+
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHrefWithNonce('displayProfile', 'Profile', 'display', array('userId'=>$userId )); ?>">
+		<?php echo __('Profile'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Privacy edition'); ?></h4>
+</div>
+
+
+<?php
+if($vars['form']){
+	echo '<div class="rounded-box">';
+	$vars['form']->insert();
+	echo '</div>';
+}
+?>
