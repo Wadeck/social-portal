@@ -500,11 +500,16 @@ samedi 30 juillet
 - confidentiality par strasse, empecher l'acces au profile d'un modo par un user
 	ca ne va pas marcher du tout => remplacer par le system comme sur hotmail avec une barre a choix
 	
+dimanche 31 juillet
+- profile tab
+- bmi evolution graphique
+- bmi remove
+current - mood / bmi evolution	
+	
 IMPORTANT for report:
 TODO - activity on profile
 TODO - FAQ
 TODO - coach forum
-TODO - mood/bmi evolution chart, using open chart flash / json
 TODO - quote system (javascript
 TODO - vote system limit to 1 day, cookie / session / database, will not be too large table in this case
 

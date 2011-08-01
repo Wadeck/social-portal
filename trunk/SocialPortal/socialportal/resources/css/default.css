@@ -194,3 +194,6 @@ div#link-back-right {
 	color: #aaa !important;
 	text-decoration: line-through !important;
 }
+.clear_both {
+	clear: both;
+}

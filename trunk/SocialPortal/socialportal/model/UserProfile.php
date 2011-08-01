@@ -105,7 +105,7 @@ class UserProfile{
      * @var smallint $genderPrivacy
      *
      * @Column(name="gender_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $genderPrivacy;
 
@@ -113,7 +113,7 @@ class UserProfile{
      * @var smallint $birthPrivacy
      *
      * @Column(name="birth_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $birthPrivacy;
 
@@ -121,7 +121,7 @@ class UserProfile{
      * @var smallint $descriptionPrivacy
      *
      * @Column(name="description_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $descriptionPrivacy;
 
@@ -129,7 +129,7 @@ class UserProfile{
      * @var smallint $objectivesPrivacy
      *
      * @Column(name="objectives_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $objectivesPrivacy;
 
@@ -137,7 +137,7 @@ class UserProfile{
      * @var smallint $quotePrivacy
      *
      * @Column(name="quote_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $quotePrivacy;
 
@@ -145,7 +145,7 @@ class UserProfile{
      * @var smallint $hobbiesPrivacy
      *
      * @Column(name="hobbies_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $hobbiesPrivacy;
 
@@ -153,7 +153,7 @@ class UserProfile{
      * @var smallint $countryPrivacy
      *
      * @Column(name="country_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $countryPrivacy;
 
@@ -161,7 +161,7 @@ class UserProfile{
      * @var smallint $statePrivacy
      *
      * @Column(name="state_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $statePrivacy;
 
@@ -169,7 +169,7 @@ class UserProfile{
      * @var smallint $activityPrivacy
      *
      * @Column(name="activity_privacy", type="smallint", nullable=false, default="1")
-     * @Comment("0: non-set, 1: public, 2: user, 3:myself only")
+     * @Comment("0: non-set, 1: public, 2: user, 3: friends of friends, 4:friends, 5:myself only ")
      */
     private $activityPrivacy;
 
@@ -199,8 +199,8 @@ class UserProfile{
         $this->countryPrivacy = '1';
         $this->statePrivacy = '1';
         $this->activityPrivacy = '1';
-        $this->bmiPrivacy = '5';
-        $this->moodPrivacy = '5';
+        $this->bmiPrivacy = '3';
+        $this->moodPrivacy = '3';
         
     }
     

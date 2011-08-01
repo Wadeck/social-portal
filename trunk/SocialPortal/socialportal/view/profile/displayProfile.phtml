@@ -1,12 +1,15 @@
 <?php
 $vars['helper']->setContainerClass('');
 $vars['helper']->insertMessage();
-//$userId = $vars['userId'];
-//$user = $vars['user'];
-//$profile = $vars['profile'];
-$profileTemplate = $vars['profileTemplate'];
+$vars['helper']->addCssFile('profile_display.css');
+
+$toolTemplate = $vars['toolTemplate'];
+$tabTemplate = $vars['tabTemplate'];
+$mainTemplate = $vars['mainTemplate'];
+
 $user = $vars['user'];
 $vars['helper']->setTitle( __( "%username%'s profile", array( '%username%' => $user->getUsername() ) ) );
+
 ?>
 
 <div id="link-back">
@@ -18,10 +21,21 @@ $vars['helper']->setTitle( __( "%username%'s profile", array( '%username%' => $u
 <h4> <?php echo __('Profile'); ?></h4>
 </div>
 
-<?php 
-if($profileTemplate){
-//	echo '<div class="rounded-box">';
-	$profileTemplate->insert();
-//	echo '</div>';
-}
-?>
+<!-- container of the profile, contains the both columns -->
+<table class="profile-container">
+	<tbody>
+		<tr>
+			<!-- first column: avatar + links -->
+			<td class="profil-avatar-column">
+				<?php $toolTemplate->insert(); ?>
+			</td>
+			<td class="vertical-bar"></td>
+			<!-- second column: Username, age/gender / description / objective / quote -->
+			<td class="profil-content-column">
+				<?php $tabTemplate->insert(); ?>
+				<?php $mainTemplate->insert(); ?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
