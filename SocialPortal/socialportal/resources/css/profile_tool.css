@@ -1,0 +1,9 @@
+@CHARSET "ISO-8859-1";
+
+.tool_links {
+    font-size: 90%;
+    margin-top: 25px;
+}
+.tool_links a {
+    display: block;
+}

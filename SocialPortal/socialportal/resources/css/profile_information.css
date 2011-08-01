@@ -1,0 +1,55 @@
+@CHARSET "ISO-8859-1";
+
+#last_modification {
+	color: #ccc;
+	font-size: 80%;
+	margin-top: 25px;
+}
+
+#description .label, #objectives .label, #hobbies .label{
+	margin: 20px 0 0 0;
+}
+
+
+.label{
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+#quote{
+	margin: 35px auto 10px;
+	width: 70%;
+	text-align: justify;
+}
+
+#quote div{
+	vertical-align: top;
+}
+#quote .start_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/up_apo.png') no-repeat;
+}
+#quote .end_quote {
+	display: inline-block;
+	width: 16px;
+	height: 30px;
+	background: transparent url('../img/down_apo.png') no-repeat;
+}
+
+#quote .symbol {
+	font-size: 24px;
+	font-family: Rosewwod;
+}
+
+tr#hobbies ul{
+	list-style: circle inside none;
+}
+
+.profile-ask-creation{
+	width: 100px;
+	text-align: right;
+}

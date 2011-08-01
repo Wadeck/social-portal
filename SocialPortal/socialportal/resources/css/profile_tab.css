@@ -1,0 +1,14 @@
+@CHARSET "ISO-8859-1";
+
+#tab-panel {
+	float: right;	
+}
+
+span.tab-link{
+	font-size: 90%;
+	padding: 3px;
+}
+
+span.tab-link a{
+	
+}

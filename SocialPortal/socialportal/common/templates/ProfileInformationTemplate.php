@@ -14,7 +14,7 @@ use socialportal\model\User;
 
 use core\FrontController;
 
-class ProfileTemplate implements iInsertable {
+class ProfileInformationTemplate implements iInsertable {
 	/** @var FrontController */
 	private $front;
 	/** @var User */
@@ -45,101 +45,8 @@ class ProfileTemplate implements iInsertable {
 	}
 	
 	public function insert() {
-		$this->front->getViewHelper()->addCssFile('profile_display.css');
-		?>
-		<!-- container of the profile, contains the both columns -->
-		<table class="profile-container"><tbody><tr>
-			<!-- first column: avatar + links -->
-			<td class="profil-avatar-column">
-				<?php $this->insertAvatar(); ?>
-				<?php $this->insertCorrectTools(); ?>
-			</td>
-			<td class="vertical-bar"></td>
-			<!-- second column: Username, age/gender / description / objective / quote -->
-			<td class="profil-content-column">
-				<?php $this->insertCorrectContent(); ?>
-			</td>
-			</tr>
-		</tbody>
-		</table>
-	
-	<?php
-	}
-	
-	private function insertAvatar(){
-		?><div id="avatar"><?php $this->userHelper->insertAvatar(75); ?></div>
-	<?php
-	}
-	
-	private function insertCorrectTools(){
-		if($this->isSelf){
-			$this->insertToolSelf();
-		}else if($this->isModo){
-			$this->insertToolModerator();
-		}else{
-			$this->insertToolVisitor();
-		}
-	}
-	
-	private function insertToolSelf(){
-		$editProfile = __('Edit profile');
-		$editPrivacy = __('Edit privacy');
-		$createProfile = __('Create profile');
-		$editUsername = __('Edit username');
-		$editPassword = __('Edit password');
-		$editEmail = __('Edit email');
-		$changeAvatar = __('Change avatar');
-		?>
-		
-		<div class="tool_links">
-			<?php if(null !== $this->profile): ?>
-				<!-- edition of the profile -->
-				<a title="<?php echo $editProfile; ?>" href="<?php 
-					$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $editProfile; ?></a>
-				<!-- edition of the privacy -->
-				<a title="<?php echo $editPrivacy; ?>" href="<?php 
-					$this->front->getViewHelper()->insertHrefWithNonce('displayEditPrivacyForm', 'Profile', 'displayEditPrivacyForm', array('userId'=>$this->userId))?>"><?php echo $editPrivacy; ?></a>
-			<?php else: ?>
-				<!-- creation of the profile -->
-				<a title="<?php echo $createProfile; ?>" href="<?php 
-					$this->front->getViewHelper()->insertHrefWithNonce('displayEditProfile', 'Profile', 'displayEditProfileForm', array('userId'=>$this->userId))?>"><?php echo $createProfile; ?></a>
-			<?php endif; ?>
-			
-			<!-- change avatar -->
-			<a title="<?php echo $changeAvatar; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditAvatarForm', 'Profile', 'displayEditAvatarForm', array('userId'=>$this->userId))?>"><?php
-				echo $changeAvatar; ?></a>
-			<!-- edit username -->
-			<a class="" title="<?php echo $editUsername; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditUsernameForm', 'Profile', 'displayEditUsernameForm', array('userId'=>$this->userId))?>"><?php
-				echo $editUsername; ?></a>
-			<!-- edit password -->
-			<a class="" title="<?php echo $editPassword; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditPasswordForm', 'Profile', 'displayEditPasswordForm', array('userId'=>$this->userId))?>"><?php
-				echo $editPassword; ?></a>
-			<!-- edit email -->
-			<a class="" title="<?php echo $editEmail; ?>" href="<?php 
-				$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
-				echo $editEmail; ?></a>
-			
-		</div>
-	<?php
-	}
-	private function insertToolModerator(){
-		$resetPassword = __('Reset password');
-		$username = $this->user->getUsername();
-		?>
-		<div class="tool_links">
-			<a class="unimplemented" <?php $this->front->getViewHelper()->insertConfirmLink(__('Do you really want to reset the password of %username%', array('%username%'=>$username)));?>
-				title="<?php echo $resetPassword; ?>"
-				href="<?php $this->front->getViewHelper()->insertHrefWithNonce('resetPassword', 'Profile', 'resetPassword', array('userId'=>$this->userId))?>"><?php
-				echo $resetPassword; ?></a>
-		</div>
-	<?php
-	}
-	
-	private function insertToolVisitor(){
-		return;
+		$this->front->getViewHelper()->addCssFile('profile_information.css');
+		$this->insertCorrectContent();
 	}
 	
 	private function insertCorrectContent(){
@@ -153,13 +60,7 @@ class ProfileTemplate implements iInsertable {
 	}
 	
 	private function insertContentSelf(){
-		$username = $this->user->getUsername();
 		$email = $this->user->getEmail();
-		?>
-		<div class="profile-field" id="username">
-			<h1><?php echo $username; ?></h1>
-		</div>
-	<?php
 		$this->insertBasicInformation(true);
 		if(null !== $this->profile){
 			$this->insertInformation();
@@ -250,8 +151,8 @@ class ProfileTemplate implements iInsertable {
 	}
 	
 	private function insertInformation(){
-		$isMine = $this->profile->getUserId() === $this->currentUser->getId();
-		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
+		$isMine = $this->isSelf;
+		$isModo = $this->isModo;
 		$isUser = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
 		
 		$country = $this->profile->getCountry();

@@ -30,8 +30,11 @@
 	color: #fff;
 	font-size: 26px;
 }
+#header h1 a:hover {
+	text-decoration: underline;
+}
 #header h1 a:focus {
-	color: blue;
+	text-decoration: underline;	
 }
 
 #header #search-bar {
@@ -94,10 +97,6 @@
 #header div#connected-panel .avatar-box {
 	float: right;
 	margin-left: 5px;
-}
-
-#header .clear_both {
-	clear: both;
 }
 
 /* css for the footer part */
