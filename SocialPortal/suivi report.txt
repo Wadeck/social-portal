@@ -507,8 +507,14 @@ dimanche 31 juillet
 lundi 1 aout
 - bmi remove
 
-todo - on pose les liens sur les items que pour l'utilisateur a qui est le graphique
-current - mood / bmi evolution	
+mardi 1 aout soir
+- bmi add
+- ajout d'une contrainte de field javascript / php pour "integer"
+- ajout d'un form pour l'ajout du bmi
+- correction du bug d'affichage d'as3 pour le chart, qu'un seul mois apparaissait lorsqu'une difference de moins de 2 mois etait detectée entre min-max
+- bmi evolution complet 
+
+current - mood 
 	
 IMPORTANT for report:
 TODO - activity on profile

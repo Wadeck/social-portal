@@ -1,1 +1,11 @@
 @CHARSET "ISO-8859-1";
+
+h3.form-title{
+	margin-top: 50px;
+	margin-bottom: 0px;
+}
+
+.remove-info{
+	font-size: 90%;
+	color: #AAA;
+}

@@ -1,6 +1,8 @@
 <?php
 
 namespace socialportal\controller;
+use core\common\NullTemplate;
+
 use socialportal\common\templates\ProfileBMITemplate;
 
 use socialportal\common\templates\ProfileTabTemplate;
@@ -79,39 +81,45 @@ class Profile extends AbstractController {
 		$userRepo = $this->em->getRepository( 'User' );
 		$user = $userRepo->find( $userId );
 		
-		$informationTitle = __( 'Information' );
-		$bmiTitle = __( 'BMI chart' );
-		$moodTitle = __( 'Mood chart' );
-		
-		$informationLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'information'));
-		$bmiLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'bmi'));
-		$moodLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'mood'));
-		
-		$links = array(
-			'info' => '<a class="button" href="' . $informationLink . '" title="' . $informationTitle . '">' . $informationTitle . '</a>',
-			'bmi' => '<a class="button" href="' . $bmiLink . '" title="' . $bmiTitle . '">' . $bmiTitle . '</a>',
-			'mood' => '<a class="button" href="' . $moodLink . '" title="' . $moodTitle . '">' . $moodTitle . '</a>',
-		);
-		
-		switch( $tab ){
-			case 'information': default:
-				$links[ 'info' ] = $informationTitle;
-				$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
-				break;
-			case 'bmi':
-				$links[ 'bmi' ] = $bmiTitle;
-				//TODO change to bmi chart
-				$mainTemplate = new ProfileBMITemplate( $this->frontController, $user, $profile );
-				break;
-			case 'mood':
-				$links[ 'mood' ] = $moodTitle;
-				//TODO change to mood chart
-				$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
-				break;
+		if( null !== $profile){
+			$informationTitle = __( 'Information' );
+			$bmiTitle = __( 'BMI chart' );
+			$moodTitle = __( 'Mood chart' );
+			
+			$informationLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'information'));
+			$bmiLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'bmi'));
+			$moodLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'mood'));
+			
+			$links = array(
+				'info' => '<a class="button" href="' . $informationLink . '" title="' . $informationTitle . '">' . $informationTitle . '</a>',
+				'bmi' => '<a class="button" href="' . $bmiLink . '" title="' . $bmiTitle . '">' . $bmiTitle . '</a>',
+				'mood' => '<a class="button" href="' . $moodLink . '" title="' . $moodTitle . '">' . $moodTitle . '</a>',
+			);
+			
+			switch( $tab ){
+				case 'information': default:
+					$links[ 'info' ] = $informationTitle;
+					$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
+					break;
+				case 'bmi':
+					$links[ 'bmi' ] = $bmiTitle;
+					//TODO change to bmi chart
+					$mainTemplate = new ProfileBMITemplate( $this->frontController, $user, $profile );
+					break;
+				case 'mood':
+					$links[ 'mood' ] = $moodTitle;
+					//TODO change to mood chart
+					$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
+					break;
+			}
+			
+			$toolTemplate = new ProfileToolTemplate( $this->frontController, $user, $profile );
+			$tabTemplate = new ProfileTabTemplate( $this->frontController, $user, $profile, $links );
+		}else{
+			$toolTemplate = new ProfileToolTemplate( $this->frontController, $user, $profile );
+			$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
+			$tabTemplate = new ProfileTabTemplate( $this->frontController, $user );
 		}
-		
-		$toolTemplate = new ProfileToolTemplate( $this->frontController, $user, $profile );
-		$tabTemplate = new ProfileTabTemplate( $this->frontController, $user, $profile, $links );
 		
 		$this->frontController->getResponse()->setVar( 'user', $user );
 		$this->frontController->getResponse()->setVar( 'toolTemplate', $toolTemplate );

@@ -13,14 +13,14 @@ use Doctrine\ORM\EntityRepository;
 class ChartBmiRepository extends EntityRepository {
 	
 	/** @return true iff the user has some information */
-	public function hasBmiInfo($userId) {
+	public function hasEnoughBmiInfo($userId) {
 		if( 1 >= $userId ) {
 			return false;
 		}
 		$dql = $this->_em->createQuery('SELECT partial b.{id} FROM ChartBmi b WHERE b.userId = :id');
-		$dql->setParameter( 'id', $userId )->setMaxResults( 1 );
+		$dql->setParameter( 'id', $userId )->setMaxResults( 2 );
 		$results = $dql->getResult();
-		if( $results ) {
+		if( 2 <= count( $results ) ) {
 			return true;
 		} else {
 			return false;
