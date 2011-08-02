@@ -51,6 +51,7 @@ use core\AbstractController;
 use core\user\UserRoles;
 use DateTime;
 
+//TODO refactor, divide into two class, the recovery things in Recovery
 class Profile extends AbstractController {
 	
 	/**

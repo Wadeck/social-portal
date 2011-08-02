@@ -503,7 +503,11 @@ samedi 30 juillet
 dimanche 31 juillet
 - profile tab
 - bmi evolution graphique
+
+lundi 1 aout
 - bmi remove
+
+todo - on pose les liens sur les items que pour l'utilisateur a qui est le graphique
 current - mood / bmi evolution	
 	
 IMPORTANT for report:

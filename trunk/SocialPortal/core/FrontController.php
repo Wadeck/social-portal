@@ -521,7 +521,7 @@ class FrontController {
 	public function setNonce($nonce) {
 		$this->nonce = $nonce;
 	}
-	// FIXME better way to do that, for the moment it just works ...
+	// FIXME find better way to do that, for the moment it just works ...
 	// not linked with different nonce per href etc... could lead to problem in some sub request
 	public function getNonceGET() {
 		return $this->getRequest()->query->get( '_nonce', null );
