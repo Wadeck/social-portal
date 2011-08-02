@@ -1,6 +1,12 @@
 <?php
 
 namespace socialportal\controller;
+use socialportal\model\ChartBmi;
+
+use socialportal\common\form\custom\AddBmiValueForm;
+
+use core\http\exceptions\AccessDeniedException;
+
 use OFC\Charts\Line\OFC_Charts_Line_Hollow;
 
 use OFC\Charts\OFC_Charts_Tooltip;
@@ -114,6 +120,7 @@ class Bmi extends AbstractController {
 				$maxDate = $timestamp;
 			}
 			$bmi = $item->getItem();
+			$bmi /= 10;
 			if($bmi < $minBmi){
 				$minBmi = $bmi;
 			}
@@ -131,14 +138,19 @@ class Bmi extends AbstractController {
 		$title = new OFC_Elements_Title( __( 'Bmi evolution' ) );
 		$line = new OFC_Charts_Line();
 		$line->set_values ( $values );
-		$line->set_tooltip("BMI: #val#\n#date:j M Y#");
+		$line->set_tooltip("BMI: #val#\n#date:j M Y#\nClick to remove");
 		$line->set_dot_style('hollow-dot');
 		$line->set_dot_size( 4 );
 		$line->set_halo_size ( 2 );
 		$line->set_on_click('bmi_click');
 		
+		$minDate = mktime(0, 0, 0, date("m", $minDate), 0, date("Y", $minDate));
+		$maxDate = mktime(0, 0, 0, date("m", $maxDate)+1, 0, date("Y", $maxDate));
+		
 		$diffDate = $maxDate - $minDate;
 		$numMonthDiff = date("n", $diffDate) + 12*(date("Y", $diffDate) - 1970);
+		// dunno why, but works, the internal as3 must be bugged
+		$numMonthDiff = max(2, $numMonthDiff);
 		$coefMonth = (integer)($numMonthDiff / 5);
 		$coefMonth = max(1, $coefMonth);
 		
@@ -153,21 +165,7 @@ class Bmi extends AbstractController {
 			$current += $coefMonth;
 		}while($current < $numMonthDiff || !$flag);
 		
-//		$datesLabel[] = array('x' => mktime(0, 0, 0, date("m", $minDate)+$current, 0, date("Y", $minDate)) );
-		$minDate = mktime(0, 0, 0, date("m", $minDate), 0, date("Y", $minDate));
-		$maxDate = mktime(0, 0, 0, date("m", $maxDate)+1, 0, date("Y", $maxDate));
-		
-//		$numStep = 5;
-//		$step = max(30*86400, (integer)(($maxDate-$minDate)/$numStep));
-//		$current = $minDate;
-//		while($current < $maxDate){
-//			$datesLabel[] = (integer)$current;
-//			$current += $step;
-//		}
-//		if($current !== $minDate){
-//			$datesLabel[] = (integer)$current;
-//		}
-//		$step= 30.6 * 86400 * $coefMonth;
+		// previous point where we trunc the dates 
 		
 		$labelX = new OFC_Elements_Axis_X_Label_Custom('#date:j M Y#', '#ddd000', 12, 90);
 		$labelX->set_labels($datesLabel);
@@ -176,13 +174,15 @@ class Bmi extends AbstractController {
 		
 		$x = new OFC_Elements_Axis_X();
 		$x->set_labels ($labelX);
-		$x->set_range( $minDate, $maxDate );
+		$x->set_range( $minDate, $maxDate+172800 );
+		$x->set_stroke(1);
 		
 		$y = new OFC_Elements_Axis_Y();
 		$minBmi = ((integer)($minBmi / 5) -1 )*5;
-		$minBmi = max(0, $minBmi);
+		$minBmi = max(0, min($minBmi, 65));
 		$maxBmi = ((integer)(($maxBmi) / 5) +1 )*5;
 		$maxBmi = max(5, min($maxBmi, 70));
+		$y->set_stroke(1);
 		$y->set_range ( $minBmi, $maxBmi, 5 );
 
 		$chart = new OFC_Chart();
@@ -203,7 +203,7 @@ class Bmi extends AbstractController {
 		$userId = $get->get ( 'userId' );
 		$itemId = $get->get('itemId');
 		
-		$bmiRepo = $this->em->getRepository ( 'ChartBmi' );
+		$bmiRepo = $this->em->getRepository( 'ChartBmi' );
 		$result = $bmiRepo->removeItem( $userId, $itemId );
 		if(false === $result){
 			$this->frontController->addMessage(__('The deletion was a failure'), 'error');
@@ -214,20 +214,39 @@ class Bmi extends AbstractController {
 	}
 	
 	/**
-	 * @Nonce(getValues)
+	 * @Method(POST)
+	 * @Nonce(addValue)
 	 * @GetAttributes(userId)
 	 */
-	public function getValues2Action() {
+	public function addValueAction() {
 		$get = $this->frontController->getRequest ()->query;
 		$userId = $get->get ( 'userId' );
 		
-		echo '{ "title": 
-			{ "text": "Bmi evolution" }, "elements": 
-				[ { "type": "line", "values": [ { "x": 1302530103, "y": 23 }, 
-				{ "x": 1307368519, "y": 25 }, { "x": 1311602144, "y": 21 }, { "x": 1312379750, "y": 26 } ] } ], 
-			"x_axis": { "labels": { "text": "#date:j M Y#", "colour": "#ddd", "size": 12, "rotate": 90, "steps":656643, "visible": true}, "min": 1302530103, "max": 1312379750, "steps": 656643.13333333 },
-			"y_axis": { "min": 0, "max": 50, "steps": 5 } }';
-	
+		// verify the current user is self
+		if($userId <= 2 || $userId !== $this->frontController->getCurrentUser()->getId()){
+			$this->frontController->generateException(new AccessDeniedException('Bmi', 'addValue'));
+		}
+		
+		$form = new AddBmiValueForm($this->frontController);
+		$form->setupWithArray();
+		$form->checkAndPrepareContent();
+		
+		$bmi = $form->getBmiValue();
+		$date = $form->getDate();
+		
+		$bmiChart = new ChartBmi();
+		$bmiChart->setUserId($userId);
+		$datetime = new DateTime("@$date");
+		$bmiChart->setDate($datetime);
+		$bmiChart->setItem($bmi);
+		
+		$this->em->persist($bmiChart);
+		if( !$this->em->flushSafe() ){
+			$this->frontController->addMessage(__('Error during insertion of the bmi value'), 'error');
+		}else{
+			$this->frontController->addMessage(__('Insertion completed'), 'correct');
+		}
+		$this->frontController->doRedirectWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'bmi') );
 	}
 
 }

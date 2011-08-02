@@ -35,7 +35,7 @@ class ProfileTabTemplate implements iInsertable {
 	/** @var array */
 	private $links;
 	
-	public function __construct(FrontController $front, User $user, UserProfile $profile, array $links) {
+	public function __construct(FrontController $front, User $user, UserProfile $profile = null, array $links = array()) {
 		$this->front = $front;
 		$this->user = $user;
 		$this->profile = $profile;
@@ -57,18 +57,25 @@ class ProfileTabTemplate implements iInsertable {
 		
 		$username = $this->user->getUsername();
 	?>
-		<div id="tab-panel">
-		<span class="tab-link"><?php echo $this->links[ 'info' ] ; ?></span>
-	<?php
-		if( $this->hasRight($this->profile->getBmiPrivacy(), $isUser, $isModo, $isMine) ){
-			echo '<span class="tab-link">' . $this->links[ 'bmi' ] . '</span>' ;
-		}
-		
-		if( $this->hasRight($this->profile->getMoodPrivacy(), $isUser, $isModo, $isMine) ){
-			echo '<span class="tab-link">' . $this->links[ 'mood' ] . '</span>' ;
-		}
-		?>
-		</div>
+		<?php if( $this->links && null !== $this->profile ): ?>
+			<div id="tab-panel">
+			<?php if( isset( $this->links[ 'info' ] ) ): ?>
+			<span class="tab-link"><?php echo $this->links[ 'info' ] ; ?></span>
+			<?php endif; ?>
+			<?php
+			if( isset( $this->links[ 'bmi' ] ) ){
+				if( $this->hasRight( $this->profile->getBmiPrivacy(), $isUser, $isModo, $isMine ) ){
+					echo '<span class="tab-link">' . $this->links[ 'bmi' ] . '</span>' ;
+				}
+			}
+			if( isset( $this->links[ 'mood' ] ) ){
+				if( $this->hasRight( $this->profile->getMoodPrivacy(), $isUser, $isModo, $isMine ) ){
+					echo '<span class="tab-link">' . $this->links[ 'mood' ] . '</span>' ;
+				}	
+			}
+			?>
+			</div>
+		<?php endif; ?>
 		<div class="profile-field" id="username">
 			<h1><?php echo $username; ?></h1>
 		</div>

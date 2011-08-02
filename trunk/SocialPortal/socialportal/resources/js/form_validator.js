@@ -155,6 +155,14 @@ function containsError(value, constraints) {
 						break;
 				}
 				break;
+			case 'integer':
+				var debug1 = parseInt(value);
+				var debug3 = isNaN(debug1);
+				var debug2 = value !== '0';
+				if( isNaN(parseInt(value)) && value !== '0' ){
+					return __(_error_messages['integer']);
+				}
+				break;
 //			case 'date':
 //				switch($args[0]){
 //					case 'non-empty-dmy':
