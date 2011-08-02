@@ -8,7 +8,7 @@ use Doctrine\ORM\Configuration;
 
 /** Configuration class */
 class DoctrineLink {
-	//TODO information from configuration file could be better
+	//TODO information from configuration file could be better but there could be a problem with directory_separator
 	public static function getEntityManager() {
 		$config = new Configuration();
 		$driverImpl = $config->newDefaultAnnotationDriver( 'socialportal'.DIRECTORY_SEPARATOR.'model' );

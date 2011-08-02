@@ -29,13 +29,7 @@ $defaultForumId = $vars['defaultForumId'];
 		<a href="<?php
 				$vars['helper']->insertHrefWithNonce('displayForm', 'Topic', 'displayForm', array( 'typeId' => $typeManager->getTypeId(), 'forumId' => $forum->getId() ) ); ?>"
 			class="button"
-			title="<?php
-		//		echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
-				echo $topicName;
-				?>"><?php
-		//		echo __( '%topic_name% in %forum_name%', array( '%topic_name%' => $topicType->getSimpleName(), '%forum_name%' => $forum->getName() ) );
-				echo $topicName ;
-				?></a>
+			title="<?php echo $topicName; ?>"><?php echo $topicName ; ?></a>
 	<?php endforeach ?>
 	</div>
 <?php endforeach ?>
