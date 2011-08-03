@@ -34,23 +34,24 @@ use DateTime;
 class ProfilePrivacyForm extends Form {
 	protected $globalMode = 2;
 	public function __construct(FrontController $front) {
-		parent::__construct ( 'ProfilePrivacy', $front, 'formPrivacySubmit', __ ( 'Save' ) );
-		$defaultPrivacyValue = array (1 => __ ( 'Public' ), 2 => __ ( 'Registered Users' ), 3 => __ ( 'Myself only' ) );
+		parent::__construct( 'ProfilePrivacy', $front, 'formPrivacySubmit', __( 'Save' ) );
+		$defaultPrivacyValue = array( 1 => __( 'Public' ), 2 => __( 'Registered Users' ), 3 => __( 'Myself only' ) );
 		
-		$this->addInputField ( new SliderField ( 'privacy_gender', __ ( 'Gender Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_birth', __ ( 'Birth Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_description', __ ( 'Description Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_quote', __ ( 'Quote Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_hobbies', __ ( 'Hobbies Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_country', __ ( 'Country Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_state', __ ( 'State Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_activities', __ ( 'Activities Privacy' ), $defaultPrivacyValue, 1 ) );
-		$this->addInputField ( new SliderField ( 'privacy_bmi', __ ( 'BMI Privacy' ), $defaultPrivacyValue, 3 ) );
-		$this->addInputField ( new SliderField ( 'privacy_mood', __ ( 'Mood Privacy' ), $defaultPrivacyValue, 3 ) );
+		$this->addInputField( new SliderField( 'privacy_gender', __( 'Gender Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_birth', __( 'Birth Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_description', __( 'Description Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_objectives', __( 'Objectives Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_quote', __( 'Quote Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_hobbies', __( 'Hobbies Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_country', __( 'Country Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_state', __( 'State Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_activities', __( 'Activities Privacy' ), $defaultPrivacyValue, 1 ) );
+		$this->addInputField( new SliderField( 'privacy_bmi', __( 'BMI Privacy' ), $defaultPrivacyValue, 3 ) );
+		$this->addInputField( new SliderField( 'privacy_mood', __( 'Mood Privacy' ), $defaultPrivacyValue, 3 ) );
 		
-		$em = $this->frontController->getEntityManager ();
+		$em = $this->frontController->getEntityManager();
 		
-		$this->setCss ( 'privacy-form', 'privacy_form.css' );
+		$this->setCss( 'privacy-form', 'privacy_form.css' );
 	}
 	
 	protected function setGlobalMode($globalMode = 1) {
@@ -58,39 +59,41 @@ class ProfilePrivacyForm extends Form {
 	}
 	
 	protected function addInputField(Field $field) {
-		parent::addInputField ( $field );
-		$field->setMode ( $this->globalMode );
+		parent::addInputField( $field );
+		$field->setMode( $this->globalMode );
 	}
 	
 	public function setupWithProfile(UserProfile $profile) {
-		$args ['privacy_gender'] = $profile->getGenderPrivacy ();
-		$args ['privacy_birth'] = $profile->getBirthPrivacy ();
-		$args ['privacy_description'] = $profile->getDescriptionPrivacy ();
-		$args ['privacy_quote'] = $profile->getQuotePrivacy ();
-		$args ['privacy_hobbies'] = $profile->getHobbiesPrivacy ();
-		$args ['privacy_country'] = $profile->getCountryPrivacy ();
-		$args ['privacy_state'] = $profile->getStatePrivacy ();
-		$args ['privacy_activities'] = $profile->getActivityPrivacy ();
-		$args ['privacy_bmi'] = $profile->getBmiPrivacy ();
-		$args ['privacy_mood'] = $profile->getMoodPrivacy ();
+		$args['privacy_gender'] = $profile->getGenderPrivacy();
+		$args['privacy_birth'] = $profile->getBirthPrivacy();
+		$args['privacy_description'] = $profile->getDescriptionPrivacy();
+		$args['privacy_objectives'] = $profile->getObjectivesPrivacy();
+		$args['privacy_quote'] = $profile->getQuotePrivacy();
+		$args['privacy_hobbies'] = $profile->getHobbiesPrivacy();
+		$args['privacy_country'] = $profile->getCountryPrivacy();
+		$args['privacy_state'] = $profile->getStatePrivacy();
+		$args['privacy_activities'] = $profile->getActivityPrivacy();
+		$args['privacy_bmi'] = $profile->getBmiPrivacy();
+		$args['privacy_mood'] = $profile->getMoodPrivacy();
 		
-		$this->fillWithArray ( $args );
+		$this->fillWithArray( $args );
 	}
 	
 	public function updateProfilePrivacy(UserProfile $profile) {
-		if (! $this->ready) {
+		if( !$this->ready ) {
 			return null;
 		}
-		$profile->setGenderPrivacy ( $this->data ['privacy_gender'] );
-		$profile->setBirthPrivacy ( $this->data ['privacy_birth'] );
-		$profile->setDescriptionPrivacy ( $this->data ['privacy_description'] );
-		$profile->setQuotePrivacy ( $this->data ['privacy_quote'] );
-		$profile->setHobbiesPrivacy ( $this->data ['privacy_hobbies'] );
-		$profile->setCountryPrivacy ( $this->data ['privacy_country'] );
-		$profile->setStatePrivacy ( $this->data ['privacy_state'] );
-		$profile->setActivityPrivacy ( $this->data ['privacy_activities'] );
-		$profile->setBmiPrivacy ( $this->data ['privacy_bmi'] );
-		$profile->setMoodPrivacy ( $this->data ['privacy_mood'] );
+		$profile->setGenderPrivacy( $this->data['privacy_gender'] );
+		$profile->setBirthPrivacy( $this->data['privacy_birth'] );
+		$profile->setDescriptionPrivacy( $this->data['privacy_description'] );
+		$profile->setObjectivesPrivacy( $this->data['privacy_objectives'] );
+		$profile->setQuotePrivacy( $this->data['privacy_quote'] );
+		$profile->setHobbiesPrivacy( $this->data['privacy_hobbies'] );
+		$profile->setCountryPrivacy( $this->data['privacy_country'] );
+		$profile->setStatePrivacy( $this->data['privacy_state'] );
+		$profile->setActivityPrivacy( $this->data['privacy_activities'] );
+		$profile->setBmiPrivacy( $this->data['privacy_bmi'] );
+		$profile->setMoodPrivacy( $this->data['privacy_mood'] );
 		
 		return $profile;
 	}

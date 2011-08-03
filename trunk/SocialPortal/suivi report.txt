@@ -514,6 +514,11 @@ mardi 1 aout soir
 - correction du bug d'affichage d'as3 pour le chart, qu'un seul mois apparaissait lorsqu'une difference de moins de 2 mois etait detectée entre min-max
 - bmi evolution complet 
 
+mercredi 2 aout
+- changement de label pour addBmiValueForm
+- ajout (oubli) de objective au ProfilePrivacyForm
+
+
 current - mood 
 	
 IMPORTANT for report:
@@ -535,7 +540,7 @@ todo - faire le menage dans les liens de retour au sommet des pages, les mettre 
 todo - les emails partent correctement si une adresse locale se situe dans le header
 todo - description des dates en format normal, hover
 todo - args_nonce, hash sur controller/action/getargs, ajouté au getargs et retrieved by annotation, peut etre tres utile pour les suppressions de posts/topic, modification profile etc
-
+todo - list des users
 
 TODO CRON:
 - every midnight: subset determination
