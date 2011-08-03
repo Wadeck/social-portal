@@ -116,24 +116,27 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayAllTools' );
 	}
 	
+	
 	/**
-	 * 
+	 * @RoleAtLeast(moderator)
 	 */
 	public function generateErrorMessageAction() {
 		$this->frontController->addMessage( 'Test error', 'error' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	
 	/**
-	 * 
+	 * @RoleAtLeast(moderator)
 	 */
 	public function generateCorrectMessageAction() {
 		$this->frontController->addMessage( 'Test correct', 'correct' );
 		$this->frontController->doRedirect( 'tool', 'index' );
 	}
 	
+	
 	/**
-	 * 
+	 * @RoleAtLeast(moderator)
 	 */
 	public function generateInfoMessageAction() {
 		$this->frontController->addMessage( 'Test info' );
@@ -157,7 +160,9 @@ class Tool extends AbstractController {
 		$this->frontController->doDisplay( 'tool', 'displayPassword' );
 	}
 	
-
+	/**
+	 * @RoleAtLeast(administrator)
+	 */
 	public function createBaseTotalAction(){
 		$result = $this->createBaseForum();
 		switch($result){

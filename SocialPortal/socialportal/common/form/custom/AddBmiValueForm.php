@@ -17,7 +17,7 @@ class AddBmiValueForm extends Form {
 		parent::__construct( 'AddBmiValue', $frontController, 'formAddBmiValueSubmit', __( 'Add' ) );
 		$this->addInputField( new TextField( 'bmi_height', __( 'Height [cm]' ), '', 'text', array( 'mandatory', 'integer', 'value_greater-equal-than_60', 'value_less-than_250' ) ) );
 		$this->addInputField( new TextField( 'bmi_weight', __( 'Weight [kg]' ), '', 'text', array( 'mandatory', 'integer', 'value_greater-equal-than_20', 'value_less-than_500' ) ) );
-		$this->addInputField( new DatePickerField( 'bmi_date', __( 'Date' ), array( 'mandatory' ) ) );
+		$this->addInputField( new DatePickerField( 'bmi_date', __( 'Date of weighing' ), array( 'mandatory' ) ) );
 		$this->setCss( 'bmi-add-form', 'bmi_add_form.css' );
 	}
 	

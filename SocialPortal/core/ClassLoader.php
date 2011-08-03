@@ -19,7 +19,7 @@
 
 namespace core;
 
-//TODO possible optimisation: permettre a un meme loader de prendre en charge plusieur namespace avec chacun un path different
+//TODO possible amelioration: permettre a un meme loader de prendre en charge plusieur namespace avec chacun un path different
 /**
  * A <tt>ClassLoader</tt> is an autoloader for class files that can be
  * installed on the SPL autoload stack. It is a class loader that either loads only classes
