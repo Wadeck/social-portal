@@ -1,6 +1,10 @@
 <?php
 
 namespace socialportal\controller;
+use core\http\exceptions\NoSuchActionException;
+
+use core\http\exceptions\ControllerNotFoundException;
+
 use socialportal\model\SubsetTopic;
 
 use core\ClassLoader;
@@ -64,10 +68,11 @@ class Tool extends AbstractController {
 		$isAdmin = $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
 		if($noDatabase || $isModo){
 			// the user has the right to come here
+			$this->frontController->getRequest()->getSession()->setFlash('has_temp_right', true);
 		}else{
 			$user = $this->frontController->getCurrentUser();
-			Logger::getInstance()->log('The user [$user] has tried to reach /Tool without permission');
-			$this->frontController->doRedirect('Connection');
+			Logger::getInstance()->log('The user ['. $user->getId() .'] has tried to reach /Tool without permission');
+			$this->frontController->generateException( new ControllerNotFoundException( 'Tool' ) );
 		}
 		
 		$refl = new \ReflectionClass( $this );
@@ -91,7 +96,7 @@ class Tool extends AbstractController {
 			if( false === strpos($name, 'Action')){
 				continue;
 			}
-			if(!$noDatabase){
+			if(false === $noDatabase){
 				$annots = $annotationRetriever->getAnnotationForMethod( get_class($this), $name );
 				$isValid = true;
 				foreach( $annots as $key => $annot ) {
@@ -104,6 +109,11 @@ class Tool extends AbstractController {
 					}
 				}
 				if( !$isValid ){
+					continue;
+				}
+			}else{
+				// no database, we allow only the creation of the total database
+				if( 'createBaseTotalAction' !== $name){
 					continue;
 				}
 			}
@@ -161,9 +171,15 @@ class Tool extends AbstractController {
 	}
 	
 	/**
-	 * @RoleAtLeast(administrator)
 	 */
 	public function createBaseTotalAction(){
+		$hasRight = $this->frontController->getRequest()->getSession()->setFlash('has_temp_right', false);
+		if(false === $hasRight){
+			$user = $this->frontController->getCurrentUser();
+			Logger::getInstance()->log('The user ['. $user->getId() .'] has tried to reach /Tool/createBaseTotalAction without permission');
+			$this->frontController->generateException( new NoSuchActionException( 'Tool', 'createBaseTotal' ) );
+		}
+		
 		$result = $this->createBaseForum();
 		switch($result){
 			case 0:
