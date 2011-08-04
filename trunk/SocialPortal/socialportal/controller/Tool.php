@@ -225,7 +225,7 @@ class Tool extends AbstractController {
 		}
 		
 		$this->frontController->addMessage( 'Every action was a success' , 'correct');
-		$this->frontController->doRedirect( 'Tool' );
+		$this->frontController->doRedirect( 'Connection' );
 	}
 	
 	/**
