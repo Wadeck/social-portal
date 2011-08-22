@@ -170,4 +170,13 @@ class TopicBaseRepository extends EntityRepository {
 		
 		return $totalPage;
 	}
+	public function findReportedTopic(){
+		$dql = $this->_em->createQuery( 'SELECT t FROM topicBase t WHERE t.id IN (SELECT distinct rt.topicId FROM reportTopic rt WHERE rt.isdeleted=0 AND rt.istreated=0)' );
+		$result = $dql->getSingleResult();
+		if( $result ) {
+			return $result;
+		} else {
+			return false;
+		}
+	}
 }

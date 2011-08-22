@@ -74,6 +74,7 @@ abstract class AbstractPostTemplate implements iInsertable{
 		
 //		$isAdmin = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$admin_role);
 		$isModo = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$moderator_role);
+		$isFullUser = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
 		$currentUserId = $this->front->getCurrentUser()->getId();
 		
 		?>
@@ -121,8 +122,9 @@ abstract class AbstractPostTemplate implements iInsertable{
 							if( $isModo ){
 								$this->insertModeratorTools($post);
 							}
-							
-							$this->insertUserTools($post);
+							if($isFullUser){
+								$this->insertUserTools($post);
+							}
 							?>
 							</span>
 
@@ -193,13 +195,22 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 */
 	protected function insertUserTools($post){
 		//TODO quote function!
+		$result=$this->em->getRepository('ReportPost')->findBy(array("postId"=>$post->getId(), "userId"=>$this->front->getCurrentUser()->getId(), "isdeleted"=>0));				
+		if(!$result){
 		?>
-		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array( 'postId' => $post->getId() )); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('reportPost','ReportAbuse','reportPost', array( 'postId'=>$post->getId(), 'topicId'=>$this->topicId, 'forumId'=>$this->forumId)); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
-		<a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"
-			title="<?php echo __( 'Quote this post in your answer' ); ?>"><?php echo __('Quote'); ?></a>
-		&nbsp;|&nbsp;
+		<?php }else{
+		$reportIdRequest=$this->em->getRepository('ReportPost')->findBy(array("postId"=>$post->getId(), "userId"=>$this->front->getCurrentUser()->getId(), "isdeleted"=>0));
+		$reportId=$reportIdRequest[0]->getId();?>
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('removeReportPost','ReportAbuse','removeReportPost', array( 'reportId'=>$reportId,'topicId'=>$this->topicId)); ?>"
+			title="<?php echo __( 'Remove report abuse to the moderators' ); ?>"><?php echo __('Remove Report'); ?></a>
+			
+		<?php }?>	
+		<!--  <a class="unimplemented" href="#comment" onClick="onQuoteClick(); return true"
+			title="<?php //echo __( 'Quote this post in your answer' ); ?>"><?php //echo __('Quote'); ?></a> 
+		&nbsp;|&nbsp;-->
 		<a href="<?php echo $this->permalink . '#post-' . $post->getId(); ?>"
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
 								
