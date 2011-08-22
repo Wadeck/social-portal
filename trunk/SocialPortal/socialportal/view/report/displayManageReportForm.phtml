@@ -1,0 +1,82 @@
+<?php
+
+use core\tools\Utils;
+
+$vars['helper']->insertMessage();
+$topics = $vars['topics'];
+$pagination = $vars['pagination'];
+$userId=$vars['userId'];
+$userHelper = $vars['userHelper'];
+$vars['helper']->addCssFile('forum_loop.css');
+// to remove the container css class
+$vars['helper']->setContainerClass('');
+
+
+?>
+
+<div id="link-back">
+	<a class="button" 
+		href="<?php echo $vars['helper']->createHref('Home')?>">
+			<?php echo __('Home'); ?>
+	</a>
+	<a class="button" 
+	href="<?php $vars['helper']->insertHrefWithNonce('displayProfile', 'Profile', 'display', array( 'userId' => $userId )); ?>">
+		<?php echo __('Profile'); ?>
+	</a>
+	nbsp;
+<h4> <?php echo __('Manage reports'); ?></h4>
+</div>
+
+
+<?php if($topics): // forum loop ?>
+	<div class="rounded-box">
+		<?php $pagination->insert(); ?>
+		<table class="forum-loop">
+			<thead>
+				<tr class="background_primary">
+					<th id="title"><?php echo __('Topic');?></th>
+					<th id="numberOfReport"><?php echo __('Number of report');?></th>
+					<th id="lastDateOfReport"><?php echo __('Last date of report');?></th>					
+					<th id="isViewed"><?php echo __('Viewed');?></th>
+					<th id="treatment"><?php echo __('isTreated');?></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+					$size = count($topics);
+					for($i = 0 ; $i < $size ; $i++):
+						$topic = $topics[$i];
+						$title = $topic->getTitle();
+						$titleDescription = $title;						
+				?>
+					<tr>
+						<td class="title"><a class="topic-title" href="<?php $vars['helper']->insertHref('Topic', 'displaySingleTopic', array('topicId'=>$topic->getId(), 'forumId' => $forumId)); ?>"
+							title="<?php echo $titleDescription; ?>"><?php echo $title; ?></a></td>
+						<td class="numberOfReport">3							
+						</td>
+						<td class="latest-poster">
+						</td>
+						<td class="postcount"><?php ?></td>
+						<td class="freshness"><?php ?></td>
+					</tr>
+				<?php endfor ?>
+			</tbody>
+		</table>
+		<?php $pagination->insert(); ?>
+	</div>
+	
+<?php else: // no topics in this forum ?>
+	<?php $vars['helper']->addCssFile('messages.css'); ?>
+	<div class="rounded-box pagged">
+		<div class="message info centered"><?php echo __('No topic in this forum');?></div>
+	</div>
+<?php endif; ?>
+
+
+<div id="bottom-button">
+<?php if( false !== $newTopicLink ):
+	echo $newTopicLink;
+endif; ?>
+</div>
+
+

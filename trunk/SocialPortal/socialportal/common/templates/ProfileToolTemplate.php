@@ -105,7 +105,13 @@ class ProfileToolTemplate implements iInsertable {
 			<a class="" title="<?php echo $editEmail; ?>" href="<?php 
 				$this->front->getViewHelper()->insertHrefWithNonce('displayEditEmailForm', 'Profile', 'displayEditEmailForm', array('userId'=>$this->userId))?>"><?php
 				echo $editEmail; ?></a>
-			
+				<!-- edit email -->
+			<?php if($this->isModo){
+			$manageReports = __('Manage reports');	?>
+			<a class="" title="<?php echo $editEmail; ?>" href="<?php 
+				$this->front->getViewHelper()->insertHref('ReportAbuse', 'displayManageReportForm', array('userId'=>$this->userId))?>">
+				<?php echo $manageReports; ?></a>
+			<?php }?>
 		</div>
 	<?php
 	}

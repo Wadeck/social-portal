@@ -133,7 +133,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 								$this->insertModeratorTools($this->topic);
 							}
 							if( $isFullUser ){
-								$this->insertFullUserTools($this->topic);	
+								$this->insertFullUserTools($this->topic, $forum);	
 							}
 							// for everybody 
 							$this->insertUserTools($this->topic);
@@ -290,13 +290,24 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	 * For full user
 	 * report / -quote- / permalink 
 	 */
-	protected function insertFullUserTools($topic){
+	protected function insertFullUserTools($topic,$forum){
+		$result=$this->em->getRepository('ReportTopic')->findBy(array("topicId"=>$topic->getId(), "userId"=>$this->front->getCurrentUser()->getId(),"isdeleted"=>0));
+		if(!$result){
 		?>
-		<a class="unimplemented" href="<?php $this->front->getViewHelper()->insertHref('Topic', 'report', array('topicId'=>$topic->getId())); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('reportTopic','ReportAbuse','reportTopic', array('topicId'=>$topic->getId(),'forumId' => $forum->getId())); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
+		<?php }else{
+			$reportIdRequest=$this->em->getRepository('ReportTopic')->findBy(array("topicId"=>$topic->getId(), "userId"=>$this->front->getCurrentUser()->getId(),"isdeleted"=>0));
+			$reportId=$reportIdRequest[0]->getId();
+		?>
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('removeReportTopic','ReportAbuse','removeReportTopic', array('reportId'=>$reportId)); ?>"
+			title="<?php echo __( 'Remove report abuse to the moderators' ); ?>"><?php echo __('Remove report'); ?></a>
+			&nbsp;|&nbsp;
+		<?php
+		}?>
 		<!--<a href="#comment" onClick="onQuoteClick(); return true"
-			title="<?php echo __( 'Quote this topic in your answer' ); ?>"><?php echo __('Quote'); ?></a>
+			title="<?php //echo __( 'Quote this topic in your answer' ); ?>"><?php //echo __('Quote'); ?></a>
 		&nbsp;|&nbsp;
 		--><a href="<?php echo $this->permalink. '#topic-'. $topic->getId(); ?>"
 			title="<?php echo __( 'Permanent link to this post' ); ?>">#</a>
