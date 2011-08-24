@@ -29,6 +29,8 @@ abstract class AbstractPostTemplate implements iInsertable{
 	protected $forumId ;
 	protected $supportVote = true;
 	
+	protected $highlightPost = false;
+	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
 	}
@@ -43,6 +45,12 @@ abstract class AbstractPostTemplate implements iInsertable{
 		$this->forumId = $topic->getForum()->getId();
 	}
 	
+	/**
+	 * @param $value int
+	 */
+	public function setHighlightPost($value){
+		$this->highlightPost = $value;
+	}
 	/**
 	 * @param array of CustomPost $posts
 	 */
@@ -87,7 +95,9 @@ abstract class AbstractPostTemplate implements iInsertable{
 			$userHelper->setCurrentUser($postAuthor);
 		?>
 			<!-- Here to add the condition on the post status -->
-			<li class="rounded-box<?php if($base->getIsDeleted()) echo ' deleted'; ?>" id="post-<?php echo $postId; ?>">
+			<li class="rounded-box<?php 
+					if($base->getIsDeleted()) echo ' deleted'; 
+					if($postId === $this->highlightPost) echo ' highlight-post'; ?>" id="post-<?php echo $postId; ?>">
 				<a name="post-<?php echo $postId; ?>" ></a>
 				<table>
 			    	<tr>
@@ -194,17 +204,20 @@ abstract class AbstractPostTemplate implements iInsertable{
 	 * report / -quote- / permalink 
 	 */
 	protected function insertUserTools($post){
+		$postBase = $post->getPostBase();
+		$postId = $postBase->getId();
+		
 		//TODO quote function!
-		$result=$this->em->getRepository('ReportPost')->findBy(array("postId"=>$post->getId(), "userId"=>$this->front->getCurrentUser()->getId(), "isdeleted"=>0));				
+		$result = $this->em->getRepository('ReportPost')->findBy(array("postId"=>$post->getId(), "userId" => $this->front->getCurrentUser()->getId(), "isDeleted"=>0));				
 		if(!$result){
 		?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('reportPost','ReportAbuse','reportPost', array( 'postId'=>$post->getId(), 'topicId'=>$this->topicId, 'forumId'=>$this->forumId)); ?>"
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('reportPost', 'Report', 'reportPost', array( 'postId' => $postId, 'topicId' => $this->topicId, 'forumId' => $this->forumId)); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
 		<?php }else{
-		$reportIdRequest=$this->em->getRepository('ReportPost')->findBy(array("postId"=>$post->getId(), "userId"=>$this->front->getCurrentUser()->getId(), "isdeleted"=>0));
-		$reportId=$reportIdRequest[0]->getId();?>
-		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('removeReportPost','ReportAbuse','removeReportPost', array( 'reportId'=>$reportId,'topicId'=>$this->topicId)); ?>"
+		$reportIdRequest = $this->em->getRepository('ReportPost')->findBy(array("postId" => $post->getId(), "userId" => $this->front->getCurrentUser()->getId(), "isDeleted" => 0));
+		$reportId = $reportIdRequest[0]->getId();?>
+		<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('removeReportPost', 'Report', 'removeReportPost', array( 'reportId' => $reportId, "postId" => $postId, 'forumId' => $this->forumId)); ?>"
 			title="<?php echo __( 'Remove report abuse to the moderators' ); ?>"><?php echo __('Remove Report'); ?></a>
 			
 		<?php }?>	

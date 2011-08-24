@@ -41,25 +41,18 @@ class ReportPost{
     private $date;
 
     /**
-     * @var boolean $isviewed
+     * @var boolean $isTreated
      *
-     * @Column(name="isviewed", type="boolean", nullable=false)
+     * @Column(name="is_treated", type="boolean", nullable=false)
      */
-    private $isviewed;
+    private $isTreated;
 
     /**
-     * @var boolean $istreated
+     * @var boolean $isDeleted
      *
-     * @Column(name="isTreated", type="boolean", nullable=false)
+     * @Column(name="is_deleted", type="boolean", nullable=false)
      */
-    private $istreated;
-
-    /**
-     * @var boolean $isdeleted
-     *
-     * @Column(name="isDeleted", type="boolean", nullable=false)
-     */
-    private $isdeleted;
+    private $isDeleted;
 
 
     /** Get id @return bigint $id */
@@ -83,21 +76,15 @@ class ReportPost{
     /** Get date @return datetime $date */
     public function getDate(){ return $this->date; }
 
-    /** Set isviewed @param boolean $isviewed */
-    public function setIsviewed($isviewed){ $this->isviewed = $isviewed; }
+    /** Set isTreated @param boolean $isTreated */
+    public function setIsTreated($isTreated){ $this->isTreated = $isTreated; }
 
-    /** Get isviewed @return boolean $isviewed */
-    public function getIsviewed(){ return $this->isviewed; }
+    /** Get isTreated @return boolean $isTreated */
+    public function getIsTreated(){ return $this->isTreated; }
 
-    /** Set istreated @param boolean $istreated */
-    public function setIstreated($istreated){ $this->istreated = $istreated; }
+    /** Set isDeleted @param boolean $isDeleted */
+    public function setIsDeleted($isDeleted){ $this->isDeleted = $isDeleted; }
 
-    /** Get istreated @return boolean $istreated */
-    public function getIstreated(){ return $this->istreated; }
-
-    /** Set isdeleted @param boolean $isdeleted */
-    public function setIsdeleted($isdeleted){ $this->isdeleted = $isdeleted; }
-
-    /** Get isdeleted @return boolean $isdeleted */
-    public function getIsdeleted(){ return $this->isdeleted; }
+    /** Get isDeleted @return boolean $isDeleted */
+    public function getIsDeleted(){ return $this->isDeleted; }
 }

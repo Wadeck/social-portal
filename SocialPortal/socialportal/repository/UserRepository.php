@@ -25,7 +25,11 @@ class UserRepository extends EntityRepository {
 //		$qb->select( 'u' )->from( 'socialportal\model\User', 'u' )->where( 'u.username = :username' )->setParameter( 'username', $username )->setMaxResults( 1 );
 //		$results = $qb->getQuery()->getResult();
 		if( $results ) {
-			return $results[0];
+			if($username === $results[0]->getUsername()){
+				return $results[0];
+			}else{
+				return false;
+			}
 		} else {
 			return false;
 		}

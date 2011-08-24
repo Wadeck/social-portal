@@ -31,12 +31,21 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	
 	protected $supportVote = true;
 	
+	protected $highlight = false;
+	
 	public function setFrontController(FrontController $front){
 		$this->front = $front;
 	}
 	
 	public function setEntityManager(EntityManager $em){
 		$this->em = $em;
+	}
+	
+	/**
+	 * @param $value boolean
+	 */
+	public function setHighlightTopic($value){
+		$this->highlight = $value;
 	}
 	
 	/**
@@ -76,7 +85,7 @@ abstract class AbstractTopicTemplate implements iInsertable {
 		$isFullUser = $this->front->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
 		?>
 		<!-- Topic initial post -->
-			<div class="rounded-box" id="topic">
+			<div class="rounded-box<?php if($this->highlight) echo ' highlight-topic' ?>" id="topic">
 				<table id="topic-<?php echo $topicId; ?>">
 					<tr>
 						<!-- row of avatar box -->	
@@ -290,22 +299,28 @@ abstract class AbstractTopicTemplate implements iInsertable {
 	 * For full user
 	 * report / -quote- / permalink 
 	 */
-	protected function insertFullUserTools($topic,$forum){
-		$result=$this->em->getRepository('ReportTopic')->findBy(array("topicId"=>$topic->getId(), "userId"=>$this->front->getCurrentUser()->getId(),"isdeleted"=>0));
+	protected function insertFullUserTools($topic, $forum){
+		$topicBase = $topic->getTopicBase();
+		$topicId = $topicBase->getId();
+		$forumId = $forum->getId();
+		
+		// check first if the current user has already reported the topic
+		$result = $this->em->getRepository('ReportTopic')->findBy( array( "topicId" => $topicId, "userId" => $this->front->getCurrentUser()->getId(), "isDeleted" => 0 ) );
 		if(!$result){
+			// this is not the case, so we propose to him the tool to report
 		?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('reportTopic','ReportAbuse','reportTopic', array('topicId'=>$topic->getId(),'forumId' => $forum->getId())); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce( 'reportTopic', 'Report', 'reportTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) ); ?>"
 			title="<?php echo __( 'Report abuse to the moderators' ); ?>"><?php echo __('Report'); ?></a>
 		&nbsp;|&nbsp;
-		<?php }else{
-			$reportIdRequest=$this->em->getRepository('ReportTopic')->findBy(array("topicId"=>$topic->getId(), "userId"=>$this->front->getCurrentUser()->getId(),"isdeleted"=>0));
+		<?php } else {
+			// the user has already reported, we let him the possibility to remove the report
+			$reportIdRequest=$this->em->getRepository('ReportTopic')->findBy( array( "topicId" => $topicId, "userId" => $this->front->getCurrentUser()->getId(), "isDeleted" => 0 ) );
 			$reportId=$reportIdRequest[0]->getId();
 		?>
-			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce('removeReportTopic','ReportAbuse','removeReportTopic', array('reportId'=>$reportId)); ?>"
+			<a href="<?php $this->front->getViewHelper()->insertHrefWithNonce( 'removeReportTopic', 'Report', 'removeReportTopic', array('reportId' => $reportId, 'topicId' => $topicId, 'forumId' => $forumId ) ); ?>"
 			title="<?php echo __( 'Remove report abuse to the moderators' ); ?>"><?php echo __('Remove report'); ?></a>
 			&nbsp;|&nbsp;
-		<?php
-		}?>
+		<?php } ?>
 		<!--<a href="#comment" onClick="onQuoteClick(); return true"
 			title="<?php //echo __( 'Quote this topic in your answer' ); ?>"><?php //echo __('Quote'); ?></a>
 		&nbsp;|&nbsp;
