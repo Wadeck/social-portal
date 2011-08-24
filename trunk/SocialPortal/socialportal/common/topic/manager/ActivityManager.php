@@ -20,22 +20,13 @@ use socialportal\common\topic\AbstractTypeManager;
 
 class ActivityManager extends AbstractTypeManager{
 	/** @return AbstractTopicTemplate */
-	public function getTopicTemplate(FrontController $frontController, EntityManager $em, $topic, $permalinkTopic){
-		$template = new ActivityTopicTemplate();
-		$template->setFrontController($frontController);
-		$template->setEntityManager($em);
-		$template->setTopic($topic);
-		return $template;
+	public function _getTopicTemplate(){
+		return new ActivityTopicTemplate();
 	}
 	
 	/** @return AbstractPostTemplate */
-	public function getPostTemplate(FrontController $frontController, EntityManager $em, TopicBase $topicBase, array $posts, $permalink){
-		$template = new ActivityPostTemplate();
-		$template->setFrontController($frontController);
-		$template->setEntityManager($em);
-		$template->setPosts($posts);
-		$template->setTopicBase($topicBase);
-		return $template;
+	public function _getPostTemplate(){
+		return new ActivityPostTemplate();
 	}
 
 	/** @return the name with namespace of the topic model related to that type */

@@ -1,5 +1,12 @@
 @CHARSET "ISO-8859-1";
 
+.highlight-topic{
+	outline: 2px dashed red;
+}
+.highlight-post{
+	outline: 2px dashed orange;
+}
+
 #topic {
 	margin-bottom: 15px;
 }

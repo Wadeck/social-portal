@@ -98,7 +98,8 @@ class Topic extends AbstractController {
 	
 	/**
 	 * @GetAttributes({topicId, forumId})
-	 * [p, n, positionTarget(int), timeTarget(timestamp int), postIdTarget(int), lastPage(boolean), withDeleted(boolean), nofilter(boolean)]
+	 * [p, n, positionTarget(int), timeTarget(timestamp int), postIdTarget(int), lastPage(boolean), 
+	 * 		highlightTopic(boolean), highlightPost(int), withDeleted(boolean), nofilter(boolean)]
 	 */
 	public function displaySingleTopicAction() {
 		$get = $this->frontController->getRequest()->query;
@@ -112,6 +113,8 @@ class Topic extends AbstractController {
 		$lastPage = $get->get( 'lastPage', false );
 		$withDeleted = $get->get( 'withDeleted', false );
 		$nofilter = $get->get( 'nofilter', false );
+		$highlightTopic = $get->get( 'highlightTopic', false );
+		$highlightPost = $get->get( 'highlightPost', false );
 		
 		$postBaseRepo = $this->em->getRepository( 'PostBase' );
 		$topicBaseRepo = $this->em->getRepository( 'TopicBase' );
@@ -210,8 +213,16 @@ class Topic extends AbstractController {
 		$response->setVar( 'posts', $posts );
 		$response->setVar( 'topic', $topic );
 		$response->setVar( 'forumId', $forumId );
-		$response->setVar( 'topicTemplate', $typeManager->getTopicTemplate($this->frontController, $this->em, $topic, $permalinkTopic ) );
-		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $baseTopic, $posts, $permalinkPost ) );
+		
+		if(true === $highlightTopic){
+			$response->setVar('hightlightTopic', true);
+		}
+		if(false !== $highlightPost){
+			$response->setVar('highlightPost', $highlightPost);
+		}
+		
+		$response->setVar( 'topicTemplate', $typeManager->getTopicTemplate($this->frontController, $this->em, $topic, $permalinkTopic, $highlightTopic ) );
+		$response->setVar( 'postsTemplate', $typeManager->getPostTemplate($this->frontController, $this->em, $baseTopic, $posts, $permalinkPost, $highlightPost ) );
 		
 		if( $this->frontController->getViewHelper()->currentUserIsAtLeast( UserRoles::$moderator_role ) ) {
 			// optimization if we use permalink before

@@ -84,16 +84,13 @@ class Profile extends AbstractController {
 		if( null !== $profile){
 			$informationTitle = __( 'Information' );
 			$bmiTitle = __( 'BMI chart' );
-			$moodTitle = __( 'Mood chart' );
 			
 			$informationLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'information'));
 			$bmiLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'bmi'));
-			$moodLink = $this->frontController->getViewHelper()->createHrefWithNonce('displayProfile', 'Profile', 'display', array('userId' => $userId, 'tab' => 'mood'));
 			
 			$links = array(
 				'info' => '<a class="button" href="' . $informationLink . '" title="' . $informationTitle . '">' . $informationTitle . '</a>',
 				'bmi' => '<a class="button" href="' . $bmiLink . '" title="' . $bmiTitle . '">' . $bmiTitle . '</a>',
-				'mood' => '<a class="button" href="' . $moodLink . '" title="' . $moodTitle . '">' . $moodTitle . '</a>',
 			);
 			
 			switch( $tab ){
@@ -105,11 +102,6 @@ class Profile extends AbstractController {
 					$links[ 'bmi' ] = $bmiTitle;
 					//TODO change to bmi chart
 					$mainTemplate = new ProfileBMITemplate( $this->frontController, $user, $profile );
-					break;
-				case 'mood':
-					$links[ 'mood' ] = $moodTitle;
-					//TODO change to mood chart
-					$mainTemplate = new ProfileInformationTemplate( $this->frontController, $user, $profile );
 					break;
 			}
 			

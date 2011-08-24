@@ -10,9 +10,9 @@ use core\FrontController;
 
 interface TypeManagerInterface{
 	/** @return AbstractTopicTemplate */
-	function getTopicTemplate(FrontController $front, EntityManager $em, $topic, $permalink);
+	function getTopicTemplate(FrontController $front, EntityManager $em, $topic, $permalink, $highlightTopic);
 	/** @return AbstractPostTemplate */
-	function getPostTemplate(FrontController $front, EntityManager $em, TopicBase $topic, array $posts, $permalink);
+	function getPostTemplate(FrontController $front, EntityManager $em, TopicBase $topic, array $posts, $permalink, $highlightPost);
 	
 	/** @return the name with namespace of the post model related to that type */
 	function getPostClassName();

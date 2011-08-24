@@ -17,9 +17,9 @@ class NonceManager {
 		if( !$user ) {
 			return false;
 		}
-		$uid = $user->getRandomKey();
+		$pepper = $user->getRandomKey();
 		$time = $this->tick();
-		$hash = $this->computeNonce( $time, $uid, $actionName );
+		$hash = $this->computeNonce( $time, $pepper, $actionName );
 		return $hash;
 	}
 	
@@ -44,8 +44,8 @@ class NonceManager {
 		return false;
 	}
 	
-	private function computeNonce($tick, $userUnique, $actionName) {
-		return Crypto::hashForNonce( $userUnique . $tick . $actionName );
+	private function computeNonce($tick, $pepperUnique, $actionName) {
+		return Crypto::hashForNonce( $pepperUnique . $tick . $actionName );
 	}
 	
 	/**

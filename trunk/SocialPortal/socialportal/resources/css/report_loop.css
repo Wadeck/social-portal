@@ -1,9 +1,7 @@
 @CHARSET "ISO-8859-1";
-
-div#link-back {
-    padding-bottom: 0;
+.navigation {
+    min-height: 15px;
 }
-
 ul#forums-header {
 	padding: 10px;
 	/*margin: 0 auto;*/
@@ -138,7 +136,7 @@ div#sidebar table td,table.forum td {
 
 table.forum-loop { /*margin: 5px -19px 5px -19px;*/
 	/*  margin: -9px -20px 20px -20px; */
-	width: auto;
+	/*width: auto;*/
 }
 
 table.forum-loop tr.alt { /* managed by background secondary */
@@ -214,7 +212,7 @@ table.forum-loop td.poster,table.forum-loop td.group {
 }
 
 table.forum-loop th#title {
-	width: 35%;
+	width: 45%;
 }
 
 /*

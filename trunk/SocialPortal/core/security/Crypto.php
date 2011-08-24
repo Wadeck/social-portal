@@ -2,8 +2,10 @@
 
 namespace core\security;
 
+// the pepper are constant stored in plaintext in the application code
+// the salts are constant stored in plaintext in the database
 class Crypto {
-	/**  @var array different salts used to hash password in db or cookie */
+	/**  @var array different peppers used to hash password in db or cookie */
 	private static $SALTS = array( 
 		// 13 + 11 + 10 = 34 => 272bits
 		'cookie' => array( '62b1d5u|e3_04', '^t:,46ru7ç+', 'c245ho4{s€' ),
@@ -13,8 +15,8 @@ class Crypto {
 		'nonce' => array( '5ks*à-+', 'gZs-/9D', '6èvF9d/' ) );
 	
 	/** Database usage @return string the encrypted pwd */
-	public static function encodeDBPassword($login, $pwd) {
-		$encrypted_pass = self::hashPwd( $login, $pwd, 'db' );
+	public static function encodeDBPassword($pepper, $pwd) {
+		$encrypted_pass = self::hashPwd( $pepper, $pwd, 'db' );
 		return $encrypted_pass;
 	}
 	
@@ -77,7 +79,10 @@ class Crypto {
 		return sha1( $salts[0] . $login . $salts[1] . sha1( $pwd ) . $salts[2] );
 	}
 	
-	/** @return random 32chars string */
+	/** 
+	 * Create the salt that will be stored in the database
+	 * @return random 32chars string
+	 */
 	public static function createRandomKey() {
 		list( $usec, $sec ) = explode( " ", microtime() );
 		$first = mt_rand();

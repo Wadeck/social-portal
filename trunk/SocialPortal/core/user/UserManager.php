@@ -301,9 +301,9 @@ class UserManager {
 	public static function createUser($username, $password, $email, $role, $time, $status = 0, $activationKey = '') {
 		$user = new User();
 		$user->setUsername( $username );
-		$randomKey = Crypto::createRandomKey();
-		$user->setPassword( Crypto::encodeDBPassword( $randomKey, $password ) );
-		$user->setRandomKey( $randomKey );
+		$pepperKey = Crypto::createRandomKey();
+		$user->setPassword( Crypto::encodeDBPassword( $pepperKey, $password ) );
+		$user->setRandomKey( $pepperKey );
 		$user->setEmail( $email );
 		$user->setStatus( $status );
 		$user->setActivationKey( $activationKey );

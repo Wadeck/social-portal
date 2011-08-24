@@ -20,22 +20,13 @@ use socialportal\common\topic\AbstractTypeManager;
 
 class SimpleStoryManager extends AbstractTypeManager{
 	/** @return AbstractTopicTemplate */
-	public function getTopicTemplate(FrontController $frontController, EntityManager $em, $topic, $permalinkTopic){
-		$template = new StoryTopicTemplate();
-		$template->setFrontController($frontController);
-		$template->setEntityManager($em);
-		$template->setTopic($topic);
-		return $template;
+	public function _getTopicTemplate(){
+		return new StoryTopicTemplate();
 	}
 	
 	/** @return AbstractPostTemplate */
-	public function getPostTemplate(FrontController $frontController, EntityManager $em, TopicBase $topicBase, array $posts, $permalink){
-		$template = new StoryPostTemplate();
-		$template->setFrontController($frontController);
-		$template->setEntityManager($em);
-		$template->setPosts($posts);
-		$template->setTopicBase($topicBase);
-		return $template;
+	public function _getPostTemplate(){
+		return new StoryPostTemplate();
 	}
 	
 	/** @return the name with namespace of the topic model related to that type */
