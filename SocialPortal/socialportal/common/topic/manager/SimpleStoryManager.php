@@ -2,60 +2,64 @@
 
 namespace socialportal\common\topic\manager;
 
+use socialportal\model\PostSimpleStory;
+
+use socialportal\common\topic\TypeCenter;
+
+use socialportal\common\templates\posts\SimpleStoryPostTemplate;
+
+use socialportal\common\templates\topics\SimpleStoryTopicTemplate;
+
 use socialportal\model\TopicBase;
 
 use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
 
-use socialportal\common\form\custom\PostStoryForm;
+use socialportal\common\form\posts\PostSimpleStoryForm;
 
-use socialportal\common\form\custom\TopicStoryForm;
-
-use socialportal\common\templates\StoryPostTemplate;
-
-use socialportal\common\templates\StoryTopicTemplate;
+use socialportal\common\form\topics\TopicSimpleStoryForm;
 
 use socialportal\common\topic\AbstractTypeManager;
 
 class SimpleStoryManager extends AbstractTypeManager{
 	/** @return AbstractTopicTemplate */
 	public function _getTopicTemplate(){
-		return new StoryTopicTemplate();
+		return new SimpleStoryTopicTemplate();
 	}
 	
 	/** @return AbstractPostTemplate */
 	public function _getPostTemplate(){
-		return new StoryPostTemplate();
+		return new SimpleStoryPostTemplate();
 	}
 	
 	/** @return the name with namespace of the topic model related to that type */
 	public function getTopicClassName(){
-		return 'socialportal\model\TopicStory';
+		return 'socialportal\model\TopicSimpleStory';
 	}
 	
 	/** @return the name with namespace of the post model related to that type */
 	public function getPostClassName(){
-		return 'socialportal\model\PostStory';
+		return 'socialportal\model\PostSimpleStory';
 	}
 	
 	/** @return the name of the topic model related to that type */
 	public function getSimpleName(){
-		return __('Story');
+		return __('Simple Story');
 	}
 	
 	/** @return int the type id */
 	public function getTypeId(){
-		return 3;
+		return TypeCenter::$simpleStoryType;
 	}
 
 	/** @return iTopicForm */
 	public function getTopicForm(FrontController $frontController){
-		return new TopicStoryForm($frontController);
+		return new TopicSimpleStoryForm($frontController);
 	}
 	
 	/** @return iPostForm */
 	public function getPostForm(FrontController $frontController){
-		return new PostStoryForm($frontController);
+		return new PostSimpleStoryForm($frontController);
 	}
 }

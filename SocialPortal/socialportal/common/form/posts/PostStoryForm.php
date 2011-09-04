@@ -1,10 +1,8 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\posts;
 
 use socialportal\model\PostStory;
-
-use socialportal\model\PostStrategy;
 
 use socialportal\model\PostBase;
 
@@ -19,7 +17,7 @@ use core\form\Form;
 class PostStoryForm extends AbstractPostForm {
 	public function __construct(FrontController $frontController) {
 		parent::__construct( 'StoryComment', $frontController, 'formStoryCommentSubmit', __( 'Submit' ) );
-		$this->addInputField( new TextAreaField( 'post_content', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
+		$this->addInputField( new TextAreaField( 'post_content', __( 'General Comment' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
 		$this->addInputField( new TextAreaField( 'post_automatic_thoughts', __( 'Automatic Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'post_alternative_thoughts', __( 'Alternative Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'post_realistic_thoughts', __( 'Realistic Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );

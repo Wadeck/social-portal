@@ -30,25 +30,25 @@ class PostStory{
     private $content;
 
     /**
-     * @var text $automaticthoughts
+     * @var text $automaticThoughts
      *
-     * @Column(name="automaticThoughts", type="text", nullable=false)
+     * @Column(name="automatic_thoughts", type="text", nullable=false)
      */
-    private $automaticthoughts;
+    private $automaticThoughts;
 
     /**
-     * @var text $alternativethoughts
+     * @var text $alternativeThoughts
      *
-     * @Column(name="alternativeThoughts", type="text", nullable=false)
+     * @Column(name="alternative_thoughts", type="text", nullable=false)
      */
-    private $alternativethoughts;
+    private $alternativeThoughts;
 
     /**
-     * @var text $realisticthoughts
+     * @var text $realisticThoughts
      *
-     * @Column(name="realisticThoughts", type="text", nullable=false)
+     * @Column(name="realistic_thoughts", type="text", nullable=false)
      */
-    private $realisticthoughts;
+    private $realisticThoughts;
 
     /**
      * @var socialportal\model\PostBase
@@ -70,23 +70,23 @@ class PostStory{
     /** Get content @return text $content */
     public function getContent(){ return $this->content; }
 
-    /** Set automaticthoughts @param text $automaticthoughts */
-    public function setAutomaticthoughts($automaticthoughts){ $this->automaticthoughts = $automaticthoughts; }
+    /** Set automaticThoughts @param text $automaticThoughts */
+    public function setAutomaticThoughts($automaticThoughts){ $this->automaticThoughts = $automaticThoughts; }
 
-    /** Get automaticthoughts @return text $automaticthoughts */
-    public function getAutomaticthoughts(){ return $this->automaticthoughts; }
+    /** Get automaticThoughts @return text $automaticThoughts */
+    public function getAutomaticThoughts(){ return $this->automaticThoughts; }
 
-    /** Set alternativethoughts @param text $alternativethoughts */
-    public function setAlternativethoughts($alternativethoughts){ $this->alternativethoughts = $alternativethoughts; }
+    /** Set alternativeThoughts @param text $alternativeThoughts */
+    public function setAlternativeThoughts($alternativeThoughts){ $this->alternativeThoughts = $alternativeThoughts; }
 
-    /** Get alternativethoughts @return text $alternativethoughts */
-    public function getAlternativethoughts(){ return $this->alternativethoughts; }
+    /** Get alternativeThoughts @return text $alternativeThoughts */
+    public function getAlternativeThoughts(){ return $this->alternativeThoughts; }
 
-    /** Set realisticthoughts @param text $realisticthoughts */
-    public function setRealisticthoughts($realisticthoughts){ $this->realisticthoughts = $realisticthoughts; }
+    /** Set realisticThoughts @param text $realisticThoughts */
+    public function setRealisticThoughts($realisticThoughts){ $this->realisticThoughts = $realisticThoughts; }
 
-    /** Get realisticthoughts @return text $realisticthoughts */
-    public function getRealisticthoughts(){ return $this->realisticthoughts; }
+    /** Get realisticThoughts @return text $realisticThoughts */
+    public function getRealisticThoughts(){ return $this->realisticThoughts; }
 
     /** Set postbase @param socialportal\model\PostBase $postbase */
     public function setPostbase(\socialportal\model\PostBase $postbase){ $this->postbase = $postbase; }

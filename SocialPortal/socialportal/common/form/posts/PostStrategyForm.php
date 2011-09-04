@@ -1,8 +1,8 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\posts;
 
-use socialportal\model\PostFreetext;
+use socialportal\model\PostStrategy;
 
 use socialportal\model\PostBase;
 
@@ -14,11 +14,11 @@ use core\FrontController;
 
 use core\form\Form;
 
-class PostFreetextForm extends AbstractPostForm {
+class PostStrategyForm extends AbstractPostForm {
 	
 	public function __construct(FrontController $frontController) {
-		parent::__construct( 'FreetextComment', $frontController, 'formFreetextCommentSubmit', __( 'Submit' ) );
-//		$this->addInputField( new TextAreaField( 'post_content', '', '', array( 'mandatory', 'strlen_at-least_10' ) ) );
+		parent::__construct( 'StrategyComment', $frontController, 'formStrategyCommentSubmit', __( 'Submit' ) );
+		//		$this->addInputField( new TextAreaField( 'post_content', '', '', array( 'mandatory', 'strlen_at-least_10' ) ) );
 		// no label desired on this form
 		$this->addInputField( new TextAreaField( 'post_content', __( 'Comment' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
 	}
@@ -38,7 +38,7 @@ class PostFreetextForm extends AbstractPostForm {
 		if( $existing ) {
 			$post = $existing;
 		} else {
-			$post = new PostFreetext();
+			$post = new PostStrategy();
 		}
 		$post->setContent( $this->getPostContent() );
 		$post->setPostbase( $base );

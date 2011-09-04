@@ -1,6 +1,6 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\topics;
 
 use core\tools\Utils;
 

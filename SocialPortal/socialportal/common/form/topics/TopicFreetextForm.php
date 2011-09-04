@@ -1,10 +1,10 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\topics;
 
 use socialportal\model\TopicBase;
 
-use socialportal\model\TopicActivity;
+use socialportal\model\TopicFreetext;
 
 use socialportal\model\Forum;
 
@@ -18,10 +18,10 @@ use core\FrontController;
 
 use core\form\Form;
 
-class TopicActivityForm extends AbstractTopicForm {
+class TopicFreetextForm extends AbstractTopicForm {
 	
 	public function __construct(FrontController $frontController) {
-		parent::__construct( 'Activity', $frontController, 'formActivitySubmit', __( 'Submit' ) );
+		parent::__construct( 'Freetext', $frontController, 'formFreetextSubmit', __( 'Submit' ) );
 		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
 	}
@@ -46,7 +46,7 @@ class TopicActivityForm extends AbstractTopicForm {
 		if( $existing ) {
 			$topic = $existing;
 		} else {
-			$topic = new TopicActivity();
+			$topic = new TopicFreetext();
 		}
 		$topic->setContent( $this->getTopicDescription() );
 		$topic->setTopicbase( $base );

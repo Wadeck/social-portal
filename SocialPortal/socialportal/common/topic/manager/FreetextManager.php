@@ -2,19 +2,21 @@
 
 namespace socialportal\common\topic\manager;
 
+use socialportal\common\topic\TypeCenter;
+
 use socialportal\model\TopicBase;
 
 use Doctrine\ORM\EntityManager;
 
 use core\FrontController;
 
-use socialportal\common\form\custom\PostFreetextForm;
+use socialportal\common\form\posts\PostFreetextForm;
 
-use socialportal\common\form\custom\TopicFreetextForm;
+use socialportal\common\form\topics\TopicFreetextForm;
 
-use socialportal\common\templates\FreetextPostTemplate;
+use socialportal\common\templates\posts\FreetextPostTemplate;
 
-use socialportal\common\templates\FreetextTopicTemplate;
+use socialportal\common\templates\topics\FreetextTopicTemplate;
 
 use socialportal\common\topic\AbstractTypeManager;
 
@@ -46,7 +48,7 @@ class FreetextManager extends AbstractTypeManager{
 	
 	/** @return int the type id */
 	public function getTypeId(){
-		return 2;
+		return TypeCenter::$freetextType;
 	}
 
 	/** @return iTopicForm */

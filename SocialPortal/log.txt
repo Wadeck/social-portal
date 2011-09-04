@@ -1,260 +1,41 @@
-Fri, 01 Jul 11 14:52:37 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 01 Jul 11 14:52:37 +0000	Request path: Forum :: displaySingleForum :: 
-Fri, 01 Jul 11 14:52:37 +0000	GET = array (
-  'forumId' => '1',
-  'p' => '3',
-  'n' => '20',
-)
-Fri, 01 Jul 11 14:52:37 +0000	POST = array (
-)
-Fri, 01 Jul 11 14:52:37 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'koue3qe8url45qf8ouhv9cmsi6',
-)
-Fri, 01 Jul 11 14:52:37 +0000	SESSION = array (
-  '_socialportal' => 
-  array (
-    '_flash' => 
-    array (
-    ),
-    '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
-  ),
-)
-Fri, 01 Jul 11 14:52:37 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '3',
-   'username' => 'admin',
-   'randomKey' => '76ec78e82b7ed6ef7ca3d0ea36fbd8c2',
-   'password' => '2bc6ea0da8a7514f6069c6755d1dca75de7890ab',
-   'email' => 'w.follonier@netunion.com',
-   'registered' => 
-  DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:00',
-     'timezone_type' => 3,
-     'timezone' => 'UTC',
-  )),
-   'activationKey' => '',
-   'status' => 0,
-   'roles' => 1,
-   'avatarType' => false,
-   'avatarKey' => 'w.follonier@netunion.com',
-))
-Fri, 01 Jul 11 14:52:37 +0000	[DEBUG]	end of session
-====================================
-
-Fri, 01 Jul 11 14:52:47 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 01 Jul 11 14:52:47 +0000	Request path: Topic :: displaySingleTopic :: 
-Fri, 01 Jul 11 14:52:47 +0000	GET = array (
-  'topicId' => '1',
-  'forumId' => '1',
-)
-Fri, 01 Jul 11 14:52:47 +0000	POST = array (
-)
-Fri, 01 Jul 11 14:52:47 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'koue3qe8url45qf8ouhv9cmsi6',
-)
-Fri, 01 Jul 11 14:52:47 +0000	SESSION = array (
-  '_socialportal' => 
-  array (
-    '_flash' => 
-    array (
-    ),
-    '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
-  ),
-)
-Fri, 01 Jul 11 14:52:48 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '3',
-   'username' => 'admin',
-   'randomKey' => '76ec78e82b7ed6ef7ca3d0ea36fbd8c2',
-   'password' => '2bc6ea0da8a7514f6069c6755d1dca75de7890ab',
-   'email' => 'w.follonier@netunion.com',
-   'registered' => 
-  DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:00',
-     'timezone_type' => 3,
-     'timezone' => 'UTC',
-  )),
-   'activationKey' => '',
-   'status' => 0,
-   'roles' => 1,
-   'avatarType' => false,
-   'avatarKey' => 'w.follonier@netunion.com',
-))
-Fri, 01 Jul 11 14:52:48 +0000	[DEBUG]	end of session
-====================================
-
-Fri, 01 Jul 11 15:02:47 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 01 Jul 11 15:02:47 +0000	Request path: Forum :: displaySingleForum :: 
-Fri, 01 Jul 11 15:02:47 +0000	GET = array (
+04 Sep 2011 12:35:47:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+04 Sep 2011 12:35:47:000000+02:00	Request path: Topic :: displaySingleTopic :: 
+04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_GET = array (
+  'topicId' => '6',
   'forumId' => '2',
 )
-Fri, 01 Jul 11 15:02:47 +0000	POST = array (
+04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_COOKIE = array (
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+  '_SESS' => '0stecj25p0eq6p0rk8dbsdknj0',
 )
-Fri, 01 Jul 11 15:02:47 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'koue3qe8url45qf8ouhv9cmsi6',
-)
-Fri, 01 Jul 11 15:02:47 +0000	SESSION = array (
+04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_SESSION = array (
   '_socialportal' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjY6IndhZGVjay5mb2xsb25pZXJAZ21haWwuY29tIjt9',
   ),
 )
-Fri, 01 Jul 11 15:02:47 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
    'id' => '3',
    'username' => 'admin',
-   'randomKey' => '76ec78e82b7ed6ef7ca3d0ea36fbd8c2',
-   'password' => '2bc6ea0da8a7514f6069c6755d1dca75de7890ab',
-   'email' => 'w.follonier@netunion.com',
+   'randomKey' => '59a8c0564b4e42f2af10f65c9a21969f',
+   'password' => 'c200870ab8d0cd44c67a84952d1549655cd9d55c',
+   'email' => 'wadeck.follonier@gmail.com',
    'registered' => 
   DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:00',
+     'date' => '2011-09-04 12:30:04',
      'timezone_type' => 3,
      'timezone' => 'UTC',
   )),
    'activationKey' => '',
    'status' => 0,
-   'roles' => 1,
-   'avatarType' => false,
-   'avatarKey' => 'w.follonier@netunion.com',
+   'roles' => 32,
+   'avatarType' => 0,
+   'avatarKey' => 'wadeck.follonier@gmail.com',
 ))
-Fri, 01 Jul 11 15:02:47 +0000	[DEBUG]	end of session
-====================================
-
-Fri, 01 Jul 11 15:03:10 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 01 Jul 11 15:03:10 +0000	Request path: Topic :: chooseType :: 
-Fri, 01 Jul 11 15:03:10 +0000	GET = array (
-)
-Fri, 01 Jul 11 15:03:10 +0000	POST = array (
-)
-Fri, 01 Jul 11 15:03:10 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'koue3qe8url45qf8ouhv9cmsi6',
-)
-Fri, 01 Jul 11 15:03:10 +0000	SESSION = array (
-  '_socialportal' => 
-  array (
-    '_flash' => 
-    array (
-    ),
-    '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
-  ),
-)
-Fri, 01 Jul 11 15:03:10 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '3',
-   'username' => 'admin',
-   'randomKey' => '76ec78e82b7ed6ef7ca3d0ea36fbd8c2',
-   'password' => '2bc6ea0da8a7514f6069c6755d1dca75de7890ab',
-   'email' => 'w.follonier@netunion.com',
-   'registered' => 
-  DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:00',
-     'timezone_type' => 3,
-     'timezone' => 'UTC',
-  )),
-   'activationKey' => '',
-   'status' => 0,
-   'roles' => 1,
-   'avatarType' => false,
-   'avatarKey' => 'w.follonier@netunion.com',
-))
-Fri, 01 Jul 11 15:03:10 +0000	[DEBUG]	end of session
-====================================
-
-Fri, 01 Jul 11 15:03:25 +0000	start of session Mozilla/5.0 (Windows NT 5.1; rv:5.0) Gecko/20100101 Firefox/5.0 FirePHP/0.5
-Fri, 01 Jul 11 15:03:25 +0000	Request path: Topic :: displayForm :: 
-Fri, 01 Jul 11 15:03:25 +0000	GET = array (
-  'typeId' => '3',
-  'forumId' => '2',
-  '_nonce' => 'baf4285708d9',
-  '_nonce_clear' => 'displayTopicForm',
-)
-Fri, 01 Jul 11 15:03:25 +0000	POST = array (
-)
-Fri, 01 Jul 11 15:03:25 +0000	COOKIE = array (
-  'debug_host' => '127.0.0.1',
-  'debug_fastfile' => '1',
-  'debug_port' => '10037',
-  'start_debug' => '1',
-  'send_debug_header' => '1',
-  'send_sess_end' => '1',
-  'debug_jit' => '1',
-  'original_url' => 'http://localhost/SocialPortal/Topic/displaySingleTopic/1/1',
-  'use_remote' => '1',
-  'debug_session_id' => '66871452',
-  '_SESS' => 'koue3qe8url45qf8ouhv9cmsi6',
-)
-Fri, 01 Jul 11 15:03:25 +0000	SESSION = array (
-  '_socialportal' => 
-  array (
-    '_flash' => 
-    array (
-    ),
-    '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjQ6IncuZm9sbG9uaWVyQG5ldHVuaW9uLmNvbSI7fQ==',
-  ),
-)
-Fri, 01 Jul 11 15:03:26 +0000	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '3',
-   'username' => 'admin',
-   'randomKey' => '76ec78e82b7ed6ef7ca3d0ea36fbd8c2',
-   'password' => '2bc6ea0da8a7514f6069c6755d1dca75de7890ab',
-   'email' => 'w.follonier@netunion.com',
-   'registered' => 
-  DateTime::__set_state(array(
-     'date' => '1970-01-01 00:00:00',
-     'timezone_type' => 3,
-     'timezone' => 'UTC',
-  )),
-   'activationKey' => '',
-   'status' => 0,
-   'roles' => 1,
-   'avatarType' => false,
-   'avatarKey' => 'w.follonier@netunion.com',
-))
-Fri, 01 Jul 11 15:03:26 +0000	[DEBUG]	end of session
+04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	end of session
 ====================================
 
