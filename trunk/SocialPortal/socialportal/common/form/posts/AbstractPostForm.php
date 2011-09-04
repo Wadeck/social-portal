@@ -1,6 +1,8 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\posts;
+
+use socialportal\common\form\custom\iPostForm;
 
 use socialportal\model\Forum;
 
@@ -14,11 +16,11 @@ use core\FrontController;
 
 use core\form\Form;
 
-abstract class AbstractTopicForm extends Form implements iTopicForm {
+abstract class AbstractPostForm extends Form implements iPostForm {
 	protected $globalMode = 2;
 	protected function __construct($formName, FrontController $front, $submitName = '', $submitDescription = '') {
 		parent::__construct( $formName, $front, $submitName, $submitDescription );
-		$this->setCss( 'topic-form', 'topic_form.css' );
+		$this->setCss( 'post-form', 'post_form.css' );
 	}
 	
 	protected function setGlobalMode($globalMode = 1) {

@@ -298,7 +298,11 @@ class Tool extends AbstractController {
 			$metaRep = $this->em->getRepository( 'ForumMeta' );
 			$result = true;
 			$result &= $metaRep->setAcceptableTopics( $forumDiscussion->getId(), array( TypeCenter::$freetextType ) );
-			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( TypeCenter::$simpleStoryType ) );
+			$result &= $metaRep->setAcceptableTopics( $forumStories->getId(), array( 
+				TypeCenter::$automaticThoughtsType, TypeCenter::$simpleStoryType,
+				TypeCenter::$mindfulnessType, TypeCenter::$problemType,
+				TypeCenter::$viciousCircleType
+				 ) );
 			$result &= $metaRep->setAcceptableTopics( $forumStrategies->getId(), array( TypeCenter::$strategyType ) );
 			$result &= $metaRep->setAcceptableTopics( $forumActivities->getId(), array( TypeCenter::$activityType ) );
 			$result &= $metaRep->setAcceptableTopics( $forumSupport->getId(), array( TypeCenter::$freetextType ) );
@@ -373,10 +377,18 @@ class Tool extends AbstractController {
 	 * @return 0: success, 1: fail
 	 */
 	private function createBaseInstructions(){
+		//TODO insert links and way to parse them
 		$instrRepo = $this->em->getRepository('Instruction');
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'activity', __( 'The activity topics will be used to share activities with other' ));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'freetext', __( 'The freetext topics will be used to discuss with other' ));
-		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'story', __( 'The story topics will be used to describe special situation' ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'simple story', __(
+			'Share story and experiences of doing the CBT exercises.'.
+			'If you want specific feedback write it in the P.S.'
+			));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'automatic thoughts', __(
+			'Share a story about a difficult situation that you or someone you might know have experienced, and try to identify some automatic thoughts. Put in alternative and realistic thoughts if you like or see what other people have to say about this. '.
+			'Please think of this as telling a story and do not use real names of people. '
+		));
 		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'strategy', __( 
 //			'The strategy topics display a list of different strategies used to fight against a problem'
 			'At first explain the situation you think that will be a problem. '.
@@ -385,6 +397,17 @@ class Tool extends AbstractController {
 			'If you were to choose between eating, and doing something you hate, '.
 			'you would choose eating. So think about what you enjoy doing rather than your eating problems. '.
 			'Think about the simple things that you often want to do.'
+			 ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'vicious circle', __( 
+			'Describe a vicious cycle of thoughts and behavior patterns that could perpetuate eating disorders. See the illustration below, think about potential real life examples and share them below. '.
+			'Please think of this as telling a story and do not use real names of people.'
+			 ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'mindfulness', __( 
+			'Share story and experiences of doing the mindulness excercises.'
+			 ));
+		$instrRepo->createInstruction($instrRepo::$prefixTopicType, 'problem', __( 
+			'Describe a simple problem that you or someone you might know have experienced. Try to find potential solutions at least to a part of the problem. '.
+			'Please think of this as telling a story and use "ficticious" names.'
 			 ));
 		
 		// Notice this is important to keep < " > between the sentences, to enable the \n special char to be transformed into <br />

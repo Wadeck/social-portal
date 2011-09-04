@@ -1,6 +1,6 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\topics;
 
 use socialportal\model\TopicBase;
 
@@ -22,8 +22,8 @@ class TopicStoryForm extends AbstractTopicForm {
 	
 	public function __construct(FrontController $frontController) {
 		parent::__construct( 'Story', $frontController, 'formStorySubmit', __( 'Submit' ) );
-		$this->addInputField( new TextField( 'topic_title', __( 'Title of the topic' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
-		$this->addInputField( new TextAreaField( 'topic_description', __( 'Description' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
+		$this->addInputField( new TextField( 'topic_title', __( 'Short description' ), '', 'text', array( 'mandatory', 'strlen_at-least_10', 'strlen_less-equal_50' ) ) );
+		$this->addInputField( new TextAreaField( 'topic_description', __( 'Content' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_automatic_thoughts', __( 'Automatic Thoughts' ), '', array( 'mandatory', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_alternative_thoughts', __( 'Alternative Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );
 		$this->addInputField( new TextAreaField( 'topic_realistic_thoughts', __( 'Realistic Thoughts' ), '', array( 'optional', 'strlen_at-least_25' ) ) );

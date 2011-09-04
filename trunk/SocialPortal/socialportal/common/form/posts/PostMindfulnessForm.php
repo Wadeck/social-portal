@@ -1,8 +1,8 @@
 <?php
 
-namespace socialportal\common\form\custom;
+namespace socialportal\common\form\posts;
 
-use socialportal\model\PostActivity;
+use socialportal\model\PostMindfulness;
 
 use socialportal\model\PostBase;
 
@@ -14,18 +14,15 @@ use core\FrontController;
 
 use core\form\Form;
 
-class PostActivityForm extends AbstractPostForm {
-	
+class PostMindfulnessForm extends AbstractPostForm {
 	public function __construct(FrontController $frontController) {
-		parent::__construct( 'ActivityComment', $frontController, 'formActivityCommentSubmit', __( 'Submit' ) );
-//		$this->addInputField( new TextAreaField( 'post_content', '', '', array( 'mandatory', 'strlen_at-least_10' ) ) );
-// no label desired on this form
+		parent::__construct( 'MindfulnessComment', $frontController, 'formMindfulnessCommentSubmit', __( 'Submit' ) );
 		$this->addInputField( new TextAreaField( 'post_content', __( 'Comment' ), '', array( 'mandatory', 'strlen_at-least_10' ) ) );
 	}
 	
 	public function setupWithPost($post) {
 		$args = array();
-		$args['post_content'] = $post->getContent();
+		$args['post_content'] = $post->getStoryContent();
 		
 		$this->fillWithArray( $args );
 	}
@@ -38,7 +35,7 @@ class PostActivityForm extends AbstractPostForm {
 		if( $existing ) {
 			$post = $existing;
 		} else {
-			$post = new PostActivity();
+			$post = new PostMindfulness();
 		}
 		$post->setContent( $this->getPostContent() );
 		$post->setPostbase( $base );
