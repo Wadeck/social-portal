@@ -272,6 +272,7 @@ class Topic extends AbstractController {
 		$module = '';
 		
 		$getArgs = array( 'typeId' => $typeId, 'forumId' => $forumId );
+		$typeName = $typeManager->getSimpleName();
 		
 		// now the form is valid we check if we can already fill it with previous value (from db)
 		if( false !== $topicId ) {
@@ -289,10 +290,13 @@ class Topic extends AbstractController {
 			$form->setNonceAction( 'editTopic' );
 			$module = 'edit';
 			$getArgs['topicId'] = $topicId;
+			$title = __('Edit %name_of_topic%', array('%name_of_topic%' => $typeName));
 		} else {
 			$form->setNonceAction( 'createTopic' );
 			$module = 'create';
+			$title = __('Create %name_of_topic%', array('%name_of_topic%' => $typeName));
 		}
+		
 		$actionUrl = $this->frontController->getViewHelper()->createHref( 'Topic', $module, $getArgs );
 		
 		// fill the form with the posted field and errors
@@ -317,6 +321,7 @@ class Topic extends AbstractController {
 		$response->setVar( 'topicId', $topicId );
 		$response->setVar( 'forumId', $forumId );
 		$response->setVar( 'form', $form );
+		$response->setVar( 'title', $title );
 		$response->setVar( 'instruction', $template );
 		$this->frontController->doDisplay( 'topic', 'displayForm' );
 	}

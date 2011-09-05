@@ -6,6 +6,8 @@ $topicId = isset($vars['topicId']) ? $vars['topicId'] : false;
 
 $vars['helper']->setTitle(__('Topic edition'));
 $instruction = $vars['instruction'];
+
+$pageTitle = $vars['title'];
 ?>
 
 <div id="link-back">
@@ -24,7 +26,7 @@ $instruction = $vars['instruction'];
 </a>
 <?php endif; ?>
 &nbsp;
-<h4> <?php echo __('Topic edition'); ?></h4>
+<h4> <?php echo $pageTitle; ?></h4>
 
 <?php $instruction->insertButton();?>
 
