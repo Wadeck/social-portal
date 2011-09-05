@@ -37,16 +37,27 @@ class Home extends AbstractController {
 		$forumMetaRepo = $this->em->getRepository('ForumMeta');
 		$topicRepo = $this->em->getRepository('TopicBase');
 		
-		if( $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role) ){
+		$hasFullAccess = $this->frontController->getViewHelper()->currentUserIsAtLeast(UserRoles::$full_user_role);
+
+		$names = array();
+		if(true === $hasFullAccess){
 			$order = 'date';
+			$names[0] = __('Last Discussions');
+			$names[1] = __('Last Stories');
+			$names[2] = __('Last Strategies');
+			$names[3] = __('Last Activities');
 		}else{
 			$order = 'vote';
+			$names[0] = __('Discussions');
+			$names[1] = __('Stories');
+			$names[2] = __('Strategies');
+			$names[3] = __('Activities');
 		}
 		
-		$freetextTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[0], __('Last Discussions'), $order);
-		$storyTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[1], __('Last Stories'), $order);
-		$strategyTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[2], __('Last Strategies'), $order);
-		$activityTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[3], __('Last Activities'), $order);
+		$freetextTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[0], $names[0], $order);
+		$storyTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[1], $names[1], $order);
+		$strategyTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[2], $names[2], $order);
+		$activityTemplate = $this->createBlock($topicRepo, $forumMetaRepo, $forums[3], $names[3], $order);
 		
 		$templates = array($freetextTemplate, $strategyTemplate, $activityTemplate, $storyTemplate);
 		$this->frontController->getResponse()->setVar('blocks', $templates);
@@ -68,11 +79,9 @@ class Home extends AbstractController {
 						$topics[] = $topicRepo->findBaseTopic($st->getTopicId());
 					}
 				}
-				
 				break;
 		}
 		$typeId = $forumMetaRepo->getAcceptableTopics($forumId);
-		$typeId = $typeId[0];
 		
 		$formattedLink = $this->frontController->getViewHelper()->createHref('Topic', 'displaySingleTopic', array('topicId' => '%topicId%', 'forumId' => '%forumId%'));
 		$linkDisplayForum = $this->frontController->getViewHelper()->createHref('Forum', 'displaySingleForum', array( 'forumId' => $forumId));

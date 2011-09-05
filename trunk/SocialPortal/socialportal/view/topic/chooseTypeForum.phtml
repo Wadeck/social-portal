@@ -5,9 +5,19 @@ $vars['helper']->setContainerClass('');
 $forum = $vars['forum'];
 $acceptedTopics = $vars['acceptedTopics'];
 ?>
-<div id="link-back"><a class="button" href="<?php
-$vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId' => $forum->getId() ));
-?>"><?php echo __('Discussions'); ?></a></div>
+
+<div id="link-back">
+<a class="button" 
+	href="<?php echo $vars['helper']->createHref('Home')?>">
+		<?php echo __('Home'); ?>
+</a>
+<a class="button" 
+	href="<?php $vars['helper']->insertHref( 'Forum', 'displaySingleForum', array('forumId' => $forum->getId() )); ?>">
+		<?php echo __('Discussions'); ?>
+</a>
+&nbsp;
+<h4> <?php echo __('Choose topic type'); ?></h4>
+</div>
 
 <h3>Choose the type of topic</h3>
 <div class="rounded-box padded margined">

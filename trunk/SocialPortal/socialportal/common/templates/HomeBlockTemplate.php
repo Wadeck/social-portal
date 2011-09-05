@@ -45,7 +45,7 @@ class HomeBlockTemplate implements iInsertable{
 	 * @param string $name Translated
 	 * @param string $formattedLink link with %forumId% and %topicId% placeholder
 	 */
-	public function __construct(FrontController $front, Forum $forum, array $topics, $typeId, $name, $formattedLink, $linkDisplayForum){
+	public function __construct(FrontController $front, Forum $forum, array $topics, array $typeId, $name, $formattedLink, $linkDisplayForum){
 		$this->front = $front;
 		$this->forum = $forum;
 		$this->topics = $topics;
@@ -96,7 +96,12 @@ class HomeBlockTemplate implements iInsertable{
 	protected function insertTool(){
 		$seeAll = __('see all');
 		$new = __('new');
-		$linkToCreate = $this->front->getViewHelper()->createHrefWithNonce('displayForm', 'Topic', 'displayForm',  array('typeId' => $this->typeId, 'forumId' => $this->forumId ));
+		if(count($this->typeId) == 1){
+			$typeId = $this->typeId[0];
+			$linkToCreate = $this->front->getViewHelper()->createHrefWithNonce('displayForm', 'Topic', 'displayForm',  array('typeId' => $typeId, 'forumId' => $this->forumId ));
+		}else{
+			$linkToCreate = $this->front->getViewHelper()->createHref('Topic', 'chooseTypeForum',  array('forumId' => $this->forumId ));
+		}
 
 		$links = array();
 		if($this->rightToCreateNew){
