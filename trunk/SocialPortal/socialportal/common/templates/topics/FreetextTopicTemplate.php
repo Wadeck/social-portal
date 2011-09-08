@@ -6,7 +6,7 @@ class FreetextTopicTemplate extends AbstractTopicTemplate {
 	protected function insertTopicBody($topic) {
 		?>
 <p><?php
-		echo $topic->getLowSelfEsteem();
+		echo $topic->getContent();
 		?></p>
 <?php
 	}
