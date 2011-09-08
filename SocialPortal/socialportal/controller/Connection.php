@@ -421,7 +421,7 @@ class Connection extends AbstractController {
 		$mailContent = nl2br($mailContent);
 		Mail::sendHtml($email, Config::getOrDie('site_display_name'). ': account validation', $mailContent);	
 			
-		$this->frontController->addMessage( __('An email to validate your address was sent, when you will click on the link inside it, the account will be activated'), 'correct');
+		$this->frontController->addMessage( __('An email to validate your address was sent, when you will click on the link inside it, the account will be activated'), 'info');
 		$this->frontController->doRedirect( 'Connection' );
 	}
 	

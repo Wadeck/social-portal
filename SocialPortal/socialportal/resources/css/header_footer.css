@@ -28,8 +28,10 @@
 
 #header h1 a {
 	color: #fff;
-	font-size: 26px;
+	font-family: century;
+    font-size: 32px;
 }
+
 #header h1 a:hover {
 	text-decoration: underline;
 }
@@ -107,7 +109,7 @@
 	text-shadow: #FAFAFA 1px 1px 0;
 	margin: 30px 10px 0;
 }
-
+/* Bigamy is having one wife too many. Monogamy is the same. */
 #footer p {
 	font-family: serif;
 }

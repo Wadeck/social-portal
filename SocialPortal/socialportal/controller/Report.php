@@ -110,75 +110,75 @@ class Report extends AbstractController {
 		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
 	}
 	
-//	/**
-//	 * @Nonce(removeReportTopic)
-//	 * @GetAttributes({reportId, topicId, forumId})
-//	 * @RoleAtLeast(fullUser)
-//	 */
-//	public function removeReportTopicAction() {
-//		$get = $this->frontController->getRequest()->query;
-//		$reportId = $get->get( 'reportId' );
-//		$topicId = $get->get( 'topicId' );
-//		$forumId = $get->get( 'forumId' );
-//		
-//		$user = $this->frontController->getCurrentUser();
-//		$userId = $user->getId();
-//		if( !$userId ) {
-//			$userId = UserManager::$anonUserId;
-//		}
-//		
-//		$topicRep = $this->em->getRepository( 'ReportTopic' );
-//		
-//		$report = $topicRep->findOneBy( array( "id" => $reportId ) );
-//		if( null != $report ) {
-//			$report->setIsDeleted( true );
-//			$this->em->persist( $report );
-//			if( false === $this->em->flushSafe( $report ) ) {
-//				$this->frontController->addMessage( __( 'There was a problem during the report process' ), 'error' );
-//			} else {
-//				$this->frontController->addMessage( __( 'Your report was removed' ), 'correct' );
-//			}
-//		} else {
-//			$this->frontController->addMessage( __( 'This topic does not exist anymore ' ), 'error' );
-//		}
-//		
-//		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
-//	}
-//	
-//	/**
-//	 * @Nonce(removeReportPost)
-//	 * @GetAttributes({reportId, topicId, forumId})
-//	 * @RoleAtLeast(fullUser)
-//	 */
-//	public function removeReportPostAction() {
-//		$get = $this->frontController->getRequest()->query;
-//		$reportId = $get->get( 'reportId' );
-//		$topicId = $get->get( 'topicId' );
-//		$forumId = $get->get( 'forumId' );
-//		
-//		$user = $this->frontController->getCurrentUser();
-//		$userId = $user->getId();
-//		if( !$userId ) {
-//			$userId = UserManager::$anonUserId;
-//		}
-//		
-//		$topicRep = $this->em->getRepository( 'ReportPost' );
-//		
-//		$report = $topicRep->findOneBy( array( "id" => $reportId ) );
-//		if( null != $report ) {
-//			$report->setIsDeleted( true );
-//			$this->em->persist( $report );
-//			if( false === $this->em->flushSafe( $report ) ) {
-//				$this->frontController->addMessage( __( 'There was a problem during the report process' ), 'error' );
-//			} else {
-//				$this->frontController->addMessage( __( 'Your report was removed' ), 'correct' );
-//			}
-//		} else {
-//			$this->frontController->addMessage( __( 'This topic does not exist anymore ' ), 'error' );
-//		}
-//		
-//		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
-//	}
+	/**
+	 * @Nonce(removeReportTopic)
+	 * @GetAttributes({reportId, topicId, forumId})
+	 * @RoleAtLeast(fullUser)
+	 */
+	public function removeReportTopicAction() {
+		$get = $this->frontController->getRequest()->query;
+		$reportId = $get->get( 'reportId' );
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		
+		$user = $this->frontController->getCurrentUser();
+		$userId = $user->getId();
+		if( !$userId ) {
+			$userId = UserManager::$anonUserId;
+		}
+		
+		$topicRep = $this->em->getRepository( 'ReportTopic' );
+		
+		$report = $topicRep->findOneBy( array( "id" => $reportId ) );
+		if( null != $report ) {
+			$report->setIsDeleted( true );
+			$this->em->persist( $report );
+			if( false === $this->em->flushSafe( $report ) ) {
+				$this->frontController->addMessage( __( 'There was a problem during the report process' ), 'error' );
+			} else {
+				$this->frontController->addMessage( __( 'Your report was removed' ), 'correct' );
+			}
+		} else {
+			$this->frontController->addMessage( __( 'This topic does not exist anymore ' ), 'error' );
+		}
+		
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+	}
+	
+	/**
+	 * @Nonce(removeReportPost)
+	 * @GetAttributes({reportId, topicId, forumId})
+	 * @RoleAtLeast(fullUser)
+	 */
+	public function removeReportPostAction() {
+		$get = $this->frontController->getRequest()->query;
+		$reportId = $get->get( 'reportId' );
+		$topicId = $get->get( 'topicId' );
+		$forumId = $get->get( 'forumId' );
+		
+		$user = $this->frontController->getCurrentUser();
+		$userId = $user->getId();
+		if( !$userId ) {
+			$userId = UserManager::$anonUserId;
+		}
+		
+		$topicRep = $this->em->getRepository( 'ReportPost' );
+		
+		$report = $topicRep->findOneBy( array( "id" => $reportId ) );
+		if( null != $report ) {
+			$report->setIsDeleted( true );
+			$this->em->persist( $report );
+			if( false === $this->em->flushSafe( $report ) ) {
+				$this->frontController->addMessage( __( 'There was a problem during the report process' ), 'error' );
+			} else {
+				$this->frontController->addMessage( __( 'Your report was removed' ), 'correct' );
+			}
+		} else {
+			$this->frontController->addMessage( __( 'This topic does not exist anymore ' ), 'error' );
+		}
+		
+		$this->frontController->doRedirect( 'Topic', 'displaySingleTopic', array( 'topicId' => $topicId, 'forumId' => $forumId ) );
+	}
 	
 	/**
 	 * @Nonce(displayManageReportForm)
