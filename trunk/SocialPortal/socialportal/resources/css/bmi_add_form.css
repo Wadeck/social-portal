@@ -1,10 +1,10 @@
 @CHARSET "ISO-8859-1";
 
 form.bmi-add-form label{
-	width: 90px;
+	width: 140px;
 }
 form.bmi-add-form input[type=submit] {
-	margin-left: 95px;
+	margin-left: 143px;
 }
 
 form.bmi-add-form {
