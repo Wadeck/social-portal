@@ -1,41 +1,238 @@
-04 Sep 2011 12:35:47:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
-04 Sep 2011 12:35:47:000000+02:00	Request path: Topic :: displaySingleTopic :: 
-04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_GET = array (
-  'topicId' => '6',
-  'forumId' => '2',
-)
-04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_COOKIE = array (
+08 Sep 2011 19:45:58:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+08 Sep 2011 19:45:58:000000+02:00	Request path: Home :: index :: 
+08 Sep 2011 19:45:58:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
   'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
-  '_SESS' => '0stecj25p0eq6p0rk8dbsdknj0',
 )
-04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	$_SESSION = array (
+08 Sep 2011 19:45:58:000000+02:00	[DEBUG]	$_SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+      'redirectFrom' => '/SocialPortal/',
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJBbGljZSI7aToxO3M6MToiNCI7aToyO3M6MTQ6ImFsaWNlQGFsaWNlLmZyIjt9',
+  ),
+)
+08 Sep 2011 19:45:58:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-09-07 15:37:24',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
+   'status' => 0,
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
+))
+08 Sep 2011 19:45:58:000000+02:00	[DEBUG]	end of session
+====================================
+
+08 Sep 2011 19:46:00:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+08 Sep 2011 19:46:00:000000+02:00	Request path: Connected :: logout :: 
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	$_SESSION = array (
   '_socialportal' => 
   array (
     '_flash' => 
     array (
     ),
     '_locale' => 'en',
-    'rememberMeS' => 'YTozOntpOjA7czo1OiJhZG1pbiI7aToxO3M6MToiMyI7aToyO3M6MjY6IndhZGVjay5mb2xsb25pZXJAZ21haWwuY29tIjt9',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJBbGljZSI7aToxO3M6MToiNCI7aToyO3M6MTQ6ImFsaWNlQGFsaWNlLmZyIjt9',
   ),
 )
-04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
-   'id' => '3',
-   'username' => 'admin',
-   'randomKey' => '59a8c0564b4e42f2af10f65c9a21969f',
-   'password' => 'c200870ab8d0cd44c67a84952d1549655cd9d55c',
-   'email' => 'wadeck.follonier@gmail.com',
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
    'registered' => 
   DateTime::__set_state(array(
-     'date' => '2011-09-04 12:30:04',
+     'date' => '2011-09-07 15:37:24',
      'timezone_type' => 3,
      'timezone' => 'UTC',
   )),
-   'activationKey' => '',
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
    'status' => 0,
-   'roles' => 32,
-   'avatarType' => 0,
-   'avatarKey' => 'wadeck.follonier@gmail.com',
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
 ))
-04 Sep 2011 12:35:47:000000+02:00	[DEBUG]	end of session
+08 Sep 2011 19:46:00:000000+02:00	Disconnection of socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-09-07 15:37:24',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
+   'status' => 0,
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
+))
+08 Sep 2011 19:46:00:000000+02:00	Redirect to /SocialPortal/Connection from /SocialPortal/Connected/logout
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	end of session
+====================================
+
+08 Sep 2011 19:46:00:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+08 Sep 2011 19:46:00:000000+02:00	Request path: Connection :: index :: 
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	$_SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+      'redirectFrom' => '/SocialPortal/Connected/logout',
+    ),
+    '_locale' => 'en',
+  ),
+)
+08 Sep 2011 19:46:00:000000+02:00	[DEBUG]	end of session
+====================================
+
+09 Sep 2011 07:23:59:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+09 Sep 2011 07:23:59:000000+02:00	Request path: Connection :: login :: 
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	$_POST = array (
+  'login_username' => 'Alice',
+  'login_password' => 'alice',
+  '_nonce' => 'c8c6396a5d64',
+  '_nonce_clear' => 'login',
+  '_http_referrer' => '/SocialPortal/Connection',
+  'loginSubmit' => 'Log in',
+)
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	$_SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+  ),
+)
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	populate session for socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-09-07 15:37:24',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
+   'status' => 0,
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
+))
+09 Sep 2011 07:23:59:000000+02:00	Redirect to /SocialPortal/Home from /SocialPortal/Connection/login
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	end of session
+====================================
+
+09 Sep 2011 07:23:59:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+09 Sep 2011 07:23:59:000000+02:00	Request path: Home :: index :: 
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	$_SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+      'redirectFrom' => '/SocialPortal/Connection/login',
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJBbGljZSI7aToxO3M6MToiNCI7aToyO3M6MTQ6ImFsaWNlQGFsaWNlLmZyIjt9',
+  ),
+)
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-09-07 15:37:24',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
+   'status' => 0,
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
+))
+09 Sep 2011 07:23:59:000000+02:00	[DEBUG]	end of session
+====================================
+
+09 Sep 2011 07:24:01:000000+02:00	start of session Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1
+09 Sep 2011 07:24:01:000000+02:00	Request path: Profile :: display :: 
+09 Sep 2011 07:24:01:000000+02:00	[DEBUG]	$_GET = array (
+  'userId' => '4',
+  '_nonce' => 'baab142a62b4',
+  '_nonce_clear' => 'displayProfile',
+)
+09 Sep 2011 07:24:01:000000+02:00	[DEBUG]	$_COOKIE = array (
+  '_SESS' => '78dl39sd3gvd6d4u5b9c5kod20',
+  'XDEBUG_SESSION' => 'ECLIPSE_DBGP',
+)
+09 Sep 2011 07:24:01:000000+02:00	[DEBUG]	$_SESSION = array (
+  '_socialportal' => 
+  array (
+    '_flash' => 
+    array (
+    ),
+    '_locale' => 'en',
+    'rememberMeS' => 'YTozOntpOjA7czo1OiJBbGljZSI7aToxO3M6MToiNCI7aToyO3M6MTQ6ImFsaWNlQGFsaWNlLmZyIjt9',
+  ),
+)
+09 Sep 2011 07:24:01:000000+02:00	[DEBUG]	retrieve user from session for socialportal\model\User::__set_state(array(
+   'id' => '4',
+   'username' => 'Alice',
+   'randomKey' => '499b1800402d60883518460b5bd3c8fb',
+   'password' => '5bfb99d181595fdafb8fef70fcef602af31d974f',
+   'email' => 'alice@alice.fr',
+   'registered' => 
+  DateTime::__set_state(array(
+     'date' => '2011-09-07 15:37:24',
+     'timezone_type' => 3,
+     'timezone' => 'UTC',
+  )),
+   'activationKey' => '9fxu9z1pd7gqyxjklg2b1luwiryag41o',
+   'status' => 0,
+   'roles' => 8,
+   'avatarType' => 1,
+   'avatarKey' => '2verqc146jsx',
+))
+09 Sep 2011 07:24:01:000000+02:00	[DEBUG]	end of session
 ====================================
 
